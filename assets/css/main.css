@@ -2934,7 +2934,7 @@
 
 	#banner {
 		padding: 12em 0 10em 0;
-		background-image: url('../../images/banner.jpg');
+		/* background-image: url('../../images/banner.jpg'); */
 		background-size: cover;
 		background-position: top;
 		background-attachment: fixed;
@@ -2943,10 +2943,10 @@
 		border-top: 0.5em solid #556B2F;
 	}
 
-		#banner h1 {
+		#banner div h1 {
 			font-size: 3.5em;
 			font-weight: 100;
-			color: #fff;
+			color: black;
 			line-height: 1em;
 			margin: 0 0 0.5em 0;
 			padding: 0;
@@ -2954,7 +2954,7 @@
 
 		#banner p {
 			font-size: 1em;
-			color: rgba(255, 255, 255, 0.55);
+			color: black;
 			margin-bottom: 1.75em;
 		}
 
