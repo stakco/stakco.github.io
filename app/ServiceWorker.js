@@ -1,4 +1,4 @@
-const cacheName = "DefaultCompany-stakco-app-unity-1.0";
+const cacheName = "Stakcos-Stakco-1.0.2";
 const contentToCache = [
     "Build/WebGL.loader.js",
     "Build/WebGL.framework.js",

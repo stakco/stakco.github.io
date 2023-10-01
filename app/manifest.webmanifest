@@ -1,11 +1,11 @@
 {
-    "name": "stakco-app-unity",
-    "short_name": "stakco-app-unity",
+    "name": "Stakco",
+    "short_name": "Stakco",
     "start_url": "index.html",
     "display": "fullscreen",
     "background_color": "#231F20",
     "theme_color": "#000",
-    "description": "",
+    "description": "Multilayer Transparent Rotary Puzzle",
     "icons": [{
       "src": "TemplateData/icons/unity-logo-dark.png",
       "sizes": "144x144",
