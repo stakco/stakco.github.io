@@ -1,9 +1,9 @@
-const cacheName = "Stakcos-Stakco-1.0.10";
+const cacheName = "Stakcos-Stakco-1.0.11";
 const contentToCache = [
     "Build/risis.loader.js",
     "Build/eaf09d6d9847bbbd6bdde4af95ec2aa1.js",
-    "Build/019461da51492771d6cd31e4b52eeb4e.data",
-    "Build/1dd35284da3d2f3f90ef3b077a4fdf60.wasm",
+    "Build/87f953d0d6c9d64c1f05599e8eea3d1f.data",
+    "Build/96db609cec50539e4155e38d31127899.wasm",
     "TemplateData/style.css"
 
 ];
