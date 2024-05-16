@@ -1,9 +1,9 @@
 const cacheName = "Stakcos-Stakco-1.0.13";
 const contentToCache = [
     "Build/APP_WebGL.loader.js",
-    "Build/43e737474225b5036f41a4d39ca62511.js",
-    "Build/5303b80c3503c74d126cd24ca285f1f3.data",
-    "Build/6ab92b524d19af7249f21eb427eac4ed.wasm",
+    "Build/56ed9a9aba4603df3e63864e9487313b.js",
+    "Build/8638fc6fee8bfcebf4d3693e65996ebe.data",
+    "Build/6e44ace94ca103372895b5c7d43dcc8c.wasm",
     "TemplateData/style.css"
 
 ];
