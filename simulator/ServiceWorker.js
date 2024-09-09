@@ -2,8 +2,8 @@ const cacheName = "Stakcos-Stakco-3.0.1";
 const contentToCache = [
     "Build/simulator.loader.js",
     "Build/d91db952a730808eaf3c819fa85d815e.js",
-    "Build/9f170fd19b67b1d1b708968931a94d8f.data",
-    "Build/22091fb65b30f824d1a3c2a34cd38bbb.wasm",
+    "Build/40b23b45d4ed201d9dba40e1cbd87bcf.data",
+    "Build/0e2fed43ca3a7e216da12b7b4552c060.wasm",
     "TemplateData/style.css"
 
 ];
