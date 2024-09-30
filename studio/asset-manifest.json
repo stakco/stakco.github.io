@@ -1,12 +1,15 @@
 {
   "files": {
     "main.css": "/studio/static/css/main.e99ac786.css",
-    "main.js": "/studio/static/js/main.1226e9d2.js",
+    "main.js": "/studio/static/js/main.8c42a570.js",
     "static/js/453.405bb9da.chunk.js": "/studio/static/js/453.405bb9da.chunk.js",
     "static/media/orchid-small.png": "/studio/static/media/orchid-small.f3654cb16874d13bd1dd.png",
     "static/media/jigsaw-medium.png": "/studio/static/media/jigsaw-medium.5d942523d707af0ef301.png",
     "static/media/orchid-medium.png": "/studio/static/media/orchid-medium.1c3efd0306c09746273c.png",
     "static/media/orchid-large.png": "/studio/static/media/orchid-large.164d3976fb329b8c56c8.png",
+    "static/media/jigsaw-composite.png": "/studio/static/media/jigsaw-composite.2275338e89da117525b8.png",
+    "static/media/trapezoid-1.png": "/studio/static/media/trapezoid-1.424118d5f1ac51ff1fe6.png",
+    "static/media/trapezoid-2.png": "/studio/static/media/trapezoid-2.c23849d849e7591b019d.png",
     "static/media/inter-latin-ext-400-normal.woff": "/studio/static/media/inter-latin-ext-400-normal.40b3b0d5e09a90fb6e3e.woff",
     "static/media/inter-latin-ext-400-normal.woff2": "/studio/static/media/inter-latin-ext-400-normal.0f9e8d4e940df8f6edfe.woff2",
     "static/media/inter-latin-400-normal.woff": "/studio/static/media/inter-latin-400-normal.08a02fd275ecea6ef662.woff",
@@ -79,11 +82,11 @@
     "static/media/roboto-greek-ext-700-normal.woff": "/studio/static/media/roboto-greek-ext-700-normal.249853776d22a271b2b5.woff",
     "index.html": "/studio/index.html",
     "main.e99ac786.css.map": "/studio/static/css/main.e99ac786.css.map",
-    "main.1226e9d2.js.map": "/studio/static/js/main.1226e9d2.js.map",
+    "main.8c42a570.js.map": "/studio/static/js/main.8c42a570.js.map",
     "453.405bb9da.chunk.js.map": "/studio/static/js/453.405bb9da.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e99ac786.css",
-    "static/js/main.1226e9d2.js"
+    "static/js/main.8c42a570.js"
   ]
 }
