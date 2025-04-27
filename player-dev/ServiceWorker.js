@@ -1,9 +1,9 @@
-const cacheName = "Stakcos-Stakco2Day-3.0.5";
+const cacheName = "Stakcos-Stakco-3.0.4";
 const contentToCache = [
-    "Build/player-dev.loader.js",
-    "Build/a1481a133ea8c0cc3b43ce354113e129.js.unityweb",
-    "Build/847e337d84e988807fd33894967f9290.data.unityweb",
-    "Build/9a473d782930f4cb1c1f5c18ce4d55e0.wasm.unityweb",
+    "Build/player.loader.js",
+    "Build/8929f88963bf40fb9395a3260307578b.js.unityweb",
+    "Build/9957f5bbf6121818df7dd9fdbd344c17.data.unityweb",
+    "Build/5a757b3c71637342c3ec6872ce9188b4.wasm.unityweb",
     "TemplateData/style.css"
 
 ];
