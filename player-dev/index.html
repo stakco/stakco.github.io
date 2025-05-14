@@ -3,66 +3,14 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Stakco Play</title>
+    <title>Unity WebGL Player | Stakco</title>
     <link rel="shortcut icon" href="TemplateData/favicon.ico">
     <link rel="stylesheet" href="TemplateData/style.css">
     <link rel="manifest" href="manifest.webmanifest">
-  
-    <!-- Inserted Meta Tags -->
-    <meta name='description' content='Brings life to papers with interactive Stakco puzzles.' />
-    <meta property='og:title' content='Stakco Puzzle Systems' />
-    <meta property='og:description' content='Brings life to papers with interactive Stakco puzzles.' />
-    <meta property='og:image' content='https://storage.googleapis.com/stakco-images/109949450257686494443/A2A3_3/A2A3_1_thumb.png' />
-    <meta property='og:url' content='https://stakcos.com/player-dev2/' />
-    <meta property='og:type' content='website' />
-    
-    <meta name='twitter:card' content='summary_large_image' />
-    <meta name='twitter:title' content='Stakco Puzzle Systems' />
-    <meta name='twitter:description' content='Brings life to papers with interactive Stakco puzzles.' />
-    <meta name='twitter:image' content='https://storage.googleapis.com/stakco-images/109949450257686494443/A2A3_3/A2A3_1_thumb.png' />
-    <meta name='twitter:url' content='https://stakcos.com/player-dev2/' />
-    <meta name='twitter:site' content='@StakcoPuzzle' />
-    
-    <meta name='apple-mobile-web-app-capable' content='yes' />
-    <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent' />
-    <meta name='apple-mobile-web-app-title' content='Stakco' />
-    <link rel='apple-touch-icon' href='https://stakcos.com/icons/apple-icon.png' />
-
-    <meta name='msapplication-TileColor' content='#ffffff' />
-    <meta name='msapplication-TileImage' content='https://stakcos.com/icons/mstile-150x150.png' />
-
-    <script type='application/ld+json'>
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Stakco Puzzle Systems",
-      "url": "https://stakcos.com/player-dev2/",
-      "description": "Brings life to papers with interactive, rotatable puzzles.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Stakco",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://stakcos.com/icons/logo.png"
-        }
-      }
-    }
-    </script>
-
-<!-- Google tag (gtag.js) -->
-<script async src='https://www.googletagmanager.com/gtag/js?id=G-NN050DQ66X'></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-NN050DQ66X');
-</script>
-
-</head>
+  </head>
   <body>
     <div id="unity-container">
-      <canvas id="unity-canvas" width=1080 height=1920 tabindex="-1"></canvas>
+      <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1"></canvas>
       <div id="unity-loading-bar">
         <div id="unity-logo"></div>
         <div id="unity-progress-bar-empty">
@@ -109,15 +57,15 @@
       }
 
       var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/player-dev.loader.js";
+      var loaderUrl = buildUrl + "/player.loader.js";
       var config = {
-        dataUrl: buildUrl + "/ac257aa7f91e02bc425fa77101ae8ae8.data.unityweb",
-        frameworkUrl: buildUrl + "/3be018c6d882fbdc36a5ab16e1d9c9e3.js.unityweb",
-        codeUrl: buildUrl + "/f1c5b14b0b9a33d693f2e2d53c3f18b7.wasm.unityweb",
+        dataUrl: buildUrl + "/9957f5bbf6121818df7dd9fdbd344c17.data.unityweb",
+        frameworkUrl: buildUrl + "/8929f88963bf40fb9395a3260307578b.js.unityweb",
+        codeUrl: buildUrl + "/5a757b3c71637342c3ec6872ce9188b4.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "Stakcos",
-        productName: "Stakco Play",
-        productVersion: "3.1.2",
+        productName: "Stakco",
+        productVersion: "3.0.4",
         showBanner: unityShowBanner,
       };
 
