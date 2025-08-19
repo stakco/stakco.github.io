@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stakco Status</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f9f9f9;
+      color: #333;
+      padding: 2rem;
+      max-width: 600px;
+      margin: auto;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .status-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .status-table th, .status-table td {
+      padding: 1rem;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+    .up {
+      color: green;
+      font-weight: bold;
+    }
+    .down {
+      color: red;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>Stakco System Status</h1>
+  <table class="status-table">
+    <thead>
+      <tr>
+        <th>Service</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="status-body">
+      <tr><td>Stakco Website</td><td id="website-status">Checking...</td></tr>
+      <tr><td>Stakco Studio</td><td id="studio-status">Checking...</td></tr>
+      <tr><td>Stakco API</td><td id="api-status">Checking...</td></tr>
+      <tr><td>Stakco Play</td><td id="play-status">Checking...</td></tr>
+    </tbody>
+  </table>
+
+  <script>
+    const services = [
+      { id: "website-status", url: "https://stakcos.com" },
+      { id: "studio-status", url: "https://studio.stakcos.com" },
+      { id: "api-status", url: "https://api.stakcos.com" }, // add a health route if possible
+      { id: "play-status", url: "https://play.stakcos.com" }
+    ];
+
+    function checkStatus() {
+      services.forEach(service => {
+        fetch(service.url, { method: "HEAD", mode: "no-cors" })
+          .then(() => {
+            document.getElementById(service.id).innerHTML = '<span class="up">Up</span>';
+          })
+          .catch(() => {
+            document.getElementById(service.id).innerHTML = '<span class="down">Down</span>';
+          });
+      });
+    }
+
+    checkStatus();
+    // Optional: refresh every 60 seconds
+    setInterval(checkStatus, 60000);
+  </script>
+</body>
+</html>

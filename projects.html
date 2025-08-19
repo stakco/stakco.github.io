@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Stakco Interactive Puzzles</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary-color: #f9a743;
+            --primary-gradient: linear-gradient(135deg, #f9a743 0%, #ffc947 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-soft: 0 8px 32px rgba(31, 38, 135, 0.37);
+            --shadow-glow: 0 0 40px rgba(249, 167, 68, 0.4);
+            --text-primary: #3c2f38;
+            --text-secondary: #7f8c8d;
+
+            --stakco-light-golden-sunrise: linear-gradient(135deg, #F9EA59 0%, #DFAC6D 100%);
+            --stakco-light-warm-rose-glow: linear-gradient(135deg, #F9EA59 0%, #B83267 100%);
+            --stakco-light-champagne-horizon: linear-gradient(135deg, #DFAC6D 0%, #D4984F 100%);
+            --stakco-light-golden-berry: linear-gradient(135deg, #F9EA59 0%, #D4984F 50%, #B83267 100%);
+
+            --stakco-dark-velvet-night: linear-gradient(135deg, #3C2F38 0%, #B83267 100%);
+            --stakco-dark-deep-rosewood: linear-gradient(135deg, #3C2F38 0%, #D4984F 100%);
+            --stakco-dark-royal-twilight: linear-gradient(135deg, #3C2F38 0%, #DFAC6D 100%);
+            --stakco-dark-wine-gold: linear-gradient(135deg, #3C2F38 0%, #B83267 40%, #DFAC6D 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom Cursor */
+        body {
+            cursor: none;
+        }
+        
+        .cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            opacity: 0.8;
+        }
+        
+        .cursor-follower {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--primary-color);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: all 0.3s ease;
+            opacity: 0.3;
+        }
+
+        /* Hide cursor on touch devices */
+        @media (pointer: coarse) {
+            body { cursor: auto; }
+            .cursor, .cursor-follower { display: none; }
+        }
+        
+        /* Navigation */
+        .navbar {
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .navbar.scrolled {
+            background: rgba(255, 255, 255, 0.95) !important;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Page Header */
+        .page-header {
+            min-height: 60vh;
+            background: var(--stakco-dark-royal-twilight);
+            position: relative;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+            z-index: 1;
+            margin-top: 76px;
+        }
+        
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+            pointer-events: none;
+        }
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+            z-index: 2;
+        }
+        
+        .floating-element:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
+        .floating-element:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
+        .floating-element:nth-child(3) { top: 30%; right: 15%; animation-delay: 4s; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        /* Project Sections */
+        .projects-section {
+            padding: 120px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .projects-section:nth-child(even) {
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        }
+
+        .projects-section:nth-child(odd) {
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        }
+
+        /* Project Cards */
+        .project-showcase {
+            position: relative;
+            margin-bottom: 6rem;
+            transition: transform 0.3s ease;
+        }
+
+        .project-showcase:hover {
+            transform: translateY(-10px);
+        }
+
+        .project-image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+        }
+
+        .project-showcase:hover .project-image-container {
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .project-showcase:hover .project-image {
+            transform: scale(1.05);
+        }
+
+        .project-badge {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            background: var(--primary-gradient);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            box-shadow: 0 5px 15px rgba(249, 167, 68, 0.4);
+            z-index: 3;
+        }
+
+        .project-content {
+            padding: 3rem 2rem;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            margin-top: -2rem;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .project-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .project-subtitle {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--text-primary);
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        .project-subtitle::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+
+        .project-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+        }
+
+        .project-description strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* Tech Stack Pills */
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 2rem 0;
+        }
+
+        .tech-pill {
+            background: linear-gradient(135deg, rgba(249, 167, 68, 0.1), rgba(255, 201, 71, 0.1));
+            border: 1px solid rgba(249, 167, 68, 0.3);
+            color: var(--primary-color);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tech-pill:hover {
+            background: var(--primary-gradient);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(249, 167, 68, 0.4);
+        }
+
+        /* Stats Cards */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, rgba(249, 167, 68, 0.1), rgba(255, 201, 71, 0.05));
+            border: 1px solid rgba(249, 167, 68, 0.2);
+            border-radius: 20px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+        }
+
+        /* Quote Sections */
+        .project-quote {
+            background: linear-gradient(135deg, var(--stakco-dark-deep-rosewood));
+            color: white;
+            padding: 3rem;
+            border-radius: 25px;
+            margin: 3rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-quote::before {
+            content: '"';
+            font-size: 8rem;
+            font-weight: 800;
+            position: absolute;
+            top: -1rem;
+            left: 1rem;
+            opacity: 0.1;
+            color: white;
+            line-height: 1;
+        }
+
+        .quote-text {
+            font-size: 1.3rem;
+            font-style: italic;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Action Buttons */
+        .btn-modern {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 50px;
+            padding: 15px 35px;
+            color: white;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            margin: 0.5rem 0.5rem 0.5rem 0;
+        }
+        
+        .btn-modern::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-modern:hover::before {
+            left: 100%;
+        }
+        
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Footer */
+        .footer-block {
+            background: var(--stakco-light-champagne-horizon);
+            padding: 3rem 0 2rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-header {
+                min-height: 50vh;
+                margin-top: 70px;
+            }
+            
+            .projects-section {
+                padding: 80px 0;
+            }
+
+            .project-image {
+                height: 250px;
+            }
+
+            .project-title {
+                font-size: 2rem;
+            }
+
+            .project-subtitle {
+                font-size: 1.3rem;
+            }
+
+            .project-content {
+                padding: 2rem 1.5rem;
+                margin-top: -1rem;
+            }
+
+            .project-badge {
+                top: 1rem;
+                left: 1rem;
+                padding: 0.5rem 1rem;
+                font-size: 0.8rem;
+            }
+
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease;
+        }
+        
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Loading Animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--text-primary);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+        
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(249, 167, 68, 0.3);
+            border-top: 4px solid var(--primary-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .footer-modern {
+    background: var(--stakco-dark-wine-gold);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-modern::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="footer-grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.05"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.05"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23footer-grain)"/></svg>') repeat;
+    pointer-events: none;
+}
+
+.footer-content {
+    position: relative;
+    z-index: 2;
+    padding: 4rem 0 2rem;
+}
+
+.footer-main {
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+}
+
+.footer-logo {
+    margin-bottom: 2rem;
+}
+
+.footer-logo img {
+    filter: brightness(0) invert(1);
+    transition: all 0.3s ease;
+}
+
+.footer-logo:hover img {
+    filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(249, 167, 67, 0.5));
+    transform: scale(1.05);
+}
+
+.footer-description {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+.footer-link-group h5 {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    font-size: 1rem;
+}
+
+.footer-link-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-link-group li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-link-group a {
+    color: rgba(255, 255, 255, 0.8);
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.footer-link-group a:hover {
+    color: var(--primary-color);
+    transform: translateX(5px);
+}
+
+.footer-link-group a i {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.social-link {
+    width: 45px;
+    height: 45px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.social-link:hover {
+    background: var(--primary-gradient);
+    color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(249, 167, 67, 0.4);
+}
+
+.footer-bottom {
+    text-align: center;
+}
+
+.footer-bottom-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.footer-legal {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.footer-legal a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.footer-legal a:hover {
+    color: var(--primary-color);
+}
+
+.footer-legal .separator {
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.8rem;
+}
+
+.footer-copyright {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.footer-patent {
+    background: rgba(249, 167, 67, 0.1);
+    border: 1px solid rgba(249, 167, 67, 0.2);
+    border-radius: 20px;
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+/* Responsive Design for Footer */
+@media (max-width: 768px) {
+    .footer-content {
+        padding: 3rem 0 1.5rem;
+    }
+    
+    .footer-links {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+    }
+    
+    .footer-bottom-content {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .footer-legal {
+        justify-content: center;
+        order: 2;
+    }
+    
+    .footer-copyright {
+        order: 1;
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .footer-links {
+        gap: 1.5rem;
+    }
+    
+    .footer-legal {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .footer-legal .separator {
+        display: none;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top" id="mainNavbar">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-3" href="index.html" style="color: var(--primary-color);">
+                <img src="images/logo2.png" alt="Stakco" width="150px">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="projects.html">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="research.html">Research</a></li>
+                    <li class="nav-item"><a class="nav-link" href="impact.html">Impact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <section class="page-header">
+        <!-- Floating Elements -->
+        <div class="floating-element">
+            <i class="fas fa-project-diagram fa-3x text-white"></i>
+        </div>
+        <div class="floating-element">
+            <i class="fas fa-lightbulb fa-2x text-white"></i>
+        </div>
+        <div class="floating-element">
+            <i class="fas fa-cogs fa-3x text-white"></i>
+        </div>
+        
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-12 text-center">
+                    <h1 class="display-2 fw-bold mb-4 text-white fade-in">
+                        Our Projects
+                    </h1>
+                    <p class="lead text-white mb-4 fade-in">
+                        Real-world implementations that showcase the power and versatility of Stakco technology
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stakco Light Project -->
+    <section class="projects-section">
+        <div class="container">
+            <div class="project-showcase fade-in">
+                <div class="row">
+                    <div class="col-lg-6 mb-4 mb-lg-0">
+                        <div class="project-image-container">
+                            <div class="project-badge">Stakco Light</div>
+                            <img src="images/showcase/showcase-3.png" alt="Stakco Light Installation" class="project-image">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="project-content">
+                            <h2 class="project-title">First Installation</h2>
+                            <p class="project-description">
+                                We developed a specialized <strong>Stakco Light</strong> puzzle system tailored for autistic children. In collaboration with AWWA School, and guided by their valuable feedback, we designed a large-format, wall-mounted puzzle structure. This installation was set up in the school's multi-sensory room to offer a calming and interactive experience.
+                            </p>
+
+                            <div class="stats-container">
+                                <div class="stat-card">
+                                    <span class="stat-number">1</span>
+                                    <div class="stat-label">Multi-sensory Installation</div>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-number">360°</span>
+                                    <div class="stat-label">Real-time Rotation Tracking</div>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-number">ESP32</span>
+                                    <div class="stat-label">Microcontroller System</div>
+                                </div>
+                            </div>
+
+                            <div class="tech-stack">
+                                <span class="tech-pill">ESP32 Microcontroller</span>
+                                <span class="tech-pill">Rotary Encoders</span>
+                                <span class="tech-pill">TCP Server</span>
+                                <span class="tech-pill">Android TV App</span>
+                                <span class="tech-pill">Projection Mapping</span>
+                                <span class="tech-pill">Stakco Studio</span>
+                            </div>
+
+                            <h3 class="project-subtitle">From Concept to Classroom</h3>
+                            <p class="project-description">
+                                After the initial testing phase, and based on insights shared by teachers, we temporarily removed the structure to build a <strong>reinforced, lightweight version</strong> using an improved tracking mechanism.
+                            </p>
+
+                            <h3 class="project-subtitle">Engineering Play with Precision</h3>
+                            <p class="project-description">
+                                In the original version, each rotating plate was equipped with a rotary encoder and gear system. These encoders measured the rotation in real time and transmitted the data to a central <strong>ESP32 microcontroller</strong>, which then sent it to a <strong>TCP server</strong>. The <strong>Stakco Light Android TV app</strong>, connected to this server, would read the incoming data in real time and rotate the corresponding <strong>digital puzzle layers</strong> to match the physical movements.
+                            </p>
+
+                            <div class="project-quote">
+                                <p class="quote-text">
+                                    The app displayed the circular puzzle interface, which was projected and precisely mapped onto the physical structure—creating a seamless and immersive blend between the physical and digital layers.
+                                </p>
+                            </div>
+
+                            <h3 class="project-subtitle">Designed for Teachers, Inspired by Students</h3>
+                            <p class="project-description">
+                                Teachers can <strong>create curated puzzles</strong> using the <strong>Stakco Studio</strong> platform, tailoring them to fit their curriculum or individual student needs. These custom puzzles are <strong>automatically synced</strong> to the Android TV app, allowing for a streamlined experience. Using just the TV remote, teachers can <strong>switch between puzzles</strong>, <strong>mix pieces</strong>, or <strong>solve them with a click</strong>, making it effortless to adapt during a session.
+                            </p>
+
+                            <h3 class="project-subtitle">Immersion Through Sights and Sounds</h3>
+                            <p class="project-description">
+                                The experience is further enhanced with <strong>relaxing background music</strong>, fostering a soothing and sensory-friendly environment ideal for engagement and focus.
+                            </p>
+
+                            <div class="mt-4">
+                                <a href="index.html#contact" class="btn btn-modern">
+                                    <i class="fas fa-envelope"></i>Learn More
+                                </a>
+                                <a href="#wedding-project" class="btn btn-modern btn-outline">
+                                    <i class="fas fa-arrow-down"></i>Next Project
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wedding Puzzle Project -->
+    <section class="projects-section" id="wedding-project">
+        <div class="container">
+            <div class="project-showcase fade-in">
+                <div class="row">
+                    <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                        <div class="project-image-container">
+                            <div class="project-badge">Stakco Paper</div>
+                            <img src="images/projects/wedding/soundarya_wedding.png" alt="Wedding Puzzle Cards" class="project-image">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 order-lg-1">
+                        <div class="project-content">
+                            <h2 class="project-title">Wedding Puzzle Cards</h2>
+                            
+                            <h3 class="project-subtitle">84 Custom Puzzles, One Unforgettable Celebration</h3>
+                            <p class="project-description">
+                                For a client's wedding event in India, we completed a unique commission: the creation of <strong>84 individual Stakco Paper puzzles</strong>, each custom-designed and handcrafted. All puzzles were printed, assembled, and delivered from our studio to the event venue in India.
+                            </p>
+
+                            <div class="stats-container">
+                                <div class="stat-card">
+                                    <span class="stat-number">84</span>
+                                    <div class="stat-label">Custom Puzzles</div>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-number">100%</span>
+                                    <div class="stat-label">Handcrafted</div>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-number">India</span>
+                                    <div class="stat-label">Delivery Destination</div>
+                                </div>
+                            </div>
+
+                            <div class="tech-stack">
+                                <span class="tech-pill">Stakco CLI</span>
+                                <span class="tech-pill">Automated Processing</span>
+                                <span class="tech-pill">PDF Generation</span>
+                                <span class="tech-pill">Precision Printing</span>
+                                <span class="tech-pill">Manual Assembly</span>
+                                <span class="tech-pill">Quality Control</span>
+                            </div>
+
+                            <h3 class="project-subtitle">Automation Meets Craft</h3>
+                            <p class="project-description">
+                                To handle the scale efficiently, we relied heavily on automation. Our in-house <strong>Stakco CLI tool</strong> was used to automate the entire process — from image cropping and layer generation to printable asset creation. Each puzzle's target image area was extracted and passed into the CLI, which generated the multi-layer puzzle design.
+                            </p>
+
+                            <h3 class="project-subtitle">From Digital to Physical</h3>
+                            <p class="project-description">
+                                Once the digital layers were ready, a post-processing script exported each set as printable <strong>PDFs</strong>. Another script compiled all the assets and repeated the process across the full set of 84 puzzles.
+                            </p>
+
+                            <div class="project-quote">
+                                <p class="quote-text">
+                                    This project showcased the power of our hybrid workflow—blending automation with hands-on craftsmanship. It demonstrated how Stakco Paper can scale to produce high-quality, personalized puzzle experiences for large events.
+                                </p>
+                            </div>
+
+                            <h3 class="project-subtitle">Precision Printing and Assembly</h3>
+                            <p class="project-description">
+                                We partnered with a professional printing supplier to produce the <strong>transparent layers</strong> and <strong>cardboard backplates</strong>. All puzzles were then carefully <strong>assembled by hand</strong> at our workspace.
+                            </p>
+
+                            <p class="project-description">
+                                The assembly process required significant manual effort. The cutting machine used for transparency sheets required <strong>manual feeding and collection</strong> of each layer. Additionally, the <strong>eyelet pressing</strong>—which binds all layers together—was performed manually, ensuring each puzzle was precisely aligned and securely fastened.
+                            </p>
+
+                            <div class="mt-4">
+                                <a href="https://shop.stakcos.com" target="_blank" class="btn btn-modern">
+                                    <i class="fas fa-shopping-cart"></i>Order Custom Puzzles
+                                </a>
+                                <a href="index.html#contact" class="btn btn-modern btn-outline">
+                                    <i class="fas fa-heart"></i>Custom Event Quote
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="projects-section" style="background: var(--stakco-dark-velvet-night); color: white;">
+        <div class="container">
+            <div class="row align-items-center text-center">
+                <div class="col-12">
+                    <h2 class="display-5 fw-bold mb-3 fade-in text-white">Have a Project in Mind?</h2>
+                    <p class="lead fade-in mb-4">Let's collaborate to bring your interactive puzzle vision to life. From educational installations to custom celebrations.</p>
+                    <div class="d-flex gap-3 flex-wrap justify-content-center fade-in">
+                        <a href="index.html#contact" class="btn btn-modern">
+                            <i class="fas fa-rocket me-2"></i>Start a Project
+                        </a>
+                        <a href="products.html" class="btn btn-modern btn-outline">
+                            <i class="fas fa-eye me-2"></i>View Products
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Footer -->
+    <footer class="footer-modern">
+        <div class="footer-content">
+            <div class="container">
+                <!-- Main Footer Content -->
+                <div class="footer-main">
+                    <!-- Logo -->
+                    <div class="footer-logo text-center">
+                        <a href="index.html">
+                            <img src="images/logo2.png" alt="Stakco" width="160px">
+                        </a>
+                    </div>
+                    
+                    <!-- Description -->
+                    <div class="footer-description text-center">
+                        Creating magical interactions through innovative puzzle experiences that engage, educate, and inspire communities worldwide.
+                    </div>
+                    
+                    <!-- Footer Links -->
+                    <div class="footer-links">
+                        <div class="footer-link-group">
+                            <h5>Products</h5>
+                            <ul>
+                                <li><a href="products.html"><i class="fas fa-play"></i>Stakco Play</a></li>
+                                <li><a href="products.html"><i class="fas fa-file-alt"></i>Stakco Paper</a></li>
+                                <li><a href="products.html"><i class="fas fa-lightbulb"></i>Stakco Light</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="footer-link-group">
+                            <h5>Company</h5>
+                            <ul>
+                                <li><a href="projects.html"><i class="fas fa-project-diagram"></i>Projects</a></li>
+                                <li><a href="research.html"><i class="fas fa-flask"></i>Research</a></li>
+                                <li><a href="impact.html"><i class="fas fa-heart"></i>Impact</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="footer-link-group">
+                            <h5>Support</h5>
+                            <ul>
+                                <li><a href="index.html#contact"><i class="fas fa-envelope"></i>Contact Us</a></li>
+                                <li><a href="mailto:hello@stakcos.com"><i class="fas fa-question-circle"></i>Help Center</a></li>
+                                <li><a href="mailto:hello@stakcos.com"><i class="fas fa-comments"></i>Feedback</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <!-- Social Links -->
+                    <div class="footer-social">
+                        <a href="#" class="social-link" title="LinkedIn">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Twitter">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link" title="YouTube">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                        <a href="#" class="social-link" title="Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="mailto:hello@stakcos.com" class="social-link" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Footer Bottom -->
+                <div class="footer-bottom">
+                    <div class="footer-bottom-content">
+                        <div class="footer-legal">
+                            <a href="terms-conditions.html">Terms & Conditions</a>
+                            <span class="separator">•</span>
+                            <a href="privacy-policy.html">Privacy Policy</a>
+                            <span class="separator">•</span>
+                            <a href="index.html#contact">Contact</a>
+                        </div>
+                        <p class="footer-copyright">
+                            © 2025 Stakco. All rights reserved.
+                        </p>
+                    </div>
+                    
+                    <!-- Patent Information -->
+                    <div class="text-center">
+                        <div class="footer-patent">
+                            <i class="fas fa-shield-alt"></i>
+                            Patent — Singapore Application No. 10202302289U
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+        
+        // Only initialize cursor on non-touch devices
+        if (!('ontouchstart' in window)) {
+            document.addEventListener('mousemove', (e) => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                
+                setTimeout(() => {
+                    cursorFollower.style.left = e.clientX - 20 + 'px';
+                    cursorFollower.style.top = e.clientY - 20 + 'px';
+                }, 100);
+            });
+            
+            // Hover effects for interactive elements
+            const interactiveElements = document.querySelectorAll('a, button, .project-showcase, .stat-card, .tech-pill');
+            
+            interactiveElements.forEach(element => {
+                element.addEventListener('mouseenter', () => {
+                    cursor.style.transform = 'scale(1.5)';
+                    cursorFollower.style.transform = 'scale(1.5)';
+                });
+                
+                element.addEventListener('mouseleave', () => {
+                    cursor.style.transform = 'scale(1)';
+                    cursorFollower.style.transform = 'scale(1)';
+                });
+            });
+        }
+        
+        // Loading animation
+        window.addEventListener('load', () => {
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            setTimeout(() => {
+                loadingOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loadingOverlay.style.display = 'none';
+                }, 500);
+            }, 1000);
+        });
+        
+        // Enhanced navbar scroll effect
+        const navbar = document.getElementById('mainNavbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offsetTop = target.offsetTop - 100;
+                    window.scrollTo({
+                        top: offsetTop,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Floating elements parallax
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const floatingElements = document.querySelectorAll('.floating-element');
+            
+            floatingElements.forEach((element, index) => {
+                if (scrolled < window.innerHeight) {
+                    const speed = 0.2 + (index * 0.1);
+                    element.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
+                }
+            });
+        });
+        
+        // Enhanced Intersection Observer for fade-in animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 150);
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all fade-in elements
+        document.querySelectorAll('.fade-in').forEach(element => {
+            observer.observe(element);
+        });
+        
+        // Note: 3D Tilt Effect (Mouse Parallax Transform) has been disabled for this page
+        // This effect was creating rotateX/rotateY transforms based on mouse position
+        // If you want to re-enable it, uncomment the code block below:
+        
+        /*
+        // Enhanced mouse movement effects for project showcases (DISABLED)
+        let ticking = false;
+        
+        function updateProjectTransforms(e) {
+            const showcases = document.querySelectorAll('.project-showcase');
+            
+            showcases.forEach(showcase => {
+                const rect = showcase.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                
+                const rotateX = (y - centerY) / 50;
+                const rotateY = (centerX - x) / 50;
+                
+                if (rect.top <= e.clientY && e.clientY <= rect.bottom && 
+                    rect.left <= e.clientX && e.clientX <= rect.right) {
+                    showcase.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(5px)`;
+                } else {
+                    showcase.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+                }
+            });
+            
+            ticking = false;
+        }
+        
+        // Only add mouse effects on non-touch devices
+        if (!('ontouchstart' in window)) {
+            document.addEventListener('mousemove', (e) => {
+                if (!ticking) {
+                    requestAnimationFrame(() => updateProjectTransforms(e));
+                    ticking = true;
+                }
+            });
+            
+            // Reset transforms when mouse leaves viewport
+            document.addEventListener('mouseleave', () => {
+                const showcases = document.querySelectorAll('.project-showcase');
+                showcases.forEach(showcase => {
+                    showcase.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateZ(0)';
+                });
+            });
+        }
+        */
+        
+        // Animated counting for stat numbers
+        function animateValue(element, start, end, duration) {
+            const startTimestamp = performance.now();
+            
+            const step = (timestamp) => {
+                const elapsed = timestamp - startTimestamp;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const current = Math.floor(progress * (end - start) + start);
+                element.textContent = current === parseInt(end) ? end : current;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                }
+            };
+            
+            requestAnimationFrame(step);
+        }
+        
+        // Trigger stat animations when they come into view
+        const statObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !entry.target.dataset.animated) {
+                    const number = entry.target.querySelector('.stat-number');
+                    const endValue = parseInt(number.textContent) || 84;
+                    
+                    if (!isNaN(endValue)) {
+                        animateValue(number, 0, endValue, 2000);
+                        entry.target.dataset.animated = 'true';
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        document.querySelectorAll('.stat-card').forEach(card => {
+            statObserver.observe(card);
+        });
+        
+        // Tech pill hover effects
+        document.querySelectorAll('.tech-pill').forEach(pill => {
+            pill.addEventListener('mouseenter', () => {
+                pill.style.transform = 'translateY(-2px) scale(1.05)';
+            });
+            
+            pill.addEventListener('mouseleave', () => {
+                pill.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+        
+        // Performance optimization for lower-end devices
+        if (navigator.hardwareConcurrency < 4) {
+            document.body.classList.add('low-performance');
+            const style = document.createElement('style');
+            style.textContent = `
+                .low-performance .floating-element { animation: none; }
+                .low-performance .project-showcase { transition-duration: 0.2s; }
+                .low-performance .tech-pill { transition-duration: 0.2s; }
+            `;
+            document.head.appendChild(style);
+        }
+        
+        // Add subtle scroll-triggered animations for project content
+        const projectContentObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const subtitles = entry.target.querySelectorAll('.project-subtitle');
+                    subtitles.forEach((subtitle, index) => {
+                        setTimeout(() => {
+                            subtitle.style.opacity = '1';
+                            subtitle.style.transform = 'translateX(0)';
+                        }, index * 200);
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+        
+        document.querySelectorAll('.project-content').forEach(content => {
+            // Initialize subtitle styles
+            content.querySelectorAll('.project-subtitle').forEach(subtitle => {
+                subtitle.style.opacity = '0';
+                subtitle.style.transform = 'translateX(-20px)';
+                subtitle.style.transition = 'all 0.6s ease';
+            });
+            
+            projectContentObserver.observe(content);
+        });
+    </script>
+</body>
+</html>
