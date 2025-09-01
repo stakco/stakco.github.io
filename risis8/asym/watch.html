@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Face Simulator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .watch-container {
+            position: relative;
+            width: 38mm;
+            height: 38mm;
+        }
+
+        .watch-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transform-origin: center;
+            border: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* .background-gold {
+            background-color: gold;
+        } */
+
+        .base-layer {
+            left: -3mm;
+            top: -6mm;
+            width: 50mm;
+            height: 50mm;
+            background-image: url('base.svg');
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        /* Background layer (bottom) - stays static */
+        .background-layer {
+            background-image: url('bg.svg');
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* Hour hand layer (middle) - rotates every 12 hours */
+        .hour-layer {
+            background-image: url('hour.svg');
+            border-radius: 50%;
+            z-index: 2;
+            animation: hourRotation 43200s linear infinite;
+        }
+
+        /* Minute hand layer (top) - rotates every 3600 seconds */
+        .minute-layer {
+            background-image: url('minute.svg');
+            border-radius: 50%;
+            z-index: 3;
+            animation: minuteRotation 3600s linear infinite;
+        }
+
+        @keyframes hourRotation {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes minuteRotation {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="watch-container">
+
+        <!-- Base layer - watch frame -->
+        <div class="watch-layer base-layer"></div>
+
+        <!-- Background color plate (most bottom) -->
+        <!-- instead of div, let's use svg circle with the same size as other few layers here -->
+        <svg class="watch-layer" style="z-index: 0;">
+            <circle cx="50%" cy="50%" r="15mm" fill="gold" />
+        </svg>
+
+        <!-- Background layer (bottom) -->
+        <div class="watch-layer bacfkground-layer"></div>
+        
+        <!-- Hour hand layer (middle) -->
+        <div class="watch-layer hour-layer"></div>
+        
+        <!-- Minute hand layer (top) -->
+        <div class="watch-layer minute-layer"></div>
+    </div>
+
+
+    <script>
+function setInitialTime() {
+    const now = new Date();
+    const hours = now.getHours() % 12;
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+
+    // Calculate total elapsed seconds
+    const elapsedHourSeconds   = (hours * 3600) + (minutes * 60) + seconds;
+    const elapsedMinuteSeconds = (minutes * 60) + seconds;
+
+    // Apply negative animation delay so hands start at the correct position
+    document.querySelector('.hour-layer').style.animationDelay   = `-${elapsedHourSeconds}s`;
+    document.querySelector('.minute-layer').style.animationDelay = `-${elapsedMinuteSeconds}s`;
+}
+setInitialTime();
+</script>
+
+</body>
+</html>
