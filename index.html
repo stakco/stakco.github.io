@@ -75,7 +75,13 @@
                     <div class="glass-card hero-content">
                         <h1 class=" fw-bold mb-4 text-white">
                             Magical Interactions<br>
-                            <span style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                            <span style="
+                                background: var(--primary-gradient);
+                                -webkit-background-clip: text; /* Safari, Chrome */
+                                background-clip: text;         /* Standard property */
+                                -webkit-text-fill-color: transparent; /* Required for WebKit */
+                                color: transparent;            /* Fallback for other browsers */
+                                ">
                                 On Paper, On Screen, and Beyond
                             </span>
                         </h1>
