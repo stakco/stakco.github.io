@@ -7,20 +7,33 @@
     <style>
         body {
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            justify-content: flex-start;
             align-items: center;
             min-height: 100vh;
             font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .instructions {
+            margin-bottom: 20px;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            color: #333;
         }
 
         .upload-controls {
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            gap: 15px;
             margin-bottom: 30px;
-            padding: 20px;
+            margin-top: 50px;
+            width: 100%;
+            max-width: 300px;
+            align-items: center; /* Center the buttons */
         }
 
         .upload-button {
@@ -28,11 +41,17 @@
             background: white;
             border: 2px solid #ddd;
             border-radius: 8px;
-            padding: 12px 20px;
+            padding: 14px 20px;
             cursor: pointer;
             transition: all 0.2s ease;
-            font-size: 14px;
-            color: #666;
+            font-size: 15px;
+            color: #333;
+            text-align: center;
+            width: 280px; /* Fixed width instead of 100% */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
         }
 
         .upload-button:hover {
@@ -51,6 +70,8 @@
         }
 
         .watch-container {
+            margin-top: 60px;
+            margin-bottom: 20px;
             position: relative;
             width: 38mm;
             height: 38mm;
@@ -64,9 +85,8 @@
             width: 100%;
             height: 100%;
             transform-origin: center;
-            z-index: 3; /* Make sure they're above background */
+            z-index: 3;
         }
-
 
         .watch-layer {
             position: absolute;
@@ -94,14 +114,12 @@
             z-index: -1;
         }
 
-        /* Background layer (bottom) - stays static */
         .background-layer {
             background-image: url('bg.svg');
             border-radius: 50%;
             z-index: 1;
         }
 
-        /* Hour hand layer (middle) - rotates every 12 hours */
         .hour-layer {
             background-image: url('hour.svg');
             border-radius: 50%;
@@ -109,7 +127,6 @@
             animation: hourRotation 43200s linear infinite;
         }
 
-        /* Minute hand layer (top) - rotates every 3600 seconds */
         .minute-layer {
             background-image: url('minute.svg');
             border-radius: 50%;
@@ -126,55 +143,44 @@
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
-
-        .instructions {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            text-align: center;
-            font-size: 14px;
-        }
     </style>
 </head>
 <body>
-    <div class="upload-controls">
-        <label class="upload-button">
-            Upload Background
-            <input type="file" accept="image/*" id="backgroundUpload">
-        </label>
-        <label class="upload-button">
-            Upload Hour Hand
-            <input type="file" accept="image/*" id="hourUpload">
-        </label>
-        <label class="upload-button">
-            Upload Minute Hand
-            <input type="file" accept="image/*" id="minuteUpload">
-        </label>
-    </div>
+    <div class="instructions">📷 Upload images to simulate</div>
+
+    
 
     <div class="watch-container">
-        <!-- Base layer - watch frame -->
         <div class="watch-layer base-layer"></div>
 
-        <!-- Background color plate (most bottom) -->
         <svg class="watch-layer" style="z-index: 0;">
             <circle cx="50%" cy="50%" r="15mm" fill="gold" />
         </svg>
 
-        <!-- Background layer (bottom) -->
         <div class="watch-layer background-layer"></div>
         
-        <!-- Hour hand layer (middle) -->
         <div class="hour-wrapper">
             <div class="watch-layer hour-layer"></div>
         </div>
         
-        <!-- Minute hand layer (top) -->
         <div class="minute-wrapper">
             <div class="watch-layer minute-layer"></div>
         </div>
+    </div>
+
+    <div class="upload-controls">
+        <label class="upload-button">
+            Background Plate
+            <input type="file" accept="image/*" id="backgroundUpload">
+        </label>
+        <label class="upload-button">
+            Hour Plate
+            <input type="file" accept="image/*" id="hourUpload">
+        </label>
+        <label class="upload-button">
+            Minute Plate
+            <input type="file" accept="image/*" id="minuteUpload">
+        </label>
     </div>
 
     <script>
@@ -184,24 +190,14 @@ function setInitialTime() {
     const minutes = now.getMinutes();
     const seconds = now.getSeconds();
 
-    // Calculate angles based on current time
-    // Hour hand: moves 360° in 12 hours (720 minutes)
-    // Also moves continuously based on minutes and seconds
     const totalMinutes = (hours * 60) + minutes + (seconds / 60);
-    const hourAngle = (totalMinutes / 720) * 360; // 720 minutes = 12 hours
-    
-    // Minute hand: moves 360° in 60 minutes
-    const minuteAngle = ((minutes * 60) + seconds) / 60 * 6; // 6 degrees per minute
+    const hourAngle = (totalMinutes / 720) * 360;
+    const minuteAngle = ((minutes * 60) + seconds) / 60 * 6;
 
-    alert(hourAngle + ", " + minuteAngle);
-    
-    // Set initial rotation on wrapper elements
-    // ---- when we run below code, both hour and minute hands are not showing
     document.querySelector('.hour-wrapper').style.transform = `rotate(${hourAngle}deg)`;
     document.querySelector('.minute-wrapper').style.transform = `rotate(${minuteAngle}deg)`;
 }
 
-// Handle file uploads
 function handleImageUpload(inputId, targetClass) {
     document.getElementById(inputId).addEventListener('change', function(e) {
         const file = e.target.files[0];
@@ -216,13 +212,11 @@ function handleImageUpload(inputId, targetClass) {
     });
 }
 
-// Initialize upload handlers
 handleImageUpload('backgroundUpload', 'background-layer');
 handleImageUpload('hourUpload', 'hour-layer');
 handleImageUpload('minuteUpload', 'minute-layer');
 
 setInitialTime();
 </script>
-
 </body>
 </html>
