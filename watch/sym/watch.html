@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watch Face Simulator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .upload-controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        .upload-button {
+            position: relative;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .upload-button:hover {
+            border-color: #007acc;
+            background: #f8f9fa;
+        }
+
+        .upload-button input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            left: 0;
+            top: 0;
+        }
+
+        .watch-container {
+            position: relative;
+            width: 38mm;
+            height: 38mm;
+        }
+
+        .hour-wrapper,
+        .minute-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-origin: center;
+            z-index: 3; /* Make sure they're above background */
+        }
+
+
+        .watch-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transform-origin: center;
+            border: none;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .base-layer {
+            left: -3mm;
+            top: -6mm;
+            width: 50mm;
+            height: 50mm;
+            background-image: url('base.svg');
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        /* Background layer (bottom) - stays static */
+        .background-layer {
+            background-image: url('bg.svg');
+            border-radius: 50%;
+            z-index: 1;
+        }
+
+        /* Hour hand layer (middle) - rotates every 12 hours */
+        .hour-layer {
+            background-image: url('hour.svg');
+            border-radius: 50%;
+            z-index: 2;
+            animation: hourRotation 43200s linear infinite;
+        }
+
+        /* Minute hand layer (top) - rotates every 3600 seconds */
+        .minute-layer {
+            background-image: url('minute.svg');
+            border-radius: 50%;
+            z-index: 3;
+            animation: minuteRotation 3600s linear infinite;
+        }
+
+        @keyframes hourRotation {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes minuteRotation {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            text-align: center;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="upload-controls">
+        <label class="upload-button">
+            Background
+            <input type="file" accept="image/*" id="backgroundUpload">
+        </label>
+        <label class="upload-button">
+            Hour Hand
+            <input type="file" accept="image/*" id="hourUpload">
+        </label>
+        <label class="upload-button">
+            Minute Hand
+            <input type="file" accept="image/*" id="minuteUpload">
+        </label>
+    </div>
+
+    <div class="watch-container">
+        <!-- Base layer - watch frame -->
+        <div class="watch-layer base-layer"></div>
+
+        <!-- Background color plate (most bottom) -->
+        <svg class="watch-layer" style="z-index: 0;">
+            <circle cx="50%" cy="50%" r="15mm" fill="gold" />
+        </svg>
+
+        <!-- Background layer (bottom) -->
+        <div class="watch-layer background-layer"></div>
+        
+        <!-- Hour hand layer (middle) -->
+        <div class="hour-wrapper">
+            <div class="watch-layer hour-layer"></div>
+        </div>
+        
+        <!-- Minute hand layer (top) -->
+        <div class="minute-wrapper">
+            <div class="watch-layer minute-layer"></div>
+        </div>
+    </div>
+
+    <script>
+function setInitialTime() {
+    const now = new Date();
+    const hours = now.getHours() % 12;
+    const minutes = now.getMinutes();
+    const seconds = now.getSeconds();
+
+    // Calculate angles based on current time
+    // Hour hand: moves 360° in 12 hours (720 minutes)
+    // Also moves continuously based on minutes and seconds
+    const totalMinutes = (hours * 60) + minutes + (seconds / 60);
+    const hourAngle = (totalMinutes / 720) * 360; // 720 minutes = 12 hours
+    
+    // Minute hand: moves 360° in 60 minutes
+    const minuteAngle = ((minutes * 60) + seconds) / 60 * 6; // 6 degrees per minute
+
+    alert(hourAngle + ", " + minuteAngle);
+    
+    // Set initial rotation on wrapper elements
+    // ---- when we run below code, both hour and minute hands are not showing
+    document.querySelector('.hour-wrapper').style.transform = `rotate(${hourAngle}deg)`;
+    document.querySelector('.minute-wrapper').style.transform = `rotate(${minuteAngle}deg)`;
+}
+
+// Handle file uploads
+function handleImageUpload(inputId, targetClass) {
+    document.getElementById(inputId).addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageUrl = e.target.result;
+                document.querySelector(`.${targetClass}`).style.backgroundImage = `url(${imageUrl})`;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+}
+
+// Initialize upload handlers
+handleImageUpload('backgroundUpload', 'background-layer');
+handleImageUpload('hourUpload', 'hour-layer');
+handleImageUpload('minuteUpload', 'minute-layer');
+
+setInitialTime();
+</script>
+
+</body>
+</html>
