@@ -19,8 +19,10 @@
 
         #container {
             position: relative;
-            width: 300px;
-            height: 300px;
+            width: 90vmin;
+            height: 90vmin;
+            max-width: calc(100vw - 20px);
+            max-height: calc(100vh - 240px); /* Account for info bar (80px) + station tracker (160px) */
         }
 
         .mrt-layer {
@@ -28,8 +30,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 250px;
-            height: 250px;
+            width: 100%;
+            height: 100%;
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
@@ -37,20 +39,17 @@
         }
 
         #green-line {
-            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0_thumb.png');
-            /* background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSIxMjUiIGN5PSIxMjUiIHI9IjEwMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDA4MDAwIiBzdHJva2Utd2lkdGg9IjEwIiBvcGFjaXR5PSIwLjgiLz4KICA8dGV4dCB4PSIxMjUiIHk9IjEzMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzAwODAwMCIgZm9udC1zaXplPSIxNCIgZm9udC13ZWlnaHQ9ImJvbGQiPkdyZWVuIExpbmU8L3RleHQ+Cjwvc3ZnPg=='); */
+            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png');
             z-index: 3;
         }
 
         #yellow-line {
-            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png');
-            /* background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSIxMjUiIGN5PSIxMjUiIHI9IjgwIiBmaWxsPSJub25lIiBzdHJva2U9IiNGRkQ3MDAiIHN0cm9rZS13aWR0aD0iMTAiIG9wYWNpdHk9IjAuOCIvPgogIDx0ZXh0IHg9IjEyNSIgeT0iMTMwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjRkZENzAwIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iYm9sZCI+WWVsbG93IExpbmU8L3RleHQ+Cjwvc3ZnPg=='); */
+            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png');
             z-index: 2;
         }
 
         #blue-line {
-            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2_thumb.png');
-            /* background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjUwIiBoZWlnaHQ9IjI1MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8Y2lyY2xlIGN4PSIxMjUiIGN5PSIxMjUiIHI9IjYwIiBmaWxsPSJub25lIiBzdHJva2U9IiMwMDZBRDAiIHN0cm9rZS13aWR0aD0iMTAiIG9wYWNpdHk9IjAuOCIvPgogIDx0ZXh0IHg9IjEyNSIgeT0iMTMwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjMDA2QUQwIiBmb250LXNpemU9IjE0IiBmb250LXdlaWdodD0iYm9sZCI+Qmx1ZSBMaW5lPC90ZXh0Pgo8L3N2Zz4='); */
+            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png');
             z-index: 1;
         }
 
@@ -59,7 +58,6 @@
             top: 20px;
             left: 20px;
             right: 20px;
-            background: rgba(255, 255, 255, 0.9);
             padding: 15px;
             border-radius: 10px;
             font-size: 14px;
@@ -67,7 +65,7 @@
 
         #status {
             position: absolute;
-            bottom: 20px;
+            bottom: 180px;
             left: 20px;
             right: 20px;
             background: rgba(0, 0, 0, 0.8);
@@ -80,14 +78,227 @@
         .active {
             box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
         }
+
+        #station-tracker {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 160px;
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border-top: 2px solid #333;
+        }
+
+        .line-display {
+            display: none;
+            padding: 10px;
+            height: 140px;
+        }
+
+        .line-display.active-display {
+            display: block;
+        }
+
+        .line-header {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .stations-container {
+            position: relative;
+            height: 100px;
+            width: 100%;
+            overflow-x: auto;
+            overflow-y: hidden;
+        }
+
+        .stations-line {
+            position: relative;
+            height: 4px;
+            background: #333;
+            margin: 50px 20px;
+            border-radius: 2px;
+            min-width: calc(100vw - 40px);
+        }
+
+        .station-point {
+            position: absolute;
+            top: -8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 3px solid #666;
+            background: #222;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        .station-point.current {
+            background: #FFD700;
+            border-color: #FFA500;
+            box-shadow: 0 0 15px #FFD700;
+            animation: pulse 2s infinite;
+        }
+
+        .station-point.proximity {
+            background: #FF6B6B;
+            border-color: #FF4757;
+            box-shadow: 0 0 10px #FF6B6B;
+        }
+
+        .station-point.passed {
+            background: #4ECDC4;
+            border-color: #26de81;
+        }
+
+        .station-name {
+            position: absolute;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-45deg);
+            transform-origin: center;
+            font-size: 10px;
+            white-space: nowrap;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 2px 4px;
+            border-radius: 3px;
+            border: 1px solid #444;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .station-distance {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 8px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1px 3px;
+            border-radius: 2px;
+            border: 1px solid #666;
+            display: none;
+        }
+
+        .station-point.current .station-distance,
+        .station-point.proximity .station-distance {
+            display: block;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 15px #FFD700; }
+            50% { box-shadow: 0 0 25px #FFD700, 0 0 35px #FFD700; }
+            100% { box-shadow: 0 0 15px #FFD700; }
+        }
+
+        .line-selector {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .line-button {
+            width: 30px;
+            height: 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: bold;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .line-button.green { background: #008000; }
+        .line-button.yellow { background: #FFD700; color: black; }
+        .line-button.blue { background: #006AD0; }
+
+        .line-button.active-button {
+            box-shadow: 0 0 10px currentColor;
+            transform: scale(1.1);
+        }
+
+        .progress-indicator {
+            position: absolute;
+            top: -2px;
+            height: 8px;
+            background: linear-gradient(90deg, transparent 0%, currentColor 50%, transparent 100%);
+            border-radius: 4px;
+            transition: all 0.5s ease;
+            opacity: 0.6;
+        }
+
+        /* LED Text Styling */
+.led-text {
+    display: block;
+    margin: 5px 0;
+    font-family: 'Courier New', monospace; /* dashboard look */
+    font-size: 16px;
+    color: #0f0; /* default green LED glow */
+    text-shadow: 
+        0 0 5px #0f0,
+        0 0 10px #0f0,
+        0 0 20px #0f0,
+        0 0 40px #0f0;
+    letter-spacing: 2px;
+}
+
+/* Labels in dimmer LED */
+.led-label {
+    color: #0a0;
+    font-weight: bold;
+    margin-right: 6px;
+    text-shadow: 
+        0 0 3px #060,
+        0 0 6px #090;
+}
+
+/* Values in stronger LED */
+.led-value {
+    color: #0f0;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Different LED colors depending on type */
+.led-coords { color: #0ff; text-shadow: 0 0 5px #0ff, 0 0 15px #0ff; }  /* cyan GPS */
+.led-station { color: #ff0; text-shadow: 0 0 5px #ff0, 0 0 15px #ff0; }  /* yellow station */
+.led-active { color: #f00; text-shadow: 0 0 5px #f00, 0 0 15px #f00; }   /* red active line */
+
+/* Optional subtle flicker for realism */
+@keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+    20%, 24%, 55% { opacity: 0.8; }
+    22% { opacity: 0.6; }
+}
+.led-text, .led-value {
+    animation: flicker 2.5s infinite;
+}
+
     </style>
 </head>
 <body>
     <div id="info">
-        <h3>Singapore MRT Line Tracker</h3>
-        <p>Current Location: <span id="coordinates">Getting GPS...</span></p>
-        <p>Nearest Station: <span id="nearest-station">Detecting...</span></p>
-        <p>Active Line: <span id="active-line">None</span></p>
+        <span class="led-text">
+            <span class="led-label">GPS:</span>
+            <span class="led-value led-coords" id="coordinates">Getting...</span>
+        </span>
+        <span class="led-text">
+            <span class="led-label">STN:</span>
+            <span class="led-value led-station" id="nearest-station">Detecting</span>
+        </span>
+        <span class="led-text">
+            <span class="led-label">LNE:</span>
+            <span class="led-value led-active" id="active-line">None</span>
+        </span>
     </div>
 
     <div id="container">
@@ -100,53 +311,142 @@
         <p id="gps-status">Initializing GPS...</p>
     </div>
 
+    <div id="station-tracker">
+        <div class="line-selector">
+            <button class="line-button green active-button" data-line="green">G</button>
+            <button class="line-button yellow" data-line="yellow">Y</button>
+            <button class="line-button blue" data-line="blue">B</button>
+        </div>
+        
+        <div id="green-display" class="line-display active-display">
+            <div class="line-header" style="color: #008000;">Green Line (North-South)</div>
+            <div class="stations-container">
+                <div class="stations-line" style="background: #008000;" id="green-stations-line"></div>
+            </div>
+        </div>
+        
+        <div id="yellow-display" class="line-display">
+            <div class="line-header" style="color: #FFD700;">Yellow Line (Circle)</div>
+            <div class="stations-container">
+                <div class="stations-line" style="background: #FFD700;" id="yellow-stations-line"></div>
+            </div>
+        </div>
+        
+        <div id="blue-display" class="line-display">
+            <div class="line-header" style="color: #006AD0;">Blue Line (Downtown)</div>
+            <div class="stations-container">
+                <div class="stations-line" style="background: #006AD0;" id="blue-stations-line"></div>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Singapore MRT Station Coordinates (sample stations for each line)
         const mrtStations = {
             green: [
-                { name: "Tanjong Pagar", lat: 1.276568, lng: 103.845436 },
-                { name: "Raffles Place", lat: 1.283806, lng: 103.851533 },
-                { name: "City Hall", lat: 1.293239, lng: 103.852219 },
-                { name: "Dhoby Ghaut", lat: 1.299156, lng: 103.845736 },
-                { name: "Somerset", lat: 1.300514, lng: 103.838975 },
-                { name: "Orchard", lat: 1.304314, lng: 103.831939 },
-                { name: "Newton", lat: 1.313083, lng: 103.838358 },
-                { name: "Novena", lat: 1.320394, lng: 103.843681 },
-                { name: "Toa Payoh", lat: 1.332706, lng: 103.847325 },
-                { name: "Braddell", lat: 1.340333, lng: 103.847078 },
-                { name: "Bishan", lat: 1.351236, lng: 103.848456 },
-                { name: "Ang Mo Kio", lat: 1.369847, lng: 103.849444 },
-                { name: "Yio Chu Kang", lat: 1.382067, lng: 103.844817 },
-                { name: "Woodlands", lat: 1.437083, lng: 103.786500 }
+                { name: "Tuas Link", lat: 1.334722, lng: 103.636111 },
+                { name: "Tuas West Road", lat: 1.332500, lng: 103.644167 },
+                { name: "Tuas Crescent", lat: 1.331389, lng: 103.653611 },
+                { name: "Gul Circle", lat: 1.331111, lng: 103.662500 },
+                { name: "Joo Koon", lat: 1.326111, lng: 103.667500 },
+                { name: "Pioneer", lat: 1.315278, lng: 103.670833 },
+                { name: "Boon Lay", lat: 1.337500, lng: 103.706389 },
+                { name: "Lakeside", lat: 1.340278, lng: 103.705278 },
+                { name: "Chinese Garden", lat: 1.347222, lng: 103.737500 },
+                { name: "Jurong East", lat: 1.333611, lng: 103.742500 },
+                { name: "Clementi", lat: 1.315000, lng: 103.765278 },
+                { name: "Dover", lat: 1.306111, lng: 103.772222 },
+                { name: "Buona Vista", lat: 1.304444, lng: 103.790833 },
+                { name: "Commonwealth", lat: 1.296389, lng: 103.800278 },
+                { name: "Queenstown", lat: 1.294167, lng: 103.816667 },
+                { name: "Redhill", lat: 1.288611, lng: 103.819722 },
+                { name: "Tiong Bahru", lat: 1.284167, lng: 103.828611 },
+                { name: "Outram Park", lat: 1.280278, lng: 103.831667 },
+                { name: "Tanjong Pagar", lat: 1.276389, lng: 103.844722 },
+                { name: "Raffles Place", lat: 1.283333, lng: 103.851944 },
+                { name: "City Hall", lat: 1.293611, lng: 103.852500 },
+                { name: "Bugis", lat: 1.300278, lng: 103.857500 },
+                { name: "Lavender", lat: 1.308611, lng: 103.873611 },
+                { name: "Kallang", lat: 1.315278, lng: 103.877500 },
+                { name: "Aljunied", lat: 1.319167, lng: 103.884722 },
+                { name: "Paya Lebar", lat: 1.317500, lng: 103.894722 },
+                { name: "Eunos", lat: 1.319167, lng: 103.904722 },
+                { name: "Kembangan", lat: 1.318611, lng: 103.915278 },
+                { name: "Bedok", lat: 1.324167, lng: 103.927500 },
+                { name: "Tanah Merah", lat: 1.327500, lng: 103.945000 },
+                { name: "Simei", lat: 1.343611, lng: 103.956389 },
+                { name: "Tampines", lat: 1.353611, lng: 103.945833 },
+                { name: "Pasir Ris", lat: 1.372222, lng: 103.949722 }
             ],
             yellow: [
                 { name: "HarbourFront", lat: 1.265297, lng: 103.822203 },
-                { name: "Chinatown", lat: 1.284017, lng: 103.843889 },
-                { name: "Clarke Quay", lat: 1.288611, lng: 103.846694 },
-                { name: "Dhoby Ghaut", lat: 1.299156, lng: 103.845736 },
-                { name: "Little India", lat: 1.306967, lng: 103.849283 },
-                { name: "Farrer Park", lat: 1.312236, lng: 103.853544 },
-                { name: "Boon Keng", lat: 1.319528, lng: 103.861547 },
-                { name: "Potong Pasir", lat: 1.331019, lng: 103.869228 },
-                { name: "Woodleigh", lat: 1.339117, lng: 103.870394 },
-                { name: "Serangoon", lat: 1.349872, lng: 103.873181 },
-                { name: "Kovan", lat: 1.360025, lng: 103.885119 },
-                { name: "Hougang", lat: 1.371236, lng: 103.892336 },
-                { name: "Punggol", lat: 1.405064, lng: 103.902331 }
-            ],
-            blue: [
-                { name: "Bugis", lat: 1.300192, lng: 103.856253 },
-                { name: "City Hall", lat: 1.293239, lng: 103.852219 },
-                { name: "Raffles Place", lat: 1.283806, lng: 103.851533 },
-                { name: "Marina Bay", lat: 1.276056, lng: 103.854675 },
-                { name: "Bayfront", lat: 1.282375, lng: 103.859694 },
-                { name: "Promenade", lat: 1.292861, lng: 103.861178 },
+                { name: "Telok Blangah", lat: 1.274517, lng: 103.815972 },
+                { name: "Labrador Park", lat: 1.280167, lng: 103.808556 },
+                { name: "Pasir Panjang", lat: 1.286389, lng: 103.787222 },
+                { name: "Haw Par Villa", lat: 1.290556, lng: 103.782500 },
+                { name: "Kent Ridge", lat: 1.293611, lng: 103.784722 },
+                { name: "One-North", lat: 1.300278, lng: 103.787500 },
+                { name: "Buona Vista", lat: 1.304444, lng: 103.790833 },
+                { name: "Holland Village", lat: 1.309167, lng: 103.798056 },
+                { name: "Farrer Road", lat: 1.319444, lng: 103.807500 },
+                { name: "Botanic Gardens", lat: 1.323611, lng: 103.814167 },
+                { name: "Caldecott", lat: 1.332500, lng: 103.816667 },
+                { name: "Marymount", lat: 1.340833, lng: 103.835000 },
+                { name: "Bishan", lat: 1.351236, lng: 103.848456 },
+                { name: "Lorong Chuan", lat: 1.360278, lng: 103.849722 },
+                { name: "Serangoon", lat: 1.358611, lng: 103.870833 },
+                { name: "Bartley", lat: 1.340278, lng: 103.879167 },
+                { name: "Tai Seng", lat: 1.333611, lng: 103.886667 },
+                { name: "MacPherson", lat: 1.326111, lng: 103.893056 },
+                { name: "Paya Lebar", lat: 1.317500, lng: 103.894722 },
+                { name: "Dakota", lat: 1.308611, lng: 103.895556 },
+                { name: "Mountbatten", lat: 1.303611, lng: 103.895000 },
+                { name: "Stadium", lat: 1.301389, lng: 103.874444 },
+                { name: "Nicoll Highway", lat: 1.302500, lng: 103.863611 },
+                { name: "promenade", lat: 1.292861, lng: 103.861178 },
                 { name: "Esplanade", lat: 1.293489, lng: 103.855436 },
                 { name: "Bras Basah", lat: 1.297031, lng: 103.850964 },
                 { name: "Bencoolen", lat: 1.301019, lng: 103.850356 },
-                { name: "Jalan Besar", lat: 1.305283, lng: 103.855411 },
-                { name: "Lavender", lat: 1.307297, lng: 103.862981 },
-                { name: "Kallang", lat: 1.311469, lng: 103.871486 }
+                { name: "Dhoby Ghaut", lat: 1.299156, lng: 103.845736 }
+            ],
+            blue: [
+                { name: "Bukit Panjang", lat: 1.377667, lng: 103.763500 },
+                { name: "Cashew", lat: 1.370833, lng: 103.770278 },
+                { name: "Hillview", lat: 1.362500, lng: 103.772500 },
+                { name: "Hume", lat: 1.352500, lng: 103.772222 },
+                { name: "Beauty World", lat: 1.340278, lng: 103.772222 },
+                { name: "King Albert Park", lat: 1.329167, lng: 103.776389 },
+                { name: "Sixth Avenue", lat: 1.323611, lng: 103.779722 },
+                { name: "Tan Kah Kee", lat: 1.315278, lng: 103.781111 },
+                { name: "Botanic Gardens", lat: 1.323611, lng: 103.814167 },
+                { name: "Stevens", lat: 1.320278, lng: 103.835000 },
+                { name: "Newton", lat: 1.313083, lng: 103.838358 },
+                { name: "Little India", lat: 1.307167, lng: 103.849722 },
+                { name: "Rochor", lat: 1.303611, lng: 103.855000 },
+                { name: "Bugis", lat: 1.300278, lng: 103.857500 },
+                { name: "Promenade", lat: 1.292861, lng: 103.861178 },
+                { name: "Bayfront", lat: 1.283556, lng: 103.860833 },
+                { name: "Downtown", lat: 1.283333, lng: 103.851944 },
+                { name: "Telok Ayer", lat: 1.282222, lng: 103.848611 },
+                { name: "Chinatown", lat: 1.283333, lng: 103.843611 },
+                { name: "Fort Canning", lat: 1.290278, lng: 103.844722 },
+                { name: "Bencoolen", lat: 1.301019, lng: 103.850356 },
+                { name: "Jalan Besar", lat: 1.308056, lng: 103.856111 },
+                { name: "Bendemeer", lat: 1.315278, lng: 103.861389 },
+                { name: "Geylang Bahru", lat: 1.320278, lng: 103.866667 },
+                { name: "Mattar", lat: 1.326111, lng: 103.886667 },
+                { name: "MacPherson", lat: 1.326111, lng: 103.893056 },
+                { name: "Ubi", lat: 1.324167, lng: 103.903611 },
+                { name: "Kaki Bukit", lat: 1.321389, lng: 103.912500 },
+                { name: "Bedok North", lat: 1.320278, lng: 103.928611 },
+                { name: "Bedok Reservoir", lat: 1.319167, lng: 103.940000 },
+                { name: "Tampines West", lat: 1.350000, lng: 103.945000 },
+                { name: "Tampines", lat: 1.353611, lng: 103.945833 },
+                { name: "Tampines East", lat: 1.354722, lng: 103.957500 },
+                { name: "Upper Changi", lat: 1.357500, lng: 103.973611 },
+                { name: "Expo", lat: 1.334722, lng: 103.961111 },
+                { name: "Xilin", lat: 1.325000, lng: 103.962500 },
+                { name: "Sungei Bedok", lat: 1.318611, lng: 103.961389 }
             ]
         };
 
@@ -154,6 +454,9 @@
         let currentLocation = null;
         let activeLines = { green: false, yellow: false, blue: false };
         let rotationAngles = { green: 0, yellow: 0, blue: 0 };
+        let currentDisplayLine = 'green';
+        let stationElements = { green: [], yellow: [], blue: [] };
+        let currentStations = { green: null, yellow: null, blue: null };
         
         // Proximity threshold in meters
         const PROXIMITY_THRESHOLD = 500;
@@ -243,9 +546,114 @@
             return activeLinesArray;
         }
 
+        // Initialize station displays
+        function initializeStationDisplays() {
+            Object.keys(mrtStations).forEach(lineColor => {
+                const stationsLine = document.getElementById(`${lineColor}-stations-line`);
+                const stations = mrtStations[lineColor];
+                const lineWidth = Math.max(800, stations.length * 80); // Minimum width for proper spacing
+                
+                stationsLine.style.width = `${lineWidth}px`;
+                stationElements[lineColor] = [];
+                
+                stations.forEach((station, index) => {
+                    // Create station point
+                    const stationPoint = document.createElement('div');
+                    stationPoint.className = 'station-point';
+                    stationPoint.style.left = `${(index / (stations.length - 1)) * (lineWidth - 40) + 20}px`;
+                    
+                    // Create station name label
+                    const stationName = document.createElement('div');
+                    stationName.className = 'station-name';
+                    stationName.textContent = station.name;
+                    stationPoint.appendChild(stationName);
+                    
+                    // Create distance indicator
+                    const stationDistance = document.createElement('div');
+                    stationDistance.className = 'station-distance';
+                    stationPoint.appendChild(stationDistance);
+                    
+                    stationsLine.appendChild(stationPoint);
+                    stationElements[lineColor].push({
+                        element: stationPoint,
+                        station: station,
+                        distanceElement: stationDistance
+                    });
+                });
+            });
+        }
+
+        // Update station display based on current location
+        function updateStationDisplay(nearestStations) {
+            Object.keys(nearestStations).forEach(lineColor => {
+                const stations = mrtStations[lineColor];
+                const elements = stationElements[lineColor];
+                const nearestStation = nearestStations[lineColor];
+                
+                elements.forEach((stationData, index) => {
+                    const element = stationData.element;
+                    const station = stationData.station;
+                    const distanceElement = stationData.distanceElement;
+                    
+                    // Calculate distance to this station
+                    if (currentLocation) {
+                        const distance = calculateDistance(
+                            currentLocation.lat, currentLocation.lng,
+                            station.lat, station.lng
+                        );
+                        
+                        // Update distance display
+                        distanceElement.textContent = `${Math.round(distance)}m`;
+                        
+                        // Reset classes
+                        element.className = 'station-point';
+                        
+                        // Determine station status
+                        if (station.name === nearestStation.name && distance <= PROXIMITY_THRESHOLD) {
+                            element.classList.add('current');
+                            currentStations[lineColor] = index;
+                        } else if (distance <= PROXIMITY_THRESHOLD * 1.5) {
+                            element.classList.add('proximity');
+                        } else if (currentStations[lineColor] !== null && index < currentStations[lineColor]) {
+                            element.classList.add('passed');
+                        }
+                    }
+                });
+                
+                // Auto-scroll to current station if on active display
+                if (lineColor === currentDisplayLine && currentStations[lineColor] !== null) {
+                    const currentElement = elements[currentStations[lineColor]].element;
+                    const container = currentElement.parentElement.parentElement;
+                    const elementLeft = parseInt(currentElement.style.left);
+                    const containerWidth = container.clientWidth;
+                    
+                    container.scrollLeft = elementLeft - containerWidth / 2;
+                }
+            });
+        }
+
+        // Switch between line displays
+        function switchLineDisplay(lineColor) {
+            // Hide all displays
+            document.querySelectorAll('.line-display').forEach(display => {
+                display.classList.remove('active-display');
+            });
+            
+            // Remove active button styling
+            document.querySelectorAll('.line-button').forEach(button => {
+                button.classList.remove('active-button');
+            });
+            
+            // Show selected display
+            document.getElementById(`${lineColor}-display`).classList.add('active-display');
+            document.querySelector(`[data-line="${lineColor}"]`).classList.add('active-button');
+            
+            currentDisplayLine = lineColor;
+        }
+
         // Update UI with current information
         function updateUI(lat, lng, nearestStations, activeLines) {
-            coordinatesSpan.textContent = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+            coordinatesSpan.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
             
             // Find overall nearest station
             let overallNearest = null;
@@ -263,6 +671,17 @@
             }
             
             activeLineSpan.textContent = activeLines.length > 0 ? activeLines.join(', ') : 'None';
+            
+            // Update LED indicator for active lines
+            const lineLed = document.getElementById('line-led');
+            if (activeLines.length > 0) {
+                lineLed.className = 'led-dot active';
+            } else {
+                lineLed.className = 'led-dot inactive';
+            }
+            
+            // Update station display
+            updateStationDisplay(nearestStations);
         }
 
         // Handle geolocation success
@@ -302,6 +721,16 @@
 
         // Initialize the app
         function initApp() {
+            // Initialize station displays
+            initializeStationDisplays();
+            
+            // Add line selector event listeners
+            document.querySelectorAll('.line-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    switchLineDisplay(button.dataset.line);
+                });
+            });
+            
             if ('geolocation' in navigator) {
                 gpsStatus.textContent = 'Requesting location permission...';
                 
