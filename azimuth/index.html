@@ -36,7 +36,7 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            transition: transform 0.3s ease-out;
+            transition: transform 0.1s ease-out;
         }
 
         .puzzle-layer.active {
@@ -83,7 +83,7 @@
 
         #controls {
             position: absolute;
-            bottom: 50px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -194,48 +194,6 @@
             animation: flicker 2.5s infinite;
         }
 
-        #compass-indicator {
-            position: absolute;
-            top: 70px;
-            right: 30px;
-            transform: translateY(-50%);
-            width: 80px;
-            height: 80px;
-            border: 3px solid #fff;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 12px;
-            color: white;
-            z-index: 1000;
-        }
-
-        #compass-needle {
-            position: absolute;
-            width: 2px;
-            height: 30px;
-            background: #ff0000;
-            top: 10px;
-            left: 50%;
-            transform-origin: bottom center;
-            transform: translateX(-50%) rotate(0deg);
-            transition: transform 0.1s ease-out;
-        }
-
-        #compass-needle::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -3px;
-            width: 0;
-            height: 0;
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-            border-bottom: 8px solid #ff0000;
-        }
-
         .permission-prompt {
             position: fixed;
             top: 50%;
@@ -285,8 +243,8 @@
             <span class="led-value led-layer" id="active-layer">1</span>
         </span>
         <span class="led-text">
-            <span class="led-label">PZL:</span>
-            <span class="led-value led-puzzle" id="puzzle-status">Loading</span>
+            <span class="led-label">ROT:</span>
+            <span class="led-value led-puzzle" id="rotation-value">0°</span>
         </span>
     </div>
 
@@ -294,14 +252,6 @@
         <div id="layer1" class="puzzle-layer active"></div>
         <div id="layer2" class="puzzle-layer"></div>
         <div id="layer3" class="puzzle-layer"></div>
-    </div>
-
-    <div id="compass-indicator">
-        <div id="compass-needle"></div>
-        <div style="position: absolute; top: 5px; font-size: 10px;">N</div>
-        <div style="position: absolute; bottom: 5px; font-size: 10px;">S</div>
-        <div style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); font-size: 10px;">E</div>
-        <div style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 10px;">W</div>
     </div>
 
     <div id="status">
@@ -312,10 +262,6 @@
         <button class="layer-button layer1 active" data-layer="1">1</button>
         <button class="layer-button layer2" data-layer="2">2</button>
         <button class="layer-button layer3" data-layer="3">3</button>
-    </div>
-
-    <div id="version-info" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: #666; font-size: 10px; font-family: 'Courier New', monospace;">
-        v1.2.0
     </div>
 
     <div id="permission-prompt" class="permission-prompt">
@@ -329,32 +275,43 @@
         // App state
         let currentLayer = 1;
         let currentHeading = 0;
-        let previousHeading = 0;
-        let puzzleData = null;
+        let lastHeading = null;
         let orientationSupported = false;
-        let calibrationOffset = 0;
-        let isFirstReading = true;
+        let isRotating = false;
 
-        // Puzzle layer data structure
+        // Puzzle layer data structure with random initial rotations
         const puzzleLayers = {
-            layer1: { url: null, rotation: 0 },
-            layer2: { url: null, rotation: 0 },
-            layer3: { url: null, rotation: 0 }
+            layer1: { 
+                url: null, 
+                rotation: 350, // Random initial rotation
+                baseRotation: 350 // Store the base rotation
+            },
+            layer2: { 
+                url: null, 
+                rotation: 83, // Random initial rotation
+                baseRotation: 83 // Store the base rotation
+            },
+            layer3: { 
+                url: null, 
+                rotation: 270, // Random initial rotation
+                baseRotation: 270 // Store the base rotation
+            }
         };
+
+        // Delta tracking variables
+        let rotationStartHeading = null;
+        let rotationStartRotation = null;
 
         // DOM elements
         const compassHeading = document.getElementById('compass-heading');
         const activeLayerSpan = document.getElementById('active-layer');
-        const puzzleStatusSpan = document.getElementById('puzzle-status');
+        const rotationValueSpan = document.getElementById('rotation-value');
         const orientationStatus = document.getElementById('orientation-status');
-        const compassNeedle = document.getElementById('compass-needle');
         const permissionPrompt = document.getElementById('permission-prompt');
 
         // Load today's puzzle data
         async function loadPuzzleData() {
             try {
-                puzzleStatusSpan.textContent = 'Loading...';
-                
                 // Format today's date as YYYY-MM-DD
                 const today = new Date();
                 const dateStr = today.toISOString().split('T')[0];
@@ -366,78 +323,118 @@
                 puzzleLayers.layer2.url = 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png';
                 puzzleLayers.layer3.url = 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png';
 
-                // Images are already set in CSS, so just update status
-                puzzleStatusSpan.textContent = dateStr;
+                // Apply initial random rotations to all layers
+                applyInitialRotations();
+                updateRotationDisplay();
+
                 console.log('Puzzle images loaded successfully');
+                console.log('Initial rotations:', {
+                    layer1: puzzleLayers.layer1.rotation + '°',
+                    layer2: puzzleLayers.layer2.rotation + '°',
+                    layer3: puzzleLayers.layer3.rotation + '°'
+                });
 
             } catch (error) {
                 console.error('Error loading puzzle data:', error);
-                puzzleStatusSpan.textContent = 'Error';
                 orientationStatus.textContent = 'Failed to load puzzle data';
             }
+        }
+
+        // Apply initial random rotations to all layers
+        function applyInitialRotations() {
+            Object.keys(puzzleLayers).forEach(layerKey => {
+                const layerNumber = layerKey.replace('layer', '');
+                const layerElement = document.getElementById(layerKey);
+                const rotation = puzzleLayers[layerKey].rotation;
+                
+                if (layerElement) {
+                    layerElement.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+                }
+            });
         }
 
         // Handle device orientation
         function handleOrientation(event) {
             if (!orientationSupported) return;
 
-            // Get the compass heading (alpha represents rotation around z-axis)
             let heading = event.alpha;
             if (heading === null) return;
 
-            // Convert to absolute compass reading (0° = North, 90° = East, etc.)
-            // Device orientation alpha is typically 0° when device points North
-            // but we want to use the true compass value
-            let absoluteHeading = heading;
+            currentHeading = heading;
 
-            // Handle the 0°/360° transition to prevent sudden jumps
-            if (!isFirstReading) {
-                let diff = absoluteHeading - previousHeading;
-                
-                // If difference is greater than 180°, we've crossed the 0°/360° boundary
-                if (diff > 180) {
-                    // We went from ~360° to ~0°, so subtract 360° from current to make smooth transition
-                    absoluteHeading -= 360;
-                } else if (diff < -180) {
-                    // We went from ~0° to ~360°, so add 360° to current to make smooth transition
-                    absoluteHeading += 360;
-                }
+            // Show current compass heading
+            compassHeading.textContent = `${Math.round(heading)}°`;
+
+            // If we're tracking rotation for the active layer
+            if (rotationStartHeading !== null) {
+                updateLayerRotationWithDelta();
             }
-
-            // Store for transition detection
-            previousHeading = currentHeading;
-            currentHeading = absoluteHeading;
-            isFirstReading = false;
-
-            // For display purposes, normalize to 0-360 range
-            let displayHeading = absoluteHeading;
-            while (displayHeading < 0) displayHeading += 360;
-            while (displayHeading >= 360) displayHeading -= 360;
-
-            // Update UI with normalized heading
-            compassHeading.textContent = `${Math.round(displayHeading)}°`;
-            
-            // Update compass needle with normalized heading
-            compassNeedle.style.transform = `translateX(-50%) rotate(${displayHeading}deg)`;
-
-            // Rotate the active layer with smooth transition (using the continuous heading value)
-            updateLayerRotation();
         }
 
-        // Update the rotation of the currently active layer
-        function updateLayerRotation() {
+        // Start tracking rotation for the current layer
+        function startRotationTracking() {
+            if (currentHeading !== null) {
+                rotationStartHeading = currentHeading;
+                rotationStartRotation = puzzleLayers[`layer${currentLayer}`].rotation;
+                isRotating = true;
+                console.log(`Started rotation tracking for layer ${currentLayer} at heading ${Math.round(currentHeading)}°`);
+            }
+        }
+
+        // Stop tracking rotation
+        function stopRotationTracking() {
+            if (isRotating) {
+                // Update the base rotation to the current rotation
+                puzzleLayers[`layer${currentLayer}`].baseRotation = puzzleLayers[`layer${currentLayer}`].rotation;
+                rotationStartHeading = null;
+                rotationStartRotation = null;
+                isRotating = false;
+                console.log(`Stopped rotation tracking for layer ${currentLayer}`);
+            }
+        }
+
+        // Update the rotation of the currently active layer based on compass delta
+        function updateLayerRotationWithDelta() {
+            if (rotationStartHeading === null || currentHeading === null) return;
+
+            // Calculate the delta from when we started rotating
+            let deltaHeading = currentHeading - rotationStartHeading;
+            
+            // Handle compass wrapping (0-360 boundary)
+            if (deltaHeading > 180) deltaHeading -= 360;
+            if (deltaHeading < -180) deltaHeading += 360;
+
+            // Calculate new rotation
+            const newRotation = rotationStartRotation + deltaHeading;
+            
+            // Normalize to 0-360 range
+            let normalizedRotation = newRotation % 360;
+            if (normalizedRotation < 0) normalizedRotation += 360;
+
+            // Update the layer rotation
+            puzzleLayers[`layer${currentLayer}`].rotation = normalizedRotation;
+
+            // Apply rotation to the layer element
             const activeLayerElement = document.getElementById(`layer${currentLayer}`);
             if (activeLayerElement) {
-                // Store the rotation value (use continuous heading to prevent jumps)
-                puzzleLayers[`layer${currentLayer}`].rotation = currentHeading;
-                
-                // Apply rotation using the continuous heading value
-                activeLayerElement.style.transform = `translate(-50%, -50%) rotate(${currentHeading}deg)`;
+                activeLayerElement.style.transform = `translate(-50%, -50%) rotate(${normalizedRotation}deg)`;
             }
+
+            // Update display
+            updateRotationDisplay();
+        }
+
+        // Update rotation value display
+        function updateRotationDisplay() {
+            const currentRotation = puzzleLayers[`layer${currentLayer}`].rotation;
+            rotationValueSpan.textContent = `${Math.round(currentRotation)}°`;
         }
 
         // Switch active layer
         function switchLayer(layerNumber) {
+            // Stop any current rotation tracking
+            stopRotationTracking();
+
             // Remove active class from all layers and buttons
             document.querySelectorAll('.puzzle-layer').forEach(layer => {
                 layer.classList.remove('active');
@@ -453,10 +450,10 @@
             currentLayer = layerNumber;
             activeLayerSpan.textContent = layerNumber;
 
-            // Apply current heading to the newly selected layer
-            updateLayerRotation();
+            // Update rotation display for the new layer
+            updateRotationDisplay();
 
-            console.log(`Switched to layer ${layerNumber}`);
+            console.log(`Switched to layer ${layerNumber}, rotation: ${Math.round(puzzleLayers[`layer${layerNumber}`].rotation)}°`);
         }
 
         // Request orientation permission (iOS 13+)
@@ -486,8 +483,8 @@
             if ('DeviceOrientationEvent' in window) {
                 window.addEventListener('deviceorientation', handleOrientation);
                 orientationSupported = true;
-                orientationStatus.textContent = 'Compass active - Rotate device to control layers';
-                console.log('Device orientation initialized - using absolute compass readings');
+                orientationStatus.textContent = 'Compass active - Touch and hold to rotate the selected layer';
+                console.log('Device orientation initialized');
             } else {
                 orientationStatus.textContent = 'Device orientation not supported';
                 console.log('Device orientation not supported');
@@ -510,15 +507,6 @@
             }
         }
 
-        // Calibrate compass (set current direction as north)
-        function calibrateCompass() {
-            if (currentHeading !== null) {
-                calibrationOffset = -currentHeading;
-                orientationStatus.textContent = 'Compass calibrated - Current direction is now North';
-                console.log('Compass calibrated with offset:', calibrationOffset);
-            }
-        }
-
         // Initialize the app
         function initApp() {
             console.log('Initializing Compass Puzzle App...');
@@ -534,6 +522,35 @@
                 });
             });
 
+            // Add touch/mouse events for rotation control
+            const container = document.getElementById('container');
+            
+            // Touch events
+            container.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                startRotationTracking();
+            });
+            
+            container.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                stopRotationTracking();
+            });
+
+            // Mouse events for desktop testing
+            container.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                startRotationTracking();
+            });
+            
+            container.addEventListener('mouseup', (e) => {
+                e.preventDefault();
+                stopRotationTracking();
+            });
+
+            container.addEventListener('mouseleave', (e) => {
+                stopRotationTracking();
+            });
+
             // Add keyboard shortcuts
             document.addEventListener('keydown', (event) => {
                 switch (event.key) {
@@ -546,23 +563,20 @@
                     case '3':
                         switchLayer(3);
                         break;
-                    case 'c':
-                    case 'C':
-                        calibrateCompass();
+                    case ' ':
+                        event.preventDefault();
+                        if (!isRotating) {
+                            startRotationTracking();
+                        }
                         break;
                 }
             });
 
-            // Add double-tap to calibrate
-            let lastTap = 0;
-            document.addEventListener('touchend', (event) => {
-                const currentTime = new Date().getTime();
-                const tapLength = currentTime - lastTap;
-                if (tapLength < 500 && tapLength > 0) {
-                    calibrateCompass();
+            document.addEventListener('keyup', (event) => {
+                if (event.key === ' ') {
                     event.preventDefault();
+                    stopRotationTracking();
                 }
-                lastTap = currentTime;
             });
 
             // Show permission prompt if needed
@@ -593,8 +607,9 @@
         // Handle orientation change
         window.addEventListener('orientationchange', () => {
             setTimeout(() => {
-                // Recalibrate after orientation change
-                console.log('Orientation changed, you may need to recalibrate');
+                // Stop any current rotation tracking on orientation change
+                stopRotationTracking();
+                console.log('Orientation changed, rotation tracking stopped');
             }, 500);
         });
     </script>
