@@ -1,154 +1,769 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Stakco Play</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-    <link rel="manifest" href="manifest.webmanifest">
-  
-    <!-- Inserted Meta Tags -->
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <meta name='description' content='Brings life to papers with interactive Stakco puzzles.' />
-    <meta property='og:title' content='Stakco Puzzle Systems' />
-    <meta property='og:description' content='Brings life to papers with interactive Stakco puzzles.' />
-    <meta property='og:image' content='https://storage.googleapis.com/stakco-images/109949450257686494443/A2A3_3/A2A3_1_thumb.png' />
-    <meta property='og:url' content='https://stakcos.com/player-dev2/' />
-    <meta property='og:type' content='website' />
-    
-    <meta name='twitter:card' content='summary_large_image' />
-    <meta name='twitter:title' content='Stakco Puzzle Systems' />
-    <meta name='twitter:description' content='Brings life to papers with interactive Stakco puzzles.' />
-    <meta name='twitter:image' content='https://storage.googleapis.com/stakco-images/109949450257686494443/A2A3_3/A2A3_1_thumb.png' />
-    <meta name='twitter:url' content='https://stakcos.com/player-dev2/' />
-    <meta name='twitter:site' content='@StakcoPuzzle' />
-    
-    <meta name='apple-mobile-web-app-capable' content='yes' />
-    <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent' />
-    <meta name='apple-mobile-web-app-title' content='Stakco' />
-    <link rel='apple-touch-icon' href='https://stakcos.com/icons/apple-icon.png' />
-
-    <meta name='msapplication-TileColor' content='#ffffff' />
-    <meta name='msapplication-TileImage' content='https://stakcos.com/icons/mstile-150x150.png' />
-
-    <script type='application/ld+json'>
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Stakco Puzzle Systems",
-      "url": "https://stakcos.com/player-dev2/",
-      "description": "Brings life to papers with interactive, rotatable puzzles.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Stakco",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://stakcos.com/icons/logo.png"
-        }
-      }
-    }
-    </script>
-
-        <!-- Google tag (gtag.js) -->
-        <script async src='https://www.googletagmanager.com/gtag/js?id=G-NN050DQ66X'></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-NN050DQ66X');
+        <meta property='og:title' content='Stakco Puzzle Systems' />
+        <meta property='og:description' content='Brings life to papers with interactive Stakco puzzles.' />
+        <meta property='og:image' content='https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png' />
+        <meta property='og:url' content='https://play.stakcos.com/' />
+        <meta property='og:type' content='website' />
+        <meta name='twitter:card' content='summary_large_image' />
+        <meta name='twitter:title' content='Stakco Puzzle Systems' />
+        <meta name='twitter:description' content='Brings life to papers with interactive Stakco puzzles.' />
+        <meta name='twitter:image' content='https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png' />
+        <meta name='twitter:url' content='https://play.stakcos.com/' />
+        <meta name='twitter:site' content='@StakcoPuzzle' />
+        <meta name='apple-mobile-web-app-capable' content='yes' />
+        <meta name='apple-mobile-web-app-status-bar-style' content='black-translucent' />
+        <meta name='apple-mobile-web-app-title' content='Stakco' />
+        <link rel='apple-touch-icon' href='https://stakcos.com/icons/apple-icon.png' />
+        <meta name='msapplication-TileColor' content='#FFFFFF' />
+        <meta name='msapplication-TileImage' content='https://stakcos.com/icons/mstile-150x150.png' />
+        <script type='application/ld+json'>
+            {{
+            ""@context"": ""https://schema.org"",
+            ""@type"": ""WebSite"",
+            ""name"": ""Stakco Puzzle Systems"",
+            ""url"": ""https://play.stakcos.com/"",
+            ""description"": ""Brings life to papers with interactive, rotatable puzzles."",
+            ""publisher"": {{
+                ""@type"": ""Organization"",
+                ""name"": ""Stakco"",
+                ""logo"": {{
+                ""@type"": ""ImageObject"",
+                ""url"": ""https://stakcos.com/icons/logo.png""
+                }}
+            }}
+            }}
         </script>
-        
+    <title>Stakco Play</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #container {
+            position: relative;
+            width: 90vmin;
+            height: 90vmin;
+            max-width: calc(100vw - 20px);
+            max-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+        }
+
+        #container.dragging {
+            cursor: grabbing;
+        }
+
+        .puzzle-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+        }
+
+        .puzzle-layer.active {
+            opacity: 1;
+            z-index: 10;
+        }
+
+        #layer1 {
+            z-index: 3;
+        }
+
+        #layer2 {
+            z-index: 2;
+        }
+
+        #layer3 {
+            z-index: 1;
+        }
+
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            display: none;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #status {
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            color: #0f0;
+            text-shadow:
+                0 0 5px #0f0,
+                0 0 10px #0f0,
+                0 0 20px #0f0,
+                0 0 40px #0f0;
+            letter-spacing: 1px;
+        }
+
+        #status.hidden {
+            display: none;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        #controls.hidden {
+            display: none;
+        }
+
+        #share-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #00ff00;
+            color: #000;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 0 30px #00ff00;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-align: center;
+            width: 50%;
+        }
+
+        #share-button.show {
+            display: block;
+        }
+
+        #share-button:hover {
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 0 40px #00ff00;
+        }
+
+        .layer-button {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #555;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            color: #777;
+            background: rgba(68, 68, 68, 0.3);
+        }
+
+        .layer-button.active {
+            background: #00ff00;
+            border-color: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+            transform: scale(1.1);
+        }
+
+        .layer-button:hover:not(.active) {
+            border-color: #888;
+            color: #aaa;
+            background: rgba(136, 136, 136, 0.2);
+        }
+
+        #instructions {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        #instructions.hidden {
+            display: none;
+        }
+
+        /* LED Text Styling */
+        .led-text {
+            display: inline-block;
+            margin: 0 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            color: #0f0;
+            text-shadow:
+                0 0 5px #0f0,
+                0 0 10px #0f0,
+                0 0 20px #0f0,
+                0 0 40px #0f0;
+            letter-spacing: 2px;
+        }
+
+        .led-label {
+            color: #0a0;
+            font-weight: bold;
+            margin-right: 6px;
+            text-shadow:
+                0 0 3px #060,
+                0 0 6px #090;
+        }
+
+        .led-value {
+            color: #0f0;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.8;
+            }
+            22% {
+                opacity: 0.6;
+            }
+        }
+
+        .led-text,
+        .led-value {
+            animation: flicker 2.5s infinite;
+        }
+    </style>
 </head>
-  <body>
-    <div id="unity-container">
-      <canvas id="unity-canvas" width=1080 height=1920 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
-      </div>
-      <div id="unity-warning"> </div>
+
+<body>
+    <div id="status">
+        <p id="orientation-status">Drag to rotate selected layer • Use arrow keys • Align all layers to solve</p>
     </div>
+
+    <div id="info">
+        <span class="led-text">
+            <span class="led-label">LYR:</span>
+            <span class="led-value" id="active-layer">1</span>
+        </span>
+        <span class="led-text">
+            <span class="led-label">ROT:</span>
+            <span class="led-value" id="rotation-value">0°</span>
+        </span>
+    </div>
+
+    <div id="container">
+        <div id="layer1" class="puzzle-layer active"></div>
+        <div id="layer2" class="puzzle-layer"></div>
+        <div id="layer3" class="puzzle-layer"></div>
+    </div>
+
+    <div id="instructions">
+        <p>🖱️ Mouse: Click & drag | Scroll wheel | Right-click to switch layers • ⌨️ Keyboard: Arrow keys | Space to switch layers • 📱 Touch: Drag to rotate</p>
+    </div>
+
+    <div id="controls">
+        <button class="layer-button active" data-layer="1">1</button>
+        <button class="layer-button" data-layer="2">2</button>
+        <button class="layer-button" data-layer="3">3</button>
+    </div>
+
+    <div id="share-button" onclick="sharePuzzle()">🎉 Share Success!</div>
+
     <script>
-      window.addEventListener("load", function () {
-        if ("serviceWorker" in navigator) {
-          navigator.serviceWorker.register("ServiceWorker.js");
+        // App state
+        let currentLayer = 1;
+        let puzzleSolved = false;
+        let isDragging = false;
+        let lastAngle = 0;
+        let imagesLoaded = false;
+
+        // Generate today's date string (YYYY-MM-DD)
+        const today = new Date();
+        const dateStr = today.toISOString().split('T')[0];
+
+        // Puzzle layer data structure with random initial rotations
+        const puzzleLayers = {
+            layer1: { rotation: 350 },
+            layer2: { rotation: 83 },
+            layer3: { rotation: 270 }
+        };
+
+        // Image URLs - primary (today's date) and backup (latest)
+        const imageConfig = {
+            baseUrl: 'https://storage.googleapis.com/stakco-images/109949450257686494443',
+            puzzleId: 'A2A3_3',
+            primary: {
+                layer1: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_0.png`,
+                layer2: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_1.png`,
+                layer3: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_2.png`
+            },
+            backup: {
+                layer1: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png',
+                layer2: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png',
+                layer3: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png'
+            }
+        };
+
+        // DOM elements
+        const activeLayerSpan = document.getElementById('active-layer');
+        const rotationValueSpan = document.getElementById('rotation-value');
+        const orientationStatus = document.getElementById('orientation-status');
+        const controlsDiv = document.getElementById('controls');
+        const statusDiv = document.getElementById('status');
+        const instructionsDiv = document.getElementById('instructions');
+        const shareButton = document.getElementById('share-button');
+        const container = document.getElementById('container');
+
+        // Initialize the app
+        function initApp() {
+            console.log('Initializing Touch Compass Puzzle App...');
+            console.log('Loading puzzle for date:', dateStr);
+
+            // Load dynamic images
+            loadDynamicImages();
+
+            // Add layer button event listeners
+            document.querySelectorAll('.layer-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const layerNumber = parseInt(button.dataset.layer);
+                    switchLayer(layerNumber);
+                });
+            });
+
+            // Add mouse/touch event listeners
+            setupInputHandlers();
+
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', handleKeyboard);
+
+            console.log('App initialized successfully');
         }
-      });
 
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var warningBanner = document.querySelector("#unity-warning");
-
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
+        // Load dynamic images with fallback
+        async function loadDynamicImages() {
+            orientationStatus.textContent = 'Loading today\'s puzzle...';
+            
+            let imagesLoadedCount = 0;
+            const totalImages = 3;
+            
+            for (let i = 1; i <= totalImages; i++) {
+                const layerKey = `layer${i}`;
+                const layerElement = document.getElementById(layerKey);
+                
+                if (layerElement) {
+                    try {
+                        // Try to load primary (date-specific) image first
+                        const primaryUrl = imageConfig.primary[layerKey];
+                        const imageExists = await checkImageExists(primaryUrl);
+                        
+                        if (imageExists) {
+                            layerElement.style.backgroundImage = `url('${primaryUrl}')`;
+                            console.log(`Loaded today's image for ${layerKey}: ${primaryUrl}`);
+                        } else {
+                            // Fallback to backup image
+                            const backupUrl = imageConfig.backup[layerKey];
+                            layerElement.style.backgroundImage = `url('${backupUrl}')`;
+                            console.log(`Using backup image for ${layerKey}: ${backupUrl}`);
+                        }
+                        
+                        imagesLoadedCount++;
+                    } catch (error) {
+                        // Use backup image on error
+                        const backupUrl = imageConfig.backup[layerKey];
+                        layerElement.style.backgroundImage = `url('${backupUrl}')`;
+                        console.log(`Error loading ${layerKey}, using backup: ${backupUrl}`);
+                        imagesLoadedCount++;
+                    }
+                }
+            }
+            
+            // Apply initial rotations after images are set
+            applyInitialRotations();
+            updateRotationDisplay();
+            
+            // Update status
+            orientationStatus.textContent = 'Drag to rotate selected layer • Use arrow keys • Align all layers to solve';
+            imagesLoaded = true;
+            
+            console.log(`Loaded ${imagesLoadedCount}/${totalImages} images successfully`);
         }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
+
+        // Check if image exists at URL
+        async function checkImageExists(url) {
+            try {
+                const response = await fetch(url, { method: 'HEAD' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
         }
-        updateBannerVisibility();
-      }
 
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/player-315.loader.js";
-      var config = {
-        dataUrl: buildUrl + "/859752718c2f436f41a07dd4d727cebf.data.unityweb",
-        frameworkUrl: buildUrl + "/e24f5b5edd248ff9dff93868864b382d.js.unityweb",
-        codeUrl: buildUrl + "/2f01fb2d77af5bb9716d046be4cda275.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "Stakcos",
-        productName: "Stakco Play",
-        productVersion: "3.1.5",
-        showBanner: unityShowBanner,
-      };
+        // Apply initial random rotations to all layers
+        function applyInitialRotations() {
+            Object.keys(puzzleLayers).forEach(layerKey => {
+                const layerElement = document.getElementById(layerKey);
+                const rotation = puzzleLayers[layerKey].rotation;
+                
+                if (layerElement) {
+                    layerElement.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+                }
+            });
+        }
 
-      // By default Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
+        // Setup mouse and touch input handlers
+        function setupInputHandlers() {
+            // Mouse events
+            container.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', handleDrag);
+            document.addEventListener('mouseup', endDrag);
 
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-      }
+            // Touch events
+            container.addEventListener('touchstart', startTouch, { passive: false });
+            document.addEventListener('touchmove', handleTouch, { passive: false });
+            document.addEventListener('touchend', endTouch);
 
-      loadingBar.style.display = "block";
+            // Mouse wheel for scrolling
+            container.addEventListener('wheel', handleScroll, { passive: false });
 
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-        }).then((unityInstance) => {
-          loadingBar.style.display = "none";
-        }).catch((message) => {
-          alert(message);
-        });
-      };
-      document.body.appendChild(script);
+            // Right click to switch layer
+            container.addEventListener('contextmenu', handleRightClick);
+        }
+
+        // Start drag operation
+        function startDrag(e) {
+            if (puzzleSolved) return;
+            e.preventDefault();
+            isDragging = true;
+            container.classList.add('dragging');
+            
+            const rect = container.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            lastAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI;
+        }
+
+        // Handle mouse drag
+        function handleDrag(e) {
+            if (!isDragging || puzzleSolved) return;
+            e.preventDefault();
+
+            const rect = container.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const currentAngle = Math.atan2(e.clientY - centerY, e.clientX - centerX) * 180 / Math.PI;
+            let deltaAngle = currentAngle - lastAngle;
+            
+            // Handle angle wrap-around
+            if (deltaAngle > 180) deltaAngle -= 360;
+            if (deltaAngle < -180) deltaAngle += 360;
+            
+            // Apply rotation
+            applyRotation(deltaAngle);
+            lastAngle = currentAngle;
+        }
+
+        // End drag operation
+        function endDrag(e) {
+            isDragging = false;
+            container.classList.remove('dragging');
+        }
+
+        // Touch event handlers
+        function startTouch(e) {
+            if (puzzleSolved) return;
+            e.preventDefault();
+            isDragging = true;
+            
+            const touch = e.touches[0];
+            const rect = container.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            lastAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * 180 / Math.PI;
+        }
+
+        function handleTouch(e) {
+            if (!isDragging || puzzleSolved) return;
+            e.preventDefault();
+
+            const touch = e.touches[0];
+            const rect = container.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            const currentAngle = Math.atan2(touch.clientY - centerY, touch.clientX - centerX) * 180 / Math.PI;
+            let deltaAngle = currentAngle - lastAngle;
+            
+            // Handle angle wrap-around
+            if (deltaAngle > 180) deltaAngle -= 360;
+            if (deltaAngle < -180) deltaAngle += 360;
+            
+            // Apply rotation
+            applyRotation(deltaAngle);
+            lastAngle = currentAngle;
+        }
+
+        function endTouch(e) {
+            isDragging = false;
+        }
+
+        // Handle keyboard input
+        function handleKeyboard(e) {
+            if (puzzleSolved) return;
+
+            switch (e.key) {
+                case '1':
+                    switchLayer(1);
+                    break;
+                case '2':
+                    switchLayer(2);
+                    break;
+                case '3':
+                    switchLayer(3);
+                    break;
+                case ' ':
+                    e.preventDefault();
+                    // Switch to next layer
+                    const nextLayer = (currentLayer % 3) + 1;
+                    switchLayer(nextLayer);
+                    break;
+                case 'ArrowLeft':
+                    e.preventDefault();
+                    applyRotation(-5);
+                    break;
+                case 'ArrowRight':
+                    e.preventDefault();
+                    applyRotation(5);
+                    break;
+                case 'ArrowUp':
+                    e.preventDefault();
+                    applyRotation(1);
+                    break;
+                case 'ArrowDown':
+                    e.preventDefault();
+                    applyRotation(-1);
+                    break;
+            }
+        }
+
+        // Handle scroll wheel
+        function handleScroll(e) {
+            if (puzzleSolved) return;
+            e.preventDefault();
+            
+            // Apply rotation based on scroll direction
+            const delta = e.deltaY > 0 ? 5 : -5;
+            applyRotation(delta);
+        }
+
+        // Handle right click to switch layer
+        function handleRightClick(e) {
+            if (puzzleSolved) return;
+            e.preventDefault();
+            
+            // Switch to next layer
+            const nextLayer = (currentLayer % 3) + 1;
+            switchLayer(nextLayer);
+        }
+        // Apply rotation to current layer
+        function applyRotation(deltaAngle) {
+            puzzleLayers[`layer${currentLayer}`].rotation += deltaAngle;
+
+            // Apply rotation to the layer element
+            const activeLayerElement = document.getElementById(`layer${currentLayer}`);
+            if (activeLayerElement) {
+                activeLayerElement.style.transform = `translate(-50%, -50%) rotate(${puzzleLayers[`layer${currentLayer}`].rotation}deg)`;
+            }
+
+            // Update rotation display
+            updateRotationDisplay();
+
+            // Check for solution
+            checkSolution();
+        }
+
+        // Update rotation value display
+        function updateRotationDisplay() {
+            const currentRotation = puzzleLayers[`layer${currentLayer}`].rotation;
+            // Normalize only for display purposes
+            let displayRotation = currentRotation % 360;
+            if (displayRotation < 0) displayRotation += 360;
+            rotationValueSpan.textContent = `${Math.round(displayRotation)}°`;
+        }
+
+        // Switch active layer
+        function switchLayer(layerNumber) {
+            if (puzzleSolved) return;
+
+            // Remove active class from all layers and buttons
+            document.querySelectorAll('.puzzle-layer').forEach(layer => {
+                layer.classList.remove('active');
+            });
+            document.querySelectorAll('.layer-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Add active class to selected layer and button
+            document.getElementById(`layer${layerNumber}`).classList.add('active');
+            document.querySelector(`[data-layer="${layerNumber}"]`).classList.add('active');
+
+            currentLayer = layerNumber;
+            activeLayerSpan.textContent = layerNumber;
+
+            // Update rotation display for the new layer
+            updateRotationDisplay();
+
+            console.log(`Switched to layer ${layerNumber}`);
+        }
+
+        // Check if puzzle is solved
+        function checkSolution() {
+            if (puzzleSolved) return;
+
+            // Normalize all layer rotations for comparison
+            const layer1Normalized = ((puzzleLayers.layer1.rotation % 360) + 360) % 360;
+            const layer2Normalized = ((puzzleLayers.layer2.rotation % 360) + 360) % 360;
+            const layer3Normalized = ((puzzleLayers.layer3.rotation % 360) + 360) % 360;
+
+            // Check if all layers are aligned (within 5 degrees tolerance)
+            const tolerance = 5;
+            const isAligned = Math.abs(layer1Normalized - layer2Normalized) <= tolerance &&
+                             Math.abs(layer2Normalized - layer3Normalized) <= tolerance &&
+                             Math.abs(layer1Normalized - layer3Normalized) <= tolerance;
+
+            if (isAligned) {
+                solvePuzzle();
+            }
+        }
+
+        // Solve puzzle
+        function solvePuzzle() {
+            puzzleSolved = true;
+            console.log('Puzzle solved!');
+
+            // Vibrate device if supported
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 300, 100, 200]);
+            }
+
+            // Hide controls, status and instructions
+            controlsDiv.classList.add('hidden');
+            statusDiv.classList.add('hidden');
+            instructionsDiv.classList.add('hidden');
+
+            // Show share button
+            shareButton.classList.add('show');
+
+            // Wait 1 second before rotating all layers to zero
+            setTimeout(() => {
+                rotateAllLayersToZero();
+            }, 1000);
+        }
+
+        // Smoothly rotate all layers to zero degrees
+        function rotateAllLayersToZero() {
+            Object.keys(puzzleLayers).forEach(layerKey => {
+                const layerElement = document.getElementById(layerKey);
+                if (layerElement) {
+                    // Add transition for smooth animation to zero
+                    layerElement.style.transition = 'transform 2s ease-out';
+                    layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+                    
+                    // Update internal rotation value
+                    puzzleLayers[layerKey].rotation = 0;
+                }
+            });
+        }
+
+        // Share function
+        function sharePuzzle() {
+            const shareData = {
+                title: 'Touch Compass Puzzle',
+                text: 'I solved the touch compass puzzle!',
+                url: 'https://stakcos.com/azimuth/'
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData)
+                    .then(() => console.log('Successful share'))
+                    .catch((error) => console.log('Error sharing:', error));
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const textArea = document.createElement('textarea');
+                textArea.value = 'https://stakcos.com/azimuth/';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Link copied to clipboard: https://stakcos.com/azimuth/');
+            }
+        }
+
+        // Start the app when page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // Prevent zoom on mobile
+        document.addEventListener('touchstart', function (e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
     </script>
-  </body>
+</body>
+
 </html>
