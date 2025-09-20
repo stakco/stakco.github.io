@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compass Puzzle Layers</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #container {
+            position: relative;
+            width: 90vmin;
+            height: 90vmin;
+            max-width: calc(100vw - 20px);
+            max-height: calc(100vh - 200px);
+        }
+
+        .puzzle-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            transition: transform 0.3s ease-out;
+            opacity: 0.8;
+        }
+
+        .puzzle-layer.active {
+            opacity: 1;
+            z-index: 10;
+        }
+
+        #layer1 {
+            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png');
+            z-index: 3;
+        }
+
+        #layer2 {
+            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png');
+            z-index: 2;
+        }
+
+        #layer3 {
+            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png');
+            z-index: 1;
+        }
+
+        #info {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+
+        #status {
+            position: absolute;
+            bottom: 100px;
+            left: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .layer-button {
+            width: 60px;
+            height: 60px;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            color: white;
+        }
+
+        .layer-button.layer1 {
+            background: rgba(255, 107, 107, 0.3);
+            border-color: #ff6b6b;
+        }
+
+        .layer-button.layer2 {
+            background: rgba(78, 205, 196, 0.3);
+            border-color: #4ecdc4;
+        }
+
+        .layer-button.layer3 {
+            background: rgba(69, 183, 209, 0.3);
+            border-color: #45b7d1;
+        }
+
+        .layer-button.active {
+            transform: scale(1.2);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .layer-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px currentColor;
+        }
+
+        /* LED Text Styling */
+        .led-text {
+            display: block;
+            margin: 5px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 16px;
+            color: #0f0;
+            text-shadow:
+                0 0 5px #0f0,
+                0 0 10px #0f0,
+                0 0 20px #0f0,
+                0 0 40px #0f0;
+            letter-spacing: 2px;
+        }
+
+        .led-label {
+            color: #0a0;
+            font-weight: bold;
+            margin-right: 6px;
+            text-shadow:
+                0 0 3px #060,
+                0 0 6px #090;
+        }
+
+        .led-value {
+            color: #0f0;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .led-compass {
+            color: #ff0;
+            text-shadow: 0 0 5px #ff0, 0 0 15px #ff0;
+        }
+
+        .led-layer {
+            color: #f0f;
+            text-shadow: 0 0 5px #f0f, 0 0 15px #f0f;
+        }
+
+        .led-puzzle {
+            color: #0ff;
+            text-shadow: 0 0 5px #0ff, 0 0 15px #0ff;
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+                opacity: 1;
+            }
+            20%, 24%, 55% {
+                opacity: 0.8;
+            }
+            22% {
+                opacity: 0.6;
+            }
+        }
+
+        .led-text,
+        .led-value {
+            animation: flicker 2.5s infinite;
+        }
+
+        #compass-indicator {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 80px;
+            height: 80px;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            z-index: 1000;
+        }
+
+        #compass-needle {
+            position: absolute;
+            width: 2px;
+            height: 30px;
+            background: #ff0000;
+            top: 10px;
+            left: 50%;
+            transform-origin: bottom center;
+            transform: translateX(-50%) rotate(0deg);
+            transition: transform 0.1s ease-out;
+        }
+
+        #compass-needle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -3px;
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-bottom: 8px solid #ff0000;
+        }
+
+        .permission-prompt {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            z-index: 10000;
+            display: none;
+            border: 2px solid #fff;
+        }
+
+        .permission-prompt.show {
+            display: block;
+        }
+
+        .permission-button {
+            background: #4ecdc4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .permission-button:hover {
+            background: #45a049;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body>
+    <div id="info">
+        <span class="led-text">
+            <span class="led-label">CMP:</span>
+            <span class="led-value led-compass" id="compass-heading">---°</span>
+        </span>
+        <span class="led-text">
+            <span class="led-label">LYR:</span>
+            <span class="led-value led-layer" id="active-layer">1</span>
+        </span>
+        <span class="led-text">
+            <span class="led-label">PZL:</span>
+            <span class="led-value led-puzzle" id="puzzle-status">Loading</span>
+        </span>
+    </div>
+
+    <div id="container">
+        <div id="layer1" class="puzzle-layer active"></div>
+        <div id="layer2" class="puzzle-layer"></div>
+        <div id="layer3" class="puzzle-layer"></div>
+    </div>
+
+    <div id="compass-indicator">
+        <div id="compass-needle"></div>
+        <div style="position: absolute; top: 5px; font-size: 10px;">N</div>
+        <div style="position: absolute; bottom: 5px; font-size: 10px;">S</div>
+        <div style="position: absolute; right: 5px; top: 50%; transform: translateY(-50%); font-size: 10px;">E</div>
+        <div style="position: absolute; left: 5px; top: 50%; transform: translateY(-50%); font-size: 10px;">W</div>
+    </div>
+
+    <div id="status">
+        <p id="orientation-status">Initializing compass...</p>
+    </div>
+
+    <div id="controls">
+        <button class="layer-button layer1 active" data-layer="1">1</button>
+        <button class="layer-button layer2" data-layer="2">2</button>
+        <button class="layer-button layer3" data-layer="3">3</button>
+    </div>
+
+    <div id="permission-prompt" class="permission-prompt">
+        <h3>Enable Device Orientation</h3>
+        <p>This app needs access to your device's compass to rotate the puzzle layers.</p>
+        <button class="permission-button" onclick="requestOrientationPermission()">Enable Compass</button>
+        <button class="permission-button" onclick="hidePermissionPrompt()">Skip</button>
+    </div>
+
+    <script>
+        // App state
+        let currentLayer = 1;
+        let currentHeading = 0;
+        let puzzleData = null;
+        let orientationSupported = false;
+        let calibrationOffset = 0;
+
+        // Puzzle layer data structure
+        const puzzleLayers = {
+            layer1: { url: null, rotation: 0 },
+            layer2: { url: null, rotation: 0 },
+            layer3: { url: null, rotation: 0 }
+        };
+
+        // DOM elements
+        const compassHeading = document.getElementById('compass-heading');
+        const activeLayerSpan = document.getElementById('active-layer');
+        const puzzleStatusSpan = document.getElementById('puzzle-status');
+        const orientationStatus = document.getElementById('orientation-status');
+        const compassNeedle = document.getElementById('compass-needle');
+        const permissionPrompt = document.getElementById('permission-prompt');
+
+        // Load today's puzzle data
+        async function loadPuzzleData() {
+            try {
+                puzzleStatusSpan.textContent = 'Loading...';
+                
+                // Format today's date as YYYY-MM-DD
+                const today = new Date();
+                const dateStr = today.toISOString().split('T')[0];
+                
+                console.log('Loading puzzle for date:', dateStr);
+                
+                // Direct image URLs - no server loading needed
+                puzzleLayers.layer1.url = 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png';
+                puzzleLayers.layer2.url = 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png';
+                puzzleLayers.layer3.url = 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png';
+
+                // Images are already set in CSS, so just update status
+                puzzleStatusSpan.textContent = dateStr;
+                console.log('Puzzle images loaded successfully');
+
+            } catch (error) {
+                console.error('Error loading puzzle data:', error);
+                puzzleStatusSpan.textContent = 'Error';
+                orientationStatus.textContent = 'Failed to load puzzle data';
+            }
+        }
+
+        // Handle device orientation
+        function handleOrientation(event) {
+            if (!orientationSupported) return;
+
+            // Get the compass heading (alpha represents rotation around z-axis)
+            let heading = event.alpha;
+            if (heading === null) return;
+
+            // Apply calibration offset and normalize to 0-360
+            heading = (heading + calibrationOffset) % 360;
+            if (heading < 0) heading += 360;
+
+            currentHeading = heading;
+
+            // Update UI
+            compassHeading.textContent = `${Math.round(heading)}°`;
+            compassNeedle.style.transform = `translateX(-50%) rotate(${heading}deg)`;
+
+            // Rotate the active layer
+            updateLayerRotation();
+        }
+
+        // Update the rotation of the currently active layer
+        function updateLayerRotation() {
+            const activeLayerElement = document.getElementById(`layer${currentLayer}`);
+            if (activeLayerElement) {
+                // Store the rotation value
+                puzzleLayers[`layer${currentLayer}`].rotation = currentHeading;
+                
+                // Apply rotation with smooth transition
+                activeLayerElement.style.transform = `translate(-50%, -50%) rotate(${currentHeading}deg)`;
+            }
+        }
+
+        // Switch active layer
+        function switchLayer(layerNumber) {
+            // Remove active class from all layers and buttons
+            document.querySelectorAll('.puzzle-layer').forEach(layer => {
+                layer.classList.remove('active');
+            });
+            document.querySelectorAll('.layer-button').forEach(button => {
+                button.classList.remove('active');
+            });
+
+            // Add active class to selected layer and button
+            document.getElementById(`layer${layerNumber}`).classList.add('active');
+            document.querySelector(`[data-layer="${layerNumber}"]`).classList.add('active');
+
+            currentLayer = layerNumber;
+            activeLayerSpan.textContent = layerNumber;
+
+            // Apply current heading to the newly selected layer
+            updateLayerRotation();
+
+            console.log(`Switched to layer ${layerNumber}`);
+        }
+
+        // Request orientation permission (iOS 13+)
+        async function requestOrientationPermission() {
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                try {
+                    const permission = await DeviceOrientationEvent.requestPermission();
+                    if (permission === 'granted') {
+                        initializeOrientation();
+                        hidePermissionPrompt();
+                    } else {
+                        orientationStatus.textContent = 'Orientation permission denied';
+                    }
+                } catch (error) {
+                    console.error('Error requesting orientation permission:', error);
+                    orientationStatus.textContent = 'Error requesting orientation permission';
+                }
+            } else {
+                // For non-iOS devices, orientation is usually available without permission
+                initializeOrientation();
+                hidePermissionPrompt();
+            }
+        }
+
+        // Initialize orientation listening
+        function initializeOrientation() {
+            if ('DeviceOrientationEvent' in window) {
+                window.addEventListener('deviceorientation', handleOrientation);
+                orientationSupported = true;
+                orientationStatus.textContent = 'Compass active - Rotate device to control layers';
+                console.log('Device orientation initialized');
+            } else {
+                orientationStatus.textContent = 'Device orientation not supported';
+                console.log('Device orientation not supported');
+            }
+        }
+
+        // Hide permission prompt
+        function hidePermissionPrompt() {
+            permissionPrompt.classList.remove('show');
+        }
+
+        // Show permission prompt if needed
+        function showPermissionPromptIfNeeded() {
+            // Check if we need to request permission (mainly for iOS 13+)
+            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                permissionPrompt.classList.add('show');
+            } else {
+                // Try to initialize directly for other devices
+                initializeOrientation();
+            }
+        }
+
+        // Calibrate compass (set current direction as north)
+        function calibrateCompass() {
+            if (currentHeading !== null) {
+                calibrationOffset = -currentHeading;
+                orientationStatus.textContent = 'Compass calibrated - Current direction is now North';
+                console.log('Compass calibrated with offset:', calibrationOffset);
+            }
+        }
+
+        // Initialize the app
+        function initApp() {
+            console.log('Initializing Compass Puzzle App...');
+
+            // Load puzzle data
+            loadPuzzleData();
+
+            // Add layer button event listeners
+            document.querySelectorAll('.layer-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const layerNumber = parseInt(button.dataset.layer);
+                    switchLayer(layerNumber);
+                });
+            });
+
+            // Add keyboard shortcuts
+            document.addEventListener('keydown', (event) => {
+                switch (event.key) {
+                    case '1':
+                        switchLayer(1);
+                        break;
+                    case '2':
+                        switchLayer(2);
+                        break;
+                    case '3':
+                        switchLayer(3);
+                        break;
+                    case 'c':
+                    case 'C':
+                        calibrateCompass();
+                        break;
+                }
+            });
+
+            // Add double-tap to calibrate
+            let lastTap = 0;
+            document.addEventListener('touchend', (event) => {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTap;
+                if (tapLength < 500 && tapLength > 0) {
+                    calibrateCompass();
+                    event.preventDefault();
+                }
+                lastTap = currentTime;
+            });
+
+            // Show permission prompt if needed
+            setTimeout(() => {
+                showPermissionPromptIfNeeded();
+            }, 1000);
+        }
+
+        // Start the app when page loads
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // Prevent zoom on mobile
+        document.addEventListener('touchstart', function (e) {
+            if (e.touches.length > 1) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function (event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+
+        // Handle orientation change
+        window.addEventListener('orientationchange', () => {
+            setTimeout(() => {
+                // Recalibrate after orientation change
+                console.log('Orientation changed, you may need to recalibrate');
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>
