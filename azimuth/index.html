@@ -1,4 +1,4 @@
-        <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -129,6 +129,8 @@
             box-shadow: 0 0 30px #00ff00;
             transition: all 0.3s ease;
             z-index: 1000;
+            text-align: center;
+            width: 50%;
         }
 
         #share-button.show {
@@ -256,6 +258,7 @@
             border-radius: 15px;
             text-align: center;
             z-index: 10000;
+            width: 70%;
             display: none;
             border: 2px solid #fff;
         }
@@ -482,13 +485,19 @@
             const layer2Normalized = ((puzzleLayers.layer2.rotation % 360) + 360) % 360;
             const layer3Normalized = ((puzzleLayers.layer3.rotation % 360) + 360) % 360;
 
-            // Check if all layers are aligned (within 5 degrees tolerance)
-            const tolerance = 5;
+            // Check if all layers are aligned (within 2 degrees tolerance)
+            const tolerance = 2;
             const isAligned = Math.abs(layer1Normalized - layer2Normalized) <= tolerance &&
                              Math.abs(layer2Normalized - layer3Normalized) <= tolerance &&
                              Math.abs(layer1Normalized - layer3Normalized) <= tolerance;
 
             if (isAligned) {
+                // vibrate phone
+                if (navigator.vibrate) {
+                    // Success vibration pattern: short-long-short
+                    navigator.vibrate([200, 100, 300, 100, 200]);
+                }
+                
                 puzzleSolved = true;
                 console.log('Puzzle solved!');
                 
