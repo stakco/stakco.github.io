@@ -197,8 +197,8 @@
 
         #compass-indicator {
             position: absolute;
-            top: 50%;
-            right: 20px;
+            top: 70px;
+            right: 30px;
             transform: translateY(-50%);
             width: 80px;
             height: 80px;
@@ -326,11 +326,11 @@
         // App state
         let currentLayer = 1;
         let currentHeading = 0;
-        let previousHeading = 0;
+        let lastHeading = null;
+        let accumulatedRotation = 0;
         let puzzleData = null;
         let orientationSupported = false;
         let calibrationOffset = 0;
-        let isFirstReading = true;
 
         // Puzzle layer data structure
         const puzzleLayers = {
@@ -378,57 +378,38 @@
         function handleOrientation(event) {
             if (!orientationSupported) return;
 
-            // Get the compass heading (alpha represents rotation around z-axis)
             let heading = event.alpha;
             if (heading === null) return;
 
-            // Convert to absolute compass reading (0° = North, 90° = East, etc.)
-            // Device orientation alpha is typically 0° when device points North
-            // but we want to use the true compass value
-            let absoluteHeading = heading;
+            if (lastHeading !== null) {
+                // Calculate difference (-180 to +180)
+                let diff = heading - lastHeading;
+                if (diff > 180) diff -= 360;
+                if (diff < -180) diff += 360;
 
-            // Handle the 0°/360° transition to prevent sudden jumps
-            if (!isFirstReading) {
-                let diff = absoluteHeading - previousHeading;
-                
-                // If difference is greater than 180°, we've crossed the 0°/360° boundary
-                if (diff > 180) {
-                    // We went from ~360° to ~0°, so subtract 360° from current to make smooth transition
-                    absoluteHeading -= 360;
-                } else if (diff < -180) {
-                    // We went from ~0° to ~360°, so add 360° to current to make smooth transition
-                    absoluteHeading += 360;
-                }
+                // Accumulate smoothly
+                accumulatedRotation += diff;
             }
 
-            // Store for transition detection
-            previousHeading = currentHeading;
-            currentHeading = absoluteHeading;
-            isFirstReading = false;
+            lastHeading = heading;
 
-            // For display purposes, normalize to 0-360 range
-            let displayHeading = absoluteHeading;
-            while (displayHeading < 0) displayHeading += 360;
-            while (displayHeading >= 360) displayHeading -= 360;
+            // Show raw heading
+            compassHeading.textContent = `${Math.round(heading)}°`;
 
-            // Update UI with normalized heading
-            compassHeading.textContent = `${Math.round(displayHeading)}°`;
-            
-            // Update compass needle with normalized heading
-            compassNeedle.style.transform = `translateX(-50%) rotate(${displayHeading}deg)`;
+            // Rotate smoothly using accumulatedRotation
+            compassNeedle.style.transform = `translateX(-50%) rotate(${accumulatedRotation}deg)`;
 
-            // Rotate the active layer with smooth transition (using the continuous heading value)
-            updateLayerRotation();
+            updateLayerRotation(accumulatedRotation);
         }
 
         // Update the rotation of the currently active layer
         function updateLayerRotation() {
             const activeLayerElement = document.getElementById(`layer${currentLayer}`);
             if (activeLayerElement) {
-                // Store the rotation value (use continuous heading to prevent jumps)
+                // Store the rotation value
                 puzzleLayers[`layer${currentLayer}`].rotation = currentHeading;
                 
-                // Apply rotation using the continuous heading value
+                // Apply rotation with smooth transition
                 activeLayerElement.style.transform = `translate(-50%, -50%) rotate(${currentHeading}deg)`;
             }
         }
@@ -451,7 +432,7 @@
             activeLayerSpan.textContent = layerNumber;
 
             // Apply current heading to the newly selected layer
-            updateLayerRotation();
+            // updateLayerRotation();
 
             console.log(`Switched to layer ${layerNumber}`);
         }
@@ -484,7 +465,7 @@
                 window.addEventListener('deviceorientation', handleOrientation);
                 orientationSupported = true;
                 orientationStatus.textContent = 'Compass active - Rotate device to control layers';
-                console.log('Device orientation initialized - using absolute compass readings');
+                console.log('Device orientation initialized');
             } else {
                 orientationStatus.textContent = 'Device orientation not supported';
                 console.log('Device orientation not supported');
