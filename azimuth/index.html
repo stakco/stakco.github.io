@@ -24,6 +24,9 @@
             height: 90vmin;
             max-width: calc(100vw - 20px);
             max-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .puzzle-layer {
@@ -67,6 +70,10 @@
             padding: 15px;
             border-radius: 10px;
             font-size: 14px;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
         }
 
         #status {
@@ -79,6 +86,7 @@
             padding: 15px;
             border-radius: 10px;
             font-size: 12px;
+            text-align: center;
         }
 
         #controls {
@@ -94,7 +102,7 @@
         .layer-button {
             width: 60px;
             height: 60px;
-            border: 3px solid #fff;
+            border: 3px solid #555;
             border-radius: 50%;
             font-size: 16px;
             font-weight: bold;
@@ -104,38 +112,40 @@
             justify-content: center;
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
-            color: white;
+            color: #777;
+            background: rgba(68, 68, 68, 0.3);
         }
 
         .layer-button.layer1 {
-            background: rgba(255, 107, 107, 0.3);
-            border-color: #ff6b6b;
+            border-color: #555;
         }
 
         .layer-button.layer2 {
-            background: rgba(78, 205, 196, 0.3);
-            border-color: #4ecdc4;
+            border-color: #555;
         }
 
         .layer-button.layer3 {
-            background: rgba(69, 183, 209, 0.3);
-            border-color: #45b7d1;
+            border-color: #555;
         }
 
         .layer-button.active {
-            transform: scale(1.2);
-            box-shadow: 0 0 20px currentColor;
+            background: #00ff00;
+            border-color: #00ff00;
+            color: #000;
+            box-shadow: 0 0 20px #00ff00;
+            transform: scale(1.1);
         }
 
-        .layer-button:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 15px currentColor;
+        .layer-button:hover:not(.active) {
+            border-color: #888;
+            color: #aaa;
+            background: rgba(136, 136, 136, 0.2);
         }
 
         /* LED Text Styling */
         .led-text {
-            display: block;
-            margin: 5px 0;
+            display: inline-block;
+            margin: 0 10px;
             font-family: 'Courier New', monospace;
             font-size: 16px;
             color: #0f0;
@@ -298,7 +308,7 @@
             }
         };
 
-        // Delta tracking variables
+        // Delta tracking variables (now unused but kept for reference)
         let rotationStartHeading = null;
         let rotationStartRotation = null;
 
@@ -360,69 +370,42 @@
             let heading = event.alpha;
             if (heading === null) return;
 
+            // Calculate delta from last heading
+            if (lastHeading !== null) {
+                let deltaHeading = heading - lastHeading;
+                
+                // Handle compass wrapping (0-360 boundary)
+                if (deltaHeading > 180) deltaHeading -= 360;
+                if (deltaHeading < -180) deltaHeading += 360;
+
+                // Apply delta to current layer rotation
+                let newRotation = puzzleLayers[`layer${currentLayer}`].rotation + deltaHeading;
+                
+                // Normalize to 0-360 range
+                newRotation = newRotation % 360;
+                if (newRotation < 0) newRotation += 360;
+
+                // Update the layer rotation
+                puzzleLayers[`layer${currentLayer}`].rotation = newRotation;
+
+                // Apply rotation to the layer element
+                const activeLayerElement = document.getElementById(`layer${currentLayer}`);
+                if (activeLayerElement) {
+                    activeLayerElement.style.transform = `translate(-50%, -50%) rotate(${newRotation}deg)`;
+                }
+
+                // Update rotation display
+                updateRotationDisplay();
+            }
+
             currentHeading = heading;
+            lastHeading = heading;
 
             // Show current compass heading
             compassHeading.textContent = `${Math.round(heading)}°`;
-
-            // If we're tracking rotation for the active layer
-            if (rotationStartHeading !== null) {
-                updateLayerRotationWithDelta();
-            }
         }
 
-        // Start tracking rotation for the current layer
-        function startRotationTracking() {
-            if (currentHeading !== null) {
-                rotationStartHeading = currentHeading;
-                rotationStartRotation = puzzleLayers[`layer${currentLayer}`].rotation;
-                isRotating = true;
-                console.log(`Started rotation tracking for layer ${currentLayer} at heading ${Math.round(currentHeading)}°`);
-            }
-        }
 
-        // Stop tracking rotation
-        function stopRotationTracking() {
-            if (isRotating) {
-                // Update the base rotation to the current rotation
-                puzzleLayers[`layer${currentLayer}`].baseRotation = puzzleLayers[`layer${currentLayer}`].rotation;
-                rotationStartHeading = null;
-                rotationStartRotation = null;
-                isRotating = false;
-                console.log(`Stopped rotation tracking for layer ${currentLayer}`);
-            }
-        }
-
-        // Update the rotation of the currently active layer based on compass delta
-        function updateLayerRotationWithDelta() {
-            if (rotationStartHeading === null || currentHeading === null) return;
-
-            // Calculate the delta from when we started rotating
-            let deltaHeading = currentHeading - rotationStartHeading;
-            
-            // Handle compass wrapping (0-360 boundary)
-            if (deltaHeading > 180) deltaHeading -= 360;
-            if (deltaHeading < -180) deltaHeading += 360;
-
-            // Calculate new rotation
-            const newRotation = rotationStartRotation + deltaHeading;
-            
-            // Normalize to 0-360 range
-            let normalizedRotation = newRotation % 360;
-            if (normalizedRotation < 0) normalizedRotation += 360;
-
-            // Update the layer rotation
-            puzzleLayers[`layer${currentLayer}`].rotation = normalizedRotation;
-
-            // Apply rotation to the layer element
-            const activeLayerElement = document.getElementById(`layer${currentLayer}`);
-            if (activeLayerElement) {
-                activeLayerElement.style.transform = `translate(-50%, -50%) rotate(${normalizedRotation}deg)`;
-            }
-
-            // Update display
-            updateRotationDisplay();
-        }
 
         // Update rotation value display
         function updateRotationDisplay() {
@@ -432,9 +415,6 @@
 
         // Switch active layer
         function switchLayer(layerNumber) {
-            // Stop any current rotation tracking
-            stopRotationTracking();
-
             // Remove active class from all layers and buttons
             document.querySelectorAll('.puzzle-layer').forEach(layer => {
                 layer.classList.remove('active');
@@ -483,7 +463,7 @@
             if ('DeviceOrientationEvent' in window) {
                 window.addEventListener('deviceorientation', handleOrientation);
                 orientationSupported = true;
-                orientationStatus.textContent = 'Compass active - Touch and hold to rotate the selected layer';
+                orientationStatus.textContent = 'Compass active - Rotate device to control selected layer';
                 console.log('Device orientation initialized');
             } else {
                 orientationStatus.textContent = 'Device orientation not supported';
@@ -522,35 +502,6 @@
                 });
             });
 
-            // Add touch/mouse events for rotation control
-            const container = document.getElementById('container');
-            
-            // Touch events
-            container.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                startRotationTracking();
-            });
-            
-            container.addEventListener('touchend', (e) => {
-                e.preventDefault();
-                stopRotationTracking();
-            });
-
-            // Mouse events for desktop testing
-            container.addEventListener('mousedown', (e) => {
-                e.preventDefault();
-                startRotationTracking();
-            });
-            
-            container.addEventListener('mouseup', (e) => {
-                e.preventDefault();
-                stopRotationTracking();
-            });
-
-            container.addEventListener('mouseleave', (e) => {
-                stopRotationTracking();
-            });
-
             // Add keyboard shortcuts
             document.addEventListener('keydown', (event) => {
                 switch (event.key) {
@@ -563,19 +514,6 @@
                     case '3':
                         switchLayer(3);
                         break;
-                    case ' ':
-                        event.preventDefault();
-                        if (!isRotating) {
-                            startRotationTracking();
-                        }
-                        break;
-                }
-            });
-
-            document.addEventListener('keyup', (event) => {
-                if (event.key === ' ') {
-                    event.preventDefault();
-                    stopRotationTracking();
                 }
             });
 
@@ -607,9 +545,7 @@
         // Handle orientation change
         window.addEventListener('orientationchange', () => {
             setTimeout(() => {
-                // Stop any current rotation tracking on orientation change
-                stopRotationTracking();
-                console.log('Orientation changed, rotation tracking stopped');
+                console.log('Orientation changed, compass will recalibrate automatically');
             }, 500);
         });
     </script>
