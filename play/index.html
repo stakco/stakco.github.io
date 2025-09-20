@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name='description' content='Brings life to papers with interactive Stakco puzzles.' />
         <meta property='og:title' content='Stakco Puzzle Systems' />
@@ -325,6 +325,29 @@
         const today = new Date();
         const dateStr = today.toISOString().split('T')[0];
 
+        // Parse URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+        const puzzle = urlParams.get('puzzle');
+
+        // Decode puzzle parameters if present
+        let customPuzzle = null;
+        if (username && puzzle) {
+            // Parse puzzle format: 638603416599875810_3_image
+            const puzzleParts = puzzle.split('_');
+            if (puzzleParts.length >= 2) {
+                const puzzleId = puzzleParts[0];
+                const puzzleFullId = puzzleParts[0] + '_' + puzzleParts[1];
+                customPuzzle = {
+                    username: username,
+                    puzzleId: puzzleId,
+                    layer1: `https://storage.googleapis.com/stakco-images/${username}/${puzzleFullId}/${puzzleId}_0.png`,
+                    layer2: `https://storage.googleapis.com/stakco-images/${username}/${puzzleFullId}/${puzzleId}_1.png`,
+                    layer3: `https://storage.googleapis.com/stakco-images/${username}/${puzzleFullId}/${puzzleId}_2.png`
+                };
+            }
+        }
+
         // Puzzle layer data structure with random initial rotations
         const puzzleLayers = {
             layer1: { rotation: 350 },
@@ -332,21 +355,45 @@
             layer3: { rotation: 270 }
         };
 
-        // Image URLs - primary (today's date) and backup (latest)
-        const imageConfig = {
-            baseUrl: 'https://storage.googleapis.com/stakco-images/109949450257686494443',
-            puzzleId: 'A2A3_3',
-            primary: {
-                layer1: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_0.png`,
-                layer2: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_1.png`,
-                layer3: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_2.png`
-            },
-            backup: {
-                layer1: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png',
-                layer2: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png',
-                layer3: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png'
-            }
-        };
+        // Image URLs - custom puzzle (from URL params) or daily puzzle
+        let imageConfig;
+        
+        if (customPuzzle) {
+            // Use custom puzzle from URL parameters
+            imageConfig = {
+                type: 'custom',
+                username: customPuzzle.username,
+                puzzleId: customPuzzle.puzzleId,
+                primary: {
+                    layer1: customPuzzle.layer1,
+                    layer2: customPuzzle.layer2,
+                    layer3: customPuzzle.layer3
+                },
+                backup: {
+                    layer1: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png',
+                    layer2: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png',
+                    layer3: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png'
+                }
+            };
+        } else {
+            // Use daily puzzle (today's date)
+            imageConfig = {
+                type: 'daily',
+                date: dateStr,
+                baseUrl: 'https://storage.googleapis.com/stakco-images/109949450257686494443',
+                puzzleId: 'A2A3_3',
+                primary: {
+                    layer1: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_0.png`,
+                    layer2: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_1.png`,
+                    layer3: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_2.png`
+                },
+                backup: {
+                    layer1: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png',
+                    layer2: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png',
+                    layer3: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png'
+                }
+            };
+        }
 
         // DOM elements
         const activeLayerSpan = document.getElementById('active-layer');
@@ -361,7 +408,12 @@
         // Initialize the app
         function initApp() {
             console.log('Initializing Touch Compass Puzzle App...');
-            console.log('Loading puzzle for date:', dateStr);
+            
+            if (customPuzzle) {
+                console.log('Loading custom puzzle:', customPuzzle.puzzleId, 'for user:', customPuzzle.username);
+            } else {
+                console.log('Loading daily puzzle for date:', dateStr);
+            }
 
             // Load dynamic images
             loadDynamicImages();
@@ -385,7 +437,11 @@
 
         // Load dynamic images with fallback
         async function loadDynamicImages() {
-            orientationStatus.textContent = 'Loading today\'s puzzle...';
+            if (customPuzzle) {
+                orientationStatus.textContent = 'Loading custom puzzle...';
+            } else {
+                orientationStatus.textContent = 'Loading today\'s puzzle...';
+            }
             
             let imagesLoadedCount = 0;
             const totalImages = 3;
@@ -396,13 +452,17 @@
                 
                 if (layerElement) {
                     try {
-                        // Try to load primary (date-specific) image first
+                        // Try to load primary image first (custom or daily)
                         const primaryUrl = imageConfig.primary[layerKey];
                         const imageExists = await checkImageExists(primaryUrl);
                         
                         if (imageExists) {
                             layerElement.style.backgroundImage = `url('${primaryUrl}')`;
-                            console.log(`Loaded today's image for ${layerKey}: ${primaryUrl}`);
+                            if (customPuzzle) {
+                                console.log(`Loaded custom image for ${layerKey}: ${primaryUrl}`);
+                            } else {
+                                console.log(`Loaded today's image for ${layerKey}: ${primaryUrl}`);
+                            }
                         } else {
                             // Fallback to backup image
                             const backupUrl = imageConfig.backup[layerKey];
@@ -435,9 +495,15 @@
         // Check if image exists at URL
         async function checkImageExists(url) {
             try {
-                const response = await fetch(url, { method: 'HEAD' });
+                // Use GET request instead of HEAD for CORS compatibility
+                const response = await fetch(url, { 
+                    method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache'
+                });
                 return response.ok;
             } catch (error) {
+                console.log('Image check failed for:', url, error);
                 return false;
             }
         }
@@ -592,25 +658,6 @@
             }
         }
 
-        // Handle scroll wheel
-        function handleScroll(e) {
-            if (puzzleSolved) return;
-            e.preventDefault();
-            
-            // Apply rotation based on scroll direction
-            const delta = e.deltaY > 0 ? 5 : -5;
-            applyRotation(delta);
-        }
-
-        // Handle right click to switch layer
-        function handleRightClick(e) {
-            if (puzzleSolved) return;
-            e.preventDefault();
-            
-            // Switch to next layer
-            const nextLayer = (currentLayer % 3) + 1;
-            switchLayer(nextLayer);
-        }
         // Apply rotation to current layer
         function applyRotation(deltaAngle) {
             puzzleLayers[`layer${currentLayer}`].rotation += deltaAngle;
@@ -712,7 +759,7 @@
                 const layerElement = document.getElementById(layerKey);
                 if (layerElement) {
                     // Add transition for smooth animation to zero
-                    layerElement.style.transition = 'transform 4s ease-out';
+                    layerElement.style.transition = 'transform 2s ease-out';
                     layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
                     
                     // Update internal rotation value
@@ -741,8 +788,28 @@
                 textArea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
-                alert('Link copied to clipboard: https://stakcos.com/play/');
+                alert('Link copied to clipboard: https://stakcos.com/azimuth/');
             }
+        }
+
+        // Handle scroll wheel
+        function handleScroll(e) {
+            if (puzzleSolved) return;
+            e.preventDefault();
+            
+            // Apply rotation based on scroll direction
+            const delta = e.deltaY > 0 ? 5 : -5;
+            applyRotation(delta);
+        }
+
+        // Handle right click to switch layer
+        function handleRightClick(e) {
+            if (puzzleSolved) return;
+            e.preventDefault();
+            
+            // Switch to next layer
+            const nextLayer = (currentLayer % 3) + 1;
+            switchLayer(nextLayer);
         }
 
         // Start the app when page loads
