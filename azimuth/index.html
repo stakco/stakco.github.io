@@ -1,72 +1,4 @@
-<div id="share-button" onclick="sharePuzzle()">🎉 Share Success!</div>        // Check if puzzle is solved
-        function checkSolution() {
-            if (puzzleSolved) return;
-
-            // Normalize all layer rotations for comparison
-            const layer1Normalized = ((puzzleLayers.layer1.rotation % 360) + 360) % 360;
-            const layer2Normalized = ((puzzleLayers.layer2.rotation % 360) + 360) % 360;
-            const layer3Normalized = ((puzzleLayers.layer3.rotation % 360) + 360) % 360;
-
-            // Check if all layers are aligned (within 5 degrees tolerance)
-            const tolerance = 5;
-            const isAligned = Math.abs(layer1Normalized - layer2Normalized) <= tolerance &&
-                             Math.abs(layer2Normalized - layer3Normalized) <= tolerance &&
-                             Math.abs(layer1Normalized - layer3Normalized) <= tolerance;
-
-            if (isAligned) {
-                puzzleSolved = true;
-                console.log('Puzzle solved!');
-                
-                // Hide controls and status
-                controlsDiv.classList.add('hidden');
-                statusDiv.classList.add('hidden');
-                
-                // Show share button
-                shareButton.classList.add('show');
-                
-                // Smoothly rotate all layers to zero
-                rotateAllLayersToZero();
-            }
-        }
-
-        // Smoothly rotate all layers to zero degrees
-        function rotateAllLayersToZero() {
-            Object.keys(puzzleLayers).forEach(layerKey => {
-                const layerElement = document.getElementById(layerKey);
-                if (layerElement) {
-                    // Add transition for smooth animation to zero
-                    layerElement.style.transition = 'transform 2s ease-out';
-                    layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-                    
-                    // Update internal rotation value
-                    puzzleLayers[layerKey].rotation = 0;
-                }
-            });
-        }
-
-        // Share function
-        function sharePuzzle() {
-            const shareData = {
-                title: 'Azimuth Puzzle',
-                text: 'I solved the Azimuth compass puzzle!',
-                url: 'https://stakcos.com/azimuth/'
-            };
-
-            if (navigator.share) {
-                navigator.share(shareData)
-                    .then(() => console.log('Successful share'))
-                    .catch((error) => console.log('Error sharing:', error));
-            } else {
-                // Fallback for browsers that don't support Web Share API
-                const textArea = document.createElement('textarea');
-                textArea.value = 'https://stakcos.com/azimuth/';
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('Link copied to clipboard: https://stakcos.com/azimuth/');
-            }
-        }<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -137,7 +69,7 @@
             padding: 15px;
             border-radius: 10px;
             font-size: 14px;
-            /* display: none; */
+            display: none;
             gap: 30px;
             justify-content: center;
             align-items: center;
@@ -385,6 +317,8 @@
         <button class="layer-button layer3" data-layer="3">3</button>
     </div>
 
+    <div id="share-button" onclick="sharePuzzle()">🎉 Share Success!</div>
+
     <div id="permission-prompt" class="permission-prompt">
         <h3>Enable Device Orientation</h3>
         <p>This app needs access to your device's compass to rotate the puzzle layers.</p>
@@ -506,7 +440,7 @@
                 updateRotationDisplay();
 
                 // Check for solution after any rotation
-                checkSolution();
+                //checkSolution();
             }
 
             currentHeading = heading;
@@ -516,7 +450,74 @@
             compassHeading.textContent = `${Math.round(heading)}°`;
         }
 
+        // Share function
+        function sharePuzzle() {
+            const shareData = {
+                title: 'Azimuth Puzzle',
+                text: 'I solved the Azimuth compass puzzle!',
+                url: 'https://stakcos.com/azimuth/'
+            };
 
+            if (navigator.share) {
+                navigator.share(shareData)
+                    .then(() => console.log('Successful share'))
+                    .catch((error) => console.log('Error sharing:', error));
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                const textArea = document.createElement('textarea');
+                textArea.value = 'https://stakcos.com/azimuth/';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Link copied to clipboard: https://stakcos.com/azimuth/');
+            }
+        }
+
+        function checkSolution() {
+            if (puzzleSolved) return;
+
+            // Normalize all layer rotations for comparison
+            const layer1Normalized = ((puzzleLayers.layer1.rotation % 360) + 360) % 360;
+            const layer2Normalized = ((puzzleLayers.layer2.rotation % 360) + 360) % 360;
+            const layer3Normalized = ((puzzleLayers.layer3.rotation % 360) + 360) % 360;
+
+            // Check if all layers are aligned (within 5 degrees tolerance)
+            const tolerance = 5;
+            const isAligned = Math.abs(layer1Normalized - layer2Normalized) <= tolerance &&
+                             Math.abs(layer2Normalized - layer3Normalized) <= tolerance &&
+                             Math.abs(layer1Normalized - layer3Normalized) <= tolerance;
+
+            if (isAligned) {
+                puzzleSolved = true;
+                console.log('Puzzle solved!');
+                
+                // Hide controls and status
+                controlsDiv.classList.add('hidden');
+                statusDiv.classList.add('hidden');
+                
+                // Show share button
+                shareButton.classList.add('show');
+                
+                // Smoothly rotate all layers to zero
+                rotateAllLayersToZero();
+            }
+        }
+
+        // Smoothly rotate all layers to zero degrees
+        function rotateAllLayersToZero() {
+            Object.keys(puzzleLayers).forEach(layerKey => {
+                const layerElement = document.getElementById(layerKey);
+                if (layerElement) {
+                    // Add transition for smooth animation to zero
+                    layerElement.style.transition = 'transform 2s ease-out';
+                    layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+                    
+                    // Update internal rotation value
+                    puzzleLayers[layerKey].rotation = 0;
+                }
+            });
+        }
 
         // Update rotation value display
         function updateRotationDisplay() {
