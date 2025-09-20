@@ -39,7 +39,6 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
-            transition: transform 0.1s ease-out;
         }
 
         .puzzle-layer.active {
@@ -378,23 +377,16 @@
                 if (deltaHeading > 180) deltaHeading -= 360;
                 if (deltaHeading < -180) deltaHeading += 360;
 
-                // Apply delta to current layer rotation
-                let newRotation = puzzleLayers[`layer${currentLayer}`].rotation + deltaHeading;
-                
-                // Normalize to 0-360 range
-                newRotation = newRotation % 360;
-                if (newRotation < 0) newRotation += 360;
+                // Apply delta to current layer rotation (without normalization)
+                puzzleLayers[`layer${currentLayer}`].rotation += deltaHeading;
 
-                // Update the layer rotation
-                puzzleLayers[`layer${currentLayer}`].rotation = newRotation;
-
-                // Apply rotation to the layer element
+                // Apply rotation to the layer element (let CSS handle the rotation value)
                 const activeLayerElement = document.getElementById(`layer${currentLayer}`);
                 if (activeLayerElement) {
-                    activeLayerElement.style.transform = `translate(-50%, -50%) rotate(${newRotation}deg)`;
+                    activeLayerElement.style.transform = `translate(-50%, -50%) rotate(${puzzleLayers[`layer${currentLayer}`].rotation}deg)`;
                 }
 
-                // Update rotation display
+                // Update rotation display (normalize only for display)
                 updateRotationDisplay();
             }
 
@@ -410,7 +402,10 @@
         // Update rotation value display
         function updateRotationDisplay() {
             const currentRotation = puzzleLayers[`layer${currentLayer}`].rotation;
-            rotationValueSpan.textContent = `${Math.round(currentRotation)}°`;
+            // Normalize only for display purposes
+            let displayRotation = currentRotation % 360;
+            if (displayRotation < 0) displayRotation += 360;
+            rotationValueSpan.textContent = `${Math.round(displayRotation)}°`;
         }
 
         // Switch active layer
