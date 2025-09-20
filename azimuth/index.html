@@ -37,7 +37,6 @@
             background-repeat: no-repeat;
             background-position: center;
             transition: transform 0.3s ease-out;
-            opacity: 0.8;
         }
 
         .puzzle-layer.active {
@@ -393,14 +392,19 @@
 
             lastHeading = heading;
 
+            // Store the logical heading for the layer
+            currentHeading = accumulatedRotation;
+
             // Show raw heading
             compassHeading.textContent = `${Math.round(heading)}°`;
 
-            // Rotate smoothly using accumulatedRotation
-            compassNeedle.style.transform = `translateX(-50%) rotate(${accumulatedRotation}deg)`;
+            // Rotate compass needle (raw heading, not accumulated)
+            compassNeedle.style.transform = `translateX(-50%) rotate(${heading}deg)`;
 
-            updateLayerRotation(accumulatedRotation);
+            // Rotate active puzzle layer
+            updateLayerRotation();
         }
+
 
         // Update the rotation of the currently active layer
         function updateLayerRotation() {
