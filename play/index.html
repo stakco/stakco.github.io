@@ -295,10 +295,11 @@
         </span>
     </div>
 
+    <!-- container & controls will be filled dynamically -->
     <div id="container">
-        <div id="layer1" class="puzzle-layer active"></div>
+        <!-- <div id="layer1" class="puzzle-layer active"></div>
         <div id="layer2" class="puzzle-layer"></div>
-        <div id="layer3" class="puzzle-layer"></div>
+        <div id="layer3" class="puzzle-layer"></div> -->
     </div>
 
     <div id="instructions">
@@ -306,20 +307,28 @@
     </div>
 
     <div id="controls">
-        <button class="layer-button active" data-layer="1">1</button>
+        <!-- <button class="layer-button active" data-layer="1">1</button>
         <button class="layer-button" data-layer="2">2</button>
-        <button class="layer-button" data-layer="3">3</button>
+        <button class="layer-button" data-layer="3">3</button> -->
     </div>
 
     <div id="share-button" onclick="sharePuzzle()">🎉 Share Success!</div>
 
     <script>
+        debugger;
+        let totalLayers = 4; // <-- change this for 2, 3, 5, etc.
+
         // App state
         let currentLayer = 1;
         let puzzleSolved = false;
         let isDragging = false;
         let lastAngle = 0;
         let imagesLoaded = false;
+
+        // Generate puzzleLayers with random rotations
+        let puzzleLayers = {};
+
+        
 
         // Generate today's date string (YYYY-MM-DD)
         const today = new Date();
@@ -332,13 +341,42 @@
 
         // Decode puzzle parameters if present
         let customPuzzle = null;
-        if (username && puzzle) {
-            alert("tewst");
+        if (username && puzzle) { // load custom puzzle
             // Parse puzzle format: 638603416599875810_3_image
             const puzzleParts = puzzle.split('_');
             if (puzzleParts.length >= 2) {
+                debugger;
                 const puzzleId = puzzleParts[0];
                 const puzzleIdFull = puzzleParts[0] + '_' + puzzleParts[1];
+                const noOfLayers = parseInt(puzzleParts[1], 10);
+                totalLayers = noOfLayers;
+
+                for (let i = 1; i <= noOfLayers; i++) {
+                    puzzleLayers[`layer${i}`] = { rotation: Math.floor(Math.random() * 360) };
+                }
+
+                // Dynamically create container layers + control buttons
+                const container = document.getElementById('container');
+                const controlsDiv = document.getElementById('controls');
+                container.innerHTML = '';
+                controlsDiv.innerHTML = '';
+
+                for (let i = 1; i <= noOfLayers; i++) {
+                    const layerDiv = document.createElement('div');
+                    layerDiv.id = `layer${i}`;
+                    layerDiv.className = `puzzle-layer${i === 1 ? ' active' : ''}`;
+                    layerDiv.style.zIndex = noOfLayers - i + 1;
+                    container.appendChild(layerDiv);
+
+                    const btn = document.createElement('button');
+                    btn.className = `layer-button${i === 1 ? ' active' : ''}`;
+                    btn.dataset.layer = i;
+                    btn.textContent = i;
+                    btn.addEventListener('click', () => switchLayer(i));
+                    controlsDiv.appendChild(btn);
+                }
+
+                // puzzleParts[1] is the number of layers, currently unused
                 customPuzzle = {
                     username: username,
                     puzzleId: puzzleId,
@@ -347,14 +385,47 @@
                     layer3: `https://storage.googleapis.com/stakco-images/${username}/${puzzleIdFull}/${puzzleId}_2.png`
                 };
             }
+        } else {
+            const noOfLayers = 3; // default to 3 layers for daily puzzle
+            totalLayers = noOfLayers;
+            puzzleLayers = {
+                layer1: { rotation: Math.floor(Math.random() * 360) },
+                layer2: { rotation: Math.floor(Math.random() * 360) },
+                layer3: { rotation: Math.floor(Math.random() * 360) }
+            };
+
+            for (let i = 1; i <= noOfLayers; i++) {
+                puzzleLayers[`layer${i}`] = { rotation: Math.floor(Math.random() * 360) };
+            }
+
+            // Dynamically create container layers + control buttons
+            const container = document.getElementById('container');
+            const controlsDiv = document.getElementById('controls');
+            container.innerHTML = '';
+            controlsDiv.innerHTML = '';
+
+            for (let i = 1; i <= noOfLayers; i++) {
+                const layerDiv = document.createElement('div');
+                layerDiv.id = `layer${i}`;
+                layerDiv.className = `puzzle-layer${i === 1 ? ' active' : ''}`;
+                layerDiv.style.zIndex = noOfLayers - i + 1;
+                container.appendChild(layerDiv);
+
+                const btn = document.createElement('button');
+                btn.className = `layer-button${i === 1 ? ' active' : ''}`;
+                btn.dataset.layer = i;
+                btn.textContent = i;
+                btn.addEventListener('click', () => switchLayer(i));
+                controlsDiv.appendChild(btn);
+            }
         }
 
-        // Puzzle layer data structure with random initial rotations
-        const puzzleLayers = {
-            layer1: { rotation: 350 },
-            layer2: { rotation: 83 },
-            layer3: { rotation: 270 }
-        };
+        // // Puzzle layer data structure with random initial rotations
+        // const puzzleLayers = {
+        //     layer1: { rotation: 350 },
+        //     layer2: { rotation: 83 },
+        //     layer3: { rotation: 270 }
+        // };
 
         // Image URLs - custom puzzle (from URL params) or daily puzzle
         let imageConfig;
@@ -514,9 +585,9 @@
             Object.keys(puzzleLayers).forEach(layerKey => {
                 const layerElement = document.getElementById(layerKey);
                 const rotation = puzzleLayers[layerKey].rotation;
-                
                 if (layerElement) {
-                    layerElement.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+                    layerElement.style.transform =
+                        `translate(-50%, -50%) rotate(${rotation}deg)`;
                 }
             });
         }
@@ -623,39 +694,25 @@
         // Handle keyboard input
         function handleKeyboard(e) {
             if (puzzleSolved) return;
-
             switch (e.key) {
-                case '1':
-                    switchLayer(1);
-                    break;
-                case '2':
-                    switchLayer(2);
-                    break;
-                case '3':
-                    switchLayer(3);
-                    break;
                 case ' ':
                     e.preventDefault();
-                    // Switch to next layer
-                    const nextLayer = (currentLayer % 3) + 1;
+                    const nextLayer = (currentLayer % totalLayers) + 1;
                     switchLayer(nextLayer);
                     break;
                 case 'ArrowLeft':
-                    e.preventDefault();
-                    applyRotation(-5);
-                    break;
+                    e.preventDefault(); applyRotation(-5); break;
                 case 'ArrowRight':
-                    e.preventDefault();
-                    applyRotation(5);
-                    break;
+                    e.preventDefault(); applyRotation(5); break;
                 case 'ArrowUp':
-                    e.preventDefault();
-                    applyRotation(1);
-                    break;
+                    e.preventDefault(); applyRotation(1); break;
                 case 'ArrowDown':
-                    e.preventDefault();
-                    applyRotation(-1);
-                    break;
+                    e.preventDefault(); applyRotation(-1); break;
+                default:
+                    if (!isNaN(e.key)) {
+                        const num = parseInt(e.key);
+                        if (num >= 1 && num <= totalLayers) switchLayer(num);
+                    }
             }
         }
 
@@ -665,7 +722,7 @@
             e.preventDefault();
             
             // Apply rotation based on scroll direction
-            const delta = e.deltaY > 0 ? 5 : -5;
+            const delta = e.deltaY > 0 ? 2 : -2;
             applyRotation(delta);
         }
 
@@ -673,11 +730,10 @@
         function handleRightClick(e) {
             if (puzzleSolved) return;
             e.preventDefault();
-            
-            // Switch to next layer
-            const nextLayer = (currentLayer % 3) + 1;
+            const nextLayer = (currentLayer % totalLayers) + 1;
             switchLayer(nextLayer);
         }
+
         // Apply rotation to current layer
         function applyRotation(deltaAngle) {
             puzzleLayers[`layer${currentLayer}`].rotation += deltaAngle;
@@ -733,20 +789,16 @@
         function checkSolution() {
             if (puzzleSolved) return;
 
-            // Normalize all layer rotations for comparison
-            const layer1Normalized = ((puzzleLayers.layer1.rotation % 360) + 360) % 360;
-            const layer2Normalized = ((puzzleLayers.layer2.rotation % 360) + 360) % 360;
-            const layer3Normalized = ((puzzleLayers.layer3.rotation % 360) + 360) % 360;
-
-            // Check if all layers are aligned (within 1 degree tolerance)
             const tolerance = 1;
-            const isAligned = Math.abs(layer1Normalized - layer2Normalized) <= tolerance &&
-                             Math.abs(layer2Normalized - layer3Normalized) <= tolerance &&
-                             Math.abs(layer1Normalized - layer3Normalized) <= tolerance;
+            const rotations = Object.values(puzzleLayers).map(l =>
+                ((l.rotation % 360) + 360) % 360
+            );
 
-            if (isAligned) {
-                solvePuzzle();
-            }
+            const allAligned = rotations.every(r =>
+                Math.abs(r - rotations[0]) <= tolerance
+            );
+
+            if (allAligned) solvePuzzle();
         }
 
         // Solve puzzle
