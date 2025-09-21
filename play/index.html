@@ -333,16 +333,18 @@
         // Decode puzzle parameters if present
         let customPuzzle = null;
         if (username && puzzle) {
+            alert("tewst");
             // Parse puzzle format: 638603416599875810_3_image
             const puzzleParts = puzzle.split('_');
             if (puzzleParts.length >= 2) {
                 const puzzleId = puzzleParts[0];
+                const puzzleIdFull = puzzleParts[0] + '_' + puzzleParts[1];
                 customPuzzle = {
                     username: username,
                     puzzleId: puzzleId,
-                    layer1: `https://storage.googleapis.com/stakco-images/${username}/${puzzleId}/${puzzleId}_0.png`,
-                    layer2: `https://storage.googleapis.com/stakco-images/${username}/${puzzleId}/${puzzleId}_1.png`,
-                    layer3: `https://storage.googleapis.com/stakco-images/${username}/${puzzleId}/${puzzleId}_2.png`
+                    layer1: `https://storage.googleapis.com/stakco-images/${username}/${puzzleIdFull}/${puzzleId}_0.png`,
+                    layer2: `https://storage.googleapis.com/stakco-images/${username}/${puzzleIdFull}/${puzzleId}_1.png`,
+                    layer3: `https://storage.googleapis.com/stakco-images/${username}/${puzzleIdFull}/${puzzleId}_2.png`
                 };
             }
         }
