@@ -89,18 +89,6 @@
             z-index: 10;
         }
 
-        #layer1 {
-            z-index: 3;
-        }
-
-        #layer2 {
-            z-index: 2;
-        }
-
-        #layer3 {
-            z-index: 1;
-        }
-
         #info {
             position: absolute;
             top: 20px;
@@ -296,21 +284,13 @@
     </div>
 
     <!-- container & controls will be filled dynamically -->
-    <div id="container">
-        <!-- <div id="layer1" class="puzzle-layer active"></div>
-        <div id="layer2" class="puzzle-layer"></div>
-        <div id="layer3" class="puzzle-layer"></div> -->
-    </div>
+    <div id="container"></div>
 
     <div id="instructions">
         <p>🖱️ Mouse: Click & drag | Scroll wheel | Right-click to switch layers • ⌨️ Keyboard: Arrow keys | Space to switch layers • 📱 Touch: Drag to rotate</p>
     </div>
 
-    <div id="controls">
-        <!-- <button class="layer-button active" data-layer="1">1</button>
-        <button class="layer-button" data-layer="2">2</button>
-        <button class="layer-button" data-layer="3">3</button> -->
-    </div>
+    <div id="controls"></div>
 
     <div id="share-button" onclick="sharePuzzle()">🎉 Share Success!</div>
 
@@ -327,8 +307,6 @@
 
         // Generate puzzleLayers with random rotations
         let puzzleLayers = {};
-
-        
 
         // Generate today's date string (YYYY-MM-DD)
         const today = new Date();
@@ -351,66 +329,55 @@
                 const noOfLayers = parseInt(puzzleParts[1], 10);
                 totalLayers = noOfLayers;
 
+                // Initialize puzzleLayers for custom puzzle
                 for (let i = 1; i <= noOfLayers; i++) {
                     puzzleLayers[`layer${i}`] = { rotation: Math.floor(Math.random() * 360) };
                 }
 
                 // Dynamically create container layers + control buttons
-                const container = document.getElementById('container');
-                const controlsDiv = document.getElementById('controls');
-                container.innerHTML = '';
-                controlsDiv.innerHTML = '';
+                createDynamicElements(noOfLayers);
 
-                for (let i = 1; i <= noOfLayers; i++) {
-                    const layerDiv = document.createElement('div');
-                    layerDiv.id = `layer${i}`;
-                    layerDiv.className = `puzzle-layer${i === 1 ? ' active' : ''}`;
-                    layerDiv.style.zIndex = noOfLayers - i + 1;
-                    container.appendChild(layerDiv);
-
-                    const btn = document.createElement('button');
-                    btn.className = `layer-button${i === 1 ? ' active' : ''}`;
-                    btn.dataset.layer = i;
-                    btn.textContent = i;
-                    btn.addEventListener('click', () => switchLayer(i));
-                    controlsDiv.appendChild(btn);
-                }
-
-                // puzzleParts[1] is the number of layers, currently unused
+                // Create customPuzzle object with dynamic layers
                 customPuzzle = {
                     username: username,
                     puzzleId: puzzleId,
-                    layer1: `https://storage.googleapis.com/stakco-images/${username}/${puzzleIdFull}/${puzzleId}_0.png`,
-                    layer2: `https://storage.googleapis.com/stakco-images/${username}/${puzzleIdFull}/${puzzleId}_1.png`,
-                    layer3: `https://storage.googleapis.com/stakco-images/${username}/${puzzleIdFull}/${puzzleId}_2.png`
+                    puzzleIdFull: puzzleIdFull
                 };
+
+                // Dynamically add layer URLs
+                for (let i = 1; i <= noOfLayers; i++) {
+                    customPuzzle[`layer${i}`] = `https://storage.googleapis.com/stakco-images/${username}/${puzzleIdFull}/${puzzleId}_${i-1}.png`;
+                }
             }
         } else {
             const noOfLayers = 3; // default to 3 layers for daily puzzle
             totalLayers = noOfLayers;
-            puzzleLayers = {
-                layer1: { rotation: Math.floor(Math.random() * 360) },
-                layer2: { rotation: Math.floor(Math.random() * 360) },
-                layer3: { rotation: Math.floor(Math.random() * 360) }
-            };
-
+            
+            // Initialize puzzleLayers for daily puzzle
             for (let i = 1; i <= noOfLayers; i++) {
                 puzzleLayers[`layer${i}`] = { rotation: Math.floor(Math.random() * 360) };
             }
 
             // Dynamically create container layers + control buttons
+            createDynamicElements(noOfLayers);
+        }
+
+        // Function to create dynamic DOM elements
+        function createDynamicElements(noOfLayers) {
             const container = document.getElementById('container');
             const controlsDiv = document.getElementById('controls');
             container.innerHTML = '';
             controlsDiv.innerHTML = '';
 
             for (let i = 1; i <= noOfLayers; i++) {
+                // Create layer div
                 const layerDiv = document.createElement('div');
                 layerDiv.id = `layer${i}`;
                 layerDiv.className = `puzzle-layer${i === 1 ? ' active' : ''}`;
                 layerDiv.style.zIndex = noOfLayers - i + 1;
                 container.appendChild(layerDiv);
 
+                // Create control button
                 const btn = document.createElement('button');
                 btn.className = `layer-button${i === 1 ? ' active' : ''}`;
                 btn.dataset.layer = i;
@@ -419,13 +386,6 @@
                 controlsDiv.appendChild(btn);
             }
         }
-
-        // // Puzzle layer data structure with random initial rotations
-        // const puzzleLayers = {
-        //     layer1: { rotation: 350 },
-        //     layer2: { rotation: 83 },
-        //     layer3: { rotation: 270 }
-        // };
 
         // Image URLs - custom puzzle (from URL params) or daily puzzle
         let imageConfig;
@@ -436,16 +396,20 @@
                 type: 'custom',
                 username: customPuzzle.username,
                 puzzleId: customPuzzle.puzzleId,
-                primary: {
-                    layer1: customPuzzle.layer1,
-                    layer2: customPuzzle.layer2,
-                    layer3: customPuzzle.layer3
-                },
-                backup: {
-                    layer1: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png',
-                    layer2: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png',
-                    layer3: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png'
-                }
+                primary: {},
+                backup: {}
+            };
+
+            // Dynamically add primary layer URLs
+            for (let i = 1; i <= totalLayers; i++) {
+                imageConfig.primary[`layer${i}`] = customPuzzle[`layer${i}`];
+            }
+
+            // Add backup URLs (fallback to default 3-layer puzzle)
+            imageConfig.backup = {
+                layer1: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png',
+                layer2: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png',
+                layer3: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png'
             };
         } else {
             // Use daily puzzle (today's date)
@@ -454,17 +418,15 @@
                 date: dateStr,
                 baseUrl: 'https://storage.googleapis.com/stakco-images/109949450257686494443',
                 puzzleId: 'A2A3_3',
-                primary: {
-                    layer1: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_0.png`,
-                    layer2: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_1.png`,
-                    layer3: `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_2.png`
-                },
-                backup: {
-                    layer1: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png',
-                    layer2: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png',
-                    layer3: 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png'
-                }
+                primary: {},
+                backup: {}
             };
+
+            // Dynamically add daily puzzle URLs
+            for (let i = 1; i <= totalLayers; i++) {
+                imageConfig.primary[`layer${i}`] = `https://storage.googleapis.com/stakco-images/109949450257686494443/${dateStr}/A2A3_3/A2A3_${i-1}.png`;
+                imageConfig.backup[`layer${i}`] = `https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_${i-1}.png`;
+            }
         }
 
         // DOM elements
@@ -482,21 +444,13 @@
             console.log('Initializing Touch Compass Puzzle App...');
             
             if (customPuzzle) {
-                console.log('Loading custom puzzle:', customPuzzle.puzzleId, 'for user:', customPuzzle.username);
+                console.log('Loading custom puzzle:', customPuzzle.puzzleId, 'for user:', customPuzzle.username, 'with', totalLayers, 'layers');
             } else {
-                console.log('Loading daily puzzle for date:', dateStr);
+                console.log('Loading daily puzzle for date:', dateStr, 'with', totalLayers, 'layers');
             }
 
             // Load dynamic images
             loadDynamicImages();
-
-            // Add layer button event listeners
-            document.querySelectorAll('.layer-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const layerNumber = parseInt(button.dataset.layer);
-                    switchLayer(layerNumber);
-                });
-            });
 
             // Add mouse/touch event listeners
             setupInputHandlers();
@@ -536,18 +490,26 @@
                                 console.log(`Loaded today's image for ${layerKey}: ${primaryUrl}`);
                             }
                         } else {
-                            // Fallback to backup image
+                            // Fallback to backup image (if available)
                             const backupUrl = imageConfig.backup[layerKey];
-                            layerElement.style.backgroundImage = `url('${backupUrl}')`;
-                            console.log(`Using backup image for ${layerKey}: ${backupUrl}`);
+                            if (backupUrl) {
+                                layerElement.style.backgroundImage = `url('${backupUrl}')`;
+                                console.log(`Using backup image for ${layerKey}: ${backupUrl}`);
+                            } else {
+                                console.log(`No backup available for ${layerKey}`);
+                            }
                         }
                         
                         imagesLoadedCount++;
                     } catch (error) {
-                        // Use backup image on error
+                        // Use backup image on error (if available)
                         const backupUrl = imageConfig.backup[layerKey];
-                        layerElement.style.backgroundImage = `url('${backupUrl}')`;
-                        console.log(`Error loading ${layerKey}, using backup: ${backupUrl}`);
+                        if (backupUrl) {
+                            layerElement.style.backgroundImage = `url('${backupUrl}')`;
+                            console.log(`Error loading ${layerKey}, using backup: ${backupUrl}`);
+                        } else {
+                            console.log(`Error loading ${layerKey}, no backup available:`, error);
+                        }
                         imagesLoadedCount++;
                     }
                 }
@@ -773,8 +735,11 @@
             });
 
             // Add active class to selected layer and button
-            document.getElementById(`layer${layerNumber}`).classList.add('active');
-            document.querySelector(`[data-layer="${layerNumber}"]`).classList.add('active');
+            const targetLayer = document.getElementById(`layer${layerNumber}`);
+            const targetButton = document.querySelector(`[data-layer="${layerNumber}"]`);
+            
+            if (targetLayer) targetLayer.classList.add('active');
+            if (targetButton) targetButton.classList.add('active');
 
             currentLayer = layerNumber;
             activeLayerSpan.textContent = layerNumber;
