@@ -316,7 +316,7 @@
 
     <script>
         debugger;
-        let totalLayers = 4; // <-- change this for 2, 3, 5, etc.
+        let totalLayers = 3; // <-- change this for 2, 3, 5, etc.
 
         // App state
         let currentLayer = 1;
@@ -516,7 +516,7 @@
             }
             
             let imagesLoadedCount = 0;
-            const totalImages = 3;
+            const totalImages = totalLayers;
             
             for (let i = 1; i <= totalImages; i++) {
                 const layerKey = `layer${i}`;
