@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name='description' content='Brings life to papers with interactive Stakco puzzles.' />
         <meta property='og:title' content='Stakco Puzzle Systems' />
@@ -337,13 +337,12 @@
             const puzzleParts = puzzle.split('_');
             if (puzzleParts.length >= 2) {
                 const puzzleId = puzzleParts[0];
-                const puzzleFullId = puzzleParts[0] + '_' + puzzleParts[1];
                 customPuzzle = {
                     username: username,
                     puzzleId: puzzleId,
-                    layer1: `https://storage.googleapis.com/stakco-images/${username}/${puzzleFullId}/${puzzleId}_0.png`,
-                    layer2: `https://storage.googleapis.com/stakco-images/${username}/${puzzleFullId}/${puzzleId}_1.png`,
-                    layer3: `https://storage.googleapis.com/stakco-images/${username}/${puzzleFullId}/${puzzleId}_2.png`
+                    layer1: `https://storage.googleapis.com/stakco-images/${username}/${puzzleId}/${puzzleId}_0.png`,
+                    layer2: `https://storage.googleapis.com/stakco-images/${username}/${puzzleId}/${puzzleId}_1.png`,
+                    layer3: `https://storage.googleapis.com/stakco-images/${username}/${puzzleId}/${puzzleId}_2.png`
                 };
             }
         }
@@ -658,6 +657,25 @@
             }
         }
 
+        // Handle scroll wheel
+        function handleScroll(e) {
+            if (puzzleSolved) return;
+            e.preventDefault();
+            
+            // Apply rotation based on scroll direction
+            const delta = e.deltaY > 0 ? 5 : -5;
+            applyRotation(delta);
+        }
+
+        // Handle right click to switch layer
+        function handleRightClick(e) {
+            if (puzzleSolved) return;
+            e.preventDefault();
+            
+            // Switch to next layer
+            const nextLayer = (currentLayer % 3) + 1;
+            switchLayer(nextLayer);
+        }
         // Apply rotation to current layer
         function applyRotation(deltaAngle) {
             puzzleLayers[`layer${currentLayer}`].rotation += deltaAngle;
@@ -718,7 +736,7 @@
             const layer2Normalized = ((puzzleLayers.layer2.rotation % 360) + 360) % 360;
             const layer3Normalized = ((puzzleLayers.layer3.rotation % 360) + 360) % 360;
 
-            // Check if all layers are aligned (within 5 degrees tolerance)
+            // Check if all layers are aligned (within 1 degree tolerance)
             const tolerance = 1;
             const isAligned = Math.abs(layer1Normalized - layer2Normalized) <= tolerance &&
                              Math.abs(layer2Normalized - layer3Normalized) <= tolerance &&
@@ -747,7 +765,7 @@
             // Show share button
             shareButton.classList.add('show');
 
-            // Wait 1 second before rotating all layers to zero
+            // Wait 2 seconds before rotating all layers to zero
             setTimeout(() => {
                 rotateAllLayersToZero();
             }, 2000);
@@ -759,7 +777,7 @@
                 const layerElement = document.getElementById(layerKey);
                 if (layerElement) {
                     // Add transition for smooth animation to zero
-                    layerElement.style.transition = 'transform 2s ease-out';
+                    layerElement.style.transition = 'transform 4s ease-out';
                     layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
                     
                     // Update internal rotation value
@@ -788,28 +806,8 @@
                 textArea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
-                alert('Link copied to clipboard: https://stakcos.com/azimuth/');
+                alert('Link copied to clipboard: https://stakcos.com/play/');
             }
-        }
-
-        // Handle scroll wheel
-        function handleScroll(e) {
-            if (puzzleSolved) return;
-            e.preventDefault();
-            
-            // Apply rotation based on scroll direction
-            const delta = e.deltaY > 0 ? 5 : -5;
-            applyRotation(delta);
-        }
-
-        // Handle right click to switch layer
-        function handleRightClick(e) {
-            if (puzzleSolved) return;
-            e.preventDefault();
-            
-            // Switch to next layer
-            const nextLayer = (currentLayer % 3) + 1;
-            switchLayer(nextLayer);
         }
 
         // Start the app when page loads
