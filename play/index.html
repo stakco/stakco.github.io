@@ -89,27 +89,10 @@
             z-index: 10;
         }
 
-        #info {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            right: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            display: none;
-            gap: 30px;
-            justify-content: center;
-            align-items: center;
-        }
-
         #status {
+            margin-left: 10px;
             position: absolute;
-            top: 10px;
-            left: 20px;
-            right: 20px;
-            padding: 15px;
-            border-radius: 10px;
+            top: 0;
             font-size: 14px;
             text-align: center;
             font-family: 'Courier New', monospace;
@@ -143,8 +126,6 @@
         #share-button {
             position: absolute;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
             background: #00ff00;
             color: #000;
             border: none;
@@ -158,7 +139,6 @@
             transition: all 0.3s ease;
             z-index: 1000;
             text-align: center;
-            width: 50%;
         }
 
         #share-button.show {
@@ -171,8 +151,8 @@
         }
 
         .layer-button {
-            width: 60px;
-            height: 60px;
+            width: 50px;
+            height: 50px;
             border: 3px solid #555;
             border-radius: 50%;
             font-size: 16px;
@@ -192,7 +172,6 @@
             border-color: #00ff00;
             color: #000;
             box-shadow: 0 0 20px #00ff00;
-            transform: scale(1.1);
         }
 
         .layer-button:hover:not(.active) {
@@ -201,45 +180,8 @@
             background: rgba(136, 136, 136, 0.2);
         }
 
-        #instructions {
-            position: absolute;
-            bottom: 100px;
-            left: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 12px;
-            text-align: center;
-        }
-
         #instructions.hidden {
             display: none;
-        }
-
-        /* LED Text Styling */
-        .led-text {
-            display: inline-block;
-            margin: 0 10px;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            color: #0f0;
-            text-shadow:
-                0 0 5px #0f0,
-                0 0 10px #0f0,
-                0 0 20px #0f0,
-                0 0 40px #0f0;
-            letter-spacing: 2px;
-        }
-
-        .led-label {
-            color: #0a0;
-            font-weight: bold;
-            margin-right: 6px;
-            text-shadow:
-                0 0 3px #060,
-                0 0 6px #090;
         }
 
         .led-value {
@@ -268,34 +210,22 @@
 </head>
 
 <body>
+    
     <div id="status">
-        <p id="orientation-status">Drag to rotate selected layer • Use arrow keys • Align all layers to solve</p>
+        <p id="orientation-status">
+            Drag to rotate selected layer • 
+            Align all layers to solve</p>    
     </div>
 
-    <div id="info">
-        <span class="led-text">
-            <span class="led-label">LYR:</span>
-            <span class="led-value" id="active-layer">1</span>
-        </span>
-        <span class="led-text">
-            <span class="led-label">ROT:</span>
-            <span class="led-value" id="rotation-value">0°</span>
-        </span>
-    </div>
-
-    <!-- container & controls will be filled dynamically -->
+    <!-- to be filled dynamically -->
     <div id="container"></div>
 
-    <div id="instructions">
-        <p>🖱️ Mouse: Click & drag | Scroll wheel | Right-click to switch layers • ⌨️ Keyboard: Arrow keys | Space to switch layers • 📱 Touch: Drag to rotate</p>
-    </div>
-
+    <!-- to be filled dynamically -->
     <div id="controls"></div>
 
     <div id="share-button" onclick="sharePuzzle()">🎉 Share Success!</div>
 
     <script>
-        debugger;
         let totalLayers = 3; // <-- change this for 2, 3, 5, etc.
 
         // App state
@@ -305,7 +235,6 @@
         let lastAngle = 0;
         let imagesLoaded = false;
 
-        // Generate puzzleLayers with random rotations
         let puzzleLayers = {};
 
         // Generate today's date string (YYYY-MM-DD)
@@ -323,7 +252,6 @@
             // Parse puzzle format: 638603416599875810_3_image
             const puzzleParts = puzzle.split('_');
             if (puzzleParts.length >= 2) {
-                debugger;
                 const puzzleId = puzzleParts[0];
                 const puzzleIdFull = puzzleParts[0] + '_' + puzzleParts[1];
                 const noOfLayers = parseInt(puzzleParts[1], 10);
@@ -430,12 +358,9 @@
         }
 
         // DOM elements
-        const activeLayerSpan = document.getElementById('active-layer');
-        const rotationValueSpan = document.getElementById('rotation-value');
         const orientationStatus = document.getElementById('orientation-status');
         const controlsDiv = document.getElementById('controls');
         const statusDiv = document.getElementById('status');
-        const instructionsDiv = document.getElementById('instructions');
         const shareButton = document.getElementById('share-button');
         const container = document.getElementById('container');
 
@@ -520,7 +445,7 @@
             updateRotationDisplay();
             
             // Update status
-            orientationStatus.textContent = 'Drag to rotate selected layer • Use arrow keys • Align all layers to solve';
+            orientationStatus.textContent = 'Drag to rotate selected layer • Align all layers to solve';
             imagesLoaded = true;
             
             console.log(`Loaded ${imagesLoadedCount}/${totalImages} images successfully`);
@@ -684,7 +609,7 @@
             e.preventDefault();
             
             // Apply rotation based on scroll direction
-            const delta = e.deltaY > 0 ? 2 : -2;
+            const delta = e.deltaY > 0 ? 1 : -1;
             applyRotation(delta);
         }
 
@@ -719,7 +644,6 @@
             // Normalize only for display purposes
             let displayRotation = currentRotation % 360;
             if (displayRotation < 0) displayRotation += 360;
-            rotationValueSpan.textContent = `${Math.round(displayRotation)}°`;
         }
 
         // Switch active layer
@@ -742,7 +666,6 @@
             if (targetButton) targetButton.classList.add('active');
 
             currentLayer = layerNumber;
-            activeLayerSpan.textContent = layerNumber;
 
             // Update rotation display for the new layer
             updateRotationDisplay();
@@ -779,7 +702,6 @@
             // Hide controls, status and instructions
             controlsDiv.classList.add('hidden');
             statusDiv.classList.add('hidden');
-            instructionsDiv.classList.add('hidden');
 
             // Show share button
             shareButton.classList.add('show');
