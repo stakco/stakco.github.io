@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surface Dial WebHID Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 40px;
+            opacity: 0.8;
+            font-size: 1.1em;
+        }
+
+        .connection-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .connect-button {
+            background: linear-gradient(45deg, #4ecdc4, #45b7aa);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .connect-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .connect-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 4px solid #4ecdc4;
+        }
+
+        .status.error {
+            border-left-color: #ff6b6b;
+        }
+
+        .status.success {
+            border-left-color: #4ecdc4;
+        }
+
+        .demo-area {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .demo-area.active {
+            display: grid;
+        }
+
+        .dial-container {
+            text-align: center;
+        }
+
+        .dial-outer {
+            width: 250px;
+            height: 250px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin: 0 auto 20px;
+        }
+
+        .dial-inner {
+            width: 80%;
+            height: 80%;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .dial-indicator {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            width: 4px;
+            height: 50px;
+            background: #ff6b6b;
+            border-radius: 2px;
+            transform: translateX(-50%);
+            transform-origin: center 115px;
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+        }
+
+        .dial-center-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.2s ease;
+        }
+
+        .dial-center-dot.pressed {
+            background: #ff6b6b;
+            transform: translate(-50%, -50%) scale(1.3);
+        }
+
+        .info-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .info-label {
+            font-size: 0.9em;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .info-value {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        .device-info {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .device-info h3 {
+            margin: 0 0 10px 0;
+            color: #4ecdc4;
+        }
+
+        .device-info p {
+            margin: 5px 0;
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .raw-data {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.8em;
+            max-height: 100px;
+            overflow-y: auto;
+            margin-top: 10px;
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .instructions h3 {
+            margin-top: 0;
+            color: #4ecdc4;
+        }
+
+        .warning {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .dial-outer.active {
+            animation: pulse 0.3s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .demo-area {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Surface Dial WebHID Demo</h1>
+        <p class="subtitle">Connect your Microsoft Surface Dial via Bluetooth and interact with it using WebHID</p>
+
+        <div class="connection-section">
+            <h3>Connect Surface Dial</h3>
+            <p>Click the button below to connect your Surface Dial. Make sure it's paired with your system via Bluetooth first.</p>
+            <button id="connectButton" class="connect-button">Connect Surface Dial</button>
+        </div>
+
+        <div id="status" class="status">
+            <strong>WebHID Support:</strong> <span id="hidSupport"></span><br>
+            <strong>Status:</strong> <span id="connectionStatus">Not connected</span>
+        </div>
+
+        <div class="warning">
+            <h3>⚠️ Important Notes:</h3>
+            <ul>
+                <li>This demo requires a Chromium-based browser (Chrome, Edge, etc.) on a desktop OS</li>
+                <li>Your Surface Dial must be paired via Bluetooth first</li>
+                <li>macOS doesn't have native Surface Dial drivers, so WebHID is the only way to access it</li>
+                <li>You'll need to grant permission when prompted</li>
+            </ul>
+        </div>
+
+        <div id="demoArea" class="demo-area">
+            <div class="dial-container">
+                <div class="dial-outer" id="dialOuter">
+                    <div class="dial-inner"></div>
+                    <div class="dial-indicator" id="dialIndicator"></div>
+                    <div class="dial-center-dot" id="dialCenterDot"></div>
+                </div>
+                <h3>Virtual Dial</h3>
+                <p>Reflects the physical Surface Dial state</p>
+            </div>
+
+            <div class="info-panel">
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Rotation</div>
+                        <div class="info-value" id="rotationValue">0°</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Button</div>
+                        <div class="info-value" id="buttonValue">Released</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Raw Delta</div>
+                        <div class="info-value" id="deltaValue">0</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Reports</div>
+                        <div class="info-value" id="reportCount">0</div>
+                    </div>
+                </div>
+
+                <div class="device-info">
+                    <h3>Device Information</h3>
+                    <p><strong>Name:</strong> <span id="deviceName">-</span></p>
+                    <p><strong>Vendor ID:</strong> <span id="vendorId">-</span></p>
+                    <p><strong>Product ID:</strong> <span id="productId">-</span></p>
+                    <p><strong>Collections:</strong> <span id="collections">-</span></p>
+                </div>
+
+                <div class="raw-data" id="rawData">
+                    Raw HID data will appear here...
+                </div>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <h3>Surface Dial HID Mapping Information:</h3>
+            <p>The Microsoft Surface Dial uses the following HID characteristics:</p>
+            <ul>
+                <li><strong>Vendor ID:</strong> 0x045E (Microsoft)</li>
+                <li><strong>Usage Page:</strong> 0x01 (Generic Desktop)</li>
+                <li><strong>Usage:</strong> 0x0E (System Multi-Axis Controller)</li>
+                <li><strong>Transport:</strong> Bluetooth Low Energy</li>
+                <li><strong>Input Reports:</strong> Contains rotation delta and button state</li>
+                <li><strong>Rotation:</strong> Reported as signed relative values</li>
+                <li><strong>Button:</strong> Press/release events for the dial press action</li>
+            </ul>
+            <p>This implementation uses the WebHID API to access raw HID reports from the Surface Dial, parse the rotation and button data, and map it to a virtual dial interface.</p>
+        </div>
+    </div>
+
+    <script>
+        class SurfaceDialWebHID {
+            constructor() {
+                this.device = null;
+                this.currentRotation = 0;
+                this.reportCounter = 0;
+                this.isButtonPressed = false;
+                
+                this.connectButton = document.getElementById('connectButton');
+                this.status = document.getElementById('connectionStatus');
+                this.demoArea = document.getElementById('demoArea');
+                this.dialIndicator = document.getElementById('dialIndicator');
+                this.dialOuter = document.getElementById('dialOuter');
+                this.dialCenterDot = document.getElementById('dialCenterDot');
+                
+                // Info elements
+                this.rotationValue = document.getElementById('rotationValue');
+                this.buttonValue = document.getElementById('buttonValue');
+                this.deltaValue = document.getElementById('deltaValue');
+                this.reportCount = document.getElementById('reportCount');
+                this.rawData = document.getElementById('rawData');
+                
+                // Device info elements
+                this.deviceName = document.getElementById('deviceName');
+                this.vendorId = document.getElementById('vendorId');
+                this.productId = document.getElementById('productId');
+                this.collections = document.getElementById('collections');
+                
+                this.init();
+            }
+
+            init() {
+                // Check WebHID support
+                const hidSupportElement = document.getElementById('hidSupport');
+                if ('hid' in navigator) {
+                    hidSupportElement.textContent = '✅ Supported';
+                    hidSupportElement.style.color = '#4ecdc4';
+                } else {
+                    hidSupportElement.textContent = '❌ Not Supported';
+                    hidSupportElement.style.color = '#ff6b6b';
+                    this.connectButton.disabled = true;
+                    this.status.textContent = 'WebHID not supported in this browser';
+                    return;
+                }
+
+                this.connectButton.addEventListener('click', () => this.connectDevice());
+                this.status.textContent = 'Ready to connect';
+            }
+
+            async connectDevice() {
+                try {
+                    this.connectButton.disabled = true;
+                    this.status.textContent = 'Requesting device...';
+
+                    // Request Surface Dial device
+                    // Microsoft Vendor ID: 0x045E
+                    // Surface Dial uses System Multi-Axis Controller (Page 0x01, Usage 0x0E)
+                    const devices = await navigator.hid.requestDevice({
+                        filters: [
+                            {
+                                vendorId: 0x045E, // Microsoft
+                                usagePage: 0x01,  // Generic Desktop
+                                usage: 0x0E       // System Multi-Axis Controller
+                            },
+                            {
+                                vendorId: 0x045E, // Microsoft - broader filter
+                            }
+                        ]
+                    });
+
+                    if (devices.length === 0) {
+                        throw new Error('No Surface Dial device selected');
+                    }
+
+                    this.device = devices[0];
+                    await this.device.open();
+                    
+                    this.displayDeviceInfo();
+                    this.setupEventListeners();
+                    
+                    this.status.textContent = 'Connected successfully!';
+                    this.status.className = 'status success';
+                    this.demoArea.classList.add('active');
+                    this.connectButton.textContent = 'Disconnect';
+                    this.connectButton.disabled = false;
+                    this.connectButton.onclick = () => this.disconnectDevice();
+
+                } catch (error) {
+                    console.error('Connection failed:', error);
+                    this.status.textContent = `Connection failed: ${error.message}`;
+                    this.status.className = 'status error';
+                    this.connectButton.disabled = false;
+                }
+            }
+
+            async disconnectDevice() {
+                if (this.device) {
+                    await this.device.close();
+                    this.device = null;
+                }
+                
+                this.status.textContent = 'Disconnected';
+                this.status.className = 'status';
+                this.demoArea.classList.remove('active');
+                this.connectButton.textContent = 'Connect Surface Dial';
+                this.connectButton.onclick = () => this.connectDevice();
+                this.connectButton.disabled = false;
+            }
+
+            displayDeviceInfo() {
+                this.deviceName.textContent = this.device.productName || 'Unknown Device';
+                this.vendorId.textContent = `0x${this.device.vendorId.toString(16).toUpperCase().padStart(4, '0')}`;
+                this.productId.textContent = `0x${this.device.productId.toString(16).toUpperCase().padStart(4, '0')}`;
+                
+                const collectionInfo = this.device.collections.map(c => 
+                    `Page 0x${c.usagePage.toString(16).toUpperCase().padStart(2, '0')}, Usage 0x${c.usage.toString(16).toUpperCase().padStart(2, '0')}`
+                ).join('; ');
+                this.collections.textContent = collectionInfo;
+            }
+
+            setupEventListeners() {
+                this.device.addEventListener('inputreport', (event) => {
+                    this.handleInputReport(event);
+                });
+            }
+
+            handleInputReport(event) {
+                const { data, device, reportId } = event;
+                const dataView = new DataView(data.buffer);
+                
+                this.reportCounter++;
+                this.reportCount.textContent = this.reportCounter;
+                
+                // Log raw data
+                const rawBytes = Array.from(new Uint8Array(data.buffer))
+                    .map(b => b.toString(16).padStart(2, '0'))
+                    .join(' ');
+                this.rawData.innerHTML = `Report ID: ${reportId}<br>Data: ${rawBytes}<br>Length: ${data.byteLength} bytes`;
+                
+                // Parse Surface Dial data
+                this.parseSurfaceDialData(dataView, reportId);
+            }
+
+            parseSurfaceDialData(dataView, reportId) {
+                try {
+                    // Surface Dial typically sends reports with:
+                    // - Rotation delta (signed 16-bit value)
+                    // - Button state (1 bit)
+                    
+                    let rotationDelta = 0;
+                    let buttonPressed = false;
+                    
+                    if (dataView.byteLength >= 2) {
+                        // Try to parse rotation (commonly at offset 0 or 1)
+                        // Surface Dial rotation is often a signed 16-bit value
+                        rotationDelta = dataView.getInt16(0, true); // little-endian
+                        
+                        // If that seems too large, try 8-bit
+                        if (Math.abs(rotationDelta) > 1000) {
+                            rotationDelta = dataView.getInt8(0);
+                        }
+                    }
+                    
+                    if (dataView.byteLength >= 3) {
+                        // Button state is typically in a separate byte
+                        const buttonByte = dataView.getUint8(2);
+                        buttonPressed = (buttonByte & 0x01) !== 0;
+                    }
+                    
+                    // Filter out zero deltas to reduce noise
+                    if (rotationDelta !== 0) {
+                        this.currentRotation += rotationDelta * 0.5; // Scale the rotation
+                        this.deltaValue.textContent = rotationDelta;
+                        this.updateVisualDial();
+                    }
+                    
+                    // Update button state
+                    if (buttonPressed !== this.isButtonPressed) {
+                        this.isButtonPressed = buttonPressed;
+                        this.buttonValue.textContent = buttonPressed ? 'Pressed' : 'Released';
+                        this.buttonValue.style.color = buttonPressed ? '#ff6b6b' : '#4ecdc4';
+                        this.dialCenterDot.classList.toggle('pressed', buttonPressed);
+                    }
+                    
+                } catch (error) {
+                    console.error('Error parsing Surface Dial data:', error);
+                }
+            }
+
+            updateVisualDial() {
+                // Update rotation display
+                this.rotationValue.textContent = `${Math.round(this.currentRotation)}°`;
+                
+                // Rotate the indicator
+                this.dialIndicator.style.transform = `translateX(-50%) rotate(${this.currentRotation}deg)`;
+                
+                // Add pulse effect
+                this.dialOuter.classList.add('active');
+                setTimeout(() => {
+                    this.dialOuter.classList.remove('active');
+                }, 300);
+            }
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SurfaceDialWebHID();
+        });
+
+        // Add some additional debugging
+        console.log('Surface Dial WebHID Demo loaded');
+        console.log('WebHID supported:', 'hid' in navigator);
+        
+        if ('hid' in navigator) {
+            // Log any already connected devices
+            navigator.hid.getDevices().then(devices => {
+                console.log('Already connected HID devices:', devices);
+                devices.forEach(device => {
+                    console.log(`- ${device.productName} (VID: 0x${device.vendorId.toString(16)}, PID: 0x${device.productId.toString(16)})`);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
