@@ -115,8 +115,6 @@
         #share-button {
             position: absolute;
             bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
             background: #00ff00;
             color: #000;
             border: none;
@@ -130,7 +128,7 @@
             transition: all 0.3s ease;
             z-index: 1000;
             text-align: center;
-            width: 50%;
+            width: auto;
         }
 
         #share-button.show {
@@ -138,7 +136,6 @@
         }
 
         #share-button:hover {
-            transform: translateX(-50%) scale(1.05);
             box-shadow: 0 0 40px #00ff00;
         }
 
@@ -372,7 +369,8 @@
     <div id="permission-prompt" class="permission-prompt">
         <h3>Enable MIDI Access</h3>
         <p>This app needs access to your MIDI devices to control the puzzle layers with musical input.</p>
-        <p>Connect a MIDI keyboard or controller, then click Enable MIDI.</p>
+        <p><strong>Connect a MIDI keyboard or controller, then click Enable MIDI.</strong></p>
+        <p><small>✨ When you solve the puzzle, your keyboard will play celebration music! 🎵</small></p>
         <button class="permission-button" onclick="requestMIDIAccess()">Enable MIDI</button>
         <button class="permission-button" onclick="hidePermissionPrompt()">Skip</button>
     </div>
@@ -383,9 +381,11 @@
         let lastNote = null;
         let midiSupported = false;
         let midiAccess = null;
+        let midiOutput = null;
         let puzzleSolved = false;
         let rotationAccumulator = 0;
         let noteCount = 0;
+        let isPlayingCelebration = false;
 
         // Puzzle layer data structure with random initial rotations
         const puzzleLayers = {
@@ -408,6 +408,53 @@
 
         // MIDI note names for display
         const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+        // Celebration melody - 
+        const celebrationMelody = [
+            { note: 67, duration: 300 }, // G4
+            { note: 69, duration: 300 }, // A4
+            { note: 71, duration: 300 }, // B4
+            { note: 74, duration: 300 }, // D5
+            { note: 76, duration: 300 }, // E5
+            { note: 78, duration: 300 }, // F#5
+            { note: 79, duration: 600 }, // G5
+            { note: 0, duration: 200 },   // Rest
+            { note: 83, duration: 300 }, // B5
+            { note: 81, duration: 300 }, // A5
+            { note: 79, duration: 300 }, // G5
+            { note: 76, duration: 300 }, // E5
+            { note: 74, duration: 300 }, // D5
+            { note: 72, duration: 300 }, // C5
+            { note: 67, duration: 800 }, // G4
+        ];
+
+        // Victory fanfare - triumphant chord progression
+        const victoryFanfare = [
+            // C Major chord
+            { note: 60, duration: 300 }, // C4
+            { note: 64, duration: 300 }, // E4
+            { note: 67, duration: 300 }, // G4
+            { note: 72, duration: 300 }, // C5
+            { note: 0, duration: 100 },   // Rest
+            // F Major chord
+            { note: 65, duration: 300 }, // F4
+            { note: 69, duration: 300 }, // A4
+            { note: 72, duration: 300 }, // C5
+            { note: 77, duration: 300 }, // F5
+            { note: 0, duration: 100 },   // Rest
+            // G Major chord
+            { note: 67, duration: 300 }, // G4
+            { note: 71, duration: 300 }, // B4
+            { note: 74, duration: 300 }, // D5
+            { note: 79, duration: 300 }, // G5
+            { note: 0, duration: 200 },   // Rest
+            // Final C Major chord (longer)
+            { note: 60, duration: 800 }, // C4
+            { note: 64, duration: 800 }, // E4
+            { note: 67, duration: 800 }, // G4
+            { note: 72, duration: 800 }, // C5
+            { note: 76, duration: 800 }, // E5
+        ];
 
         // DOM elements
         const lastNoteSpan = document.getElementById('last-note');
@@ -474,7 +521,7 @@
 
         // Handle MIDI message
         function handleMIDIMessage(message) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || isPlayingCelebration) return;
 
             const [status, note, velocity] = message.data;
             
@@ -517,7 +564,88 @@
             }
         }
 
-        // Show MIDI activity indicator
+        // Send MIDI note
+        function sendMIDINote(note, velocity = 100, duration = 500) {
+            if (!midiOutput) return;
+
+            try {
+                // Note on message
+                const noteOnMessage = [0x90, note, velocity];
+                midiOutput.send(noteOnMessage);
+
+                // Note off message after duration
+                setTimeout(() => {
+                    const noteOffMessage = [0x80, note, 0];
+                    midiOutput.send(noteOffMessage);
+                }, duration);
+
+                // Visual feedback
+                showMIDIActivity();
+                updateNoteVisual(note % 12);
+                
+                const noteName = noteNames[note % 12];
+                const octave = Math.floor(note / 12) - 1;
+                lastNoteSpan.textContent = `${noteName}${octave}`;
+
+            } catch (error) {
+                console.error('Error sending MIDI note:', error);
+            }
+        }
+
+        // Play celebration melody
+        async function playCelebrationMelody() {
+            if (!midiOutput || isPlayingCelebration) return;
+
+            isPlayingCelebration = true;
+            midiStatus.textContent = '🎉 Playing celebration music!';
+
+            for (let i = 0; i < celebrationMelody.length; i++) {
+                const { note, duration } = celebrationMelody[i];
+                
+                if (note > 0) {
+                    sendMIDINote(note, 90, duration * 0.8); // Slightly shorter than gap
+                }
+                
+                // Wait for the duration before next note
+                await new Promise(resolve => setTimeout(resolve, duration));
+            }
+
+            // Play victory fanfare after melody
+            await new Promise(resolve => setTimeout(resolve, 500)); // Brief pause
+            
+            for (let i = 0; i < victoryFanfare.length; i++) {
+                const { note, duration } = victoryFanfare[i];
+                
+                if (note > 0) {
+                    sendMIDINote(note, 110, duration * 0.9);
+                }
+                
+                await new Promise(resolve => setTimeout(resolve, duration));
+            }
+
+            isPlayingCelebration = false;
+            midiStatus.textContent = `Puzzle solved with ${noteCount} notes! 🎵`;
+        }
+
+        // Send chord (multiple notes simultaneously)
+        function sendMIDIChord(notes, velocity = 100, duration = 1000) {
+            if (!midiOutput) return;
+
+            // Send all note on messages
+            notes.forEach(note => {
+                const noteOnMessage = [0x90, note, velocity];
+                midiOutput.send(noteOnMessage);
+                updateNoteVisual(note % 12);
+            });
+
+            // Send all note off messages after duration
+            setTimeout(() => {
+                notes.forEach(note => {
+                    const noteOffMessage = [0x80, note, 0];
+                    midiOutput.send(noteOffMessage);
+                });
+            }, duration);
+        }
         function showMIDIActivity() {
             midiIndicator.classList.add('active');
             setTimeout(() => {
@@ -550,7 +678,7 @@
             }
 
             try {
-                midiAccess = await navigator.requestMIDIAccess();
+                midiAccess = await navigator.requestMIDIAccess({ sysex: false });
                 midiSupported = true;
                 
                 // Set up MIDI input listeners
@@ -559,15 +687,29 @@
                     console.log('MIDI input connected:', input.name);
                 }
                 
+                // Set up MIDI output (use first available output)
+                for (let output of midiAccess.outputs.values()) {
+                    if (!midiOutput) {
+                        midiOutput = output;
+                        console.log('MIDI output connected:', output.name);
+                        break;
+                    }
+                }
+                
                 // Listen for new MIDI connections
                 midiAccess.onstatechange = (event) => {
                     console.log('MIDI state change:', event.port.name, event.port.state);
                     if (event.port.type === 'input' && event.port.state === 'connected') {
                         event.port.onmidimessage = handleMIDIMessage;
                     }
+                    if (event.port.type === 'output' && event.port.state === 'connected' && !midiOutput) {
+                        midiOutput = event.port;
+                        console.log('MIDI output connected:', event.port.name);
+                    }
                 };
                 
-                midiStatus.textContent = `MIDI active - Play notes to rotate layer ${currentLayer}`;
+                const outputStatus = midiOutput ? ' (Output: ✓)' : ' (Output: ✗)';
+                midiStatus.textContent = `MIDI active - Play notes to rotate layer ${currentLayer}${outputStatus}`;
                 hidePermissionPrompt();
                 
             } catch (error) {
@@ -623,12 +765,19 @@
                 puzzleSolved = true;
                 console.log(`Puzzle solved with ${noteCount} notes!`);
                 
-                // Hide controls and status
-                controlsDiv.classList.add('hidden');
-                statusDiv.classList.add('hidden');
+                // Play celebration music immediately
+                if (midiOutput) {
+                    playCelebrationMelody();
+                } else {
+                    midiStatus.textContent = `Puzzle solved with ${noteCount} notes! 🎉`;
+                }
                 
-                // Show share button
-                shareButton.classList.add('show');
+                // Hide controls and status after a delay to let music play
+                setTimeout(() => {
+                    controlsDiv.classList.add('hidden');
+                    statusDiv.classList.add('hidden');
+                    shareButton.classList.add('show');
+                }, 2000);
                 
                 // Smoothly rotate all layers to zero
                 rotateAllLayersToZero();
@@ -683,7 +832,8 @@
             
             // Update status message
             if (midiSupported) {
-                midiStatus.textContent = `MIDI active - Play notes to rotate layer ${currentLayer}`;
+                const outputStatus = midiOutput ? ' (Output: ✓)' : ' (Output: ✗)';
+                midiStatus.textContent = `MIDI active - Play notes to rotate layer ${currentLayer}${outputStatus}`;
             }
 
             console.log(`Switched to layer ${layerNumber}, rotation: ${Math.round(puzzleLayers[`layer${layerNumber}`].rotation)}°`);
@@ -739,6 +889,18 @@
                         event.preventDefault();
                         if (!midiSupported) {
                             requestMIDIAccess();
+                        }
+                        break;
+                    case 'm': // Test melody playback
+                        if (midiOutput && !isPlayingCelebration && !puzzleSolved) {
+                            console.log('Testing celebration melody...');
+                            playCelebrationMelody();
+                        }
+                        break;
+                    case 'c': // Test chord
+                        if (midiOutput && !isPlayingCelebration) {
+                            console.log('Testing C major chord...');
+                            sendMIDIChord([60, 64, 67, 72], 100, 1000); // C major chord
                         }
                         break;
                 }
