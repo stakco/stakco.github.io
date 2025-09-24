@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Brings life to papers with interactive Stakco puzzles.">
-    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Stakco Puzzle Systems">
     <meta property="og:description" content="Brings life to papers with interactive Stakco puzzles.">
@@ -113,6 +114,71 @@
             z-index: 10;
         }
 
+        /* Countdown Timer Styles */
+        #countdown-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--primary-green);
+            border-radius: 15px;
+            padding: 5px 15px;
+            font-family: 'Courier New', monospace;
+            color: var(--text-green);
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px var(--primary-green);
+            z-index: 2000;
+            display: none;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        #countdown-container.show {
+            display: block;
+        }
+
+        #countdown-timer {
+            font-size: 24px;
+            color: var(--primary-green);
+            text-shadow: 0 0 10px var(--primary-green);
+            margin-top: 5px;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 20px var(--primary-green);
+            }
+            50% {
+                box-shadow: 0 0 30px var(--primary-green), 0 0 40px var(--primary-green);
+            }
+        }
+
+        #countdown-container.urgent {
+            animation: pulse 1s infinite;
+            border-color: #ff4444;
+            color: #ff4444;
+        }
+
+        #countdown-container.urgent #countdown-timer {
+            color: #ff4444;
+            text-shadow: 0 0 10px #ff4444;
+        }
+
         #branding {
             position: absolute;
             top: 7px;
@@ -185,7 +251,6 @@
             border-color: var(--primary-green);
             color: var(--primary-green);
             background: rgba(0, 255, 0, 0.1);
-            box-shadow: 0 0 10px var(--primary-green);
         }
 
         .hamburger-icon {
@@ -219,7 +284,6 @@
             width: 50px;
             transition: width var(--transition-duration) ease;
             backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px var(--primary-green);
             box-sizing: border-box;
         }
 
@@ -355,19 +419,51 @@
             animation: flicker 2.5s infinite;
         }
 
-        /* Remove overlay styles as no longer needed */
+        #info-button {
+            position: fixed;   /* keeps it pinned to viewport */
+            top: 20px;         /* distance from top */
+            left: 15px;        /* distance from left */
+            z-index: 1000;     /* make sure it's above other elements */
+            border: none;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+                display: flex;        /* 👈 makes centering work */
+
+            justify-content: center;
+            align-items: center;
+            background-color: var(--primary-green);
+        }
+
+        #info-button i {
+            font-size: 45px;  /* 🔥 adjust this to make it bigger */
+            color: #333;
+            }
+
     </style>
 </head>
 
 <body>
-    <div id="status">
-        <p id="orientation-status">Drag to rotate selected layer • Align all layers</p>    
+
+    <!-- Countdown Timer -->
+    <div id="countdown-container">
+        <div id="countdown-timer">00:00</div>
     </div>
+
+    <button id="info-button">
+        <i class="fa-solid fa-circle-info"></i>
+    </button>
 
     <div id="branding">
         <img src="stakco_logo_squricle.png" alt="Stakco Logo" style="height: 20px; vertical-align: middle; margin-right: 0px;">
         <p id="stakco-branding" style="display: inline; margin-left: 2px; vertical-align: middle;">Stakco Play <span id="product-version">v1.0.0</span></p>
         <p id="puzzle-title" style="margin-top: 2px;"></p> 
+    </div>
+
+    <div id="status">
+        <p id="orientation-status">Drag to rotate selected layer • Align all layers</p>    
     </div>
 
     <div id="options-container">
@@ -427,6 +523,12 @@
         let lastTouchEnd = 0;
         let optionsMenuOpen = false;
 
+        // Countdown state
+        let countdownActive = false;
+        let countdownStartTime = null;
+        let countdownInterval = null;
+        let firstInteractionOccurred = false;
+
         // get product version from package.json (injected at build time)
         const PRODUCT_VERSION = '1.0.4'; // Placeholder, replace with actual version
         document.getElementById('product-version').textContent = `v${PRODUCT_VERSION}`;
@@ -435,10 +537,11 @@
         const urlParams = new URLSearchParams(window.location.search);
         const username = urlParams.get('username');
         const puzzle = urlParams.get('puzzle');
+        const hasUrlParams = urlParams.toString() !== '';
 
         // Construct share URL with parameters
         let shareParams = '';
-            if (urlParams.toString()) {
+        if (urlParams.toString()) {
             shareParams = '?' + urlParams.toString();
         }
 
@@ -455,7 +558,76 @@
         }
 
         // DOM elements (cached)
-        let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu;
+        let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer;
+
+        // Countdown functions
+        function startCountdown() {
+            if (countdownActive || hasUrlParams) return;
+            
+            countdownActive = true;
+            countdownStartTime = Date.now();
+            
+            // Show countdown and hide branding/status
+            countdownContainer.classList.add('show');
+            brandingDiv.classList.add('hidden');
+            statusDiv.classList.add('hidden');
+            
+            countdownInterval = setInterval(updateCountdownDisplay, 100);
+            console.log('Countdown started');
+        }
+
+        function stopCountdown() {
+            if (!countdownActive) return;
+            
+            countdownActive = false;
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            
+            console.log('Countdown stopped');
+        }
+
+        function updateCountdownDisplay() {
+            if (!countdownActive || !countdownStartTime) return;
+            
+            const elapsed = Date.now() - countdownStartTime;
+            const seconds = Math.floor(elapsed / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            
+            const timeString = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            countdownTimer.textContent = timeString;
+            
+            // Add urgent styling after 5 minutes
+            if (seconds >= 300) {
+                countdownContainer.classList.add('urgent');
+            }
+        }
+
+        function resetCountdown() {
+            stopCountdown();
+            countdownContainer.classList.remove('show', 'urgent');
+            countdownTimer.textContent = '00:00';
+            firstInteractionOccurred = false;
+            
+            // Show branding and status again if puzzle isn't solved
+            if (!puzzleSolved) {
+                brandingDiv.classList.remove('hidden');
+                statusDiv.classList.remove('hidden');
+            }
+        }
+
+        function getFinalTime() {
+            if (!countdownStartTime) return '00:00';
+            
+            const elapsed = Date.now() - countdownStartTime;
+            const seconds = Math.floor(elapsed / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            
+            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
 
         // Initialize the app
         function initApp() {
@@ -469,6 +641,9 @@
             container = document.getElementById('container');
             optionsButton = document.getElementById('options-button');
             optionsMenu = document.getElementById('options-menu');
+            brandingDiv = document.getElementById('branding');
+            countdownContainer = document.getElementById('countdown-container');
+            countdownTimer = document.getElementById('countdown-timer');
 
             // Determine puzzle configuration
             const customPuzzle = parseCustomPuzzle();
@@ -486,6 +661,7 @@
             setupEventHandlers();
 
             console.log('App initialized successfully');
+            console.log('URL params present:', hasUrlParams);
         }
 
         // Parse custom puzzle parameters
@@ -577,10 +753,15 @@
                 // Reset puzzle state
                 puzzleSolved = false;
                 controlsDiv.classList.remove('hidden');
-                statusDiv.classList.remove('hidden');
+                if (!countdownActive) {
+                    statusDiv.classList.remove('hidden');
+                }
                 shareButton.classList.remove('show');
                 orientationStatus.textContent = MESSAGES.INSTRUCTIONS;
             }
+            
+            // Reset countdown
+            resetCountdown();
             
             // Generate new random rotations
             initializePuzzleLayers();
@@ -727,10 +908,19 @@
             }, false);
         }
 
+        // Helper function to trigger first interaction
+        function handleFirstInteraction() {
+            if (!firstInteractionOccurred && !hasUrlParams && !puzzleSolved) {
+                firstInteractionOccurred = true;
+                startCountdown();
+            }
+        }
+
         // Drag and touch event handlers
         function startDrag(e) {
             if (puzzleSolved) return;
             e.preventDefault();
+            handleFirstInteraction();
             isDragging = true;
             container.classList.add('dragging');
             lastAngle = getAngleFromEvent(e, e.clientX, e.clientY);
@@ -755,6 +945,7 @@
         function startTouch(e) {
             if (puzzleSolved) return;
             e.preventDefault();
+            handleFirstInteraction();
             isDragging = true;
             const touch = e.touches[0];
             lastAngle = getAngleFromEvent(e, touch.clientX, touch.clientY);
@@ -795,6 +986,11 @@
         function handleKeyboard(e) {
             if (puzzleSolved) return;
             
+            // Trigger countdown on first keyboard interaction
+            if (!firstInteractionOccurred && (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
+                handleFirstInteraction();
+            }
+            
             const keyActions = {
                 ' ': () => switchLayer((currentLayer % totalLayers) + 1),
                 'ArrowLeft': () => applyRotation(-CONFIG.ROTATION_STEP_LARGE),
@@ -818,6 +1014,7 @@
         function handleScroll(e) {
             if (puzzleSolved) return;
             e.preventDefault();
+            handleFirstInteraction();
             const delta = e.deltaY > 0 ? CONFIG.ROTATION_STEP_SMALL : -CONFIG.ROTATION_STEP_SMALL;
             applyRotation(delta);
         }
@@ -882,7 +1079,11 @@
         // Handle puzzle completion
         function solvePuzzle() {
             puzzleSolved = true;
-            console.log('Puzzle solved!');
+            const finalTime = getFinalTime();
+            console.log(`Puzzle solved in ${finalTime}!`);
+
+            // Stop countdown
+            stopCountdown();
 
             // Vibrate if supported
             if (navigator.vibrate) {
@@ -892,7 +1093,11 @@
             // Update UI
             controlsDiv.classList.add('hidden');
             statusDiv.classList.add('hidden');
+            countdownContainer.classList.remove('show');
             shareButton.classList.add('show');
+
+            // Update share button with time
+            shareButton.textContent = `🎉 Solved in ${finalTime}! Share Success!`;
 
             // Animate to final position
             setTimeout(rotateAllLayersToZero, CONFIG.SOLVE_ANIMATION_DELAY);
@@ -926,10 +1131,11 @@
         // Share functionality
         function sharePuzzle() {
             const shareUrlWithParams = CONFIG.SHARE_URL + shareParams;
+            const finalTime = getFinalTime();
 
             const shareData = {
                 title: MESSAGES.SHARE_TITLE,
-                text: MESSAGES.SHARE_TEXT,
+                text: `${MESSAGES.SHARE_TEXT} Time: ${finalTime}`,
                 url: shareUrlWithParams
             };
 
@@ -940,18 +1146,17 @@
             } else {
                 // Fallback: copy to clipboard
                 const textArea = document.createElement('textarea');
-                textArea.value = shareUrlWithParams;
+                textArea.value = `${shareData.text} ${shareUrlWithParams}`;
                 document.body.appendChild(textArea);
                 textArea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
-                alert(`Link copied to clipboard: ${shareUrlWithParams}`);
+                alert(`Copied to clipboard: ${shareData.text} ${shareUrlWithParams}`);
             }
         }
-
 
         // Initialize app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
-</body>
+    </body>
 </html>
