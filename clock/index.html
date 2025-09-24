@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Time-based rotating puzzle synchronized with clock hands.">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Clock Puzzle Systems">
+    <meta property="og:description" content="Time-synchronized rotating puzzle layers.">
+    <meta property="og:type" content="website">
+    
+    <!-- Mobile App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Clock Puzzle">
+    
+    <title>Clock Puzzle</title>
+    
+    <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --primary-green: #00ff00;
+            --background-dark: #000;
+            --text-green: #0f0;
+            --button-inactive: #555;
+            --button-inactive-bg: rgba(68, 68, 68, 0.3);
+            --button-hover: #888;
+            --button-hover-bg: rgba(136, 136, 136, 0.2);
+            --text-inactive: #777;
+            --text-hover: #aaa;
+            --button-size: 50px;
+            --border-radius: 50%;
+            --transition-duration: 0.3s;
+            --clock-color: #ffffff;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: var(--background-dark);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        #container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            aspect-ratio: 1 / 1; /* Force square aspect ratio */
+        }
+
+        /* Portrait orientation: 90% of viewport width */
+        @media (orientation: portrait) {
+            #container {
+                width: 90vw;
+                height: 90vw;
+                max-width: 90vh; /* Prevent overflow on short screens */
+                max-height: 90vh;
+            }
+        }
+
+        /* Landscape orientation: 60% of viewport height */
+        @media (orientation: landscape) {
+            #container {
+                width: 60vh;
+                height: 60vh;
+                max-width: 90vw; /* Prevent overflow on narrow screens */
+                max-height: 90vw;
+            }
+        }
+
+        .puzzle-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+            transition: transform 0.1s linear;
+        }
+
+        .puzzle-layer.active {
+            opacity: 1;
+            z-index: 10;
+        }
+
+        #branding {
+            position: absolute;
+            top: 7px;
+            margin-top: 10px;
+            margin-left: 10px;
+            font-size: 14px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            color: var(--text-green);
+            text-shadow: 0 0 5px var(--text-green), 0 0 10px var(--text-green), 
+                         0 0 20px var(--text-green), 0 0 40px var(--text-green);
+            letter-spacing: 1px;
+        }
+
+        #status {
+            position: absolute;
+            top: 40px;
+            margin-left: 10px;
+            font-size: 14px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            color: var(--text-green);
+            text-shadow: 0 0 5px var(--text-green), 0 0 10px var(--text-green), 
+                         0 0 20px var(--text-green), 0 0 40px var(--text-green);
+            letter-spacing: 1px;
+        }
+
+
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .layer-indicator {
+            width: var(--button-size);
+            height: var(--button-size);
+            border: 3px solid var(--button-inactive);
+            border-radius: var(--border-radius);
+            font-size: 12px;
+            font-weight: bold;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            color: var(--text-inactive);
+            background: var(--button-inactive-bg);
+            transition: all var(--transition-duration) ease;
+        }
+
+        .layer-indicator.hour {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .layer-indicator.minute {
+            border-color: #4ecdc4;
+            color: #4ecdc4;
+            background: rgba(78, 205, 196, 0.1);
+        }
+
+        .layer-indicator.second {
+            border-color: #45b7d1;
+            color: #45b7d1;
+            background: rgba(69, 183, 209, 0.1);
+        }
+
+        .layer-label {
+            font-size: 8px;
+            margin-top: 2px;
+        }
+
+        .angle-display {
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* Clock face overlay for reference */
+        .clock-face {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 80%;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            z-index: 5;
+            pointer-events: none;
+            aspect-ratio: 1 / 1; /* Ensure clock face stays circular */
+        }
+
+        .clock-hand {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: bottom center;
+            width: 2px;
+            background: var(--clock-color);
+            opacity: 0.3;
+        }
+
+        .hour-hand {
+            height: 25%;
+            transform: translate(-50%, -100%) rotate(0deg);
+            width: 4px;
+            background: #ff6b6b;
+        }
+
+        .minute-hand {
+            height: 35%;
+            transform: translate(-50%, -100%) rotate(0deg);
+            width: 3px;
+            background: #4ecdc4;
+        }
+
+        .second-hand {
+            height: 40%;
+            transform: translate(-50%, -100%) rotate(0deg);
+            width: 1px;
+            background: #45b7d1;
+        }
+
+        .clock-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: var(--clock-color);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+
+        .led-value {
+            color: var(--text-green);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.8; }
+            22% { opacity: 0.6; }
+        }
+
+        .led-text, .led-value {
+            animation: flicker 2.5s infinite;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <div id="status">
+        <p id="orientation-status">Layers synchronized with clock hands • Live time rotation</p>    
+    </div>
+
+    <div id="branding">
+        <p id="stakco-branding" style="display: inline; margin-left: 2px; vertical-align: middle;">Clock Puzzle <span id="product-version">v1.0.0</span></p>
+        <p id="puzzle-title" style="margin-top: 2px;">Time-Based Rotation</p> 
+    </div>
+
+    <div id="container">
+        <!-- Clock face reference -->
+        <div class="clock-face">
+            <div class="hour-hand clock-hand" id="ref-hour-hand"></div>
+            <div class="minute-hand clock-hand" id="ref-minute-hand"></div>
+            <div class="second-hand clock-hand" id="ref-second-hand"></div>
+            <div class="clock-center"></div>
+        </div>
+    </div>
+    
+    <div id="controls">
+        <div class="layer-indicator hour">
+            <div class="angle-display" id="hour-angle">0°</div>
+            <div class="layer-label">HOUR</div>
+        </div>
+        <div class="layer-indicator minute">
+            <div class="angle-display" id="minute-angle">0°</div>
+            <div class="layer-label">MIN</div>
+        </div>
+        <div class="layer-indicator second">
+            <div class="angle-display" id="second-angle">0°</div>
+            <div class="layer-label">SEC</div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration constants
+        const CONFIG = {
+            TOTAL_LAYERS: 3,
+            UPDATE_INTERVAL: 50, // milliseconds for smooth animation
+            BASE_IMAGE_URL: 'https://storage.googleapis.com/stakco-images',
+            DEFAULT_USER_ID: '109949450257686494443',
+            DEFAULT_PUZZLE_ID: 'A2A3_3'
+        };
+
+        // UI text constants
+        const MESSAGES = {
+            LOADING: 'Loading clock puzzle layers...',
+            SYNCHRONIZED: 'Layers synchronized with clock hands • Live time rotation'
+        };
+
+        // App state
+        let imagesLoaded = false;
+        let puzzleLayers = {};
+        let animationId = null;
+
+        // DOM elements (cached)
+        let orientationStatus, controlsDiv, statusDiv, container;
+        let hourAngleDisplay, minuteAngleDisplay, secondAngleDisplay;
+        let refHourHand, refMinuteHand, refSecondHand;
+
+        // Initialize the app
+        function initApp() {
+            console.log('Initializing Clock Puzzle App...');
+            
+            // Cache DOM elements
+            orientationStatus = document.getElementById('orientation-status');
+            controlsDiv = document.getElementById('controls');
+            statusDiv = document.getElementById('status');
+            container = document.getElementById('container');
+            hourAngleDisplay = document.getElementById('hour-angle');
+            minuteAngleDisplay = document.getElementById('minute-angle');
+            secondAngleDisplay = document.getElementById('second-angle');
+            refHourHand = document.getElementById('ref-hour-hand');
+            refMinuteHand = document.getElementById('ref-minute-hand');
+            refSecondHand = document.getElementById('ref-second-hand');
+
+            // Initialize puzzle layers
+            initializePuzzleLayers();
+            createLayerElements();
+            loadImages();
+
+            console.log('App initialized successfully');
+        }
+
+        // Initialize puzzle layer data
+        function initializePuzzleLayers() {
+            puzzleLayers = {
+                layer1: { rotation: 0, type: 'hour' },
+                layer2: { rotation: 0, type: 'minute' },
+                layer3: { rotation: 0, type: 'second' }
+            };
+        }
+
+        // Create layer elements
+        function createLayerElements() {
+            // Clear existing puzzle layers (keep clock face)
+            const existingLayers = container.querySelectorAll('.puzzle-layer');
+            existingLayers.forEach(layer => layer.remove());
+
+            // Create layer elements
+            for (let i = 1; i <= CONFIG.TOTAL_LAYERS; i++) {
+                const layerDiv = document.createElement('div');
+                layerDiv.id = `layer${i}`;
+                layerDiv.className = `puzzle-layer${i === 1 ? ' active' : ''}`;
+                layerDiv.style.zIndex = CONFIG.TOTAL_LAYERS - i + 1;
+                container.appendChild(layerDiv);
+            }
+        }
+
+        // Generate image URLs for the layers
+        function generateImageUrls() {
+            const urls = {};
+            for (let i = 1; i <= CONFIG.TOTAL_LAYERS; i++) {
+                const imageIndex = i - 1;
+                urls[`layer${i}`] = 
+                    `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
+            }
+            return urls;
+        }
+
+        // Load images
+        async function loadImages() {
+            orientationStatus.textContent = MESSAGES.LOADING;
+            
+            const imageUrls = generateImageUrls();
+            let loadedCount = 0;
+
+            for (let i = 1; i <= CONFIG.TOTAL_LAYERS; i++) {
+                const layerKey = `layer${i}`;
+                const layerElement = document.getElementById(layerKey);
+                
+                if (!layerElement) continue;
+
+                try {
+                    const imageUrl = imageUrls[layerKey];
+                    layerElement.style.backgroundImage = `url('${imageUrl}')`;
+                    console.log(`Loaded image for ${layerKey}: ${imageUrl}`);
+                    loadedCount++;
+                } catch (error) {
+                    console.error(`Error loading ${layerKey}:`, error);
+                    loadedCount++;
+                }
+            }
+
+            orientationStatus.textContent = MESSAGES.SYNCHRONIZED;
+            imagesLoaded = true;
+            
+            // Start the clock update loop
+            startClockUpdate();
+            
+            console.log(`Loaded ${loadedCount}/${CONFIG.TOTAL_LAYERS} images successfully`);
+        }
+
+        // Calculate clock hand angles
+        function calculateClockAngles() {
+            const now = new Date();
+            const hours = now.getHours() % 12;
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            const milliseconds = now.getMilliseconds();
+
+            // Calculate angles (0° = 12 o'clock, clockwise)
+            const secondAngle = (seconds + milliseconds / 1000) * 6; // 6° per second
+            const minuteAngle = (minutes + seconds / 60) * 6; // 6° per minute
+            const hourAngle = (hours + minutes / 60) * 30; // 30° per hour
+
+            return {
+                hour: hourAngle,
+                minute: minuteAngle,
+                second: secondAngle,
+                time: now
+            };
+        }
+
+        // Update all layers based on current time
+        function updateLayers() {
+            if (!imagesLoaded) return;
+
+            const angles = calculateClockAngles();
+            
+            // Update puzzle layers
+            puzzleLayers.layer1.rotation = angles.hour;
+            puzzleLayers.layer2.rotation = angles.minute;
+            puzzleLayers.layer3.rotation = angles.second;
+
+            // Apply rotations to DOM elements
+            Object.entries(puzzleLayers).forEach(([layerKey, data]) => {
+                const layerElement = document.getElementById(layerKey);
+                if (layerElement) {
+                    layerElement.style.transform = 
+                        `translate(-50%, -50%) rotate(${data.rotation}deg)`;
+                }
+            });
+
+            // Update reference clock hands
+            if (refHourHand) {
+                refHourHand.style.transform = `translate(-50%, -100%) rotate(${angles.hour}deg)`;
+            }
+            if (refMinuteHand) {
+                refMinuteHand.style.transform = `translate(-50%, -100%) rotate(${angles.minute}deg)`;
+            }
+            if (refSecondHand) {
+                refSecondHand.style.transform = `translate(-50%, -100%) rotate(${angles.second}deg)`;
+            }
+
+            // Update displays
+            updateDisplays(angles);
+        }
+
+        // Update all display elements
+        function updateDisplays(angles) {
+            // Update angle displays
+            hourAngleDisplay.textContent = `${Math.round(angles.hour)}°`;
+            minuteAngleDisplay.textContent = `${Math.round(angles.minute)}°`;
+            secondAngleDisplay.textContent = `${Math.round(angles.second)}°`;
+        }
+
+        // Start the clock update loop
+        function startClockUpdate() {
+            function update() {
+                updateLayers();
+                animationId = requestAnimationFrame(update);
+            }
+            
+            // Initial update
+            updateLayers();
+            
+            // Start animation loop
+            animationId = requestAnimationFrame(update);
+            
+            console.log('Clock update loop started');
+        }
+
+        // Stop the clock update loop
+        function stopClockUpdate() {
+            if (animationId) {
+                cancelAnimationFrame(animationId);
+                animationId = null;
+                console.log('Clock update loop stopped');
+            }
+        }
+
+        // Handle page visibility change to optimize performance
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                stopClockUpdate();
+            } else {
+                startClockUpdate();
+            }
+        });
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
+
+        // Cleanup when page is unloaded
+        window.addEventListener('beforeunload', stopClockUpdate);
+    </script>
+</body>
+</html>
