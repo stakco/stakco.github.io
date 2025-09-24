@@ -432,26 +432,40 @@
         }
 
         // Update all layers based on current time
+        // Update all layers based on current time
         function updateLayers() {
             if (!imagesLoaded) return;
 
             const angles = calculateClockAngles();
-            
-            // Update puzzle layers
-            puzzleLayers.layer1.rotation = angles.hour;
-            puzzleLayers.layer2.rotation = angles.minute;
-            puzzleLayers.layer3.rotation = angles.second;
+
+            // Instead of resetting rotation to [0,360),
+            // we check last rotation and accumulate to avoid jumps.
+            function smoothRotation(layerKey, newAngle) {
+                const data = puzzleLayers[layerKey];
+                let delta = newAngle - (data.rotation % 360);
+
+                // Handle wrapping (e.g., 359 → 0 should become +1)
+                if (delta < -180) delta += 360;
+                if (delta > 180) delta -= 360;
+
+                data.rotation += delta; // accumulate smoothly
+                return data.rotation;
+            }
+
+            const hourRot = smoothRotation("layer1", angles.hour);
+            const minuteRot = smoothRotation("layer2", angles.minute);
+            const secondRot = smoothRotation("layer3", angles.second);
 
             // Apply rotations to DOM elements
             Object.entries(puzzleLayers).forEach(([layerKey, data]) => {
                 const layerElement = document.getElementById(layerKey);
                 if (layerElement) {
-                    layerElement.style.transform = 
+                    layerElement.style.transform =
                         `translate(-50%, -50%) rotate(${data.rotation}deg)`;
                 }
             });
 
-            // Update reference clock hands
+            // Update reference clock hands (these *can* stay modulo 360)
             if (refHourHand) {
                 refHourHand.style.transform = `translate(-50%, -100%) rotate(${angles.hour}deg)`;
             }
@@ -463,8 +477,13 @@
             }
 
             // Update displays
-            updateDisplays(angles);
+            updateDisplays({
+                hour: hourRot % 360,
+                minute: minuteRot % 360,
+                second: secondRot % 360
+            });
         }
+
 
         // Update all display elements
         function updateDisplays(angles) {
