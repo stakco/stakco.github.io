@@ -3,564 +3,976 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Surface Dial WebHID Demo</title>
+    <meta name="description" content="Brings life to papers with interactive Stakco puzzles controlled by Surface Dial.">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <title>Stakco Play - Surface Dial Edition</title>
+    
     <style>
+        /* CSS Variables for consistent theming */
+        :root {
+            --primary-green: #00ff00;
+            --background-dark: #000;
+            --text-green: #0f0;
+            --button-inactive: #555;
+            --button-inactive-bg: rgba(68, 68, 68, 0.3);
+            --button-hover: #888;
+            --button-hover-bg: rgba(136, 136, 136, 0.2);
+            --text-inactive: #777;
+            --text-hover: #aaa;
+            --container-size: 90vmin;
+            --button-size: 50px;
+            --border-radius: 50%;
+            --transition-duration: 0.3s;
+        }
+
         body {
             margin: 0;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-height: 100vh;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: var(--background-dark);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
+        #container {
+            position: relative;
+            width: var(--container-size);
+            height: var(--container-size);
+            max-width: calc(100vw - 20px);
+            max-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        h1 {
-            text-align: center;
-            margin-bottom: 10px;
-            font-size: 2.5em;
+        .puzzle-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+            transition: transform 0.1s ease-out;
         }
 
-        .subtitle {
-            text-align: center;
-            margin-bottom: 40px;
-            opacity: 0.8;
-            font-size: 1.1em;
+        .puzzle-layer.active {
+            opacity: 1;
+            z-index: 10;
+            border-radius: 10px;
         }
 
-        .connection-section {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+        /* Surface Dial Connection Panel */
+        #dial-connection {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--primary-green);
             border-radius: 15px;
-            padding: 30px;
-            margin: 20px 0;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: center;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            color: var(--text-green);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px var(--primary-green);
+            z-index: 2000;
+            min-width: 200px;
         }
 
-        .connect-button {
+        #dial-connection.error {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        #dial-connection.connected {
+            border-color: var(--primary-green);
+        }
+
+        #connect-dial-btn {
             background: linear-gradient(45deg, #4ecdc4, #45b7aa);
             color: white;
             border: none;
-            padding: 15px 30px;
-            font-size: 1.1em;
-            border-radius: 25px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 12px;
             cursor: pointer;
+            margin-top: 10px;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
 
-        .connect-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        #connect-dial-btn:hover {
+            transform: translateY(-1px);
         }
 
-        .connect-button:disabled {
+        #connect-dial-btn:disabled {
             background: #666;
             cursor: not-allowed;
-            transform: none;
         }
 
-        .status {
-            margin: 20px 0;
-            padding: 15px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-left: 4px solid #4ecdc4;
+        .dial-status {
+            font-size: 12px;
+            margin: 5px 0;
         }
 
-        .status.error {
-            border-left-color: #ff6b6b;
-        }
-
-        .status.success {
-            border-left-color: #4ecdc4;
-        }
-
-        .demo-area {
+        /* Countdown Timer */
+        #countdown-container {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            border: 2px solid var(--primary-green);
+            border-radius: 15px;
+            padding: 5px 15px;
+            font-family: 'Courier New', monospace;
+            color: var(--text-green);
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 20px var(--primary-green);
+            z-index: 2000;
             display: none;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-top: 30px;
         }
 
-        .demo-area.active {
-            display: grid;
+        #countdown-container.show {
+            display: block;
         }
 
-        .dial-container {
+        #branding {
+            position: absolute;
+            top: 7px;
+            right: 20px;
+            font-size: 14px;
+            text-align: right;
+            font-family: 'Courier New', monospace;
+            color: var(--text-green);
+            text-shadow: 0 0 5px var(--text-green);
+            letter-spacing: 1px;
+        }
+
+        #branding.hidden {
+            display: none;
+        }
+
+        #status {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+            color: var(--text-green);
+            text-shadow: 0 0 10px var(--text-green);
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--primary-green);
+        }
+
+        #status.hidden {
+            display: none;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        #controls.hidden {
+            display: none;
+        }
+
+        .layer-button {
+            width: var(--button-size);
+            height: var(--button-size);
+            border: 3px solid var(--button-inactive);
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all var(--transition-duration) ease;
+            backdrop-filter: blur(5px);
+            color: var(--text-inactive);
+            background: var(--button-inactive-bg);
+        }
+
+        .layer-button.active {
+            background: var(--primary-green);
+            border-color: var(--primary-green);
+            color: var(--background-dark);
+            box-shadow: 0 0 20px var(--primary-green);
+        }
+
+        .layer-button:hover:not(.active) {
+            border-color: var(--button-hover);
+            color: var(--text-hover);
+            background: var(--button-hover-bg);
+        }
+
+        #share-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-green);
+            color: var(--background-dark);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 0 30px var(--primary-green);
+            transition: all var(--transition-duration) ease;
+            z-index: 1000;
+        }
+
+        #share-button.show {
+            display: block;
+        }
+
+        #options-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 2000;
+        }
+
+        .option-button {
+            padding: 10px 15px;
+            border: 2px solid var(--button-inactive);
+            border-radius: 8px;
+            background: var(--button-inactive-bg);
+            color: var(--text-inactive);
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all var(--transition-duration) ease;
+            backdrop-filter: blur(5px);
             text-align: center;
         }
 
-        .dial-outer {
-            width: 250px;
-            height: 250px;
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            position: relative;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            margin: 0 auto 20px;
+        .option-button:hover {
+            border-color: var(--button-hover);
+            color: var(--text-hover);
+            background: var(--button-hover-bg);
         }
 
-        .dial-inner {
-            width: 80%;
-            height: 80%;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 255, 255, 0.05);
+        .option-button.primary {
+            border-color: var(--primary-green);
+            color: var(--primary-green);
+            background: rgba(0, 255, 0, 0.1);
         }
 
-        .dial-indicator {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            width: 4px;
-            height: 50px;
-            background: #ff6b6b;
-            border-radius: 2px;
-            transform: translateX(-50%);
-            transform-origin: center 115px;
-            transition: transform 0.1s ease-out;
-            box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
-        }
-
-        .dial-center-dot {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            transition: all 0.2s ease;
-        }
-
-        .dial-center-dot.pressed {
-            background: #ff6b6b;
-            transform: translate(-50%, -50%) scale(1.3);
-        }
-
-        .info-panel {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .info-item {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .info-label {
-            font-size: 0.9em;
-            opacity: 0.7;
-            margin-bottom: 5px;
-        }
-
-        .info-value {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #4ecdc4;
-        }
-
-        .device-info {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
-        }
-
-        .device-info h3 {
-            margin: 0 0 10px 0;
-            color: #4ecdc4;
-        }
-
-        .device-info p {
-            margin: 5px 0;
-            font-size: 0.9em;
-            opacity: 0.8;
-        }
-
-        .raw-data {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 10px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.8em;
-            max-height: 100px;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-
-        .instructions {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: left;
-        }
-
-        .instructions h3 {
-            margin-top: 0;
-            color: #4ecdc4;
-        }
-
-        .warning {
-            background: rgba(255, 193, 7, 0.1);
-            border: 1px solid rgba(255, 193, 7, 0.3);
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
+        .option-button.primary:hover {
+            background: rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 15px var(--primary-green);
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0%, 100% {
+                box-shadow: 0 0 20px var(--primary-green);
+            }
+            50% {
+                box-shadow: 0 0 30px var(--primary-green), 0 0 40px var(--primary-green);
+            }
         }
 
-        .dial-outer.active {
-            animation: pulse 0.3s ease-out;
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.8; }
+            22% { opacity: 0.6; }
+        }
+
+        .led-text {
+            animation: flicker 2.5s infinite;
         }
 
         @media (max-width: 768px) {
-            .demo-area {
-                grid-template-columns: 1fr;
+            #dial-connection {
+                position: relative;
+                margin: 10px;
+            }
+            
+            #container {
+                --container-size: 80vmin;
             }
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Surface Dial WebHID Demo</h1>
-        <p class="subtitle">Connect your Microsoft Surface Dial via Bluetooth and interact with it using WebHID</p>
-
-        <div class="connection-section">
-            <h3>Connect Surface Dial</h3>
-            <p>Click the button below to connect your Surface Dial. Make sure it's paired with your system via Bluetooth first.</p>
-            <button id="connectButton" class="connect-button">Connect Surface Dial</button>
+    <!-- Surface Dial Connection Panel -->
+    <div id="dial-connection">
+        <div class="led-text">Surface Dial Control</div>
+        <div id="dial-status" class="dial-status">Not Connected</div>
+        <div class="dial-status">
+            <small>Rotation: <span id="dial-rotation">0°</span></small><br>
+            <small>Button: <span id="dial-button">Released</span></small>
         </div>
-
-        <div id="status" class="status">
-            <strong>WebHID Support:</strong> <span id="hidSupport"></span><br>
-            <strong>Status:</strong> <span id="connectionStatus">Not connected</span>
-        </div>
-
-        <div class="warning">
-            <h3>⚠️ Important Notes:</h3>
-            <ul>
-                <li>This demo requires a Chromium-based browser (Chrome, Edge, etc.) on a desktop OS</li>
-                <li>Your Surface Dial must be paired via Bluetooth first</li>
-                <li>macOS doesn't have native Surface Dial drivers, so WebHID is the only way to access it</li>
-                <li>You'll need to grant permission when prompted</li>
-            </ul>
-        </div>
-
-        <div id="demoArea" class="demo-area">
-            <div class="dial-container">
-                <div class="dial-outer" id="dialOuter">
-                    <div class="dial-inner"></div>
-                    <div class="dial-indicator" id="dialIndicator"></div>
-                    <div class="dial-center-dot" id="dialCenterDot"></div>
-                </div>
-                <h3>Virtual Dial</h3>
-                <p>Reflects the physical Surface Dial state</p>
-            </div>
-
-            <div class="info-panel">
-                <div class="info-grid">
-                    <div class="info-item">
-                        <div class="info-label">Rotation</div>
-                        <div class="info-value" id="rotationValue">0°</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Button</div>
-                        <div class="info-value" id="buttonValue">Released</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Raw Delta</div>
-                        <div class="info-value" id="deltaValue">0</div>
-                    </div>
-                    <div class="info-item">
-                        <div class="info-label">Reports</div>
-                        <div class="info-value" id="reportCount">0</div>
-                    </div>
-                </div>
-
-                <div class="device-info">
-                    <h3>Device Information</h3>
-                    <p><strong>Name:</strong> <span id="deviceName">-</span></p>
-                    <p><strong>Vendor ID:</strong> <span id="vendorId">-</span></p>
-                    <p><strong>Product ID:</strong> <span id="productId">-</span></p>
-                    <p><strong>Collections:</strong> <span id="collections">-</span></p>
-                </div>
-
-                <div class="raw-data" id="rawData">
-                    Raw HID data will appear here...
-                </div>
-            </div>
-        </div>
-
-        <div class="instructions">
-            <h3>Surface Dial HID Mapping Information:</h3>
-            <p>The Microsoft Surface Dial uses the following HID characteristics:</p>
-            <ul>
-                <li><strong>Vendor ID:</strong> 0x045E (Microsoft)</li>
-                <li><strong>Usage Page:</strong> 0x01 (Generic Desktop)</li>
-                <li><strong>Usage:</strong> 0x0E (System Multi-Axis Controller)</li>
-                <li><strong>Transport:</strong> Bluetooth Low Energy</li>
-                <li><strong>Input Reports:</strong> Contains rotation delta and button state</li>
-                <li><strong>Rotation:</strong> Reported as signed relative values</li>
-                <li><strong>Button:</strong> Press/release events for the dial press action</li>
-            </ul>
-            <p>This implementation uses the WebHID API to access raw HID reports from the Surface Dial, parse the rotation and button data, and map it to a virtual dial interface.</p>
-        </div>
+        <button id="connect-dial-btn">Connect Surface Dial</button>
     </div>
 
+    <!-- Countdown Timer -->
+    <div id="countdown-container">
+        <div id="countdown-timer">00:00</div>
+    </div>
+
+    <div id="branding">
+        <p class="led-text">Stakco Play - Surface Dial Edition</p>
+        <p id="puzzle-title"></p> 
+    </div>
+
+    <div id="status">
+        <p id="orientation-status">Connect Surface Dial • Rotate to control selected layer • Press to switch layers</p>    
+    </div>
+
+    <div id="options-container">
+        <button class="option-button primary" onclick="solvePuzzleInstantly()">Solve</button>
+        <button class="option-button" onclick="remixPuzzle()">Remix</button>
+    </div>
+
+    <div id="container"></div>
+    <div id="controls"></div>
+
+    <button id="share-button" onclick="sharePuzzle()">🎉 Share Success!</button>
+
     <script>
-        class SurfaceDialWebHID {
-            constructor() {
+        // Surface Dial WebHID Integration
+        class SurfaceDialController {
+            constructor(onRotation, onButtonPress) {
                 this.device = null;
-                this.currentRotation = 0;
-                this.reportCounter = 0;
+                this.currentRotation = 0.0;
                 this.isButtonPressed = false;
+                this.onRotation = onRotation;
+                this.onButtonPress = onButtonPress;
+                this.prevBytes = null;
                 
-                this.connectButton = document.getElementById('connectButton');
-                this.status = document.getElementById('connectionStatus');
-                this.demoArea = document.getElementById('demoArea');
-                this.dialIndicator = document.getElementById('dialIndicator');
-                this.dialOuter = document.getElementById('dialOuter');
-                this.dialCenterDot = document.getElementById('dialCenterDot');
+                // Fixed settings for optimal Stakco control
+                this.sensitivity = 1.0;
+                this.maxDelta = 1.0;
                 
-                // Info elements
-                this.rotationValue = document.getElementById('rotationValue');
-                this.buttonValue = document.getElementById('buttonValue');
-                this.deltaValue = document.getElementById('deltaValue');
-                this.reportCount = document.getElementById('reportCount');
-                this.rawData = document.getElementById('rawData');
+                // UI elements
+                this.statusElement = document.getElementById('dial-status');
+                this.rotationElement = document.getElementById('dial-rotation');
+                this.buttonElement = document.getElementById('dial-button');
+                this.connectionPanel = document.getElementById('dial-connection');
+                this.connectButton = document.getElementById('connect-dial-btn');
                 
-                // Device info elements
-                this.deviceName = document.getElementById('deviceName');
-                this.vendorId = document.getElementById('vendorId');
-                this.productId = document.getElementById('productId');
-                this.collections = document.getElementById('collections');
-                
-                this.init();
+                this.setupEventHandlers();
             }
-
-            init() {
-                // Check WebHID support
-                const hidSupportElement = document.getElementById('hidSupport');
-                if ('hid' in navigator) {
-                    hidSupportElement.textContent = '✅ Supported';
-                    hidSupportElement.style.color = '#4ecdc4';
-                } else {
-                    hidSupportElement.textContent = '❌ Not Supported';
-                    hidSupportElement.style.color = '#ff6b6b';
-                    this.connectButton.disabled = true;
-                    this.status.textContent = 'WebHID not supported in this browser';
-                    return;
-                }
-
+            
+            setupEventHandlers() {
                 this.connectButton.addEventListener('click', () => this.connectDevice());
-                this.status.textContent = 'Ready to connect';
             }
-
+            
             async connectDevice() {
                 try {
                     this.connectButton.disabled = true;
-                    this.status.textContent = 'Requesting device...';
-
-                    // Request Surface Dial device
-                    // Microsoft Vendor ID: 0x045E
-                    // Surface Dial uses System Multi-Axis Controller (Page 0x01, Usage 0x0E)
+                    this.statusElement.textContent = 'Requesting device...';
+                    
                     const devices = await navigator.hid.requestDevice({
                         filters: [
-                            {
-                                vendorId: 0x045E, // Microsoft
-                                usagePage: 0x01,  // Generic Desktop
-                                usage: 0x0E       // System Multi-Axis Controller
-                            },
-                            {
-                                vendorId: 0x045E, // Microsoft - broader filter
-                            }
+                            { vendorId: 0x045E, usagePage: 0x01, usage: 0x0E },
+                            { vendorId: 0x045E }
                         ]
                     });
-
-                    if (devices.length === 0) {
-                        throw new Error('No Surface Dial device selected');
+                    
+                    if (!devices || devices.length === 0) {
+                        throw new Error('No Surface Dial selected');
                     }
-
+                    
                     this.device = devices[0];
                     await this.device.open();
                     
-                    this.displayDeviceInfo();
-                    this.setupEventListeners();
+                    this.device.addEventListener('inputreport', (event) => {
+                        this.handleInputReport(event);
+                    });
                     
-                    this.status.textContent = 'Connected successfully!';
-                    this.status.className = 'status success';
-                    this.demoArea.classList.add('active');
+                    this.statusElement.textContent = 'Connected!';
+                    this.connectionPanel.classList.add('connected');
                     this.connectButton.textContent = 'Disconnect';
                     this.connectButton.disabled = false;
                     this.connectButton.onclick = () => this.disconnectDevice();
-
+                    
+                    console.log('Surface Dial connected for Stakco control');
+                    
                 } catch (error) {
                     console.error('Connection failed:', error);
-                    this.status.textContent = `Connection failed: ${error.message}`;
-                    this.status.className = 'status error';
+                    this.statusElement.textContent = `Error: ${error.message}`;
+                    this.connectionPanel.classList.add('error');
                     this.connectButton.disabled = false;
                 }
             }
-
+            
             async disconnectDevice() {
                 if (this.device) {
-                    await this.device.close();
+                    try { await this.device.close(); } catch (e) { /* ignore */ }
                     this.device = null;
                 }
                 
-                this.status.textContent = 'Disconnected';
-                this.status.className = 'status';
-                this.demoArea.classList.remove('active');
+                this.statusElement.textContent = 'Not Connected';
+                this.connectionPanel.classList.remove('connected', 'error');
                 this.connectButton.textContent = 'Connect Surface Dial';
                 this.connectButton.onclick = () => this.connectDevice();
                 this.connectButton.disabled = false;
             }
-
-            displayDeviceInfo() {
-                this.deviceName.textContent = this.device.productName || 'Unknown Device';
-                this.vendorId.textContent = `0x${this.device.vendorId.toString(16).toUpperCase().padStart(4, '0')}`;
-                this.productId.textContent = `0x${this.device.productId.toString(16).toUpperCase().padStart(4, '0')}`;
-                
-                const collectionInfo = this.device.collections.map(c => 
-                    `Page 0x${c.usagePage.toString(16).toUpperCase().padStart(2, '0')}, Usage 0x${c.usage.toString(16).toUpperCase().padStart(2, '0')}`
-                ).join('; ');
-                this.collections.textContent = collectionInfo;
-            }
-
-            setupEventListeners() {
-                this.device.addEventListener('inputreport', (event) => {
-                    this.handleInputReport(event);
-                });
-            }
-
+            
             handleInputReport(event) {
-                const { data, device, reportId } = event;
+                const { data } = event;
                 const dataView = new DataView(data.buffer);
                 
-                this.reportCounter++;
-                this.reportCount.textContent = this.reportCounter;
-                
-                // Log raw data
-                const rawBytes = Array.from(new Uint8Array(data.buffer))
-                    .map(b => b.toString(16).padStart(2, '0'))
-                    .join(' ');
-                this.rawData.innerHTML = `Report ID: ${reportId}<br>Data: ${rawBytes}<br>Length: ${data.byteLength} bytes`;
-                
-                // Parse Surface Dial data
-                this.parseSurfaceDialData(dataView, reportId);
-            }
-
-            parseSurfaceDialData(dataView, reportId) {
                 try {
-                    // Surface Dial typically sends reports with:
-                    // - Rotation delta (signed 16-bit value)
-                    // - Button state (1 bit)
-                    
                     let rotationDelta = 0;
-                    let buttonPressed = false;
+                    let buttonPressed = this.isButtonPressed;
                     
                     if (dataView.byteLength >= 2) {
-                        // Try to parse rotation (commonly at offset 0 or 1)
-                        // Surface Dial rotation is often a signed 16-bit value
-                        rotationDelta = dataView.getInt16(0, true); // little-endian
+                        // Fixed-point /256 decoding for smooth rotation
+                        const rawValue = dataView.getInt16(0, true);
+                        rotationDelta = rawValue / 256.0;
                         
-                        // If that seems too large, try 8-bit
-                        if (Math.abs(rotationDelta) > 1000) {
-                            rotationDelta = dataView.getInt8(0);
+                        // Apply sensitivity and clamp
+                        rotationDelta *= this.sensitivity;
+                        if (Math.abs(rotationDelta) > this.maxDelta) {
+                            rotationDelta = Math.sign(rotationDelta) * this.maxDelta;
+                        }
+                        
+                        // Ignore tiny noise
+                        if (Math.abs(rotationDelta) < 0.001) {
+                            rotationDelta = 0;
                         }
                     }
                     
-                    if (dataView.byteLength >= 3) {
-                        // Button state is typically in a separate byte
-                        const buttonByte = dataView.getUint8(2);
-                        buttonPressed = (buttonByte & 0x01) !== 0;
+                    // Button detection through byte comparison
+                    if (this.prevBytes && dataView.byteLength > 0) {
+                        for (let i = 0; i < Math.min(4, dataView.byteLength, this.prevBytes.length); i++) {
+                            const currentByte = dataView.getUint8(i);
+                            const prevByte = this.prevBytes[i];
+                            const changed = currentByte ^ prevByte;
+                            
+                            if (changed !== 0) {
+                                if ((changed & 0x01) !== 0) {
+                                    buttonPressed = (currentByte & 0x01) !== 0;
+                                    break;
+                                }
+                            }
+                        }
                     }
                     
-                    // Filter out zero deltas to reduce noise
+                    // Store bytes for next comparison
+                    this.prevBytes = Array.from(new Uint8Array(dataView.buffer)).slice(0, 8);
+                    
+                    // Handle rotation
                     if (rotationDelta !== 0) {
-                        this.currentRotation += rotationDelta * 0.5; // Scale the rotation
-                        this.deltaValue.textContent = rotationDelta;
-                        this.updateVisualDial();
+                        this.currentRotation += rotationDelta;
+                        this.currentRotation = ((this.currentRotation % 360) + 360) % 360;
+                        this.rotationElement.textContent = `${this.currentRotation.toFixed(1)}°`;
+                        
+                        if (this.onRotation) {
+                            this.onRotation(rotationDelta);
+                        }
                     }
                     
-                    // Update button state
+                    // Handle button press
                     if (buttonPressed !== this.isButtonPressed) {
                         this.isButtonPressed = buttonPressed;
-                        this.buttonValue.textContent = buttonPressed ? 'Pressed' : 'Released';
-                        this.buttonValue.style.color = buttonPressed ? '#ff6b6b' : '#4ecdc4';
-                        this.dialCenterDot.classList.toggle('pressed', buttonPressed);
+                        this.buttonElement.textContent = buttonPressed ? 'Pressed' : 'Released';
+                        
+                        if (buttonPressed && this.onButtonPress) {
+                            this.onButtonPress();
+                        }
                     }
                     
                 } catch (error) {
                     console.error('Error parsing Surface Dial data:', error);
                 }
             }
+        }
 
-            updateVisualDial() {
-                // Update rotation display
-                this.rotationValue.textContent = `${Math.round(this.currentRotation)}°`;
-                
-                // Rotate the indicator
-                this.dialIndicator.style.transform = `translateX(-50%) rotate(${this.currentRotation}deg)`;
-                
-                // Add pulse effect
-                this.dialOuter.classList.add('active');
-                setTimeout(() => {
-                    this.dialOuter.classList.remove('active');
-                }, 300);
+        // Configuration constants
+        const CONFIG = {
+            DEFAULT_LAYERS: 3,
+            ROTATION_TOLERANCE: 2,
+            SOLVE_ANIMATION_DELAY: 1000,
+            SOLVE_ANIMATION_DURATION: 3000,
+            BASE_IMAGE_URL: 'https://storage.googleapis.com/stakco-images',
+            DEFAULT_USER_ID: '109949450257686494443',
+            DEFAULT_PUZZLE_ID: 'A2A3_3'
+        };
+
+        // App state
+        let totalLayers = CONFIG.DEFAULT_LAYERS;
+        let currentLayer = 1;
+        let puzzleSolved = false;
+        let imagesLoaded = false;
+        let puzzleLayers = {};
+        let surfaceDial = null;
+
+        // Countdown state
+        let countdownActive = false;
+        let countdownStartTime = null;
+        let countdownInterval = null;
+        let firstInteractionOccurred = false;
+
+        // Parse URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const username = urlParams.get('username');
+        const puzzle = urlParams.get('puzzle');
+        const hasUrlParams = urlParams.toString() !== '';
+
+        // Generate today's date string
+        const today = new Date();
+        const dateStr = today.toISOString().split('T')[0];
+
+        // DOM elements
+        let orientationStatus, controlsDiv, statusDiv, shareButton, container, brandingDiv, countdownContainer, countdownTimer;
+
+        // Countdown functions
+        function startCountdown() {
+            if (countdownActive || hasUrlParams) return;
+            
+            countdownActive = true;
+            countdownStartTime = Date.now();
+            
+            countdownContainer.classList.add('show');
+            brandingDiv.classList.add('hidden');
+            statusDiv.classList.add('hidden');
+            
+            countdownInterval = setInterval(updateCountdownDisplay, 100);
+            console.log('Countdown started');
+        }
+
+        function stopCountdown() {
+            if (!countdownActive) return;
+            
+            countdownActive = false;
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
             }
         }
 
-        // Initialize when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new SurfaceDialWebHID();
-        });
+        function updateCountdownDisplay() {
+            if (!countdownActive || !countdownStartTime) return;
+            
+            const elapsed = Date.now() - countdownStartTime;
+            const seconds = Math.floor(elapsed / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            
+            const timeString = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            countdownTimer.textContent = timeString;
+        }
 
-        // Add some additional debugging
-        console.log('Surface Dial WebHID Demo loaded');
-        console.log('WebHID supported:', 'hid' in navigator);
-        
-        if ('hid' in navigator) {
-            // Log any already connected devices
-            navigator.hid.getDevices().then(devices => {
-                console.log('Already connected HID devices:', devices);
-                devices.forEach(device => {
-                    console.log(`- ${device.productName} (VID: 0x${device.vendorId.toString(16)}, PID: 0x${device.productId.toString(16)})`);
-                });
+        function resetCountdown() {
+            stopCountdown();
+            countdownContainer.classList.remove('show');
+            countdownTimer.textContent = '00:00';
+            firstInteractionOccurred = false;
+            
+            if (!puzzleSolved) {
+                brandingDiv.classList.remove('hidden');
+                statusDiv.classList.remove('hidden');
+            }
+        }
+
+        function getFinalTime() {
+            if (!countdownStartTime) return '00:00';
+            
+            const elapsed = Date.now() - countdownStartTime;
+            const seconds = Math.floor(elapsed / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const remainingSeconds = seconds % 60;
+            
+            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+        }
+
+        // Surface Dial event handlers
+        function handleDialRotation(deltaAngle) {
+            if (puzzleSolved || !imagesLoaded) return;
+            
+            // Trigger countdown on first interaction
+            if (!firstInteractionOccurred && !hasUrlParams) {
+                firstInteractionOccurred = true;
+                startCountdown();
+            }
+            
+            applyRotation(deltaAngle);
+        }
+
+        function handleDialButtonPress() {
+            if (puzzleSolved) return;
+            
+            // Switch to next layer
+            const nextLayer = (currentLayer % totalLayers) + 1;
+            switchLayer(nextLayer);
+            
+            // Visual feedback
+            if (navigator.vibrate) {
+                navigator.vibrate([50]);
+            }
+        }
+
+        // Initialize the app
+        function initApp() {
+            console.log('Initializing Stakco Surface Dial Edition...');
+            
+            // Check WebHID support
+            if (!('hid' in navigator)) {
+                alert('WebHID not supported in this browser. Please use Chrome or Edge.');
+                return;
+            }
+            
+            // Cache DOM elements
+            orientationStatus = document.getElementById('orientation-status');
+            controlsDiv = document.getElementById('controls');
+            statusDiv = document.getElementById('status');
+            shareButton = document.getElementById('share-button');
+            container = document.getElementById('container');
+            brandingDiv = document.getElementById('branding');
+            countdownContainer = document.getElementById('countdown-container');
+            countdownTimer = document.getElementById('countdown-timer');
+
+            // Set puzzle title
+            const puzzleTitleElem = document.getElementById('puzzle-title');
+            if (username && puzzle) {
+                puzzleTitleElem.textContent = `${puzzle} by ${username}`;
+            } else {
+                puzzleTitleElem.textContent = `Daily Puzzle : ${dateStr}`;
+            }
+
+            // Initialize Surface Dial controller
+            surfaceDial = new SurfaceDialController(handleDialRotation, handleDialButtonPress);
+
+            // Determine puzzle configuration
+            const customPuzzle = parseCustomPuzzle();
+            if (customPuzzle) {
+                totalLayers = customPuzzle.noOfLayers;
+            }
+
+            // Initialize puzzle
+            initializePuzzleLayers();
+            createDynamicElements();
+            loadImages(customPuzzle);
+
+            console.log('Stakco Surface Dial Edition initialized');
+        }
+
+        // Parse custom puzzle parameters
+        function parseCustomPuzzle() {
+            if (!username || !puzzle) return null;
+
+            const puzzleParts = puzzle.split('_');
+            if (puzzleParts.length < 2) return null;
+
+            const puzzleId = puzzleParts[0];
+            const puzzleIdFull = `${puzzleParts[0]}_${puzzleParts[1]}`;
+            const noOfLayers = parseInt(puzzleParts[1], 10);
+
+            return { username, puzzleId, puzzleIdFull, noOfLayers };
+        }
+
+        // Initialize puzzle layer data
+        function initializePuzzleLayers() {
+            puzzleLayers = {};
+            for (let i = 1; i <= totalLayers; i++) {
+                puzzleLayers[`layer${i}`] = { 
+                    rotation: Math.floor(Math.random() * 360) 
+                };
+            }
+        }
+
+        // Create dynamic DOM elements
+        function createDynamicElements() {
+            container.innerHTML = '';
+            controlsDiv.innerHTML = '';
+
+            // Create layer elements
+            for (let i = 1; i <= totalLayers; i++) {
+                const layerDiv = document.createElement('div');
+                layerDiv.id = `layer${i}`;
+                layerDiv.className = `puzzle-layer${i === 1 ? ' active' : ''}`;
+                layerDiv.style.zIndex = totalLayers - i + 1;
+                container.appendChild(layerDiv);
+
+                const button = document.createElement('button');
+                button.className = `layer-button${i === 1 ? ' active' : ''}`;
+                button.dataset.layer = i;
+                button.textContent = i;
+                button.addEventListener('click', () => switchLayer(i));
+                controlsDiv.appendChild(button);
+            }
+        }
+
+        // Generate image URLs
+        function generateImageUrls(customPuzzle) {
+            const urls = { primary: {}, backup: {} };
+
+            if (customPuzzle) {
+                for (let i = 1; i <= totalLayers; i++) {
+                    urls.primary[`layer${i}`] = 
+                        `${CONFIG.BASE_IMAGE_URL}/${customPuzzle.username}/${customPuzzle.puzzleIdFull}/${customPuzzle.puzzleId}_${i-1}.png`;
+                }
+                
+                for (let i = 1; i <= 3; i++) {
+                    urls.backup[`layer${i}`] = 
+                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${i-1}.png`;
+                }
+            } else {
+                for (let i = 1; i <= totalLayers; i++) {
+                    const imageIndex = i - 1;
+                    urls.primary[`layer${i}`] = 
+                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/${dateStr}/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
+                    urls.backup[`layer${i}`] = 
+                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
+                }
+            }
+
+            return urls;
+        }
+
+        // Load images with fallback
+        async function loadImages(customPuzzle) {
+            orientationStatus.textContent = 'Loading puzzle images...';
+            
+            const imageUrls = generateImageUrls(customPuzzle);
+            let loadedCount = 0;
+
+            for (let i = 1; i <= totalLayers; i++) {
+                const layerKey = `layer${i}`;
+                const layerElement = document.getElementById(layerKey);
+                
+                if (!layerElement) continue;
+
+                try {
+                    const primaryUrl = imageUrls.primary[layerKey];
+                    const imageExists = await checkImageExists(primaryUrl);
+                    
+                    if (imageExists) {
+                        layerElement.style.backgroundImage = `url('${primaryUrl}')`;
+                    } else {
+                        const backupUrl = imageUrls.backup[layerKey];
+                        if (backupUrl) {
+                            layerElement.style.backgroundImage = `url('${backupUrl}')`;
+                        }
+                    }
+                    loadedCount++;
+                } catch (error) {
+                    console.error(`Error loading ${layerKey}:`, error);
+                    const backupUrl = imageUrls.backup[layerKey];
+                    if (backupUrl) {
+                        layerElement.style.backgroundImage = `url('${backupUrl}')`;
+                    }
+                    loadedCount++;
+                }
+            }
+
+            applyInitialRotations();
+            orientationStatus.textContent = 'Connect Surface Dial • Rotate to control selected layer • Press to switch layers';
+            imagesLoaded = true;
+            
+            console.log(`Loaded ${loadedCount}/${totalLayers} images`);
+        }
+
+        // Check if image exists
+        async function checkImageExists(url) {
+            try {
+                const response = await fetch(url, { method: 'GET', mode: 'cors' });
+                return response.ok;
+            } catch (error) {
+                return false;
+            }
+        }
+
+        // Apply initial rotations
+        function applyInitialRotations() {
+            Object.entries(puzzleLayers).forEach(([layerKey, data]) => {
+                const layerElement = document.getElementById(layerKey);
+                if (layerElement) {
+                    layerElement.style.transform = 
+                        `translate(-50%, -50%) rotate(${data.rotation}deg)`;
+                }
             });
         }
+
+        // Apply rotation to current layer
+        function applyRotation(deltaAngle) {
+            const layerKey = `layer${currentLayer}`;
+            puzzleLayers[layerKey].rotation += deltaAngle;
+
+            const layerElement = document.getElementById(layerKey);
+            if (layerElement) {
+                layerElement.style.transform = 
+                    `translate(-50%, -50%) rotate(${puzzleLayers[layerKey].rotation}deg)`;
+            }
+
+            checkSolution();
+        }
+
+        // Switch active layer
+        function switchLayer(layerNumber) {
+            if (puzzleSolved || layerNumber === currentLayer) return;
+
+            document.querySelectorAll('.puzzle-layer, .layer-button').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            const targetLayer = document.getElementById(`layer${layerNumber}`);
+            const targetButton = document.querySelector(`[data-layer="${layerNumber}"]`);
+            
+            if (targetLayer) targetLayer.classList.add('active');
+            if (targetButton) targetButton.classList.add('active');
+
+            currentLayer = layerNumber;
+            console.log(`Switched to layer ${layerNumber}`);
+        }
+
+        // Check if puzzle is solved
+        function checkSolution() {
+            if (puzzleSolved) return;
+
+            const rotations = Object.values(puzzleLayers).map(layer => 
+                ((layer.rotation % 360) + 360) % 360
+            );
+
+            const allAligned = rotations.every(rotation =>
+                Math.abs(rotation - rotations[0]) <= CONFIG.ROTATION_TOLERANCE
+            );
+
+            if (allAligned) {
+                solvePuzzle();
+            }
+        }
+
+        // Handle puzzle completion
+        function solvePuzzle() {
+            puzzleSolved = true;
+            const finalTime = getFinalTime();
+            console.log(`Puzzle solved in ${finalTime}!`);
+
+            stopCountdown();
+
+            if (navigator.vibrate) {
+                navigator.vibrate([200, 100, 200, 100, 200]);
+            }
+
+            controlsDiv.classList.add('hidden');
+            statusDiv.classList.add('hidden');
+            countdownContainer.classList.remove('show');
+            shareButton.classList.add('show');
+
+            shareButton.textContent = `🎉 Solved in ${finalTime}! Share Success!`;
+
+            setTimeout(rotateAllLayersToZero, CONFIG.SOLVE_ANIMATION_DELAY);
+        }
+
+        // Animate all layers to zero
+        function rotateAllLayersToZero() {
+            Object.keys(puzzleLayers).forEach(layerKey => {
+                const layerElement = document.getElementById(layerKey);
+                if (layerElement) {
+                    let currentRotation = puzzleLayers[layerKey].rotation || 0;
+
+                    if (currentRotation > 0) {
+                        currentRotation -= 360;
+                    }
+
+                    puzzleLayers[layerKey].rotation = currentRotation;
+                    layerElement.style.transform = `translate(-50%, -50%) rotate(${currentRotation}deg)`;
+
+                    requestAnimationFrame(() => {
+                        layerElement.style.transition = `transform ${CONFIG.SOLVE_ANIMATION_DURATION}ms ease-out`;
+                        layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+                    });
+                    puzzleLayers[layerKey].rotation = 0;
+                }
+            });
+        }
+
+        // Solve puzzle instantly
+        function solvePuzzleInstantly() {
+            Object.keys(puzzleLayers).forEach(layerKey => {
+                puzzleLayers[layerKey].rotation = 0;
+                const layerElement = document.getElementById(layerKey);
+                if (layerElement) {
+                    layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+                }
+            });
+            
+            solvePuzzle();
+        }
+
+        // Remix puzzle
+        function remixPuzzle() {
+            if (puzzleSolved) {
+                puzzleSolved = false;
+                controlsDiv.classList.remove('hidden');
+                if (!countdownActive) {
+                    statusDiv.classList.remove('hidden');
+                }
+                shareButton.classList.remove('show');
+                orientationStatus.textContent = 'Connect Surface Dial • Rotate to control selected layer • Press to switch layers';
+            }
+            
+            resetCountdown();
+            initializePuzzleLayers();
+            applyInitialRotations();
+            
+            console.log('Puzzle remixed with new rotations');
+        }
+
+        // Share functionality
+        function sharePuzzle() {
+            const shareParams = urlParams.toString() ? '?' + urlParams.toString() : '';
+            const shareUrl = 'https://stakcos.com/play/' + shareParams;
+            const finalTime = getFinalTime();
+
+            const shareData = {
+                title: 'Stakco Surface Dial Puzzle',
+                text: `I just solved a Stakco puzzle using Surface Dial! Time: ${finalTime}`,
+                url: shareUrl
+            };
+
+            if (navigator.share) {
+                navigator.share(shareData)
+                    .then(() => console.log('Successful share'))
+                    .catch(error => console.log('Error sharing:', error));
+            } else {
+                const textArea = document.createElement('textarea');
+                textArea.value = `${shareData.text} ${shareUrl}`;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert(`Copied to clipboard: ${shareData.text} ${shareUrl}`);
+            }
+        }
+
+        // Initialize app when DOM is loaded
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
