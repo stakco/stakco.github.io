@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,18 +10,20 @@
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Stakco Puzzle Systems">
     <meta property="og:description" content="Brings life to papers with interactive Stakco puzzles.">
-    <meta property="og:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
     <meta property="og:url" content="https://play.stakcos.com/">
     <meta property="og:type" content="website">
-    
+
     <!-- Twitter Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Stakco Puzzle Systems">
     <meta name="twitter:description" content="Brings life to papers with interactive Stakco puzzles.">
-    <meta name="twitter:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
     <meta name="twitter:url" content="https://play.stakcos.com/">
     <meta name="twitter:site" content="@StakcoPuzzle">
-    
+
     <!-- Mobile App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -28,7 +31,7 @@
     <link rel="apple-touch-icon" href="https://stakcos.com/icons/apple-icon.png">
     <meta name="msapplication-TileColor" content="#FFFFFF">
     <meta name="msapplication-TileImage" content="https://stakcos.com/icons/mstile-150x150.png">
-    
+
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
@@ -47,9 +50,9 @@
         }
     }
     </script>
-    
+
     <title>Stakco Play</title>
-    
+
     <style>
         /* CSS Variables for consistent theming */
         :root {
@@ -114,16 +117,14 @@
             z-index: 10;
         }
 
-        /* Countdown Timer Styles */
         #countdown-container {
             position: absolute;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(0, 0, 0, 0.9);
-            border: 2px solid var(--primary-green);
             border-radius: 15px;
-            padding: 5px 15px;
+            padding: 0px 15px;
             font-family: 'Courier New', monospace;
             color: var(--text-green);
             text-align: center;
@@ -132,8 +133,10 @@
             letter-spacing: 2px;
             backdrop-filter: blur(10px);
             box-shadow: 0 0 20px var(--primary-green);
-            z-index: 2000;
+            z-index: 1000;
             display: none;
+            height: 50px;
+            line-height: 50px;
             animation: slideDown 0.5s ease-out;
         }
 
@@ -143,8 +146,9 @@
 
         #countdown-timer {
             font-size: 24px;
-            color: var(--primary-green);
-            margin-top: 5px;
+            margin: 0;
+            display: inline-block;
+            vertical-align: middle;
         }
 
         @keyframes slideDown {
@@ -152,6 +156,7 @@
                 opacity: 0;
                 transform: translate(-50%, -20px);
             }
+
             to {
                 opacity: 1;
                 transform: translateX(-50%);
@@ -159,9 +164,12 @@
         }
 
         @keyframes pulse {
-            0%, 100% {
+
+            0%,
+            100% {
                 box-shadow: 0 0 20px var(--primary-green);
             }
+
             50% {
                 box-shadow: 0 0 30px var(--primary-green), 0 0 40px var(--primary-green);
             }
@@ -169,15 +177,15 @@
 
         #branding {
             position: absolute;
-            top: 7px;
-            margin-top: 10px;
+            top: 10px;
+            margin-top: 15px;
             margin-left: 10px;
             font-size: 14px;
             text-align: center;
             font-family: 'Courier New', monospace;
             color: var(--text-green);
-            text-shadow: 0 0 5px var(--text-green), 0 0 10px var(--text-green), 
-                         0 0 20px var(--text-green), 0 0 40px var(--text-green);
+            text-shadow: 0 0 5px var(--text-green), 0 0 10px var(--text-green),
+                0 0 20px var(--text-green), 0 0 40px var(--text-green);
             letter-spacing: 1px;
         }
 
@@ -186,16 +194,17 @@
         }
 
         #status {
-            position: absolute;
-            top: 40px;
+            padding-left: 25px;
+            padding-right: 25px;
             margin-left: 10px;
             font-size: 14px;
-            text-align: center;
+            /* text-align: center; */
             font-family: 'Courier New', monospace;
             color: var(--text-green);
-            text-shadow: 0 0 5px var(--text-green), 0 0 10px var(--text-green), 
-                         0 0 20px var(--text-green), 0 0 40px var(--text-green);
+            text-shadow: 0 0 5px var(--text-green), 0 0 10px var(--text-green),
+                0 0 20px var(--text-green), 0 0 40px var(--text-green);
             letter-spacing: 1px;
+            z-index: 1500;
         }
 
         #status.hidden {
@@ -398,42 +407,143 @@
         }
 
         @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-            20%, 24%, 55% { opacity: 0.8; }
-            22% { opacity: 0.6; }
+
+            0%,
+            19%,
+            21%,
+            23%,
+            25%,
+            54%,
+            56%,
+            100% {
+                opacity: 1;
+            }
+
+            20%,
+            24%,
+            55% {
+                opacity: 0.8;
+            }
+
+            22% {
+                opacity: 0.6;
+            }
         }
 
-        .led-text, .led-value {
+        .led-text,
+        .led-value {
             animation: flicker 2.5s infinite;
         }
 
         #info-button {
-            position: fixed;   /* keeps it pinned to viewport */
-            top: 20px;         /* distance from top */
-            left: 20px;        /* distance from left */
-            z-index: 1000;     /* make sure it's above other elements */
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 2000;
             border: none;
             padding: 8px;
             border-radius: 50%;
             cursor: pointer;
             width: 50px;
             height: 50px;
-                display: flex;        /* 👈 makes centering work */
-
+            display: flex;
             justify-content: center;
             align-items: center;
             background-color: var(--primary-green);
+            transition: all var(--transition-duration) ease;
+        }
+
+        #info-button:hover {
+            background-color: #00cc00;
+            box-shadow: 0 0 15px var(--primary-green);
+        }
+
+        #info-button.active {
+            background-color: #00aa00;
+            box-shadow: 0 0 20px var(--primary-green);
         }
 
         #info-button i {
-            font-size: 45px;  /* 🔥 adjust this to make it bigger */
+            width: auto;
+            height: auto;
+            display: block;
+            font-size: 44px;
             color: #333;
-            }
+        }
 
+        #stakco-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            border: none;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            aspect-ratio: 1 / 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+            background: url('stakco_logo_squricle.png') no-repeat center;
+            background-size: contain;
+            padding: 0;
+        }
+
+        #stakco-button img {
+            width: 30px;
+            height: auto;
+        }
+
+        #info-div {
+            position: fixed;
+            top: 20px;
+            left: 45px; /* Start right after the info button */
+            border: none;
+            height: 50px;
+            border-radius: 0 25px 25px 0; /* top-left, top-right, bottom-right, bottom-left */
+            background: rgba(0, 255, 0, 0.9);
+            color: #333;
+            font-family: 'Courier New', monospace;
+            z-index: 1500;
+            width: 0; /* Start with 0 width */
+            overflow: hidden;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+        }
+
+        #status p {
+            margin: 0;              /* remove default paragraph margin */
+            line-height: 1.2;         /* no extra spacing between lines */
+            white-space: normal;    /* allow wrapping */
+        }
+
+        #info-div.expanded {
+            width: calc(100vw - 65px); /* Full width minus margins and button */
+        }
+
+        #info-div #status {
+            margin-left: 15px;
+            margin-right: 15px;
+            color: #333;
+            text-shadow: none;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.1s; /* Slight delay for text appearance */
+        }
+
+        #info-div.expanded #status {
+            opacity: 1;
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- app bar -->
 
     <!-- Countdown Timer -->
     <div id="countdown-container">
@@ -444,29 +554,20 @@
         <i class="fa-solid fa-circle-info"></i>
     </button>
 
-    <div id="branding">
-        <img src="stakco_logo_squricle.png" alt="Stakco Logo" style="height: 20px; vertical-align: middle; margin-right: 0px;">
-        <p id="stakco-branding" style="display: inline; margin-left: 2px; vertical-align: middle;">Stakco Play <span id="product-version">v1.0.0</span></p>
-        <p id="puzzle-title" style="margin-top: 2px;"></p> 
-    </div>
-
-    <div id="status">
-        <p id="orientation-status">Drag to rotate selected layer • Align all layers</p>    
-    </div>
-
-    <div id="options-container">
-        <div id="options-menu">
-            <button class="option-button primary" onclick="solvePuzzleInstantly()">Solve</button>
-            <button class="option-button" onclick="remixPuzzle()">Remix</button>
+    <div id="info-div">
+        <div id="status">
+            <p id="orientation-status">Drag to rotate selected layer • Align all layers</p>
         </div>
-        <button id="options-button" onclick="toggleOptionsMenu()">
-            <div class="hamburger-icon">
-                <div class="hamburger-line"></div>
-                <div class="hamburger-line"></div>
-                <div class="hamburger-line"></div>
-            </div>
-        </button>
     </div>
+
+    <div id="branding">
+        
+        <p id="stakco-branding" style="display: inline; margin-left: 2px; vertical-align: middle;">Stakco Play <span
+                id="product-version">v1.0.0</span></p>
+        <p id="puzzle-title" style="margin-top: 2px;"></p>
+    </div>
+
+    <button id="stakco-button"></button>
 
     <div id="container"></div>
     <div id="controls"></div>
@@ -510,6 +611,7 @@
         let puzzleLayers = {};
         let lastTouchEnd = 0;
         let optionsMenuOpen = false;
+        let infoExpanded = false; // New state for info panel
 
         // Countdown state
         let countdownActive = false;
@@ -540,53 +642,68 @@
         // set puzzle title in branding
         const puzzleTitleElem = document.getElementById('puzzle-title');
         if (username && puzzle) {
-            puzzleTitleElem.textContent = `${puzzle} by ${username}`;
+            puzzleTitleElem.textContent = `User Puzzle`;
         } else {
-            puzzleTitleElem.textContent = `Daily Puzzle : ${dateStr}`;
+            puzzleTitleElem.textContent = `Daily Puzzle`;
         }
 
         // DOM elements (cached)
-        let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer;
+        let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer, infoButton, infoDiv;
+
+        // Info panel toggle function
+        function toggleInfoPanel() {
+            infoExpanded = !infoExpanded;
+            
+            if (infoExpanded) {
+                infoDiv.classList.add('expanded');
+                infoButton.classList.add('active');
+            } else {
+                infoDiv.classList.remove('expanded');
+                infoButton.classList.remove('active');
+            }
+            
+            console.log('Info panel toggled:', infoExpanded ? 'expanded' : 'collapsed');
+        }
 
         // Countdown functions
         function startCountdown() {
             if (countdownActive || hasUrlParams) return;
-            
+
             countdownActive = true;
             countdownStartTime = Date.now();
-            
+
             // Show countdown and hide branding/status
             countdownContainer.classList.add('show');
             brandingDiv.classList.add('hidden');
-            statusDiv.classList.add('hidden');
-            
+            // statusDiv.classList.add('hidden');
+
             countdownInterval = setInterval(updateCountdownDisplay, 100);
             console.log('Countdown started');
         }
 
         function stopCountdown() {
             if (!countdownActive) return;
-            
+
             countdownActive = false;
             if (countdownInterval) {
                 clearInterval(countdownInterval);
                 countdownInterval = null;
             }
-            
+
             console.log('Countdown stopped');
         }
 
         function updateCountdownDisplay() {
             if (!countdownActive || !countdownStartTime) return;
-            
+
             const elapsed = Date.now() - countdownStartTime;
             const seconds = Math.floor(elapsed / 1000);
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
-            
+
             const timeString = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
             countdownTimer.textContent = timeString;
-            
+
             // Change color based on time ranges
             if (seconds < 120) {            // 0-2 min
                 countdownTimer.style.color = '#00ff00'; // green
@@ -603,17 +720,16 @@
             } else {     // 5+ min
                 countdownTimer.style.color = '#ff4444'; // orange
                 countdownContainer.style.borderColor = '#ff4444';
-                countdownContainer.style.boxShadow = '0 0 20px #ff4444'; 
+                countdownContainer.style.boxShadow = '0 0 20px #ff4444';
             }
         }
-
 
         function resetCountdown() {
             stopCountdown();
             countdownContainer.classList.remove('show');
             countdownTimer.textContent = '00:00';
             firstInteractionOccurred = false;
-            
+
             // Show branding and status again if puzzle isn't solved
             if (!puzzleSolved) {
                 brandingDiv.classList.remove('hidden');
@@ -623,19 +739,19 @@
 
         function getFinalTime() {
             if (!countdownStartTime) return '00:00';
-            
+
             const elapsed = Date.now() - countdownStartTime;
             const seconds = Math.floor(elapsed / 1000);
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
-            
+
             return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
         }
 
         // Initialize the app
         function initApp() {
             console.log('Initializing Touch Compass Puzzle App...');
-            
+
             // Cache DOM elements
             orientationStatus = document.getElementById('orientation-status');
             controlsDiv = document.getElementById('controls');
@@ -647,6 +763,11 @@
             brandingDiv = document.getElementById('branding');
             countdownContainer = document.getElementById('countdown-container');
             countdownTimer = document.getElementById('countdown-timer');
+            infoButton = document.getElementById('info-button');
+            infoDiv = document.getElementById('info-div');
+
+            // Add event listener for info button
+            infoButton.addEventListener('click', toggleInfoPanel);
 
             // Determine puzzle configuration
             const customPuzzle = parseCustomPuzzle();
@@ -685,8 +806,8 @@
         function initializePuzzleLayers() {
             puzzleLayers = {};
             for (let i = 1; i <= totalLayers; i++) {
-                puzzleLayers[`layer${i}`] = { 
-                    rotation: Math.floor(Math.random() * 360) 
+                puzzleLayers[`layer${i}`] = {
+                    rotation: Math.floor(Math.random() * 360)
                 };
             }
         }
@@ -717,7 +838,7 @@
         // Options menu functions
         function toggleOptionsMenu() {
             optionsMenuOpen = !optionsMenuOpen;
-            
+
             if (optionsMenuOpen) {
                 optionsMenu.classList.add('show');
                 optionsButton.classList.add('active');
@@ -735,7 +856,7 @@
 
         function solvePuzzleInstantly() {
             closeOptionsMenu();
-            
+
             // Set all layers to 0 rotation
             Object.keys(puzzleLayers).forEach(layerKey => {
                 puzzleLayers[layerKey].rotation = 0;
@@ -744,14 +865,14 @@
                     layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
                 }
             });
-            
+
             // Mark puzzle as solved and trigger completion
             solvePuzzle();
         }
 
         function remixPuzzle() {
             closeOptionsMenu();
-            
+
             if (puzzleSolved) {
                 // Reset puzzle state
                 puzzleSolved = false;
@@ -762,14 +883,14 @@
                 shareButton.classList.remove('show');
                 orientationStatus.textContent = MESSAGES.INSTRUCTIONS;
             }
-            
+
             // Reset countdown
             resetCountdown();
-            
+
             // Generate new random rotations
             initializePuzzleLayers();
             applyInitialRotations();
-            
+
             console.log('Puzzle remixed with new rotations');
         }
 
@@ -780,22 +901,22 @@
             if (customPuzzle) {
                 // Custom puzzle URLs
                 for (let i = 1; i <= totalLayers; i++) {
-                    urls.primary[`layer${i}`] = 
-                        `${CONFIG.BASE_IMAGE_URL}/${customPuzzle.username}/${customPuzzle.puzzleIdFull}/${customPuzzle.puzzleId}_${i-1}.png`;
+                    urls.primary[`layer${i}`] =
+                        `${CONFIG.BASE_IMAGE_URL}/${customPuzzle.username}/${customPuzzle.puzzleIdFull}/${customPuzzle.puzzleId}_${i - 1}.png`;
                 }
-                
+
                 // Backup to default puzzle
                 for (let i = 1; i <= 3; i++) {
-                    urls.backup[`layer${i}`] = 
-                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${i-1}.png`;
+                    urls.backup[`layer${i}`] =
+                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${i - 1}.png`;
                 }
             } else {
                 // Daily puzzle URLs
                 for (let i = 1; i <= totalLayers; i++) {
                     const imageIndex = i - 1;
-                    urls.primary[`layer${i}`] = 
+                    urls.primary[`layer${i}`] =
                         `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/${dateStr}/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
-                    urls.backup[`layer${i}`] = 
+                    urls.backup[`layer${i}`] =
                         `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
                 }
             }
@@ -807,20 +928,20 @@
         async function loadImages(customPuzzle) {
             const loadingMessage = customPuzzle ? MESSAGES.LOADING_USER : MESSAGES.LOADING_DAILY;
             orientationStatus.textContent = loadingMessage;
-            
+
             const imageUrls = generateImageUrls(customPuzzle);
             let loadedCount = 0;
 
             for (let i = 1; i <= totalLayers; i++) {
                 const layerKey = `layer${i}`;
                 const layerElement = document.getElementById(layerKey);
-                
+
                 if (!layerElement) continue;
 
                 try {
                     const primaryUrl = imageUrls.primary[layerKey];
                     const imageExists = await checkImageExists(primaryUrl);
-                    
+
                     if (imageExists) {
                         layerElement.style.backgroundImage = `url('${primaryUrl}')`;
                         console.log(`Loaded image for ${layerKey}: ${primaryUrl}`);
@@ -846,14 +967,14 @@
             applyInitialRotations();
             orientationStatus.textContent = MESSAGES.INSTRUCTIONS;
             imagesLoaded = true;
-            
+
             console.log(`Loaded ${loadedCount}/${totalLayers} images successfully`);
         }
 
         // Check if image exists at URL
         async function checkImageExists(url) {
             try {
-                const response = await fetch(url, { 
+                const response = await fetch(url, {
                     method: 'GET',
                     mode: 'cors',
                     cache: 'no-cache'
@@ -869,7 +990,7 @@
             Object.entries(puzzleLayers).forEach(([layerKey, data]) => {
                 const layerElement = document.getElementById(layerKey);
                 if (layerElement) {
-                    layerElement.style.transform = 
+                    layerElement.style.transform =
                         `translate(-50%, -50%) rotate(${data.rotation}deg)`;
                 }
             });
@@ -894,6 +1015,15 @@
 
             // Prevent mobile zoom and double-tap
             preventMobileZoom();
+
+            // Click outside to close info panel
+            document.addEventListener('click', (e) => {
+                if (infoExpanded && 
+                    !infoButton.contains(e.target) && 
+                    !infoDiv.contains(e.target)) {
+                    toggleInfoPanel();
+                }
+            });
         }
 
         // Prevent zoom on mobile devices
@@ -932,10 +1062,10 @@
         function handleDrag(e) {
             if (!isDragging || puzzleSolved) return;
             e.preventDefault();
-            
+
             const currentAngle = getAngleFromEvent(e, e.clientX, e.clientY);
             const deltaAngle = normalizeAngleDelta(currentAngle - lastAngle);
-            
+
             applyRotation(deltaAngle);
             lastAngle = currentAngle;
         }
@@ -957,11 +1087,11 @@
         function handleTouch(e) {
             if (!isDragging || puzzleSolved) return;
             e.preventDefault();
-            
+
             const touch = e.touches[0];
             const currentAngle = getAngleFromEvent(e, touch.clientX, touch.clientY);
             const deltaAngle = normalizeAngleDelta(currentAngle - lastAngle);
-            
+
             applyRotation(deltaAngle);
             lastAngle = currentAngle;
         }
@@ -988,12 +1118,12 @@
         // Keyboard event handler
         function handleKeyboard(e) {
             if (puzzleSolved) return;
-            
+
             // Trigger countdown on first keyboard interaction
             if (!firstInteractionOccurred && (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
                 handleFirstInteraction();
             }
-            
+
             const keyActions = {
                 ' ': () => switchLayer((currentLayer % totalLayers) + 1),
                 'ArrowLeft': () => applyRotation(-CONFIG.ROTATION_STEP_LARGE),
@@ -1036,7 +1166,7 @@
 
             const layerElement = document.getElementById(layerKey);
             if (layerElement) {
-                layerElement.style.transform = 
+                layerElement.style.transform =
                     `translate(-50%, -50%) rotate(${puzzleLayers[layerKey].rotation}deg)`;
             }
 
@@ -1054,7 +1184,7 @@
 
             const targetLayer = document.getElementById(`layer${layerNumber}`);
             const targetButton = document.querySelector(`[data-layer="${layerNumber}"]`);
-            
+
             if (targetLayer) targetLayer.classList.add('active');
             if (targetButton) targetButton.classList.add('active');
 
@@ -1066,7 +1196,7 @@
         function checkSolution() {
             if (puzzleSolved) return;
 
-            const rotations = Object.values(puzzleLayers).map(layer => 
+            const rotations = Object.values(puzzleLayers).map(layer =>
                 ((layer.rotation % 360) + 360) % 360
             );
 
@@ -1161,5 +1291,6 @@
         // Initialize app when DOM is loaded
         document.addEventListener('DOMContentLoaded', initApp);
     </script>
-    </body>
+</body>
+
 </html>
