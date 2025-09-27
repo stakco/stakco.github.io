@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Brings life to papers with interactive Stakco puzzles.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Stakco Puzzle Systems">
@@ -54,28 +55,12 @@
     <title>Stakco Play</title>
 
     <style>
-        /* CSS Variables for consistent theming */
-        :root {
-            --primary-green: #00ff00;
-            --background-dark: #000;
-            --text-green: #0f0;
-            --button-inactive: #555;
-            --button-inactive-bg: rgba(68, 68, 68, 0.3);
-            --button-hover: #888;
-            --button-hover-bg: rgba(136, 136, 136, 0.2);
-            --text-inactive: #777;
-            --text-hover: #aaa;
-            --container-size: 90vmin;
-            --button-size: 50px;
-            --border-radius: 50%;
-            --transition-duration: 0.3s;
-        }
-
+        /* Apply Stakcos theme variables and override app-specific styles */
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: var(--background-dark);
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
             overflow: hidden;
             display: flex;
             justify-content: center;
@@ -85,8 +70,8 @@
 
         #container {
             position: relative;
-            width: var(--container-size);
-            height: var(--container-size);
+            width: 90vmin;
+            height: 90vmin;
             max-width: calc(100vw - 20px);
             max-height: calc(100vh - 200px);
             display: flex;
@@ -122,17 +107,18 @@
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
             padding: 0px 15px;
-            font-family: 'Courier New', monospace;
-            color: var(--text-green);
+            font-family: 'Inter', sans-serif;
+            color: var(--primary-color);
             text-align: center;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             letter-spacing: 2px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px var(--primary-green);
+            box-shadow: var(--shadow-soft);
             z-index: 1000;
             display: none;
             height: 50px;
@@ -156,37 +142,22 @@
                 opacity: 0;
                 transform: translate(-50%, -20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(-50%);
             }
         }
 
-        @keyframes pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 20px var(--primary-green);
-            }
-
-            50% {
-                box-shadow: 0 0 30px var(--primary-green), 0 0 40px var(--primary-green);
-            }
-        }
-
         #branding {
             position: absolute;
-            top: 10px;
-            margin-top: 15px;
-            margin-left: 10px;
+            top: 18px;
             font-size: 14px;
             text-align: center;
-            font-family: 'Courier New', monospace;
-            color: var(--text-green);
-            text-shadow: 0 0 5px var(--text-green), 0 0 10px var(--text-green),
-                0 0 20px var(--text-green), 0 0 40px var(--text-green);
+            font-family: 'Inter', sans-serif;
+            color: var(--primary-color);
+            text-shadow: var(--shadow-glow);
             letter-spacing: 1px;
+            font-weight: 500;
         }
 
         #branding.hidden {
@@ -198,13 +169,12 @@
             padding-right: 25px;
             margin-left: 10px;
             font-size: 14px;
-            /* text-align: center; */
-            font-family: 'Courier New', monospace;
-            color: var(--text-green);
-            text-shadow: 0 0 5px var(--text-green), 0 0 10px var(--text-green),
-                0 0 20px var(--text-green), 0 0 40px var(--text-green);
+            font-family: 'Inter', sans-serif;
+            color: var(--primary-color);
+            text-shadow: var(--shadow-glow);
             letter-spacing: 1px;
             z-index: 1500;
+            font-weight: 500;
         }
 
         #status.hidden {
@@ -223,31 +193,32 @@
         #options-button {
             width: 50px;
             height: 50px;
-            border: 2px solid var(--button-inactive);
-            border-radius: 8px;
-            background: var(--button-inactive-bg);
-            color: var(--text-inactive);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            background: var(--glass-bg);
+            color: var(--text-secondary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition-duration) ease;
-            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
             position: relative;
             z-index: 2001;
             box-sizing: border-box;
         }
 
         #options-button:hover {
-            border-color: var(--button-hover);
-            color: var(--text-hover);
-            background: var(--button-hover-bg);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
         }
 
         #options-button.active {
-            border-color: var(--primary-green);
-            color: var(--primary-green);
-            background: rgba(0, 255, 0, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(249, 167, 68, 0.1);
+            box-shadow: var(--shadow-glow);
         }
 
         .hamburger-icon {
@@ -262,7 +233,7 @@
             width: 100%;
             height: 2px;
             background-color: currentColor;
-            transition: all var(--transition-duration) ease;
+            transition: all 0.3s ease;
         }
 
         #options-menu {
@@ -270,18 +241,19 @@
             top: 0;
             right: 0;
             height: 50px;
-            background: rgba(0, 0, 0, 0.95);
-            border: 2px solid var(--primary-green);
-            border-radius: 8px;
+            background: var(--glass-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 0;
             overflow: hidden;
             width: 50px;
-            transition: width var(--transition-duration) ease;
+            transition: width 0.3s ease;
             backdrop-filter: blur(10px);
             box-sizing: border-box;
+            box-shadow: var(--shadow-soft);
         }
 
         #options-menu.show {
@@ -292,20 +264,21 @@
         .option-button {
             height: 30px;
             padding: 0 15px;
-            border: 1px solid var(--button-inactive);
-            border-radius: 6px;
-            background: var(--button-inactive-bg);
-            color: var(--text-inactive);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            background: var(--glass-bg);
+            color: var(--text-secondary);
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 500;
             cursor: pointer;
-            transition: all var(--transition-duration) ease;
+            transition: all 0.3s ease;
             backdrop-filter: blur(5px);
             text-align: center;
             white-space: nowrap;
             opacity: 0;
             transform: translateX(-10px);
             min-width: 60px;
+            font-family: 'Inter', sans-serif;
         }
 
         #options-menu.show .option-button {
@@ -314,20 +287,20 @@
         }
 
         .option-button:hover {
-            border-color: var(--button-hover);
-            color: var(--text-hover);
-            background: var(--button-hover-bg);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
         }
 
         .option-button.primary {
-            border-color: var(--primary-green);
-            color: var(--primary-green);
-            background: rgba(0, 255, 0, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(249, 167, 68, 0.1);
         }
 
         .option-button.primary:hover {
-            background: rgba(0, 255, 0, 0.2);
-            box-shadow: 0 0 15px var(--primary-green);
+            background: rgba(249, 167, 68, 0.2);
+            box-shadow: var(--shadow-glow);
         }
 
         #controls {
@@ -345,51 +318,53 @@
         }
 
         .layer-button {
-            width: var(--button-size);
-            height: var(--button-size);
-            border: 3px solid var(--button-inactive);
-            border-radius: var(--border-radius);
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--glass-border);
+            border-radius: 50%;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition-duration) ease;
-            backdrop-filter: blur(5px);
-            color: var(--text-inactive);
-            background: var(--button-inactive-bg);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            color: var(--text-secondary);
+            background: var(--glass-bg);
+            font-family: 'Inter', sans-serif;
         }
 
         .layer-button.active {
-            background: var(--primary-green);
-            border-color: var(--primary-green);
-            color: var(--background-dark);
-            box-shadow: 0 0 20px var(--primary-green);
+            background: var(--primary-gradient);
+            border-color: var(--primary-color);
+            color: white;
+            box-shadow: var(--shadow-glow);
         }
 
         .layer-button:hover:not(.active) {
-            border-color: var(--button-hover);
-            color: var(--text-hover);
-            background: var(--button-hover-bg);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
         }
 
         #share-button {
             position: absolute;
             bottom: 20px;
-            background: var(--primary-green);
-            color: var(--background-dark);
+            background: var(--primary-gradient);
+            color: white;
             border: none;
             padding: 15px 20px;
             border-radius: 25px;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             display: none;
-            box-shadow: 0 0 30px var(--primary-green);
-            transition: all var(--transition-duration) ease;
+            box-shadow: var(--shadow-glow);
+            transition: all 0.3s ease;
             z-index: 1000;
             text-align: center;
+            font-family: 'Inter', sans-serif;
         }
 
         #share-button.show {
@@ -397,42 +372,14 @@
         }
 
         #share-button:hover {
-            box-shadow: 0 0 40px var(--primary-green);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
         }
 
         .led-value {
-            color: var(--text-green);
-            font-weight: bold;
+            color: var(--primary-color);
+            font-weight: 600;
             text-transform: uppercase;
-        }
-
-        @keyframes flicker {
-
-            0%,
-            19%,
-            21%,
-            23%,
-            25%,
-            54%,
-            56%,
-            100% {
-                opacity: 1;
-            }
-
-            20%,
-            24%,
-            55% {
-                opacity: 0.8;
-            }
-
-            22% {
-                opacity: 0.6;
-            }
-        }
-
-        .led-text,
-        .led-value {
-            animation: flicker 2.5s infinite;
         }
 
         #info-button {
@@ -449,26 +396,27 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: var(--primary-green);
-            transition: all var(--transition-duration) ease;
+            background: var(--primary-gradient);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
         }
 
         #info-button:hover {
-            background-color: #00cc00;
-            box-shadow: 0 0 15px var(--primary-green);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
         }
 
         #info-button.active {
-            background-color: #00aa00;
-            box-shadow: 0 0 20px var(--primary-green);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
         }
 
         #info-button i {
             width: auto;
             height: auto;
             display: block;
-            font-size: 44px;
-            color: #333;
+            font-size: 42px;
+            color: white;
         }
 
         #stakco-button {
@@ -488,6 +436,13 @@
             background: url('stakco_logo_squricle.png') no-repeat center;
             background-size: contain;
             padding: 0;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        #stakco-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-glow);
         }
 
         #stakco-button img {
@@ -498,41 +453,43 @@
         #info-div {
             position: fixed;
             top: 20px;
-            left: 45px; /* Start right after the info button */
+            left: 45px;
             border: none;
             height: 50px;
-            border-radius: 0 25px 25px 0; /* top-left, top-right, bottom-right, bottom-left */
-            background: rgba(0, 255, 0, 0.9);
-            color: #333;
-            font-family: 'Courier New', monospace;
+            border-radius: 0 25px 25px 0;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
             z-index: 1500;
-            width: 0; /* Start with 0 width */
+            width: 0;
             overflow: hidden;
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             backdrop-filter: blur(10px);
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--glass-border);
         }
 
         #status p {
-            margin: 0;              /* remove default paragraph margin */
-            line-height: 1.2;         /* no extra spacing between lines */
-            white-space: normal;    /* allow wrapping */
+            margin: 0;
+            line-height: 1.2;
+            white-space: normal;
         }
 
         #info-div.expanded {
-            width: calc(100vw - 65px); /* Full width minus margins and button */
+            width: calc(100vw - 55px);
         }
 
         #info-div #status {
             margin-left: 15px;
             margin-right: 15px;
-            color: #333;
+            color: var(--text-primary);
             text-shadow: none;
             white-space: nowrap;
             opacity: 0;
-            transition: opacity 0.3s ease 0.1s; /* Slight delay for text appearance */
+            transition: opacity 0.3s ease 0.1s;
+            font-weight: 500;
         }
 
         #info-div.expanded #status {
@@ -546,30 +503,29 @@
             border: none;
             height: 50px;
             border-radius: 25px;
-            background: rgba(0, 255, 0, 0.9);
-            color: #333;
-            font-family: 'Courier New', monospace;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
             z-index: 2000;
             width: 0;
             overflow: hidden;
             display: flex;
             align-items: flex-start;
             backdrop-filter: blur(10px);
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--glass-border);
             flex-direction: column;
             transition:
                 width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                height 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* default */
+                height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Opening: width first, then height */
         #stakco-div.expanding {
             transition:
                 width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
                 height 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
         }
 
-        /* Closing: height first, then width */
         #stakco-div.collapsing {
             transition:
                 height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
@@ -585,11 +541,12 @@
             margin: 15px;
             opacity: 0;
             transition: opacity 0.3s ease 0.8s;
-            color: #333;
+            color: var(--text-primary);
             text-shadow: none;
             overflow-y: auto;
             height: calc(100% - 30px);
         }
+
         #stakco-div.expanded #stakco-content {
             opacity: 1;
         }
@@ -602,8 +559,8 @@
         }
 
         .product-card {
-            background: rgba(0, 0, 0, 0.2);
-            border: 2px solid #666;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
             border-radius: 12px;
             padding: 20px;
             transition: all 0.3s ease;
@@ -611,34 +568,35 @@
             text-decoration: none;
             color: inherit;
             display: block;
+            backdrop-filter: blur(10px);
         }
 
         .product-card:hover {
-            border-color: #00ff00;
-            background: rgba(0, 255, 0, 0.05);
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            border-color: var(--primary-color);
+            background: rgba(249, 167, 68, 0.05);
+            box-shadow: var(--shadow-glow);
             transform: translateY(-2px);
         }
 
         .product-thumbnail {
             width: 100%;
             height: 200px;
-            background: #222;
+            background: var(--glass-bg);
             border-radius: 8px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 48px;
-            border: 1px solid #444;
-            color: #00ff00;
+            border: 1px solid var(--glass-border);
+            color: var(--primary-color);
         }
 
         .product-title {
             font-size: 20px;
-            font-weight: bold;
+            font-weight: 600;
             margin-bottom: 8px;
-            color: #00ff00;
+            color: var(--primary-color);
         }
 
         .product-description {
@@ -646,13 +604,70 @@
             line-height: 1.4;
             margin-bottom: 10px;
             opacity: 0.9;
+            color: var(--text-primary);
         }
 
         .product-url {
             font-size: 12px;
-            font-family: 'Courier New', monospace;
+            font-family: 'Inter', sans-serif;
             opacity: 0.7;
             word-break: break-all;
+            color: var(--text-secondary);
+        }
+
+        /* Orientation Overlay Styles */
+        #orientation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #orientation-overlay.show {
+            display: flex;
+        }
+
+        .orientation-icon {
+            font-size: 120px;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            animation: rotateDevice 2s ease-in-out infinite;
+        }
+
+        .orientation-message {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .orientation-subtitle {
+            font-size: 16px;
+            opacity: 0.8;
+            line-height: 1.4;
+            max-width: 400px;
+        }
+
+        @keyframes rotateDevice {
+            0%, 100% { 
+                transform: rotate(0deg);
+            }
+            50% { 
+                transform: rotate(90deg);
+            }
         }
 
         @media (max-width: 768px) {
@@ -668,13 +683,39 @@
                 height: 150px;
                 font-size: 36px;
             }
+
+            .orientation-icon {
+                font-size: 80px;
+            }
+
+            .orientation-message {
+                font-size: 20px;
+            }
+
+            .orientation-subtitle {
+                font-size: 14px;
+            }
         }
+
+        /* Color transitions for countdown timer */
+        .countdown-green { color: var(--primary-color); }
+        .countdown-yellow { color: #ffc947; }
+        .countdown-orange { color: #ff9900; }
+        .countdown-red { color: #ff4444; }
     </style>
 </head>
 
 <body>
-
-    <!-- app bar -->
+    <!-- Orientation Overlay -->
+    <div id="orientation-overlay">
+        <div class="orientation-icon">
+            <i class="fa-solid fa-mobile-screen"></i>
+        </div>
+        <div class="orientation-message">Please rotate your device</div>
+        <div class="orientation-subtitle">
+            This game is optimized for portrait mode on mobile devices
+        </div>
+    </div>
 
     <!-- Countdown Timer -->
     <div id="countdown-container">
@@ -692,7 +733,6 @@
     </div>
 
     <div id="branding">
-        
         <p id="stakco-branding" style="display: inline; margin-left: 2px; vertical-align: middle;">Stakco Play <span
                 id="product-version">v1.0.0</span></p>
         <p id="puzzle-title" style="margin-top: 2px;"></p>
@@ -754,7 +794,6 @@
         </div>
     </div>
 
-
     <div id="container"></div>
     <div id="controls"></div>
 
@@ -797,7 +836,7 @@
         let puzzleLayers = {};
         let lastTouchEnd = 0;
         let optionsMenuOpen = false;
-        let infoExpanded = false; // New state for info panel
+        let infoExpanded = false;
 
         // Countdown state
         let countdownActive = false;
@@ -805,8 +844,11 @@
         let countdownInterval = null;
         let firstInteractionOccurred = false;
 
+        // Orientation state
+        let orientationBlocked = false;
+
         // get product version from package.json (injected at build time)
-        const PRODUCT_VERSION = '1.0.4'; // Placeholder, replace with actual version
+        const PRODUCT_VERSION = '1.0.4';
         document.getElementById('product-version').textContent = `v${PRODUCT_VERSION}`;
 
         // Parse URL parameters
@@ -834,7 +876,52 @@
         }
 
         // DOM elements (cached)
-        let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer, infoButton, infoDiv;
+        let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer, infoButton, infoDiv, orientationOverlay;
+
+        // Orientation detection functions
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                   (navigator.maxTouchPoints && navigator.maxTouchPoints > 2 && /MacIntel/.test(navigator.platform));
+        }
+
+        function isLandscapeMode() {
+            return window.innerWidth > window.innerHeight;
+        }
+
+        function checkOrientationRestriction() {
+            const shouldBlock = isMobileDevice() && isLandscapeMode();
+            
+            if (shouldBlock !== orientationBlocked) {
+                orientationBlocked = shouldBlock;
+                
+                if (orientationBlocked) {
+                    orientationOverlay.classList.add('show');
+                    document.body.style.pointerEvents = 'none';
+                    orientationOverlay.style.pointerEvents = 'auto';
+                    console.log('Orientation blocked: Mobile device in landscape mode');
+                } else {
+                    orientationOverlay.classList.remove('show');
+                    document.body.style.pointerEvents = 'auto';
+                    console.log('Orientation unblocked: Portrait mode or desktop');
+                }
+            }
+        }
+
+        function setupOrientationMonitoring() {
+            // Check orientation on load
+            checkOrientationRestriction();
+            
+            // Monitor orientation changes
+            window.addEventListener('orientationchange', () => {
+                // Small delay to ensure the orientation change is complete
+                setTimeout(checkOrientationRestriction, 100);
+            });
+            
+            // Also monitor resize events for devices that don't fire orientationchange
+            window.addEventListener('resize', () => {
+                setTimeout(checkOrientationRestriction, 100);
+            });
+        }
 
         // Info panel toggle function
         function toggleInfoPanel() {
@@ -872,10 +959,9 @@
 
         stakcoButton.addEventListener('click', toggleStakcoPanel);
 
-
         // Countdown functions
         function startCountdown() {
-            if (countdownActive || hasUrlParams) return;
+            if (countdownActive || hasUrlParams || orientationBlocked) return;
 
             countdownActive = true;
             countdownStartTime = Date.now();
@@ -883,7 +969,6 @@
             // Show countdown and hide branding/status
             countdownContainer.classList.add('show');
             brandingDiv.classList.add('hidden');
-            // statusDiv.classList.add('hidden');
 
             countdownInterval = setInterval(updateCountdownDisplay, 100);
             console.log('Countdown started');
@@ -912,23 +997,16 @@
             const timeString = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
             countdownTimer.textContent = timeString;
 
-            // Change color based on time ranges
-            if (seconds < 120) {            // 0-2 min
-                countdownTimer.style.color = '#00ff00'; // green
-                countdownContainer.style.borderColor = '#00ff00';
-                countdownContainer.style.boxShadow = '0 0 20px #00ff00';
-            } else if (seconds < 180) {     // 2-3 min
-                countdownTimer.style.color = '#ffff00'; // yellow
-                countdownContainer.style.borderColor = '#ffff00';
-                countdownContainer.style.boxShadow = '0 0 20px #ffff00';
-            } else if (seconds < 300) {     // 3-5 min
-                countdownTimer.style.color = '#ff9900'; // orange
-                countdownContainer.style.borderColor = '#ff9900';
-                countdownContainer.style.boxShadow = '0 0 20px #ff9900';
-            } else {     // 5+ min
-                countdownTimer.style.color = '#ff4444'; // orange
-                countdownContainer.style.borderColor = '#ff4444';
-                countdownContainer.style.boxShadow = '0 0 20px #ff4444';
+            // Apply color classes based on time ranges
+            countdownTimer.className = '';
+            if (seconds < 120) {
+                countdownTimer.classList.add('countdown-green');
+            } else if (seconds < 180) {
+                countdownTimer.classList.add('countdown-yellow');
+            } else if (seconds < 300) {
+                countdownTimer.classList.add('countdown-orange');
+            } else {
+                countdownTimer.classList.add('countdown-red');
             }
         }
 
@@ -973,6 +1051,10 @@
             countdownTimer = document.getElementById('countdown-timer');
             infoButton = document.getElementById('info-button');
             infoDiv = document.getElementById('info-div');
+            orientationOverlay = document.getElementById('orientation-overlay');
+
+            // Setup orientation monitoring
+            setupOrientationMonitoring();
 
             // Add event listener for info button
             infoButton.addEventListener('click', toggleInfoPanel);
@@ -1043,28 +1125,16 @@
             }
         }
 
-        // Options menu functions
+        // Options menu functions (simplified - removed options menu for cleaner design)
         function toggleOptionsMenu() {
-            optionsMenuOpen = !optionsMenuOpen;
-
-            if (optionsMenuOpen) {
-                optionsMenu.classList.add('show');
-                optionsButton.classList.add('active');
-            } else {
-                optionsMenu.classList.remove('show');
-                optionsButton.classList.remove('active');
-            }
+            // Removed options menu functionality for cleaner Stakcos design
         }
 
         function closeOptionsMenu() {
-            optionsMenuOpen = false;
-            optionsMenu.classList.remove('show');
-            optionsButton.classList.remove('active');
+            // Removed options menu functionality
         }
 
         function solvePuzzleInstantly() {
-            closeOptionsMenu();
-
             // Set all layers to 0 rotation
             Object.keys(puzzleLayers).forEach(layerKey => {
                 puzzleLayers[layerKey].rotation = 0;
@@ -1079,8 +1149,6 @@
         }
 
         function remixPuzzle() {
-            closeOptionsMenu();
-
             if (puzzleSolved) {
                 // Reset puzzle state
                 puzzleSolved = false;
@@ -1251,7 +1319,7 @@
 
         // Helper function to trigger first interaction
         function handleFirstInteraction() {
-            if (!firstInteractionOccurred && !hasUrlParams && !puzzleSolved) {
+            if (!firstInteractionOccurred && !hasUrlParams && !puzzleSolved && !orientationBlocked) {
                 firstInteractionOccurred = true;
                 startCountdown();
             }
@@ -1259,7 +1327,7 @@
 
         // Drag and touch event handlers
         function startDrag(e) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || orientationBlocked) return;
             e.preventDefault();
             handleFirstInteraction();
             isDragging = true;
@@ -1268,7 +1336,7 @@
         }
 
         function handleDrag(e) {
-            if (!isDragging || puzzleSolved) return;
+            if (!isDragging || puzzleSolved || orientationBlocked) return;
             e.preventDefault();
 
             const currentAngle = getAngleFromEvent(e, e.clientX, e.clientY);
@@ -1284,7 +1352,7 @@
         }
 
         function startTouch(e) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || orientationBlocked) return;
             e.preventDefault();
             handleFirstInteraction();
             isDragging = true;
@@ -1293,7 +1361,7 @@
         }
 
         function handleTouch(e) {
-            if (!isDragging || puzzleSolved) return;
+            if (!isDragging || puzzleSolved || orientationBlocked) return;
             e.preventDefault();
 
             const touch = e.touches[0];
@@ -1325,7 +1393,7 @@
 
         // Keyboard event handler
         function handleKeyboard(e) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || orientationBlocked) return;
 
             // Trigger countdown on first keyboard interaction
             if (!firstInteractionOccurred && (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
@@ -1353,7 +1421,7 @@
 
         // Handle scroll wheel
         function handleScroll(e) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || orientationBlocked) return;
             e.preventDefault();
             handleFirstInteraction();
             const delta = e.deltaY > 0 ? CONFIG.ROTATION_STEP_SMALL : -CONFIG.ROTATION_STEP_SMALL;
@@ -1362,7 +1430,7 @@
 
         // Handle right click to switch layer
         function handleRightClick(e) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || orientationBlocked) return;
             e.preventDefault();
             switchLayer((currentLayer % totalLayers) + 1);
         }
@@ -1383,7 +1451,7 @@
 
         // Switch active layer
         function switchLayer(layerNumber) {
-            if (puzzleSolved || layerNumber === currentLayer) return;
+            if (puzzleSolved || layerNumber === currentLayer || orientationBlocked) return;
 
             // Update UI elements
             document.querySelectorAll('.puzzle-layer, .layer-button').forEach(el => {
