@@ -475,7 +475,7 @@
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 1000;
+            z-index: 2500;
             border: none;
             cursor: pointer;
             width: 50px;
@@ -538,6 +538,137 @@
         #info-div.expanded #status {
             opacity: 1;
         }
+
+        #stakco-div {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            border: none;
+            height: 50px;
+            border-radius: 25px;
+            background: rgba(0, 255, 0, 0.9);
+            color: #333;
+            font-family: 'Courier New', monospace;
+            z-index: 2000;
+            width: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: flex-start;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            flex-direction: column;
+            transition:
+                width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                height 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* default */
+        }
+
+        /* Opening: width first, then height */
+        #stakco-div.expanding {
+            transition:
+                width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                height 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+        }
+
+        /* Closing: height first, then width */
+        #stakco-div.collapsing {
+            transition:
+                height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                width 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
+        }
+
+        #stakco-div.expanded {
+            width: calc(100vw - 40px);
+            height: calc(100vh - 40px);
+        }
+
+        #stakco-content {
+            margin: 15px;
+            opacity: 0;
+            transition: opacity 0.3s ease 0.8s;
+            color: #333;
+            text-shadow: none;
+            overflow-y: auto;
+            height: calc(100% - 30px);
+        }
+        #stakco-div.expanded #stakco-content {
+            opacity: 1;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .product-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid #666;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .product-card:hover {
+            border-color: #00ff00;
+            background: rgba(0, 255, 0, 0.05);
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .product-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: #222;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            border: 1px solid #444;
+            color: #00ff00;
+        }
+
+        .product-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #00ff00;
+        }
+
+        .product-description {
+            font-size: 14px;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            opacity: 0.9;
+        }
+
+        .product-url {
+            font-size: 12px;
+            font-family: 'Courier New', monospace;
+            opacity: 0.7;
+            word-break: break-all;
+        }
+
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .product-card {
+                padding: 15px;
+            }
+            
+            .product-thumbnail {
+                height: 150px;
+                font-size: 36px;
+            }
+        }
     </style>
 </head>
 
@@ -568,6 +699,68 @@
     </div>
 
     <button id="stakco-button"></button>
+
+    <div id="stakco-div">
+        <div id="stakco-content">
+            <h3>More ways to enjoy Stakco Play</h3>
+            <p>Discover our complete collection of interactive puzzle experiences</p>
+            
+            <div class="products-grid">
+                <a href="https://stakcos.com/azimuth" class="product-card" target="_blank">
+                    <div class="product-thumbnail">
+                        <i class="fa-solid fa-compass"></i>
+                    </div>
+                    <div class="product-title">Stakco Azimuth</div>
+                    <div class="product-description">Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientations</div>
+                    <div class="product-url">stakcos.com/azimuth</div>
+                </a>
+
+                <a href="https://stakcos.com/mrt" class="product-card" target="_blank">
+                    <div class="product-thumbnail">
+                        <i class="fa-solid fa-train-subway"></i>
+                    </div>
+                    <div class="product-title">Stakco SMRT</div>
+                    <div class="product-description">MRT driven Stakco - Journey through Singapore's rail network while solving intricate puzzles</div>
+                    <div class="product-url">stakcos.com/mrt</div>
+                </a>
+
+                <a href="https://stakcos.com/midi" class="product-card" target="_blank">
+                    <div class="product-thumbnail">
+                        <i class="fa-solid fa-music"></i>
+                    </div>
+                    <div class="product-title">Stakco MIDI</div>
+                    <div class="product-description">MIDI driven Stakco - Create musical compositions while solving puzzles through sound and rhythm</div>
+                    <div class="product-url">stakcos.com/midi</div>
+                </a>
+
+                <a href="https://stakcos.com/clock" class="product-card" target="_blank">
+                    <div class="product-thumbnail">
+                        <i class="fa-solid fa-clock"></i>
+                    </div>
+                    <div class="product-title">Stakco Clock</div>
+                    <div class="product-description">Time-driven Stakco - Solve puzzles synchronized with real-time clock movements and temporal challenges</div>
+                    <div class="product-url">stakcos.com/clock</div>
+                </a>
+
+                <a href="https://stakcos.com/dial" class="product-card" target="_blank">
+                    <div class="product-thumbnail">
+                        <i class="fa-solid fa-circle-dot"></i>
+                    </div>
+                    <div class="product-title">Stakco Dial</div>
+                    <div class="product-description">Surface Dial driven Stakco - Experience tactile puzzle solving with Microsoft Surface Dial's precise rotational control</div>
+                    <div class="product-url">stakcos.com/dial</div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="rotate-warning"
+        style="display:none; position:fixed; inset:0;
+                background:black; color:white;
+                align-items:center; justify-content:center;
+                z-index:9999;">
+        Please rotate your device back to portrait
+    </div>
 
     <div id="container"></div>
     <div id="controls"></div>
@@ -650,6 +843,20 @@
         // DOM elements (cached)
         let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer, infoButton, infoDiv;
 
+
+        function checkDeviceOrientation() {
+            if (window.matchMedia("(orientation: portrait)").matches) {
+                document.getElementById("rotate-warning").style.display = "none";
+            } else {
+                document.getElementById("rotate-warning").style.display = "flex";
+            }
+        }
+
+        window.addEventListener("resize", checkDeviceOrientation);
+        window.addEventListener("orientationchange", checkDeviceOrientation);
+        checkDeviceOrientation();
+
+
         // Info panel toggle function
         function toggleInfoPanel() {
             infoExpanded = !infoExpanded;
@@ -664,6 +871,28 @@
             
             console.log('Info panel toggled:', infoExpanded ? 'expanded' : 'collapsed');
         }
+
+        let stakcoExpanded = false;
+        const stakcoButton = document.getElementById('stakco-button');
+        const stakcoDiv = document.getElementById('stakco-div');
+
+        function toggleStakcoPanel() {
+            if (!stakcoExpanded) {
+                // Opening
+                stakcoDiv.classList.add('expanding');
+                stakcoDiv.classList.remove('collapsing');
+                stakcoDiv.classList.add('expanded');
+            } else {
+                // Closing
+                stakcoDiv.classList.remove('expanding');
+                stakcoDiv.classList.add('collapsing');
+                stakcoDiv.classList.remove('expanded');
+            }
+            stakcoExpanded = !stakcoExpanded;
+        }
+
+        stakcoButton.addEventListener('click', toggleStakcoPanel);
+
 
         // Countdown functions
         function startCountdown() {
