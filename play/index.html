@@ -66,6 +66,13 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        button {
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #container {
@@ -399,6 +406,7 @@
             background: var(--primary-gradient);
             transition: all 0.3s ease;
             box-shadow: var(--shadow-soft);
+            
         }
 
         #info-button:hover {
@@ -476,7 +484,7 @@
         }
 
         #info-div.expanded {
-            width: calc(100vw - 55px);
+            width: calc(100vw - 65px);
         }
 
         #info-div #status {
