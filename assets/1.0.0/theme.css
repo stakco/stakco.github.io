@@ -46,7 +46,6 @@ body {
 /* ===============================
    Cursor (optional for all apps)
    =============================== */
-body { cursor: none; }
 
 .cursor {
   width: 20px;

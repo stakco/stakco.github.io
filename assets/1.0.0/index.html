@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Stakco CDN Utils Reference</title>
+    <title>Stakco CDN Reference</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,7 +12,12 @@
         h1 {
             text-align: center;
         }
-        .file-section {
+        .section-title {
+            margin-top: 2rem;
+            font-size: 1.5rem;
+            text-align: center;
+        }
+        .file-section, .theme-section {
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -48,17 +53,94 @@
             white-space: pre-wrap;
             font-family: monospace;
         }
+        .swatch-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .swatch {
+            width: 150px;
+            height: 100px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #000;
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 0.5rem;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            background-clip: padding-box;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .swatch:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .swatch-gradient {
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+        .swatch-text {
+            background: none;
+            padding: 0.25rem;
+            border-radius: 3px;
+            font-weight: bold;
+            z-index: 1;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+        .error {
+            color: #d32f2f;
+            background: #ffebee;
+            padding: 1rem;
+            border-radius: 4px;
+        }
+        .copy-feedback {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .copy-feedback.show {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
-    <h1>Stakco CDN Utils Reference</h1>
+    <h1>Stakco CDN Reference</h1>
+
+    <!-- JS Method Reference -->
+    <div class="section-title">JS Module Methods</div>
     <div id="method-list"></div>
 
+    <!-- Theme Reference -->
+    <div class="section-title">Theme Variables</div>
+    <div id="theme-list" class="theme-section">
+        <div class="loading">Loading theme variables...</div>
+    </div>
+
+    <!-- Copy feedback element -->
+    <div id="copy-feedback" class="copy-feedback">Copied to clipboard!</div>
+
     <script type="module">
-        // Base CDN URL
         const CDN_BASE = 'https://stakcos.com/assets/1.0.0/';
 
-        // List of JS files hosted on CDN
+        // JS files to inspect
         const jsFiles = [
             'utils.js',
             'rotation.js',
@@ -72,15 +154,12 @@
 
         async function loadAndInspect(file) {
             try {
-                // Import the module from CDN
                 const module = await import(`${CDN_BASE}${file}`);
                 const exportedMethods = Object.keys(module);
 
-                // Create a section for this file
                 const section = document.createElement('div');
                 section.className = 'file-section';
 
-                // Header with toggle
                 const header = document.createElement('div');
                 header.className = 'file-header';
 
@@ -95,7 +174,6 @@
                 header.appendChild(toggleBtn);
                 section.appendChild(header);
 
-                // Methods list
                 const methodsDiv = document.createElement('div');
                 methodsDiv.className = 'methods-list';
                 methodsDiv.textContent = exportedMethods.join('\n');
@@ -108,18 +186,232 @@
                 });
 
                 methodListDiv.appendChild(section);
-
             } catch (err) {
                 console.error(`Error loading ${file}:`, err);
                 const errorSection = document.createElement('div');
-                errorSection.className = 'file-section';
+                errorSection.className = 'file-section error';
                 errorSection.textContent = `Error loading ${file}: ${err.message}`;
                 methodListDiv.appendChild(errorSection);
             }
         }
 
-        // Load all files from CDN
         jsFiles.forEach(loadAndInspect);
+
+        // Theme Variables Reference - Fixed Implementation
+        const themeListDiv = document.getElementById('theme-list');
+        const copyFeedback = document.getElementById('copy-feedback');
+
+        // Copy to clipboard function
+        async function copyToClipboard(text) {
+            try {
+                await navigator.clipboard.writeText(text);
+                showCopyFeedback();
+            } catch (err) {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    showCopyFeedback();
+                } catch (err) {
+                    console.error('Failed to copy: ', err);
+                    alert('Failed to copy to clipboard');
+                }
+                document.body.removeChild(textArea);
+            }
+        }
+
+        function showCopyFeedback() {
+            copyFeedback.classList.add('show');
+            setTimeout(() => {
+                copyFeedback.classList.remove('show');
+            }, 2000);
+        }
+
+        async function loadTheme() {
+            try {
+                // Method 1: Try to fetch and parse the CSS file directly
+                const response = await fetch(`${CDN_BASE}theme.css`);
+                const cssText = await response.text();
+                
+                // Parse CSS variables from the text
+                const variableMatches = cssText.match(/--[\w-]+\s*:\s*[^;]+;/g);
+                
+                if (variableMatches && variableMatches.length > 0) {
+                    // Clear loading message
+                    themeListDiv.innerHTML = '';
+                    
+                    // Create a style element to inject the CSS
+                    const styleElement = document.createElement('style');
+                    styleElement.textContent = cssText;
+                    document.head.appendChild(styleElement);
+                    
+                    // Wait for CSS to be applied
+                    await new Promise(r => setTimeout(r, 200));
+                    
+                    const grid = document.createElement('div');
+                    grid.className = 'swatch-grid';
+
+                    variableMatches.forEach(match => {
+                        // Extract variable name and value
+                        const [, varName, value] = match.match(/(--[\w-]+)\s*:\s*([^;]+);/);
+                        const cleanValue = value.trim();
+                        
+                        const swatch = document.createElement('div');
+                        swatch.className = 'swatch';
+                        swatch.title = `Click to copy: ${varName}: ${cleanValue}`;
+
+                        const textDiv = document.createElement('div');
+                        textDiv.className = 'swatch-text';
+                        textDiv.textContent = varName;
+
+                        // Add click handler for copying
+                        swatch.addEventListener('click', () => {
+                            copyToClipboard(`${varName}: ${cleanValue}`);
+                        });
+
+                        if (cleanValue.includes('linear-gradient') || cleanValue.includes('radial-gradient')) {
+                            swatch.style.background = cleanValue;
+                            swatch.classList.add('swatch-gradient');
+                            textDiv.style.color = '#fff';
+                        } else if (cleanValue.startsWith('rgba') || cleanValue.startsWith('rgb') || cleanValue.startsWith('#') || cleanValue.startsWith('hsl')) {
+                            swatch.style.backgroundColor = cleanValue;
+                            textDiv.style.color = getTextColor(cleanValue);
+                        } else {
+                            // For non-color values, show as text
+                            swatch.style.backgroundColor = '#f5f5f5';
+                            textDiv.textContent = `${varName}: ${cleanValue}`;
+                            textDiv.style.fontSize = '0.7rem';
+                            textDiv.style.color = '#000';
+                        }
+
+                        swatch.appendChild(textDiv);
+                        grid.appendChild(swatch);
+                    });
+
+                    themeListDiv.appendChild(grid);
+                } else {
+                    // Fallback: try the original method
+                    await fallbackThemeLoad();
+                }
+            } catch (error) {
+                console.error('Error loading theme:', error);
+                await fallbackThemeLoad();
+            }
+        }
+
+        async function fallbackThemeLoad() {
+            try {
+                // Load theme.css as a link element
+                const link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.href = `${CDN_BASE}theme.css`;
+                document.head.appendChild(link);
+
+                // Wait longer for CSS to load
+                await new Promise(r => setTimeout(r, 500));
+
+                // Get computed styles from root
+                const styles = getComputedStyle(document.documentElement);
+                
+                // Try to find CSS variables
+                const allProps = [];
+                for (let i = 0; i < styles.length; i++) {
+                    const prop = styles[i];
+                    if (prop.startsWith('--')) {
+                        allProps.push(prop);
+                    }
+                }
+
+                themeListDiv.innerHTML = '';
+
+                if (allProps.length === 0) {
+                    themeListDiv.innerHTML = `
+                        <div class="error">
+                            Could not load theme variables. Possible issues:
+                            <ul>
+                                <li>CSS file not found at ${CDN_BASE}theme.css</li>
+                                <li>CORS policy blocking access</li>
+                                <li>CSS variables not defined in :root selector</li>
+                            </ul>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const grid = document.createElement('div');
+                grid.className = 'swatch-grid';
+
+                allProps.forEach(varName => {
+                    const value = styles.getPropertyValue(varName).trim();
+                    const swatch = document.createElement('div');
+                    swatch.className = 'swatch';
+                    swatch.title = `Click to copy: ${varName}: ${value}`;
+
+                    // Add click handler for copying
+                    swatch.addEventListener('click', () => {
+                        copyToClipboard(`${varName}: ${value}`);
+                    });
+
+                    if (value.includes('gradient')) {
+                        swatch.style.background = value;
+                        swatch.classList.add('swatch-gradient');
+                        swatch.style.color = '#fff';
+                    } else if (value.startsWith('rgba') || value.startsWith('#') || value.startsWith('rgb')) {
+                        swatch.style.backgroundColor = value;
+                        swatch.style.color = getTextColor(value);
+                    } else {
+                        swatch.style.backgroundColor = '#f5f5f5';
+                        swatch.style.color = '#000';
+                    }
+
+                    swatch.textContent = varName;
+                    grid.appendChild(swatch);
+                });
+
+                themeListDiv.appendChild(grid);
+            } catch (error) {
+                themeListDiv.innerHTML = `<div class="error">Failed to load theme: ${error.message}</div>`;
+            }
+        }
+
+        // Helper function to determine if a color is light or dark
+        function isLightColor(color) {
+            if (color.startsWith('#')) {
+                const hex = color.slice(1);
+                const r = parseInt(hex.substr(0, 2), 16);
+                const g = parseInt(hex.substr(2, 2), 16);
+                const b = parseInt(hex.substr(4, 2), 16);
+                const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                return brightness > 128;
+            } else if (color.startsWith('rgb')) {
+                const values = color.match(/\d+/g);
+                if (values && values.length >= 3) {
+                    const r = parseInt(values[0]);
+                    const g = parseInt(values[1]);
+                    const b = parseInt(values[2]);
+                    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                    return brightness > 128;
+                }
+            }
+            return true; // Default to light for unknown formats
+        }
+
+        // Function to determine text color based on background
+        function getTextColor(backgroundColor) {
+            if (backgroundColor.includes('gradient')) {
+                return '#fff'; // Default to white for gradients
+            }
+            return isLightColor(backgroundColor) ? '#000' : '#fff';
+        }
+
+        loadTheme();
     </script>
 </body>
 </html>
