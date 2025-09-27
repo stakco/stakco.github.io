@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stakco CDN Utils Reference</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 2rem;
+            background: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+        }
+        .file-section {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin: 1rem 0;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .file-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        .file-header h2 {
+            margin: 0;
+            font-size: 1.2rem;
+        }
+        .toggle-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .methods-list {
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background: #f0f0f0;
+            border-radius: 4px;
+            display: none;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stakco CDN Utils Reference</h1>
+    <div id="method-list"></div>
+
+    <script type="module">
+        // Base CDN URL
+        const CDN_BASE = 'https://stakcos.com/assets/1.0.0/';
+
+        // List of JS files hosted on CDN
+        const jsFiles = [
+            'utils.js',
+            'rotation.js',
+            'countdown.js',
+            'images.js',
+            'puzzleLayers.js',
+            'share.js',
+        ];
+
+        const methodListDiv = document.getElementById('method-list');
+
+        async function loadAndInspect(file) {
+            try {
+                // Import the module from CDN
+                const module = await import(`${CDN_BASE}${file}`);
+                const exportedMethods = Object.keys(module);
+
+                // Create a section for this file
+                const section = document.createElement('div');
+                section.className = 'file-section';
+
+                // Header with toggle
+                const header = document.createElement('div');
+                header.className = 'file-header';
+
+                const title = document.createElement('h2');
+                title.textContent = file;
+
+                const toggleBtn = document.createElement('button');
+                toggleBtn.className = 'toggle-button';
+                toggleBtn.textContent = 'Show';
+
+                header.appendChild(title);
+                header.appendChild(toggleBtn);
+                section.appendChild(header);
+
+                // Methods list
+                const methodsDiv = document.createElement('div');
+                methodsDiv.className = 'methods-list';
+                methodsDiv.textContent = exportedMethods.join('\n');
+                section.appendChild(methodsDiv);
+
+                toggleBtn.addEventListener('click', () => {
+                    const visible = methodsDiv.style.display === 'block';
+                    methodsDiv.style.display = visible ? 'none' : 'block';
+                    toggleBtn.textContent = visible ? 'Show' : 'Hide';
+                });
+
+                methodListDiv.appendChild(section);
+
+            } catch (err) {
+                console.error(`Error loading ${file}:`, err);
+                const errorSection = document.createElement('div');
+                errorSection.className = 'file-section';
+                errorSection.textContent = `Error loading ${file}: ${err.message}`;
+                methodListDiv.appendChild(errorSection);
+            }
+        }
+
+        // Load all files from CDN
+        jsFiles.forEach(loadAndInspect);
+    </script>
+</body>
+</html>
