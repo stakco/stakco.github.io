@@ -17,7 +17,7 @@
             font-size: 1.5rem;
             text-align: center;
         }
-        .file-section, .theme-section {
+        .file-section {
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -30,34 +30,63 @@
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
+            padding: 0.5rem;
+            margin: -0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.2s ease;
+        }
+        .file-header:hover {
+            background-color: #f8f9fa;
         }
         .file-header h2 {
             margin: 0;
             font-size: 1.2rem;
         }
-        .toggle-button {
-            background: #007bff;
-            color: white;
-            border: none;
-            padding: 0.2rem 0.6rem;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 0.9rem;
+        .expand-icon {
+            font-size: 1.2rem;
+            transition: transform 0.2s ease;
+        }
+        .expand-icon.expanded {
+            transform: rotate(90deg);
         }
         .methods-list {
             margin-top: 0.5rem;
             padding: 0.5rem;
-            background: #f0f0f0;
             border-radius: 4px;
             display: none;
+        }
+        .method-item {
+            padding: 0.5rem;
+            margin: 1rem 0;
+            background: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid #e9ecef;
+            transition: all 0.2s ease;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+        .method-item:hover {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            transform: translateX(2px);
+        }
+        .method-name {
+            font-weight: bold;
+            color: #1976d2;
+        }
+        .method-signature {
+            margin-top: 0.25rem;
+            color: #666;
+            font-size: 0.85rem;
             white-space: pre-wrap;
-            font-family: monospace;
         }
         .swatch-grid {
             display: flex;
             flex-wrap: wrap;
             gap: 1rem;
             margin-top: 1rem;
+            cursor: default;
         }
         .swatch {
             width: 150px;
@@ -75,8 +104,11 @@
             background-clip: padding-box;
             position: relative;
             overflow: hidden;
-            cursor: pointer;
+            cursor: pointer !important;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .swatch * {
+            cursor: pointer !important;
         }
         .swatch:hover {
             transform: translateY(-2px);
@@ -164,25 +196,71 @@
                 header.className = 'file-header';
 
                 const title = document.createElement('h2');
-                title.textContent = file;
+                title.textContent = `${file} (${exportedMethods.length} methods)`;
 
-                const toggleBtn = document.createElement('button');
-                toggleBtn.className = 'toggle-button';
-                toggleBtn.textContent = 'Show';
+                const expandIcon = document.createElement('span');
+                expandIcon.className = 'expand-icon';
+                expandIcon.textContent = '▶';
 
                 header.appendChild(title);
-                header.appendChild(toggleBtn);
+                header.appendChild(expandIcon);
                 section.appendChild(header);
 
                 const methodsDiv = document.createElement('div');
                 methodsDiv.className = 'methods-list';
-                methodsDiv.textContent = exportedMethods.join('\n');
+
+                // Create method items with enhanced display
+                exportedMethods.forEach(methodName => {
+                    const methodItem = document.createElement('div');
+                    methodItem.className = 'method-item';
+                    methodItem.title = `Click to copy: ${methodName}`;
+
+                    const nameDiv = document.createElement('div');
+                    nameDiv.className = 'method-name';
+                    nameDiv.textContent = methodName;
+
+                    const signatureDiv = document.createElement('div');
+                    signatureDiv.className = 'method-signature';
+                    
+                    try {
+                        const method = module[methodName];
+                        if (typeof method === 'function') {
+                            const funcStr = method.toString();
+                            // Extract parameters from function
+                            const paramMatch = funcStr.match(/\(([^)]*)\)/);
+                            const params = paramMatch ? paramMatch[1].trim() : '';
+                            
+                            if (params) {
+                                signatureDiv.textContent = `(${params})`;
+                            } else {
+                                signatureDiv.textContent = '()';
+                            }
+                        } else {
+                            signatureDiv.textContent = `[${typeof method}]`;
+                        }
+                    } catch (e) {
+                        signatureDiv.textContent = '(...)';
+                    }
+
+                    methodItem.appendChild(nameDiv);
+                    methodItem.appendChild(signatureDiv);
+
+                    // Add click handler to copy method name
+                    methodItem.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        copyToClipboard(methodName);
+                    });
+
+                    methodsDiv.appendChild(methodItem);
+                });
+
                 section.appendChild(methodsDiv);
 
-                toggleBtn.addEventListener('click', () => {
+                // Add click handler to entire header for expansion
+                header.addEventListener('click', () => {
                     const visible = methodsDiv.style.display === 'block';
                     methodsDiv.style.display = visible ? 'none' : 'block';
-                    toggleBtn.textContent = visible ? 'Show' : 'Hide';
+                    expandIcon.classList.toggle('expanded', !visible);
                 });
 
                 methodListDiv.appendChild(section);
