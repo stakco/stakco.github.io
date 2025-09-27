@@ -119,7 +119,7 @@
             border: 1px solid var(--glass-border);
             border-radius: 25px;
             padding: 0px 15px;
-            font-family: 'Inter', sans-serif;
+            font-family: Consolas, "Courier New", Courier, monospace;
             color: var(--primary-color);
             text-align: center;
             font-size: 18px;
@@ -422,7 +422,7 @@
             width: auto;
             height: auto;
             display: block;
-            font-size: 42px;
+            font-size: 44px;
             color: white;
         }
 
@@ -448,7 +448,6 @@
         }
 
         #stakco-button:hover {
-            transform: translateY(-2px);
             box-shadow: var(--shadow-glow);
         }
 
@@ -544,6 +543,7 @@
         }
 
         #stakco-content {
+            width: calc(100% - 30px);  /* Subtract left + right margins */
             margin: 15px;
             opacity: 0;
             transition: opacity 0.3s ease 0.8s;
@@ -551,6 +551,10 @@
             text-shadow: none;
             overflow-y: auto;
             height: calc(100% - 30px);
+        }
+
+        #stakco-content h3, p {
+            text-align: center;
         }
 
         #stakco-div.expanded #stakco-content {
@@ -581,7 +585,6 @@
             border-color: var(--primary-color);
             background: rgba(249, 167, 68, 0.05);
             box-shadow: var(--shadow-glow);
-            transform: translateY(-2px);
         }
 
         .product-thumbnail {
@@ -595,14 +598,13 @@
             justify-content: center;
             font-size: 48px;
             border: 1px solid var(--glass-border);
-            color: var(--primary-color);
         }
 
         .product-title {
             font-size: 20px;
             font-weight: 600;
             margin-bottom: 8px;
-            color: var(--primary-color);
+            color: var(--text-primary);
         }
 
         .product-description {
@@ -618,7 +620,7 @@
             font-family: 'Inter', sans-serif;
             opacity: 0.7;
             word-break: break-all;
-            color: var(--text-secondary);
+            color: var(--text-primary);
         }
 
         /* Orientation Overlay Styles */
@@ -704,7 +706,7 @@
         }
 
         /* Color transitions for countdown timer */
-        .countdown-green { color: var(--primary-color); }
+        .countdown-green { color: white; }
         .countdown-yellow { color: #ffc947; }
         .countdown-orange { color: #ff9900; }
         .countdown-red { color: #ff4444; }
@@ -734,7 +736,7 @@
 
     <div id="info-div">
         <div id="status">
-            <p id="orientation-status">Drag to rotate selected layer • Align all layers</p>
+            <p id="orientation-status">Drag to rotate selected layer • Align all layers • Share</p>
         </div>
     </div>
 
@@ -748,8 +750,8 @@
 
     <div id="stakco-div">
         <div id="stakco-content">
-            <h3>More ways to enjoy Stakco Play</h3>
-            <p>Discover our complete collection of interactive puzzle experiences</p>
+            <h3>Explore Stakco Apps</h3>
+            <p>Same puzzle, endless experiences</p>
             
             <div class="products-grid">
                 <a href="https://stakcos.com/azimuth" class="product-card" target="_blank">
@@ -826,7 +828,7 @@
         const MESSAGES = {
             LOADING_USER: 'Loading custom puzzle...',
             LOADING_DAILY: 'Loading today\'s puzzle...',
-            INSTRUCTIONS: 'Drag to rotate selected layer • Align all layers',
+            INSTRUCTIONS: 'Drag to rotate selected layer • Align all layers • Share',
             SHARE_TITLE: 'Stakco Daily Puzzle',
             SHARE_TEXT: "I just solved today's Stakco puzzle!",
             CLIPBOARD_MESSAGE: 'Link copied to clipboard: https://stakcos.com/play/'
@@ -849,6 +851,10 @@
         let countdownStartTime = null;
         let countdownInterval = null;
         let firstInteractionOccurred = false;
+        let countdownPaused = false;
+        let pausedElapsedTime = 0; // Store elapsed time when paused
+        let pauseStartTime = null;
+        let finalTime = "00:00";
 
         // Orientation state
         let orientationBlocked = false;
@@ -929,6 +935,77 @@
             });
         }
 
+        function setupVisibilityHandlers() {
+            // Handle both visibility API and focus events for broader browser support
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            window.addEventListener('blur', handleWindowBlur);
+            window.addEventListener('focus', handleWindowFocus);
+            
+            console.log('Visibility change handlers set up');
+        }
+
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                pauseCountdown();
+            } else {
+                resumeCountdown();
+            }
+        }
+
+        function handleWindowBlur() {
+            pauseCountdown();
+        }
+
+        function handleWindowFocus() {
+            resumeCountdown();
+        }
+
+        function pauseCountdown() {
+            if (!countdownActive || countdownPaused) return;
+            
+            countdownPaused = true;
+            pauseStartTime = Date.now();
+            
+            // Calculate elapsed time up to this point
+            if (countdownStartTime) {
+                pausedElapsedTime = Date.now() - countdownStartTime;
+            }
+            
+            // Stop the update interval
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            
+            // Visual indication that timer is paused
+            countdownTimer.style.opacity = '0.6';
+            countdownContainer.style.borderColor = 'var(--text-secondary)';
+            
+            console.log('Countdown paused at:', formatTime(pausedElapsedTime));
+        }
+
+        function resumeCountdown() {
+            if (!countdownActive || !countdownPaused) return;
+            
+            countdownPaused = false;
+            
+            // Adjust start time to account for paused duration
+            if (pauseStartTime && countdownStartTime) {
+                const pauseDuration = Date.now() - pauseStartTime;
+                countdownStartTime += pauseDuration;
+                console.log('Countdown resumed after pause of:', formatTime(pauseDuration));
+            }
+            
+            // Restart the update interval
+            countdownInterval = setInterval(updateCountdownDisplay, 100);
+            
+            // Reset visual indication
+            countdownTimer.style.opacity = '1';
+            countdownContainer.style.borderColor = 'var(--glass-border)';
+            
+            pauseStartTime = null;
+        }
+
         // Info panel toggle function
         function toggleInfoPanel() {
             infoExpanded = !infoExpanded;
@@ -970,7 +1047,9 @@
             if (countdownActive || hasUrlParams || orientationBlocked) return;
 
             countdownActive = true;
+            countdownPaused = false;
             countdownStartTime = Date.now();
+            pausedElapsedTime = 0;
 
             // Show countdown and hide branding/status
             countdownContainer.classList.add('show');
@@ -984,26 +1063,29 @@
             if (!countdownActive) return;
 
             countdownActive = false;
+            countdownPaused = false;
+            
             if (countdownInterval) {
                 clearInterval(countdownInterval);
                 countdownInterval = null;
             }
+            
+            // Reset visual state
+            countdownTimer.style.opacity = '1';
+            countdownContainer.style.borderColor = 'var(--glass-border)';
 
             console.log('Countdown stopped');
         }
 
         function updateCountdownDisplay() {
-            if (!countdownActive || !countdownStartTime) return;
+            if (!countdownActive || countdownPaused || !countdownStartTime) return;
 
             const elapsed = Date.now() - countdownStartTime;
-            const seconds = Math.floor(elapsed / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-
-            const timeString = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            const timeString = formatTime(elapsed);
             countdownTimer.textContent = timeString;
 
             // Apply color classes based on time ranges
+            const seconds = Math.floor(elapsed / 1000);
             countdownTimer.className = '';
             if (seconds < 120) {
                 countdownTimer.classList.add('countdown-green');
@@ -1021,6 +1103,8 @@
             countdownContainer.classList.remove('show');
             countdownTimer.textContent = '00:00';
             firstInteractionOccurred = false;
+            pausedElapsedTime = 0;
+            pauseStartTime = null;
 
             // Show branding and status again if puzzle isn't solved
             if (!puzzleSolved) {
@@ -1032,11 +1116,24 @@
         function getFinalTime() {
             if (!countdownStartTime) return '00:00';
 
-            const elapsed = Date.now() - countdownStartTime;
+            let finalElapsed;
+            if (countdownPaused && pausedElapsedTime > 0) {
+                // Use the elapsed time at pause if currently paused
+                finalElapsed = pausedElapsedTime;
+            } else {
+                // Use current elapsed time if active
+                finalElapsed = Date.now() - countdownStartTime;
+            }
+            
+            return formatTime(finalElapsed);
+        }
+
+        // Helper function to format time consistently
+        function formatTime(elapsed) {
             const seconds = Math.floor(elapsed / 1000);
             const minutes = Math.floor(seconds / 60);
             const remainingSeconds = seconds % 60;
-
+            
             return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
         }
 
@@ -1058,6 +1155,9 @@
             infoButton = document.getElementById('info-button');
             infoDiv = document.getElementById('info-div');
             orientationOverlay = document.getElementById('orientation-overlay');
+
+            // Setup visibility monitoring for pause/resume
+            setupVisibilityHandlers();
 
             // Setup orientation monitoring
             setupOrientationMonitoring();
@@ -1494,7 +1594,7 @@
         // Handle puzzle completion
         function solvePuzzle() {
             puzzleSolved = true;
-            const finalTime = getFinalTime();
+            finalTime = getFinalTime();
             console.log(`Puzzle solved in ${finalTime}!`);
 
             // Stop countdown
@@ -1546,7 +1646,6 @@
         // Share functionality
         function sharePuzzle() {
             const shareUrlWithParams = CONFIG.SHARE_URL + shareParams;
-            const finalTime = getFinalTime();
 
             const shareData = {
                 title: MESSAGES.SHARE_TITLE,
