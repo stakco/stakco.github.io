@@ -132,10 +132,19 @@
             height: 50px;
             line-height: 50px;
             animation: slideDown 0.5s ease-out;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #countdown-container.show {
             display: block;
+        }
+
+        #countdown-container.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         #countdown-timer {
@@ -143,6 +152,42 @@
             margin: 0;
             display: inline-block;
             vertical-align: middle;
+        }
+
+        #solve-button {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            height: 50px;
+            width: 100px;
+            transform: translateX(-50%);
+            background: var(--primary-gradient);
+            border: 2px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
+            display: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #solve-button.show {
+            display: block;
+            animation: slideDown 0.5s ease-out 0.2s both;
+        }
+
+        #solve-button:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(249, 167, 68, 0.1);
+            box-shadow: var(--shadow-glow);
         }
 
         @keyframes slideDown {
@@ -730,6 +775,9 @@
         <div id="countdown-timer">00:00</div>
     </div>
 
+    <!-- Solve Button -->
+    <button id="solve-button">Solve</button>
+
     <button id="info-button">
         <i class="fa-solid fa-circle-info"></i>
     </button>
@@ -821,7 +869,8 @@
             BASE_IMAGE_URL: 'https://storage.googleapis.com/stakco-images',
             DEFAULT_USER_ID: '109949450257686494443',
             DEFAULT_PUZZLE_ID: 'A2A3_3',
-            SHARE_URL: 'https://stakcos.com/play/'
+            SHARE_URL: 'https://stakcos.com/play/',
+            COUNTDOWN_HIDE_DURATION: 2500
         };
 
         // UI text constants
@@ -855,6 +904,7 @@
         let pausedElapsedTime = 0; // Store elapsed time when paused
         let pauseStartTime = null;
         let finalTime = "00:00";
+        let countdownHideTimeout = null;
 
         // Orientation state
         let orientationBlocked = false;
@@ -888,7 +938,7 @@
         }
 
         // DOM elements (cached)
-        let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer, infoButton, infoDiv, orientationOverlay;
+        let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer, infoButton, infoDiv, orientationOverlay, solveButton;
 
         // Orientation detection functions
         function isMobileDevice() {
@@ -1006,6 +1056,41 @@
             pauseStartTime = null;
         }
 
+        // Countdown hide/show functions
+        function hideCountdown() {
+            if (!countdownActive) return;
+
+            solveButton.classList.add('show');
+            
+            countdownContainer.classList.add('hidden');
+            console.log('Countdown hidden for 3 seconds');
+            
+            // Clear any existing timeout
+            if (countdownHideTimeout) {
+                clearTimeout(countdownHideTimeout);
+            }
+            
+            // Set timeout to show countdown again after 3 seconds
+            countdownHideTimeout = setTimeout(() => {
+                showCountdown();
+            }, CONFIG.COUNTDOWN_HIDE_DURATION);
+        }
+
+        function showCountdown() {
+            if (!countdownActive) return;
+            
+            countdownContainer.classList.remove('hidden');
+            solveButton.classList.remove('show');
+
+            console.log('Countdown shown again');
+            
+            // Clear the timeout
+            if (countdownHideTimeout) {
+                clearTimeout(countdownHideTimeout);
+                countdownHideTimeout = null;
+            }
+        }
+
         // Info panel toggle function
         function toggleInfoPanel() {
             infoExpanded = !infoExpanded;
@@ -1051,7 +1136,7 @@
             countdownStartTime = Date.now();
             pausedElapsedTime = 0;
 
-            // Show countdown and hide branding/status
+            // Show countdown, solve button and hide branding/status
             countdownContainer.classList.add('show');
             brandingDiv.classList.add('hidden');
 
@@ -1070,9 +1155,16 @@
                 countdownInterval = null;
             }
             
+            // Clear hide timeout if active
+            if (countdownHideTimeout) {
+                clearTimeout(countdownHideTimeout);
+                countdownHideTimeout = null;
+            }
+            
             // Reset visual state
             countdownTimer.style.opacity = '1';
             countdownContainer.style.borderColor = 'var(--glass-border)';
+            countdownContainer.classList.remove('hidden');
 
             console.log('Countdown stopped');
         }
@@ -1101,6 +1193,7 @@
         function resetCountdown() {
             stopCountdown();
             countdownContainer.classList.remove('show');
+            solveButton.classList.remove('show');
             countdownTimer.textContent = '00:00';
             firstInteractionOccurred = false;
             pausedElapsedTime = 0;
@@ -1155,6 +1248,7 @@
             infoButton = document.getElementById('info-button');
             infoDiv = document.getElementById('info-div');
             orientationOverlay = document.getElementById('orientation-overlay');
+            solveButton = document.getElementById('solve-button');
 
             // Setup visibility monitoring for pause/resume
             setupVisibilityHandlers();
@@ -1164,6 +1258,12 @@
 
             // Add event listener for info button
             infoButton.addEventListener('click', toggleInfoPanel);
+
+            // Add event listener for countdown container click
+            countdownContainer.addEventListener('click', hideCountdown);
+
+            // Add event listener for solve button
+            solveButton.addEventListener('click', solvePuzzleInstantly);
 
             // Determine puzzle configuration
             const customPuzzle = parseCustomPuzzle();
@@ -1609,10 +1709,11 @@
             controlsDiv.classList.add('hidden');
             statusDiv.classList.add('hidden');
             countdownContainer.classList.remove('show');
+            solveButton.classList.remove('show');
             shareButton.classList.add('show');
 
             // Update share button with time
-            shareButton.textContent = `🎉 Solved in ${finalTime}! Share Success!`;
+            shareButton.textContent = `Solved in ${finalTime}! Share Success!`;
 
             // Animate to final position
             setTimeout(rotateAllLayersToZero, CONFIG.SOLVE_ANIMATION_DELAY);
