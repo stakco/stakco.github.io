@@ -402,12 +402,10 @@
         }
 
         #info-button:hover {
-            transform: translateY(-2px);
             box-shadow: var(--shadow-glow);
         }
 
         #info-button.active {
-            transform: translateY(-2px);
             box-shadow: var(--shadow-glow);
         }
 
@@ -420,7 +418,7 @@
         }
 
         #stakco-button {
-            position: fixed;
+            position: absolute;
             top: 20px;
             right: 20px;
             z-index: 2500;
@@ -497,7 +495,7 @@
         }
 
         #stakco-div {
-            position: fixed;
+            position: absolute;
             top: 20px;
             right: 20px;
             border: none;
@@ -513,7 +511,6 @@
             align-items: flex-start;
             backdrop-filter: blur(10px);
             box-shadow: var(--shadow-soft);
-            border: 1px solid var(--glass-border);
             flex-direction: column;
             transition:
                 width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
