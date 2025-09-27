@@ -754,13 +754,6 @@
         </div>
     </div>
 
-    <div id="rotate-warning"
-        style="display:none; position:fixed; inset:0;
-                background:black; color:white;
-                align-items:center; justify-content:center;
-                z-index:9999;">
-        Please rotate your device back to portrait
-    </div>
 
     <div id="container"></div>
     <div id="controls"></div>
@@ -842,20 +835,6 @@
 
         // DOM elements (cached)
         let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer, infoButton, infoDiv;
-
-
-        function checkDeviceOrientation() {
-            if (window.matchMedia("(orientation: portrait)").matches) {
-                document.getElementById("rotate-warning").style.display = "none";
-            } else {
-                document.getElementById("rotate-warning").style.display = "flex";
-            }
-        }
-
-        window.addEventListener("resize", checkDeviceOrientation);
-        window.addEventListener("orientationchange", checkDeviceOrientation);
-        checkDeviceOrientation();
-
 
         // Info panel toggle function
         function toggleInfoPanel() {
