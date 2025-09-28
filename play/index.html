@@ -35,6 +35,9 @@
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
+    <script src="gameManager.js"></script>
+
+
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
@@ -908,8 +911,8 @@
             LOADING_USER: 'Loading custom puzzle...',
             LOADING_DAILY: 'Loading today\'s puzzle...',
             INSTRUCTIONS: 'Drag to rotate selected layer • Align all layers • Share',
-            SHARE_TITLE: 'Stakco Daily Puzzle',
-            SHARE_TEXT: "I just solved today's Stakco puzzle!",
+            SHARE_TITLE: 'Stakco Puzzle',
+            SHARE_TEXT: "I just solved Stakco",
             CLIPBOARD_MESSAGE: 'Link copied to clipboard: https://stakcos.com/play/'
         };
 
@@ -924,6 +927,7 @@
         let lastTouchEnd = 0;
         let optionsMenuOpen = false;
         let infoExpanded = false;
+        let performanceText = '';
 
         // Countdown state
         let countdownActive = false;
@@ -958,6 +962,9 @@
         // Generate today's date string (YYYY-MM-DD)
         const today = new Date();
         const dateStr = today.toISOString().split('T')[0];
+
+        // Load game data
+        const gameManager = new GameDataManager();
 
         // set puzzle title in branding
         const puzzleTitleElem = document.getElementById('puzzle-title');
@@ -1279,30 +1286,13 @@
         }
 
         function loadAttempts() {
-            const attemptsKey = `stakco_attempts_${dateStr}`;
-            const attemptsData = localStorage.getItem(attemptsKey);
-            if (attemptsData) {
-                try {
-                    const attempts = JSON.parse(attemptsData);
-                    if (attempts && attempts.solved) {
-                        puzzleSolved = true;
-                        finalTime = attempts.time || "00:00";
-                        console.log('Puzzle already solved today with time:', finalTime);
-                    }
-                } catch (e) {
-                    console.error('Error parsing attempts data from localStorage:', e);
-                }
-            }
+            return gameManager.loadAttempts(dateStr);
         }
-
-        function saveAttempts() {
-            const attemptsKey = `stakco_attempts_${dateStr}`;
-            const attemptsData = {
-                solved: puzzleSolved,
-                time: finalTime
-            };
-            localStorage.setItem(attemptsKey, JSON.stringify(attemptsData));
-            console.log('Attempts data saved to localStorage:', attemptsData);
+        
+        function saveAttempts(solved, time) {
+            gameManager.saveAttempt(dateStr, solved, time);
+            performanceText = gameManager.generatePerformanceText(dateStr, time);
+            console.log(performanceText);
         }
 
         // Initialize the app
@@ -1739,7 +1729,8 @@
             // Update share button with time
             if(!simulate){
                 shareButton.textContent = `Share Success!`;
-                shareButton.classList.add('show');          
+                shareButton.classList.add('show');
+                saveAttempts(true, finalTime);          
             } else{
                 replayButton.classList.add('show');
             }
@@ -1801,120 +1792,21 @@
             }
         }
 
-
-        async function captureLayerToCanvas(layerElement, ctx, canvasWidth, canvasHeight) {
-            return new Promise((resolve, reject) => {
-                // Get the background image URL
-                const backgroundImage = getComputedStyle(layerElement).backgroundImage;
-                const urlMatch = backgroundImage.match(/url\(["']?([^"']*)["']?\)/);
-                
-                if (!urlMatch) {
-                    resolve();
-                    return;
-                }
-                
-                const imageUrl = urlMatch[1];
-                const img = new Image();
-                img.crossOrigin = 'anonymous'; // Enable CORS
-                
-                img.onload = () => {
-                    try {
-                        // Get the current rotation
-                        const transform = getComputedStyle(layerElement).transform;
-                        const rotation = getRotationFromTransform(transform);
-                        
-                        // Save context state
-                        ctx.save();
-                        
-                        // Move to center and apply rotation
-                        ctx.translate(canvasWidth / 2, canvasHeight / 2);
-                        ctx.rotate((rotation * Math.PI) / 180);
-                        
-                        // Calculate image dimensions to maintain aspect ratio
-                        const maxSize = Math.min(canvasWidth, canvasHeight) * 0.9;
-                        const aspectRatio = img.width / img.height;
-                        let drawWidth, drawHeight;
-                        
-                        if (aspectRatio > 1) {
-                            drawWidth = maxSize;
-                            drawHeight = maxSize / aspectRatio;
-                        } else {
-                            drawWidth = maxSize * aspectRatio;
-                            drawHeight = maxSize;
-                        }
-                        
-                        // Draw the image centered
-                        ctx.drawImage(img, -drawWidth / 2, -drawHeight / 2, drawWidth, drawHeight);
-                        
-                        // Restore context state
-                        ctx.restore();
-                        
-                        resolve();
-                    } catch (error) {
-                        console.error('Error drawing layer to canvas:', error);
-                        resolve(); // Continue even if one layer fails
-                    }
-                };
-                
-                img.onerror = () => {
-                    console.error('Error loading image for screenshot:', imageUrl);
-                    resolve(); // Continue even if image fails to load
-                };
-                
-                img.src = imageUrl;
-            });
-        }
-
-        function getRotationFromTransform(transform) {
-            if (transform === 'none') return 0;
-            
-            const values = transform.split('(')[1].split(')')[0].split(',');
-            const a = values[0];
-            const b = values[1];
-            const angle = Math.round(Math.atan2(b, a) * (180 / Math.PI));
-            return angle;
-        }
-
-        async function addCompletionOverlay(ctx, width, height) {
-            // Add a subtle completion indicator
-            const gradient = ctx.createRadialGradient(width/2, height/2, 0, width/2, height/2, width/2);
-            gradient.addColorStop(0, 'rgba(249, 167, 68, 0.1)');
-            gradient.addColorStop(1, 'rgba(249, 167, 68, 0)');
-            
-            ctx.fillStyle = gradient;
-            ctx.fillRect(0, 0, width, height);
-            
-            // Add time and success text
-            ctx.fillStyle = 'rgba(249, 167, 68, 0.9)';
-            ctx.font = 'bold 24px Inter, sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            
-            // Add subtle shadow
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-            ctx.shadowBlur = 10;
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
-            
-            ctx.fillText(`Solved in ${finalTime}`, width / 2, height - 40);
-            
-            // Reset shadow
-            ctx.shadowColor = 'transparent';
-            ctx.shadowBlur = 0;
-            ctx.shadowOffsetX = 0;
-            ctx.shadowOffsetY = 0;
-        }
-
         // Enhanced share function with screenshot
         async function sharePuzzleWithScreenshot() {
             const shareUrlWithParams = CONFIG.SHARE_URL + shareParams;
             
             // Capture screenshot
-            const screenshotBlob = await captureScreenshot();
+            const screenshotBlob = null;
+            try {
+                screenshotBlob = await captureScreenshot();
+            } catch (error) {
+                console.log('Error capturing screenshot:', error);
+            }
             
             const shareData = {
                 title: MESSAGES.SHARE_TITLE,
-                text: `${MESSAGES.SHARE_TEXT} Time: ${finalTime}`,
+                text: `${MESSAGES.SHARE_TEXT}; Time: ${finalTime}; ${performanceText}`,
                 url: shareUrlWithParams
             };
             
@@ -1991,7 +1883,7 @@
 
             const shareData = {
                 title: MESSAGES.SHARE_TITLE,
-                text: `${MESSAGES.SHARE_TEXT} Time: ${finalTime}`,
+                text: `${MESSAGES.SHARE_TEXT}; Time: ${finalTime}; ${performanceText}`,
                 url: shareUrlWithParams
             };
 
