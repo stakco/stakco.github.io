@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Brings life to papers with interactive Stakco puzzles.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Stakco Puzzle Systems">
@@ -32,6 +33,11 @@
     <meta name="msapplication-TileColor" content="#FFFFFF">
     <meta name="msapplication-TileImage" content="https://stakcos.com/icons/mstile-150x150.png">
 
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <script src="gameManager.js"></script>
+    <script src="https://stakcos.com/assets/1.0.0/utils.js"></script>
+
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
@@ -54,39 +60,31 @@
     <title>Stakco Play</title>
 
     <style>
-        /* CSS Variables for consistent theming */
-        :root {
-            --primary-green: #00ff00;
-            --background-dark: #000;
-            --text-green: #0f0;
-            --button-inactive: #555;
-            --button-inactive-bg: rgba(68, 68, 68, 0.3);
-            --button-hover: #888;
-            --button-hover-bg: rgba(136, 136, 136, 0.2);
-            --text-inactive: #777;
-            --text-hover: #aaa;
-            --container-size: 90vmin;
-            --button-size: 50px;
-            --border-radius: 50%;
-            --transition-duration: 0.3s;
-        }
-
+        /* Apply Stakcos theme variables and override app-specific styles */
         body {
             margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: var(--background-dark);
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
             overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+
+        }
+
+        html, body {margin: 0; height: 100%; overflow: hidden}
+
+
+        button {
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #container {
             position: relative;
-            width: var(--container-size);
-            height: var(--container-size);
+            width: 90vmin;
+            height: 90vmin;
             max-width: calc(100vw - 20px);
             max-height: calc(100vh - 200px);
             display: flex;
@@ -117,31 +115,132 @@
             z-index: 10;
         }
 
+        /* Share Window Styles */
+        #share-window {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--text-primary);
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        #share-window.show {
+            display: flex;
+        }
+
+        #share-container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            max-width: 80vw;
+            max-height: 60vh;
+            margin-bottom: 30px;
+        }
+
+        .share-puzzle-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        #share-text {
+            background: var(--glass-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 20px;
+            padding: 20px 30px;
+            color: var(--primary-color);
+            font-family: 'Inter', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-glow);
+        }
+
+        #share-buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .share-action-button {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .share-action-button:hover {
+            box-shadow: var(--shadow-glow);
+        }
+
+        .share-action-button.secondary {
+            background: var(--glass-bg);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .share-action-button.secondary:hover {
+            background: rgba(249, 167, 68, 0.1);
+        }
+
         #countdown-container {
             position: absolute;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 15px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
             padding: 0px 15px;
-            font-family: 'Courier New', monospace;
-            color: var(--text-green);
+            font-family: Consolas, "Courier New", Courier, monospace;
+            color: var(--primary-color);
             text-align: center;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             letter-spacing: 2px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px var(--primary-green);
+            box-shadow: var(--shadow-soft);
             z-index: 1000;
             display: none;
             height: 50px;
             line-height: 50px;
             animation: slideDown 0.5s ease-out;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         #countdown-container.show {
             display: block;
+        }
+
+        #countdown-container.hidden {
+            opacity: 0;
+            pointer-events: none;
         }
 
         #countdown-timer {
@@ -151,42 +250,63 @@
             vertical-align: middle;
         }
 
+        #solve-button {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            height: 50px;
+            width: 100px;
+            transform: translateX(-50%);
+            background: var(--primary-gradient);
+            border: 2px solid var(--glass-border);
+            border-radius: 50px;
+            padding: 8px 20px;
+            font-family: 'Inter', sans-serif;
+            color: white;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
+            display: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #solve-button.show {
+            display: block;
+            animation: slideDown 0.5s ease-out 0.2s both;
+        }
+
+        #solve-button:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(249, 167, 68, 0.1);
+            box-shadow: var(--shadow-glow);
+        }
+
         @keyframes slideDown {
             from {
                 opacity: 0;
                 transform: translate(-50%, -20px);
             }
-
             to {
                 opacity: 1;
                 transform: translateX(-50%);
             }
         }
 
-        @keyframes pulse {
-
-            0%,
-            100% {
-                box-shadow: 0 0 20px var(--primary-green);
-            }
-
-            50% {
-                box-shadow: 0 0 30px var(--primary-green), 0 0 40px var(--primary-green);
-            }
-        }
-
         #branding {
             position: absolute;
-            top: 10px;
-            margin-top: 15px;
-            margin-left: 10px;
+            top: 18px;
             font-size: 14px;
             text-align: center;
-            font-family: 'Courier New', monospace;
-            color: var(--text-green);
-            text-shadow: 0 0 5px var(--text-green), 0 0 10px var(--text-green),
-                0 0 20px var(--text-green), 0 0 40px var(--text-green);
+            font-family: 'Inter', sans-serif;
+            color: var(--primary-color);
+            text-shadow: var(--shadow-glow);
             letter-spacing: 1px;
+            font-weight: 500;
         }
 
         #branding.hidden {
@@ -198,13 +318,12 @@
             padding-right: 25px;
             margin-left: 10px;
             font-size: 14px;
-            /* text-align: center; */
-            font-family: 'Courier New', monospace;
-            color: var(--text-green);
-            text-shadow: 0 0 5px var(--text-green), 0 0 10px var(--text-green),
-                0 0 20px var(--text-green), 0 0 40px var(--text-green);
+            font-family: 'Inter', sans-serif;
+            color: var(--primary-color);
+            text-shadow: var(--shadow-glow);
             letter-spacing: 1px;
             z-index: 1500;
+            font-weight: 500;
         }
 
         #status.hidden {
@@ -223,31 +342,32 @@
         #options-button {
             width: 50px;
             height: 50px;
-            border: 2px solid var(--button-inactive);
-            border-radius: 8px;
-            background: var(--button-inactive-bg);
-            color: var(--text-inactive);
+            border: 2px solid var(--glass-border);
+            border-radius: 12px;
+            background: var(--glass-bg);
+            color: var(--text-secondary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition-duration) ease;
-            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
             position: relative;
             z-index: 2001;
             box-sizing: border-box;
         }
 
         #options-button:hover {
-            border-color: var(--button-hover);
-            color: var(--text-hover);
-            background: var(--button-hover-bg);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
         }
 
         #options-button.active {
-            border-color: var(--primary-green);
-            color: var(--primary-green);
-            background: rgba(0, 255, 0, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(249, 167, 68, 0.1);
+            box-shadow: var(--shadow-glow);
         }
 
         .hamburger-icon {
@@ -262,7 +382,7 @@
             width: 100%;
             height: 2px;
             background-color: currentColor;
-            transition: all var(--transition-duration) ease;
+            transition: all 0.3s ease;
         }
 
         #options-menu {
@@ -270,18 +390,19 @@
             top: 0;
             right: 0;
             height: 50px;
-            background: rgba(0, 0, 0, 0.95);
-            border: 2px solid var(--primary-green);
-            border-radius: 8px;
+            background: var(--glass-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             gap: 10px;
             padding: 0;
             overflow: hidden;
             width: 50px;
-            transition: width var(--transition-duration) ease;
+            transition: width 0.3s ease;
             backdrop-filter: blur(10px);
             box-sizing: border-box;
+            box-shadow: var(--shadow-soft);
         }
 
         #options-menu.show {
@@ -292,20 +413,21 @@
         .option-button {
             height: 30px;
             padding: 0 15px;
-            border: 1px solid var(--button-inactive);
-            border-radius: 6px;
-            background: var(--button-inactive-bg);
-            color: var(--text-inactive);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            background: var(--glass-bg);
+            color: var(--text-secondary);
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 500;
             cursor: pointer;
-            transition: all var(--transition-duration) ease;
+            transition: all 0.3s ease;
             backdrop-filter: blur(5px);
             text-align: center;
             white-space: nowrap;
             opacity: 0;
             transform: translateX(-10px);
             min-width: 60px;
+            font-family: 'Inter', sans-serif;
         }
 
         #options-menu.show .option-button {
@@ -314,20 +436,20 @@
         }
 
         .option-button:hover {
-            border-color: var(--button-hover);
-            color: var(--text-hover);
-            background: var(--button-hover-bg);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
         }
 
         .option-button.primary {
-            border-color: var(--primary-green);
-            color: var(--primary-green);
-            background: rgba(0, 255, 0, 0.1);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background: rgba(249, 167, 68, 0.1);
         }
 
         .option-button.primary:hover {
-            background: rgba(0, 255, 0, 0.2);
-            box-shadow: 0 0 15px var(--primary-green);
+            background: rgba(249, 167, 68, 0.2);
+            box-shadow: var(--shadow-glow);
         }
 
         #controls {
@@ -345,51 +467,53 @@
         }
 
         .layer-button {
-            width: var(--button-size);
-            height: var(--button-size);
-            border: 3px solid var(--button-inactive);
-            border-radius: var(--border-radius);
+            width: 50px;
+            height: 50px;
+            border: 3px solid var(--glass-border);
+            border-radius: 50%;
             font-size: 16px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all var(--transition-duration) ease;
-            backdrop-filter: blur(5px);
-            color: var(--text-inactive);
-            background: var(--button-inactive-bg);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            color: var(--text-secondary);
+            background: var(--glass-bg);
+            font-family: 'Inter', sans-serif;
         }
 
         .layer-button.active {
-            background: var(--primary-green);
-            border-color: var(--primary-green);
-            color: var(--background-dark);
-            box-shadow: 0 0 20px var(--primary-green);
+            background: var(--primary-gradient);
+            border-color: var(--primary-color);
+            color: white;
+            box-shadow: var(--shadow-glow);
         }
 
         .layer-button:hover:not(.active) {
-            border-color: var(--button-hover);
-            color: var(--text-hover);
-            background: var(--button-hover-bg);
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
         }
 
         #share-button {
             position: absolute;
             bottom: 20px;
-            background: var(--primary-green);
-            color: var(--background-dark);
+            background: var(--primary-gradient);
+            color: white;
             border: none;
             padding: 15px 20px;
             border-radius: 25px;
             font-size: 18px;
-            font-weight: bold;
+            font-weight: 600;
             cursor: pointer;
             display: none;
-            box-shadow: 0 0 30px var(--primary-green);
-            transition: all var(--transition-duration) ease;
+            box-shadow: var(--shadow-glow);
+            transition: all 0.3s ease;
             z-index: 1000;
             text-align: center;
+            font-family: 'Inter', sans-serif;
         }
 
         #share-button.show {
@@ -397,42 +521,40 @@
         }
 
         #share-button:hover {
-            box-shadow: 0 0 40px var(--primary-green);
+            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
+        }
+
+        #replay-button {
+            position: absolute;
+            bottom: 20px;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            box-shadow: var(--shadow-glow);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #replay-button.show {
+            display: block;
+        }
+
+        #replay-button:hover {
+            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
         }
 
         .led-value {
-            color: var(--text-green);
-            font-weight: bold;
+            color: var(--primary-color);
+            font-weight: 600;
             text-transform: uppercase;
-        }
-
-        @keyframes flicker {
-
-            0%,
-            19%,
-            21%,
-            23%,
-            25%,
-            54%,
-            56%,
-            100% {
-                opacity: 1;
-            }
-
-            20%,
-            24%,
-            55% {
-                opacity: 0.8;
-            }
-
-            22% {
-                opacity: 0.6;
-            }
-        }
-
-        .led-text,
-        .led-value {
-            animation: flicker 2.5s infinite;
         }
 
         #info-button {
@@ -449,18 +571,18 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: var(--primary-green);
-            transition: all var(--transition-duration) ease;
+            background: var(--primary-gradient);
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+            
         }
 
         #info-button:hover {
-            background-color: #00cc00;
-            box-shadow: 0 0 15px var(--primary-green);
+            box-shadow: var(--shadow-glow);
         }
 
         #info-button.active {
-            background-color: #00aa00;
-            box-shadow: 0 0 20px var(--primary-green);
+            box-shadow: var(--shadow-glow);
         }
 
         #info-button i {
@@ -468,11 +590,11 @@
             height: auto;
             display: block;
             font-size: 44px;
-            color: #333;
+            color: white;
         }
 
         #stakco-button {
-            position: fixed;
+            position: absolute;
             top: 20px;
             right: 20px;
             z-index: 2500;
@@ -488,6 +610,12 @@
             background: url('stakco_logo_squricle.png') no-repeat center;
             background-size: contain;
             padding: 0;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
+        }
+
+        #stakco-button:hover {
+            box-shadow: var(--shadow-glow);
         }
 
         #stakco-button img {
@@ -498,41 +626,43 @@
         #info-div {
             position: fixed;
             top: 20px;
-            left: 45px; /* Start right after the info button */
+            left: 45px;
             border: none;
             height: 50px;
-            border-radius: 0 25px 25px 0; /* top-left, top-right, bottom-right, bottom-left */
-            background: rgba(0, 255, 0, 0.9);
-            color: #333;
-            font-family: 'Courier New', monospace;
+            border-radius: 0 25px 25px 0;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
             z-index: 1500;
-            width: 0; /* Start with 0 width */
+            width: 0;
             overflow: hidden;
             transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             backdrop-filter: blur(10px);
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            box-shadow: var(--shadow-soft);
+            border: 1px solid var(--glass-border);
         }
 
         #status p {
-            margin: 0;              /* remove default paragraph margin */
-            line-height: 1.2;         /* no extra spacing between lines */
-            white-space: normal;    /* allow wrapping */
+            margin: 0;
+            line-height: 1.2;
+            white-space: normal;
         }
 
         #info-div.expanded {
-            width: calc(100vw - 65px); /* Full width minus margins and button */
+            width: calc(100vw - 65px);
         }
 
         #info-div #status {
             margin-left: 15px;
             margin-right: 15px;
-            color: #333;
+            color: var(--text-primary);
             text-shadow: none;
             white-space: nowrap;
             opacity: 0;
-            transition: opacity 0.3s ease 0.1s; /* Slight delay for text appearance */
+            transition: opacity 0.3s ease 0.1s;
+            font-weight: 500;
         }
 
         #info-div.expanded #status {
@@ -540,36 +670,34 @@
         }
 
         #stakco-div {
-            position: fixed;
+            position: absolute;
             top: 20px;
             right: 20px;
             border: none;
             height: 50px;
             border-radius: 25px;
-            background: rgba(0, 255, 0, 0.9);
-            color: #333;
-            font-family: 'Courier New', monospace;
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
             z-index: 2000;
             width: 0;
             overflow: hidden;
             display: flex;
             align-items: flex-start;
             backdrop-filter: blur(10px);
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+            box-shadow: var(--shadow-soft);
             flex-direction: column;
             transition:
                 width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-                height 0.4s cubic-bezier(0.4, 0, 0.2, 1); /* default */
+                height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Opening: width first, then height */
         #stakco-div.expanding {
             transition:
                 width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
                 height 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.4s;
         }
 
-        /* Closing: height first, then width */
         #stakco-div.collapsing {
             transition:
                 height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
@@ -582,14 +710,20 @@
         }
 
         #stakco-content {
+            width: calc(100% - 30px);  /* Subtract left + right margins */
             margin: 15px;
             opacity: 0;
             transition: opacity 0.3s ease 0.8s;
-            color: #333;
+            color: var(--text-primary);
             text-shadow: none;
             overflow-y: auto;
             height: calc(100% - 30px);
         }
+
+        #stakco-content h3, p {
+            text-align: center;
+        }
+
         #stakco-div.expanded #stakco-content {
             opacity: 1;
         }
@@ -602,8 +736,8 @@
         }
 
         .product-card {
-            background: rgba(0, 0, 0, 0.2);
-            border: 2px solid #666;
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
             border-radius: 12px;
             padding: 20px;
             transition: all 0.3s ease;
@@ -611,34 +745,33 @@
             text-decoration: none;
             color: inherit;
             display: block;
+            backdrop-filter: blur(10px);
         }
 
         .product-card:hover {
-            border-color: #00ff00;
-            background: rgba(0, 255, 0, 0.05);
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
-            transform: translateY(-2px);
+            border-color: var(--primary-color);
+            background: rgba(249, 167, 68, 0.05);
+            box-shadow: var(--shadow-glow);
         }
 
         .product-thumbnail {
             width: 100%;
             height: 200px;
-            background: #222;
+            background: var(--glass-bg);
             border-radius: 8px;
             margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 48px;
-            border: 1px solid #444;
-            color: #00ff00;
+            border: 1px solid var(--glass-border);
         }
 
         .product-title {
             font-size: 20px;
-            font-weight: bold;
+            font-weight: 600;
             margin-bottom: 8px;
-            color: #00ff00;
+            color: var(--text-primary);
         }
 
         .product-description {
@@ -646,13 +779,70 @@
             line-height: 1.4;
             margin-bottom: 10px;
             opacity: 0.9;
+            color: var(--text-primary);
         }
 
         .product-url {
             font-size: 12px;
-            font-family: 'Courier New', monospace;
+            font-family: 'Inter', sans-serif;
             opacity: 0.7;
             word-break: break-all;
+            color: var(--text-primary);
+        }
+
+        /* Orientation Overlay Styles */
+        #orientation-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 10000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #orientation-overlay.show {
+            display: flex;
+        }
+
+        .orientation-icon {
+            font-size: 120px;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            animation: rotateDevice 2s ease-in-out infinite;
+        }
+
+        .orientation-message {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: white;
+        }
+
+        .orientation-subtitle {
+            font-size: 16px;
+            opacity: 0.8;
+            line-height: 1.4;
+            max-width: 400px;
+        }
+
+        @keyframes rotateDevice {
+            0%, 100% { 
+                transform: rotate(0deg);
+            }
+            50% { 
+                transform: rotate(90deg);
+            }
         }
 
         @media (max-width: 768px) {
@@ -668,18 +858,72 @@
                 height: 150px;
                 font-size: 36px;
             }
+
+            .orientation-icon {
+                font-size: 80px;
+            }
+
+            .orientation-message {
+                font-size: 20px;
+            }
+
+            .orientation-subtitle {
+                font-size: 14px;
+            }
+
+            #share-container {
+                width: 300px;
+                height: 300px;
+            }
+
+            #share-text {
+                font-size: 16px;
+                padding: 15px 20px;
+            }
+
+            #share-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
         }
+
+        /* Color transitions for countdown timer */
+        .countdown-green { color: white; }
+        .countdown-yellow { color: #ffc947; }
+        .countdown-orange { color: #ff9900; }
+        .countdown-red { color: #ff4444; }
     </style>
 </head>
 
 <body>
+    <!-- Share Window -->
+    <div id="share-window">
+        <div id="share-container">
+            <!-- Share puzzle layers will be populated here -->
+        </div>
+        <div id="share-text">
+            Solved in 02:30 • First try today!
+        </div>
+    </div>
 
-    <!-- app bar -->
+    <!-- Orientation Overlay -->
+    <div id="orientation-overlay">
+        <div class="orientation-icon">
+            <i class="fa-solid fa-mobile-screen"></i>
+        </div>
+        <div class="orientation-message">Please rotate your device</div>
+        <div class="orientation-subtitle">
+            This game is optimized for portrait mode on mobile devices
+        </div>
+    </div>
 
     <!-- Countdown Timer -->
     <div id="countdown-container">
         <div id="countdown-timer">00:00</div>
     </div>
+
+    <!-- Solve Button -->
+    <button id="solve-button">Solve</button>
 
     <button id="info-button">
         <i class="fa-solid fa-circle-info"></i>
@@ -687,12 +931,11 @@
 
     <div id="info-div">
         <div id="status">
-            <p id="orientation-status">Drag to rotate selected layer • Align all layers</p>
+            <p id="orientation-status">Drag to rotate selected layer • Align all layers • Share</p>
         </div>
     </div>
 
     <div id="branding">
-        
         <p id="stakco-branding" style="display: inline; margin-left: 2px; vertical-align: middle;">Stakco Play <span
                 id="product-version">v1.0.0</span></p>
         <p id="puzzle-title" style="margin-top: 2px;"></p>
@@ -702,11 +945,11 @@
 
     <div id="stakco-div">
         <div id="stakco-content">
-            <h3>More ways to enjoy Stakco Play</h3>
-            <p>Discover our complete collection of interactive puzzle experiences</p>
+            <h3>Explore Stakco Apps</h3>
+            <p>Same puzzle, endless experiences</p>
             
             <div class="products-grid">
-                <a href="https://stakcos.com/azimuth" class="product-card" target="_blank">
+                <a id="azimuth-link" href="https://stakcos.com/azimuth" class="product-card" target="_blank">
                     <div class="product-thumbnail">
                         <i class="fa-solid fa-compass"></i>
                     </div>
@@ -715,7 +958,7 @@
                     <div class="product-url">stakcos.com/azimuth</div>
                 </a>
 
-                <a href="https://stakcos.com/mrt" class="product-card" target="_blank">
+                <a id="mrt-link" href="https://stakcos.com/mrt" class="product-card" target="_blank">
                     <div class="product-thumbnail">
                         <i class="fa-solid fa-train-subway"></i>
                     </div>
@@ -724,7 +967,7 @@
                     <div class="product-url">stakcos.com/mrt</div>
                 </a>
 
-                <a href="https://stakcos.com/midi" class="product-card" target="_blank">
+                <a id="midi-link" href="https://stakcos.com/midi" class="product-card" target="_blank">
                     <div class="product-thumbnail">
                         <i class="fa-solid fa-music"></i>
                     </div>
@@ -733,7 +976,7 @@
                     <div class="product-url">stakcos.com/midi</div>
                 </a>
 
-                <a href="https://stakcos.com/clock" class="product-card" target="_blank">
+                <a id="clock-link" href="https://stakcos.com/clock" class="product-card" target="_blank">
                     <div class="product-thumbnail">
                         <i class="fa-solid fa-clock"></i>
                     </div>
@@ -742,7 +985,7 @@
                     <div class="product-url">stakcos.com/clock</div>
                 </a>
 
-                <a href="https://stakcos.com/dial" class="product-card" target="_blank">
+                <a id="dial-link" href="https://stakcos.com/dial" class="product-card" target="_blank">
                     <div class="product-thumbnail">
                         <i class="fa-solid fa-circle-dot"></i>
                     </div>
@@ -754,36 +997,49 @@
         </div>
     </div>
 
-
     <div id="container"></div>
     <div id="controls"></div>
 
-    <button id="share-button" onclick="sharePuzzle()">🎉 Share Success!</button>
+    <button id="share-button" onclick="openShareWindow()">Share Success!</button>
+    <button id="replay-button" onclick="replayPuzzle()">Remix and try again</button>
 
-    <script>
+
+    <script type="module">
+
+        import { 
+            isMobileDevice, 
+            isLandscapeMode, 
+            formatTime, 
+            getDailyRotations, 
+            checkImageExists, 
+            preventMobileZoom, 
+            normalizeAngleDelta, 
+        } from 'https://stakcos.com/assets/1.0.0/utils.js';
+
         // Configuration constants
         const CONFIG = {
             DEFAULT_LAYERS: 3,
             ROTATION_TOLERANCE: 1,
             ROTATION_STEP_SMALL: 1,
             ROTATION_STEP_LARGE: 5,
-            SOLVE_ANIMATION_DELAY: 2000,
+            SOLVE_ANIMATION_DELAY: 500,
             SOLVE_ANIMATION_DURATION: 4000,
             DOUBLE_TAP_DELAY: 300,
             VIBRATION_PATTERN: [200, 100, 300, 100, 200],
             BASE_IMAGE_URL: 'https://storage.googleapis.com/stakco-images',
             DEFAULT_USER_ID: '109949450257686494443',
             DEFAULT_PUZZLE_ID: 'A2A3_3',
-            SHARE_URL: 'https://stakcos.com/play/'
+            SHARE_URL: 'https://stakcos.com/play/',
+            COUNTDOWN_HIDE_DURATION: 2500
         };
 
         // UI text constants
         const MESSAGES = {
             LOADING_USER: 'Loading custom puzzle...',
             LOADING_DAILY: 'Loading today\'s puzzle...',
-            INSTRUCTIONS: 'Drag to rotate selected layer • Align all layers',
-            SHARE_TITLE: 'Stakco Daily Puzzle',
-            SHARE_TEXT: "I just solved today's Stakco puzzle!",
+            INSTRUCTIONS: 'Drag to rotate selected layer • Align all layers • Share',
+            SHARE_TITLE: 'Stakco Puzzle',
+            SHARE_TEXT: "I just solved Stakco",
             CLIPBOARD_MESSAGE: 'Link copied to clipboard: https://stakcos.com/play/'
         };
 
@@ -797,16 +1053,28 @@
         let puzzleLayers = {};
         let lastTouchEnd = 0;
         let optionsMenuOpen = false;
-        let infoExpanded = false; // New state for info panel
+        let infoExpanded = false;
+        let performanceText = '';
 
         // Countdown state
         let countdownActive = false;
         let countdownStartTime = null;
         let countdownInterval = null;
         let firstInteractionOccurred = false;
+        let countdownPaused = false;
+        let pausedElapsedTime = 0; // Store elapsed time when paused
+        let pauseStartTime = null;
+        let finalTime = "00:00";
+        let countdownHideTimeout = null;
+
+        // Orientation state
+        let orientationBlocked = false;
+
+        // Share window state
+        let shareWindowOpen = false;
 
         // get product version from package.json (injected at build time)
-        const PRODUCT_VERSION = '1.0.4'; // Placeholder, replace with actual version
+        const PRODUCT_VERSION = '1.0.4';
         document.getElementById('product-version').textContent = `v${PRODUCT_VERSION}`;
 
         // Parse URL parameters
@@ -825,6 +1093,9 @@
         const today = new Date();
         const dateStr = today.toISOString().split('T')[0];
 
+        // Load game data
+        const gameManager = new GameDataManager();
+
         // set puzzle title in branding
         const puzzleTitleElem = document.getElementById('puzzle-title');
         if (username && puzzle) {
@@ -834,7 +1105,233 @@
         }
 
         // DOM elements (cached)
-        let orientationStatus, controlsDiv, statusDiv, shareButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer, infoButton, infoDiv;
+        let orientationStatus, controlsDiv, statusDiv, shareButton, replayButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer, infoButton, infoDiv, orientationOverlay, solveButton, shareWindow, shareContainer, shareText;
+
+        function checkOrientationRestriction() {
+            const shouldBlock = isMobileDevice() && isLandscapeMode();
+            
+            if (shouldBlock !== orientationBlocked) {
+                orientationBlocked = shouldBlock;
+                
+                if (orientationBlocked) {
+                    orientationOverlay.classList.add('show');
+                    document.body.style.pointerEvents = 'none';
+                    orientationOverlay.style.pointerEvents = 'auto';
+                    console.log('Orientation blocked: Mobile device in landscape mode');
+                } else {
+                    orientationOverlay.classList.remove('show');
+                    document.body.style.pointerEvents = 'auto';
+                    console.log('Orientation unblocked: Portrait mode or desktop');
+                }
+            }
+        }
+
+        function setupOrientationMonitoring() {
+            // Check orientation on load
+            checkOrientationRestriction();
+            
+            // Monitor orientation changes
+            window.addEventListener('orientationchange', () => {
+                // Small delay to ensure the orientation change is complete
+                setTimeout(checkOrientationRestriction, 100);
+            });
+            
+            // Also monitor resize events for devices that don't fire orientationchange
+            window.addEventListener('resize', () => {
+                setTimeout(checkOrientationRestriction, 100);
+            });
+        }
+
+        function setupVisibilityHandlers() {
+            // Handle both visibility API and focus events for broader browser support
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+            window.addEventListener('blur', handleWindowBlur);
+            window.addEventListener('focus', handleWindowFocus);
+            
+            console.log('Visibility change handlers set up');
+        }
+
+        function handleVisibilityChange() {
+            if (document.hidden) {
+                pauseCountdown();
+            } else {
+                resumeCountdown();
+            }
+        }
+
+        function handleWindowBlur() {
+            pauseCountdown();
+        }
+
+        function handleWindowFocus() {
+            resumeCountdown();
+        }
+
+        function pauseCountdown() {
+            if (!countdownActive || countdownPaused) return;
+            
+            countdownPaused = true;
+            pauseStartTime = Date.now();
+            
+            // Calculate elapsed time up to this point
+            if (countdownStartTime) {
+                pausedElapsedTime = Date.now() - countdownStartTime;
+            }
+            
+            // Stop the update interval
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            
+            // Visual indication that timer is paused
+            countdownTimer.style.opacity = '0.6';
+            countdownContainer.style.borderColor = 'var(--text-secondary)';
+            
+            console.log('Countdown paused at:', formatTime(pausedElapsedTime));
+        }
+
+        function resumeCountdown() {
+            if (!countdownActive || !countdownPaused) return;
+            
+            countdownPaused = false;
+            
+            // Adjust start time to account for paused duration
+            if (pauseStartTime && countdownStartTime) {
+                const pauseDuration = Date.now() - pauseStartTime;
+                countdownStartTime += pauseDuration;
+                console.log('Countdown resumed after pause of:', formatTime(pauseDuration));
+            }
+            
+            // Restart the update interval
+            countdownInterval = setInterval(updateCountdownDisplay, 100);
+            
+            // Reset visual indication
+            countdownTimer.style.opacity = '1';
+            countdownContainer.style.borderColor = 'var(--glass-border)';
+            
+            pauseStartTime = null;
+        }
+
+        // Share window functions
+        async function openShareWindow() {
+            shareWindowOpen = true;
+            shareWindow.classList.add('show');
+            populateShareWindow();
+            console.log('Share window opened');
+            
+            // Auto-execute share after a brief delay to ensure rendering
+            setTimeout(async () => {
+                try {
+                    const screenshotBlob = await captureShareWindow();
+                    await sharePuzzleWithScreenshot(screenshotBlob);
+                } catch (error) {
+                    console.error('Error executing auto-share:', error);
+                    // Fallback to text-only share
+                    sharePuzzleTextOnly();
+                } finally {
+                    closeShareWindow();
+                }
+            }, 300); // Brief delay to ensure DOM is rendered
+        }
+
+        function closeShareWindow() {
+            shareWindowOpen = false;
+            shareWindow.classList.remove('show');
+            console.log('Share window closed');
+        }
+
+        function populateShareWindow() {
+            // Clear existing content
+            shareContainer.innerHTML = '';
+
+            // Create share puzzle layers based on current puzzle state
+            for (let i = 1; i <= totalLayers; i++) {
+                const layerDiv = document.createElement('div');
+                layerDiv.id = `share-layer${i}`;
+                layerDiv.className = 'share-puzzle-layer';
+                
+                // Copy the background image from the main puzzle
+                const mainLayer = document.getElementById(`layer${i}`);
+                if (mainLayer) {
+                    layerDiv.style.backgroundImage = mainLayer.style.backgroundImage;
+                    layerDiv.style.transform = 'translate(-50%, -50%) rotate(0deg)'; // Always show solved state
+                }
+                
+                shareContainer.appendChild(layerDiv);
+            }
+
+            // Update share text with performance data
+            shareText.textContent = `Solved in ${finalTime} • ${performanceText}`;
+        }
+
+        async function executeShare() {
+            try {
+                const screenshotBlob = await captureShareWindow();
+                await sharePuzzleWithScreenshot(screenshotBlob);
+            } catch (error) {
+                console.error('Error executing share:', error);
+                // Fallback to text-only share
+                sharePuzzleTextOnly();
+            }
+        }
+
+        // Screen capture functionality for share window
+        async function captureShareWindow() {
+            try {
+                // Render share window content into canvas
+                const canvas = await html2canvas(shareWindow, {
+                    backgroundColor: getComputedStyle(document.body).getPropertyValue('--text-primary') || '#000000',
+                    scale: 2, // higher = sharper
+                    useCORS: true, // allow cross-origin images
+                    allowTaint: false
+                });
+
+                return new Promise((resolve) => {
+                    canvas.toBlob((blob) => {
+                        resolve(blob);
+                    }, 'image/png', 0.9);
+                });
+            } catch (error) {
+                console.error("Error capturing share window screenshot:", error);
+                return null;
+            }
+        }
+
+        // Countdown hide/show functions
+        function hideCountdown() {
+            if (!countdownActive) return;
+
+            solveButton.classList.add('show');
+            
+            countdownContainer.classList.add('hidden');
+            console.log('Countdown hidden for 3 seconds');
+            
+            // Clear any existing timeout
+            if (countdownHideTimeout) {
+                clearTimeout(countdownHideTimeout);
+            }
+            
+            // Set timeout to show countdown again after 3 seconds
+            countdownHideTimeout = setTimeout(() => {
+                showCountdown();
+            }, CONFIG.COUNTDOWN_HIDE_DURATION);
+        }
+
+        function showCountdown() {
+            if (!countdownActive) return;
+            
+            countdownContainer.classList.remove('hidden');
+            solveButton.classList.remove('show');
+
+            console.log('Countdown shown again');
+            
+            // Clear the timeout
+            if (countdownHideTimeout) {
+                clearTimeout(countdownHideTimeout);
+                countdownHideTimeout = null;
+            }
+        }
 
         // Info panel toggle function
         function toggleInfoPanel() {
@@ -872,18 +1369,18 @@
 
         stakcoButton.addEventListener('click', toggleStakcoPanel);
 
-
         // Countdown functions
         function startCountdown() {
-            if (countdownActive || hasUrlParams) return;
+            if (countdownActive || hasUrlParams || orientationBlocked) return;
 
             countdownActive = true;
+            countdownPaused = false;
             countdownStartTime = Date.now();
+            pausedElapsedTime = 0;
 
-            // Show countdown and hide branding/status
+            // Show countdown, solve button and hide branding/status
             countdownContainer.classList.add('show');
             brandingDiv.classList.add('hidden');
-            // statusDiv.classList.add('hidden');
 
             countdownInterval = setInterval(updateCountdownDisplay, 100);
             console.log('Countdown started');
@@ -893,50 +1390,56 @@
             if (!countdownActive) return;
 
             countdownActive = false;
+            countdownPaused = false;
+            
             if (countdownInterval) {
                 clearInterval(countdownInterval);
                 countdownInterval = null;
             }
+            
+            // Clear hide timeout if active
+            if (countdownHideTimeout) {
+                clearTimeout(countdownHideTimeout);
+                countdownHideTimeout = null;
+            }
+            
+            // Reset visual state
+            countdownTimer.style.opacity = '1';
+            countdownContainer.style.borderColor = 'var(--glass-border)';
+            countdownContainer.classList.remove('hidden');
 
             console.log('Countdown stopped');
         }
 
         function updateCountdownDisplay() {
-            if (!countdownActive || !countdownStartTime) return;
+            if (!countdownActive || countdownPaused || !countdownStartTime) return;
 
             const elapsed = Date.now() - countdownStartTime;
-            const seconds = Math.floor(elapsed / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-
-            const timeString = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            const timeString = formatTime(elapsed);
             countdownTimer.textContent = timeString;
 
-            // Change color based on time ranges
-            if (seconds < 120) {            // 0-2 min
-                countdownTimer.style.color = '#00ff00'; // green
-                countdownContainer.style.borderColor = '#00ff00';
-                countdownContainer.style.boxShadow = '0 0 20px #00ff00';
-            } else if (seconds < 180) {     // 2-3 min
-                countdownTimer.style.color = '#ffff00'; // yellow
-                countdownContainer.style.borderColor = '#ffff00';
-                countdownContainer.style.boxShadow = '0 0 20px #ffff00';
-            } else if (seconds < 300) {     // 3-5 min
-                countdownTimer.style.color = '#ff9900'; // orange
-                countdownContainer.style.borderColor = '#ff9900';
-                countdownContainer.style.boxShadow = '0 0 20px #ff9900';
-            } else {     // 5+ min
-                countdownTimer.style.color = '#ff4444'; // orange
-                countdownContainer.style.borderColor = '#ff4444';
-                countdownContainer.style.boxShadow = '0 0 20px #ff4444';
+            // Apply color classes based on time ranges
+            const seconds = Math.floor(elapsed / 1000);
+            countdownTimer.className = '';
+            if (seconds < 120) {
+                countdownTimer.classList.add('countdown-green');
+            } else if (seconds < 180) {
+                countdownTimer.classList.add('countdown-yellow');
+            } else if (seconds < 300) {
+                countdownTimer.classList.add('countdown-orange');
+            } else {
+                countdownTimer.classList.add('countdown-red');
             }
         }
 
         function resetCountdown() {
             stopCountdown();
             countdownContainer.classList.remove('show');
+            solveButton.classList.remove('show');
             countdownTimer.textContent = '00:00';
             firstInteractionOccurred = false;
+            pausedElapsedTime = 0;
+            pauseStartTime = null;
 
             // Show branding and status again if puzzle isn't solved
             if (!puzzleSolved) {
@@ -948,23 +1451,24 @@
         function getFinalTime() {
             if (!countdownStartTime) return '00:00';
 
-            const elapsed = Date.now() - countdownStartTime;
-            const seconds = Math.floor(elapsed / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-
-            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            let finalElapsed;
+            if (countdownPaused && pausedElapsedTime > 0) {
+                // Use the elapsed time at pause if currently paused
+                finalElapsed = pausedElapsedTime;
+            } else {
+                // Use current elapsed time if active
+                finalElapsed = Date.now() - countdownStartTime;
+            }
+            
+            return formatTime(finalElapsed);
         }
 
-        // Initialize the app
-        function initApp() {
-            console.log('Initializing Touch Compass Puzzle App...');
-
-            // Cache DOM elements
+        function cacheDomeElements (){
             orientationStatus = document.getElementById('orientation-status');
             controlsDiv = document.getElementById('controls');
             statusDiv = document.getElementById('status');
             shareButton = document.getElementById('share-button');
+            replayButton = document.getElementById('replay-button');
             container = document.getElementById('container');
             optionsButton = document.getElementById('options-button');
             optionsMenu = document.getElementById('options-menu');
@@ -973,9 +1477,40 @@
             countdownTimer = document.getElementById('countdown-timer');
             infoButton = document.getElementById('info-button');
             infoDiv = document.getElementById('info-div');
+            orientationOverlay = document.getElementById('orientation-overlay');
+            solveButton = document.getElementById('solve-button');
+            shareWindow = document.getElementById('share-window');
+            shareContainer = document.getElementById('share-container');
+            shareText = document.getElementById('share-text');
+        }
 
-            // Add event listener for info button
-            infoButton.addEventListener('click', toggleInfoPanel);
+        function loadAttempts() {
+            return gameManager.loadAttempts(dateStr);
+        }
+        
+        function saveAttempts(solved, time) {
+            gameManager.saveAttempt(dateStr, solved, time);
+            performanceText = gameManager.generatePerformanceText(dateStr, time);
+            console.log(performanceText);
+        }
+
+        // Initialize the app
+        function initApp() {
+            console.log('Initializing Stakco Play Puzzle App...');
+
+            // Cache DOM elements
+            cacheDomeElements();
+
+            // Setup visibility monitoring for pause/resume
+            setupVisibilityHandlers();
+
+            // Setup orientation monitoring
+            setupOrientationMonitoring();
+
+            updateProductLinks();
+
+            // method to fetch today's attempts from localStorage
+            loadAttempts();
 
             // Determine puzzle configuration
             const customPuzzle = parseCustomPuzzle();
@@ -987,14 +1522,8 @@
             }
 
             // Initialize puzzle layers
-            initializePuzzleLayers();
+            setPuzzleLayerInitialRotation();
             createDynamicElements();
-            
-            // Start preloading critical images
-            const imageUrls = generateImageUrls(customPuzzle);
-            preloadCriticalImages(imageUrls);
-            
-            // Load images with progressive strategy
             loadImages(customPuzzle);
             setupEventHandlers();
 
@@ -1017,12 +1546,33 @@
         }
 
         // Initialize puzzle layer data
-        function initializePuzzleLayers() {
+        function setPuzzleLayerInitialRotation() {
             puzzleLayers = {};
-            for (let i = 1; i <= totalLayers; i++) {
-                puzzleLayers[`layer${i}`] = {
-                    rotation: Math.floor(Math.random() * 360)
-                };
+            
+            // Check if this is a custom puzzle (has URL parameters)
+            const isCustomPuzzle = username && puzzle;
+            
+            if (isCustomPuzzle) {
+                // Custom puzzles: use random rotations for unique experience each time
+                console.log('Using random rotations for custom puzzle');
+                for (let i = 1; i <= totalLayers; i++) {
+                    puzzleLayers[`layer${i}`] = {
+                        rotation: Math.floor(Math.random() * 360)
+                    };
+                }
+            } else {
+                // Daily puzzles: use deterministic date-based rotations
+                console.log('Using daily deterministic rotations for daily puzzle');
+                const dailyRotations = getDailyRotations();
+                
+                for (let i = 1; i <= totalLayers; i++) {
+                    puzzleLayers[`layer${i}`] = {
+                        rotation: dailyRotations[i - 1] // Use rotation for this layer
+                    };
+                }
+                
+                // Log today's rotations for debugging
+                console.log('Today\'s rotations:', dailyRotations.slice(0, totalLayers));
             }
         }
 
@@ -1049,92 +1599,34 @@
             }
         }
 
-        // Options menu functions
-        function toggleOptionsMenu() {
-            optionsMenuOpen = !optionsMenuOpen;
-
-            if (optionsMenuOpen) {
-                optionsMenu.classList.add('show');
-                optionsButton.classList.add('active');
-            } else {
-                optionsMenu.classList.remove('show');
-                optionsButton.classList.remove('active');
-            }
-        }
-
-        function closeOptionsMenu() {
-            optionsMenuOpen = false;
-            optionsMenu.classList.remove('show');
-            optionsButton.classList.remove('active');
-        }
-
-        function solvePuzzleInstantly() {
-            closeOptionsMenu();
-
-            // Set all layers to 0 rotation
-            Object.keys(puzzleLayers).forEach(layerKey => {
-                puzzleLayers[layerKey].rotation = 0;
-                const layerElement = document.getElementById(layerKey);
-                if (layerElement) {
-                    layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-                }
-            });
-
-            // Mark puzzle as solved and trigger completion
-            solvePuzzle();
-        }
-
         function remixPuzzle() {
-            closeOptionsMenu();
-
-            if (puzzleSolved) {
-                // Reset puzzle state
-                puzzleSolved = false;
-                controlsDiv.classList.remove('hidden');
-                if (!countdownActive) {
-                    statusDiv.classList.remove('hidden');
-                }
-                shareButton.classList.remove('show');
-                orientationStatus.textContent = MESSAGES.INSTRUCTIONS;
-            }
-
-            // Reset countdown
-            resetCountdown();
-
-            // Generate new random rotations
-            initializePuzzleLayers();
-            applyInitialRotations();
-
-            console.log('Puzzle remixed with new rotations');
+            location.reload();
         }
 
         // Generate image URLs based on puzzle type
         function generateImageUrls(customPuzzle) {
-            const urls = { primary: {}, backup: {}, thumbs: {} };
+            const urls = { primary: {}, backup: {} };
 
             if (customPuzzle) {
                 // Custom puzzle URLs
                 for (let i = 1; i <= totalLayers; i++) {
-                    const baseUrl = `${CONFIG.BASE_IMAGE_URL}/${customPuzzle.username}/${customPuzzle.puzzleIdFull}/${customPuzzle.puzzleId}_${i - 1}`;
-                    urls.primary[`layer${i}`] = `${baseUrl}.png`;
-                    urls.thumbs[`layer${i}`] = `${baseUrl}_thumb.png`;
+                    urls.primary[`layer${i}`] =
+                        `${CONFIG.BASE_IMAGE_URL}/${customPuzzle.username}/${customPuzzle.puzzleIdFull}/${customPuzzle.puzzleId}_${i - 1}.png`;
                 }
 
                 // Backup to default puzzle
                 for (let i = 1; i <= 3; i++) {
-                    const baseUrl = `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${i - 1}`;
-                    urls.backup[`layer${i}`] = `${baseUrl}.png`;
+                    urls.backup[`layer${i}`] =
+                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${i - 1}.png`;
                 }
             } else {
                 // Daily puzzle URLs
                 for (let i = 1; i <= totalLayers; i++) {
                     const imageIndex = i - 1;
-                    const baseUrl = `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/${dateStr}/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}`;
-                    const backupBaseUrl = `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}`;
-                    
-                    urls.primary[`layer${i}`] = `${baseUrl}.png`;
-                    urls.thumbs[`layer${i}`] = `${baseUrl}_thumb.png`;
-                    urls.backup[`layer${i}`] = `${backupBaseUrl}.png`;
+                    urls.primary[`layer${i}`] =
+                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/${dateStr}/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
+                    urls.backup[`layer${i}`] =
+                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
                 }
             }
 
@@ -1147,153 +1639,45 @@
             orientationStatus.textContent = loadingMessage;
 
             const imageUrls = generateImageUrls(customPuzzle);
-            
-            // Phase 1: Load thumbnails quickly first
-            await loadThumbnails(imageUrls);
-            
-            // Show instructions and enable interaction after thumbnails load
-            orientationStatus.textContent = MESSAGES.INSTRUCTIONS;
+            let loadedCount = 0;
+
+            for (let i = 1; i <= totalLayers; i++) {
+                const layerKey = `layer${i}`;
+                const layerElement = document.getElementById(layerKey);
+
+                if (!layerElement) continue;
+
+                try {
+                    const primaryUrl = imageUrls.primary[layerKey];
+                    const imageExists = await checkImageExists(primaryUrl);
+
+                    if (imageExists) {
+                        layerElement.style.backgroundImage = `url('${primaryUrl}')`;
+                        console.log(`Loaded image for ${layerKey}: ${primaryUrl}`);
+                    } else {
+                        const backupUrl = imageUrls.backup[layerKey];
+                        if (backupUrl) {
+                            layerElement.style.backgroundImage = `url('${backupUrl}')`;
+                            console.log(`Using backup image for ${layerKey}: ${backupUrl}`);
+                        }
+                    }
+                    loadedCount++;
+                } catch (error) {
+                    console.error(`Error loading ${layerKey}:`, error);
+                    const backupUrl = imageUrls.backup[layerKey];
+                    if (backupUrl) {
+                        layerElement.style.backgroundImage = `url('${backupUrl}')`;
+                        console.log(`Error fallback for ${layerKey}, using backup`);
+                    }
+                    loadedCount++;
+                }
+            }
+
             applyInitialRotations();
+            orientationStatus.textContent = MESSAGES.INSTRUCTIONS;
             imagesLoaded = true;
-            
-            // Phase 2: Load full resolution images in background
-            loadFullResolutionImages(imageUrls);
-            
-            console.log('Progressive image loading initiated');
-        }
 
-        async function loadThumbnails(imageUrls) {
-    console.log('Loading thumbnail images...');
-    const thumbLoadPromises = [];
-    
-    for (let i = 1; i <= totalLayers; i++) {
-        const layerKey = `layer${i}`;
-        const layerElement = document.getElementById(layerKey);
-        
-        if (!layerElement) continue;
-        
-        const thumbPromise = loadImageWithFallback(
-            imageUrls.thumbs[layerKey],
-            imageUrls.backup[layerKey] // Use backup full image if thumb fails
-        ).then(imageUrl => {
-            if (imageUrl) {
-                layerElement.style.backgroundImage = `url('${imageUrl}')`;
-                layerElement.style.backgroundSize = 'contain';
-                layerElement.style.backgroundRepeat = 'no-repeat';
-                layerElement.style.backgroundPosition = 'center';
-                
-                // Add a subtle blur effect to indicate it's a thumbnail
-                layerElement.style.filter = 'blur(0.5px)';
-                layerElement.dataset.isThumb = 'true';
-                
-                console.log(`Loaded thumbnail for ${layerKey}: ${imageUrl}`);
-            }
-        }).catch(error => {
-            console.error(`Failed to load thumbnail for ${layerKey}:`, error);
-        });
-        
-        thumbLoadPromises.push(thumbPromise);
-    }
-    
-    // Wait for all thumbnails to load (or fail)
-    await Promise.allSettled(thumbLoadPromises);
-    console.log('Thumbnail loading phase complete');
-}
-
-// New function: Load full resolution images and replace thumbnails
-async function loadFullResolutionImages(imageUrls) {
-    console.log('Loading full resolution images...');
-    
-    for (let i = 1; i <= totalLayers; i++) {
-        const layerKey = `layer${i}`;
-        const layerElement = document.getElementById(layerKey);
-        
-        if (!layerElement) continue;
-        
-        try {
-            // Try to load the full resolution image
-            const fullImageUrl = await loadImageWithFallback(
-                imageUrls.primary[layerKey],
-                imageUrls.backup[layerKey]
-            );
-            
-            if (fullImageUrl && layerElement.dataset.isThumb === 'true') {
-                // Preload the full image before replacing
-                const img = new Image();
-                img.onload = () => {
-                    // Smooth transition from thumbnail to full image
-                    layerElement.style.transition = 'filter 0.3s ease-out';
-                    layerElement.style.backgroundImage = `url('${fullImageUrl}')`;
-                    layerElement.style.filter = 'blur(0px)'; // Remove blur
-                    
-                    // Clean up after transition
-                    setTimeout(() => {
-                        layerElement.style.transition = '';
-                        layerElement.dataset.isThumb = 'false';
-                    }, 300);
-                    
-                    console.log(`Upgraded to full resolution for ${layerKey}: ${fullImageUrl}`);
-                };
-                img.onerror = () => {
-                    console.warn(`Failed to load full resolution for ${layerKey}, keeping thumbnail`);
-                };
-                img.src = fullImageUrl;
-            }
-        } catch (error) {
-            console.error(`Error loading full resolution for ${layerKey}:`, error);
-        }
-    }
-}
-
-// New helper function: Load image with fallback
-async function loadImageWithFallback(primaryUrl, fallbackUrl) {
-    try {
-        const primaryExists = await checkImageExists(primaryUrl);
-        if (primaryExists) {
-            return primaryUrl;
-        }
-        
-        if (fallbackUrl) {
-            const fallbackExists = await checkImageExists(fallbackUrl);
-            if (fallbackExists) {
-                return fallbackUrl;
-            }
-        }
-        
-        return null;
-    } catch (error) {
-        console.error('Error in loadImageWithFallback:', error);
-        return fallbackUrl || null;
-    }
-}
-
-        // Check if image exists at URL
-        async function checkImageExists(url, timeout = 3000) {
-            try {
-                const controller = new AbortController();
-                const timeoutId = setTimeout(() => controller.abort(), timeout);
-                
-                const response = await fetch(url, {
-                    method: 'HEAD', // Use HEAD for faster checks
-                    mode: 'cors',
-                    cache: 'no-cache',
-                    signal: controller.signal
-                });
-                
-                clearTimeout(timeoutId);
-                return response.ok;
-            } catch (error) {
-                return false;
-            }
-        }
-
-        function preloadCriticalImages(imageUrls) {
-            // Preload the first layer's thumbnail immediately
-            if (imageUrls.thumbs['layer1']) {
-                const img = new Image();
-                img.src = imageUrls.thumbs['layer1'];
-                console.log('Preloading critical thumbnail:', imageUrls.thumbs['layer1']);
-            }
+            console.log(`Loaded ${loadedCount}/${totalLayers} images successfully`);
         }
 
         // Apply initial random rotations
@@ -1327,42 +1711,68 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
             // Prevent mobile zoom and double-tap
             preventMobileZoom();
 
-            // Click outside to close info panel
+            // Click outside to close panels
             document.addEventListener('click', (e) => {
                 if (infoExpanded && 
                     !infoButton.contains(e.target) && 
                     !infoDiv.contains(e.target)) {
                     toggleInfoPanel();
                 }
-            });
-        }
-
-        // Prevent zoom on mobile devices
-        function preventMobileZoom() {
-            document.addEventListener('touchstart', (e) => {
-                if (e.touches.length > 1) e.preventDefault();
-            }, { passive: false });
-
-            document.addEventListener('touchend', (event) => {
-                const now = Date.now();
-                if (now - lastTouchEnd <= CONFIG.DOUBLE_TAP_DELAY) {
-                    event.preventDefault();
+                
+                if (shareWindowOpen && 
+                    !shareContainer.contains(e.target) && 
+                    !document.getElementById('share-buttons').contains(e.target)) {
+                    // Allow clicking outside to close, but not on the share content itself
                 }
-                lastTouchEnd = now;
-            }, false);
+            });
+
+            // Add event listener for info button
+            infoButton.addEventListener('click', toggleInfoPanel);
+
+            // Add event listener for countdown container click
+            countdownContainer.addEventListener('click', hideCountdown);
+
+            // Add event listener for solve button
+            solveButton.addEventListener('click', () => solvePuzzle(true));
+
+            // Add keyboard handler for share window
+            document.addEventListener('keydown', (e) => {
+                if (shareWindowOpen && e.key === 'Escape') {
+                    closeShareWindow();
+                }
+            });
         }
 
         // Helper function to trigger first interaction
         function handleFirstInteraction() {
-            if (!firstInteractionOccurred && !hasUrlParams && !puzzleSolved) {
+            if (!firstInteractionOccurred && !hasUrlParams && !puzzleSolved && !orientationBlocked) {
                 firstInteractionOccurred = true;
                 startCountdown();
             }
         }
 
+        function updateProductLinks() {
+            if (shareParams) {
+                const productLinks = [
+                    { id: 'azimuth-link', baseUrl: 'https://stakcos.com/azimuth' },
+                    { id: 'mrt-link', baseUrl: 'https://stakcos.com/mrt' },
+                    { id: 'midi-link', baseUrl: 'https://stakcos.com/midi' },
+                    { id: 'clock-link', baseUrl: 'https://stakcos.com/clock' },
+                    { id: 'dial-link', baseUrl: 'https://stakcos.com/dial' }
+                ];
+
+                productLinks.forEach(link => {
+                    const element = document.getElementById(link.id);
+                    if (element) {
+                        element.href = link.baseUrl + shareParams;
+                    }
+                });
+            }
+        }
+
         // Drag and touch event handlers
         function startDrag(e) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || orientationBlocked) return;
             e.preventDefault();
             handleFirstInteraction();
             isDragging = true;
@@ -1371,7 +1781,7 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
         }
 
         function handleDrag(e) {
-            if (!isDragging || puzzleSolved) return;
+            if (!isDragging || puzzleSolved || orientationBlocked) return;
             e.preventDefault();
 
             const currentAngle = getAngleFromEvent(e, e.clientX, e.clientY);
@@ -1387,7 +1797,7 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
         }
 
         function startTouch(e) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || orientationBlocked) return;
             e.preventDefault();
             handleFirstInteraction();
             isDragging = true;
@@ -1396,7 +1806,7 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
         }
 
         function handleTouch(e) {
-            if (!isDragging || puzzleSolved) return;
+            if (!isDragging || puzzleSolved || orientationBlocked) return;
             e.preventDefault();
 
             const touch = e.touches[0];
@@ -1419,16 +1829,9 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
             return Math.atan2(clientY - centerY, clientX - centerX) * 180 / Math.PI;
         }
 
-        // Normalize angle delta to handle wrap-around
-        function normalizeAngleDelta(delta) {
-            if (delta > 180) delta -= 360;
-            if (delta < -180) delta += 360;
-            return delta;
-        }
-
         // Keyboard event handler
         function handleKeyboard(e) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || orientationBlocked) return;
 
             // Trigger countdown on first keyboard interaction
             if (!firstInteractionOccurred && (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
@@ -1456,7 +1859,7 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
 
         // Handle scroll wheel
         function handleScroll(e) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || orientationBlocked) return;
             e.preventDefault();
             handleFirstInteraction();
             const delta = e.deltaY > 0 ? CONFIG.ROTATION_STEP_SMALL : -CONFIG.ROTATION_STEP_SMALL;
@@ -1465,7 +1868,7 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
 
         // Handle right click to switch layer
         function handleRightClick(e) {
-            if (puzzleSolved) return;
+            if (puzzleSolved || orientationBlocked) return;
             e.preventDefault();
             switchLayer((currentLayer % totalLayers) + 1);
         }
@@ -1486,7 +1889,7 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
 
         // Switch active layer
         function switchLayer(layerNumber) {
-            if (puzzleSolved || layerNumber === currentLayer) return;
+            if (puzzleSolved || layerNumber === currentLayer || orientationBlocked) return;
 
             // Update UI elements
             document.querySelectorAll('.puzzle-layer, .layer-button').forEach(el => {
@@ -1521,9 +1924,10 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
         }
 
         // Handle puzzle completion
-        function solvePuzzle() {
+        function solvePuzzle(simulate = false) {
+
             puzzleSolved = true;
-            const finalTime = getFinalTime();
+            finalTime = getFinalTime();
             console.log(`Puzzle solved in ${finalTime}!`);
 
             // Stop countdown
@@ -1537,11 +1941,17 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
             // Update UI
             controlsDiv.classList.add('hidden');
             statusDiv.classList.add('hidden');
-            countdownContainer.classList.remove('show');
-            shareButton.classList.add('show');
+            //countdownContainer.classList.remove('show');
+            solveButton.classList.remove('show');
 
             // Update share button with time
-            shareButton.textContent = `🎉 Solved in ${finalTime}! Share Success!`;
+            if(!simulate){
+                shareButton.textContent = `Share Success!`;
+                shareButton.classList.add('show');
+                saveAttempts(true, finalTime);          
+            } else{
+                replayButton.classList.add('show');
+            }
 
             // Animate to final position
             setTimeout(rotateAllLayersToZero, CONFIG.SOLVE_ANIMATION_DELAY);
@@ -1572,31 +1982,97 @@ async function loadImageWithFallback(primaryUrl, fallbackUrl) {
             });
         }
 
-        // Share functionality
-        function sharePuzzle() {
-            const shareUrlWithParams = CONFIG.SHARE_URL + shareParams;
-            const finalTime = getFinalTime();
+        function replayPuzzle() {
+            remixPuzzle();
+        }
 
+        // Enhanced share function with screenshot
+        async function sharePuzzleWithScreenshot(screenshotBlob = null) {
+            const shareUrlWithParams = CONFIG.SHARE_URL + shareParams;
+            
             const shareData = {
                 title: MESSAGES.SHARE_TITLE,
-                text: `${MESSAGES.SHARE_TEXT} Time: ${finalTime}`,
+                text: `${MESSAGES.SHARE_TEXT}; Time: ${finalTime}; ${performanceText}`,
                 url: shareUrlWithParams
             };
+            
+            // Add screenshot to share data if available
+            if (screenshotBlob) {
+                shareData.files = [new File([screenshotBlob], `stakco-puzzle-${finalTime.replace(':', '')}.png`, { 
+                    type: 'image/png' 
+                })];
+            }
+            
+            // Check if native sharing with files is supported
+            if (navigator.share && navigator.canShare && screenshotBlob && navigator.canShare(shareData)) {
+                try {
+                    await navigator.share(shareData);
+                    console.log('Successful share with screenshot');
+                    closeShareWindow();
+                    return;
+                } catch (error) {
+                    console.log('Error sharing with screenshot, falling back:', error);
+                }
+            }
+            
+            // Fallback: try to copy screenshot to clipboard
+            if (screenshotBlob && navigator.clipboard && navigator.clipboard.write) {
+                try {
+                    await navigator.clipboard.write([
+                        new ClipboardItem({
+                            'image/png': screenshotBlob,
+                            'text/plain': `${shareData.text} ${shareData.url}`
+                        })
+                    ]);
+                    alert('Screenshot and text copied to clipboard!');
+                    closeShareWindow();
+                    return;
+                } catch (error) {
+                    console.log('Error copying to clipboard, using text fallback:', error);
+                }
+            }
+            
+            // Final fallback: text-only share
+            sharePuzzleTextOnly(shareData);
+        }
+
+        function sharePuzzleTextOnly(shareData = null) {
+            if (!shareData) {
+                const shareUrlWithParams = CONFIG.SHARE_URL + shareParams;
+                shareData = {
+                    title: MESSAGES.SHARE_TITLE,
+                    text: `${MESSAGES.SHARE_TEXT}; Time: ${finalTime}; ${performanceText}`,
+                    url: shareUrlWithParams
+                };
+            }
 
             if (navigator.share) {
-                navigator.share(shareData)
-                    .then(() => console.log('Successful share'))
-                    .catch(error => console.log('Error sharing:', error));
+                navigator.share({
+                    title: shareData.title,
+                    text: shareData.text,
+                    url: shareData.url
+                }).then(() => {
+                    console.log('Successful text-only share');
+                    closeShareWindow();
+                }).catch(error => {
+                    console.log('Error with text share:', error);
+                    textOnlyFallback(shareData);
+                });
             } else {
-                // Fallback: copy to clipboard
-                const textArea = document.createElement('textarea');
-                textArea.value = `${shareData.text} ${shareUrlWithParams}`;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert(`Copied to clipboard: ${shareData.text} ${shareUrlWithParams}`);
+                textOnlyFallback(shareData);
             }
+        }
+
+        function textOnlyFallback(shareData) {
+            // Ultimate fallback: copy text to clipboard
+            const textArea = document.createElement('textarea');
+            textArea.value = `${shareData.text} ${shareData.url}`;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            alert(`Copied to clipboard: ${shareData.text} ${shareData.url}`);
+            closeShareWindow();
         }
 
         // Initialize app when DOM is loaded
