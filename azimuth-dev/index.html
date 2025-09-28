@@ -264,7 +264,7 @@
             width: auto;
             height: auto;
             display: block;
-            font-size: 20px;
+            font-size: 44px;
             color: white;
         }
 
@@ -282,7 +282,7 @@
             justify-content: center;
             align-items: center;
             border-radius: 50%;
-            background: url('stakco_logo_squricle.png') no-repeat center;
+            background: url('https://stakcos.com/assets/1.0.0/images/stakco_logo_squricle.png') no-repeat center;
             background-size: contain;
             padding: 0;
             transition: all 0.3s ease;
@@ -315,7 +315,7 @@
         }
 
         #info-div.expanded {
-            width: calc(100vw - 90px);
+            width: calc(100vw - 65px);
         }
 
         #status {
@@ -546,6 +546,9 @@
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 500;
+
+            /* force row layout */
+            flex-direction: row;
         }
 
         #compass-info.show {
@@ -728,7 +731,6 @@
             }
 
             #compass-info {
-                flex-direction: column;
                 gap: 10px;
             }
         }
@@ -766,11 +768,7 @@
     <div id="compass-info">
         <div class="compass-data">
             <span class="compass-label">Heading:</span>
-            <span class="compass-value" id="compass-heading">---°</span>
-        </div>
-        <div class="compass-data">
-            <span class="compass-label">Layer:</span>
-            <span class="compass-value" id="active-layer">1</span>
+            <span class="compass-value" id="compass-heading">°</span>
         </div>
         <div class="compass-data">
             <span class="compass-label">Rotation:</span>
