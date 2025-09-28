@@ -36,7 +36,7 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <script src="gameManager.js"></script>
-
+    <script src="https://stakcos.com/assets/1.0.0/utils.js"></script>
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -949,7 +949,7 @@
             <p>Same puzzle, endless experiences</p>
             
             <div class="products-grid">
-                <a href="https://stakcos.com/azimuth" class="product-card" target="_blank">
+                <a id="azimuth-link" href="https://stakcos.com/azimuth" class="product-card" target="_blank">
                     <div class="product-thumbnail">
                         <i class="fa-solid fa-compass"></i>
                     </div>
@@ -958,7 +958,7 @@
                     <div class="product-url">stakcos.com/azimuth</div>
                 </a>
 
-                <a href="https://stakcos.com/mrt" class="product-card" target="_blank">
+                <a id="mrt-link" href="https://stakcos.com/mrt" class="product-card" target="_blank">
                     <div class="product-thumbnail">
                         <i class="fa-solid fa-train-subway"></i>
                     </div>
@@ -967,7 +967,7 @@
                     <div class="product-url">stakcos.com/mrt</div>
                 </a>
 
-                <a href="https://stakcos.com/midi" class="product-card" target="_blank">
+                <a id="midi-link" href="https://stakcos.com/midi" class="product-card" target="_blank">
                     <div class="product-thumbnail">
                         <i class="fa-solid fa-music"></i>
                     </div>
@@ -976,7 +976,7 @@
                     <div class="product-url">stakcos.com/midi</div>
                 </a>
 
-                <a href="https://stakcos.com/clock" class="product-card" target="_blank">
+                <a id="clock-link" href="https://stakcos.com/clock" class="product-card" target="_blank">
                     <div class="product-thumbnail">
                         <i class="fa-solid fa-clock"></i>
                     </div>
@@ -985,7 +985,7 @@
                     <div class="product-url">stakcos.com/clock</div>
                 </a>
 
-                <a href="https://stakcos.com/dial" class="product-card" target="_blank">
+                <a id="dial-link" href="https://stakcos.com/dial" class="product-card" target="_blank">
                     <div class="product-thumbnail">
                         <i class="fa-solid fa-circle-dot"></i>
                     </div>
@@ -1000,11 +1000,22 @@
     <div id="container"></div>
     <div id="controls"></div>
 
-    <button id="share-button" onclick="openShareWindow()">Share Success!</button>
-    <button id="replay-button" onclick="replayPuzzle()">Remix and try again</button>
+    <button id="share-button">Share Success!</button>
+    <button id="replay-button">Remix and try again</button>
 
 
-    <script>
+    <script type="module">
+
+        import { 
+            isMobileDevice, 
+            isLandscapeMode, 
+            formatTime, 
+            getDailyRotations, 
+            checkImageExists, 
+            preventMobileZoom, 
+            normalizeAngleDelta, 
+        } from 'https://stakcos.com/assets/1.0.0/utils.js';
+
         // Configuration constants
         const CONFIG = {
             DEFAULT_LAYERS: 3,
@@ -1095,16 +1106,6 @@
 
         // DOM elements (cached)
         let orientationStatus, controlsDiv, statusDiv, shareButton, replayButton, container, optionsButton, optionsMenu, brandingDiv, countdownContainer, countdownTimer, infoButton, infoDiv, orientationOverlay, solveButton, shareWindow, shareContainer, shareText;
-
-        // Orientation detection functions
-        function isMobileDevice() {
-            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
-                   (navigator.maxTouchPoints && navigator.maxTouchPoints > 2 && /MacIntel/.test(navigator.platform));
-        }
-
-        function isLandscapeMode() {
-            return window.innerWidth > window.innerHeight;
-        }
 
         function checkOrientationRestriction() {
             const shouldBlock = isMobileDevice() && isLandscapeMode();
@@ -1462,15 +1463,6 @@
             return formatTime(finalElapsed);
         }
 
-        // Helper function to format time consistently
-        function formatTime(elapsed) {
-            const seconds = Math.floor(elapsed / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            
-            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-        }
-
         function cacheDomeElements (){
             orientationStatus = document.getElementById('orientation-status');
             controlsDiv = document.getElementById('controls');
@@ -1514,6 +1506,8 @@
 
             // Setup orientation monitoring
             setupOrientationMonitoring();
+
+            updateProductLinks();
 
             // method to fetch today's attempts from localStorage
             loadAttempts();
@@ -1580,33 +1574,6 @@
                 // Log today's rotations for debugging
                 console.log('Today\'s rotations:', dailyRotations.slice(0, totalLayers));
             }
-        }
-
-        // Helper function to generate daily rotations using Method 1 (hash-based)
-        function getDailyRotations() {
-            const today = new Date();
-            const dateString = today.getFullYear() + '-' + 
-                            String(today.getMonth() + 1).padStart(2, '0') + '-' + 
-                            String(today.getDate()).padStart(2, '0');
-            
-            // Simple hash function
-            function simpleHash(str, seed = 0) {
-                let hash = seed;
-                for (let i = 0; i < str.length; i++) {
-                    hash = ((hash << 5) - hash + str.charCodeAt(i)) & 0xffffffff;
-                }
-                return Math.abs(hash);
-            }
-            
-            // Generate rotations for up to 10 layers (you can extend if needed)
-            const rotations = [];
-            for (let i = 1; i <= 10; i++) {
-                const hash = simpleHash(dateString, i);
-                rotations.push(hash % 361); // 0-360 range
-            }
-            
-            console.log('Generated daily rotations:', rotations);
-            return rotations;
         }
 
         // Create dynamic DOM elements for layers and controls
@@ -1713,20 +1680,6 @@
             console.log(`Loaded ${loadedCount}/${totalLayers} images successfully`);
         }
 
-        // Check if image exists at URL
-        async function checkImageExists(url) {
-            try {
-                const response = await fetch(url, {
-                    method: 'GET',
-                    mode: 'cors',
-                    cache: 'no-cache'
-                });
-                return response.ok;
-            } catch (error) {
-                return false;
-            }
-        }
-
         // Apply initial random rotations
         function applyInitialRotations() {
             Object.entries(puzzleLayers).forEach(([layerKey, data]) => {
@@ -1788,21 +1741,9 @@
                     closeShareWindow();
                 }
             });
-        }
 
-        // Prevent zoom on mobile devices
-        function preventMobileZoom() {
-            document.addEventListener('touchstart', (e) => {
-                if (e.touches.length > 1) e.preventDefault();
-            }, { passive: false });
-
-            document.addEventListener('touchend', (event) => {
-                const now = Date.now();
-                if (now - lastTouchEnd <= CONFIG.DOUBLE_TAP_DELAY) {
-                    event.preventDefault();
-                }
-                lastTouchEnd = now;
-            }, false);
+            document.getElementById('share-button').addEventListener('click', openShareWindow);
+            document.getElementById('replay-button').addEventListener('click', remixPuzzle);
         }
 
         // Helper function to trigger first interaction
@@ -1810,6 +1751,25 @@
             if (!firstInteractionOccurred && !hasUrlParams && !puzzleSolved && !orientationBlocked) {
                 firstInteractionOccurred = true;
                 startCountdown();
+            }
+        }
+
+        function updateProductLinks() {
+            if (shareParams) {
+                const productLinks = [
+                    { id: 'azimuth-link', baseUrl: 'https://stakcos.com/azimuth' },
+                    { id: 'mrt-link', baseUrl: 'https://stakcos.com/mrt' },
+                    { id: 'midi-link', baseUrl: 'https://stakcos.com/midi' },
+                    { id: 'clock-link', baseUrl: 'https://stakcos.com/clock' },
+                    { id: 'dial-link', baseUrl: 'https://stakcos.com/dial' }
+                ];
+
+                productLinks.forEach(link => {
+                    const element = document.getElementById(link.id);
+                    if (element) {
+                        element.href = link.baseUrl + shareParams;
+                    }
+                });
             }
         }
 
@@ -1870,13 +1830,6 @@
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
             return Math.atan2(clientY - centerY, clientX - centerX) * 180 / Math.PI;
-        }
-
-        // Normalize angle delta to handle wrap-around
-        function normalizeAngleDelta(delta) {
-            if (delta > 180) delta -= 360;
-            if (delta < -180) delta += 360;
-            return delta;
         }
 
         // Keyboard event handler

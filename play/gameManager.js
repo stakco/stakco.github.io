@@ -1,6 +1,7 @@
 class GameDataManager {
     constructor() {
         this.storageKey = 'stakco_game_data';
+        this.maxRecords = 30; // Maximum number of date records to keep
     }
 
     // Load all game data or initialize empty structure
@@ -14,14 +15,38 @@ class GameDataManager {
         }
     }
 
-    // Save all game data
+    // Save all game data with automatic cleanup
     saveAllGameData(gameData) {
         try {
-            localStorage.setItem(this.storageKey, JSON.stringify(gameData));
+            // Clean up old records if we exceed the limit
+            const cleanedData = this.cleanupOldRecords(gameData);
+            localStorage.setItem(this.storageKey, JSON.stringify(cleanedData));
             console.log('Game data saved successfully');
         } catch (e) {
             console.error('Error saving game data:', e);
         }
+    }
+
+    // Clean up old records, keeping only the most recent maxRecords
+    cleanupOldRecords(gameData) {
+        const dates = Object.keys(gameData).sort(); // Sort dates chronologically
+        
+        if (dates.length <= this.maxRecords) {
+            return gameData; // No cleanup needed
+        }
+        
+        // Keep only the most recent records
+        const datesToKeep = dates.slice(-this.maxRecords);
+        const cleanedData = {};
+        
+        datesToKeep.forEach(date => {
+            cleanedData[date] = gameData[date];
+        });
+        
+        const removedCount = dates.length - this.maxRecords;
+        console.log(`Cleaned up ${removedCount} old record(s), keeping ${datesToKeep.length} most recent records`);
+        
+        return cleanedData;
     }
 
     // Load attempts for a specific date
@@ -69,6 +94,7 @@ class GameDataManager {
         
         allData[dateStr].attempts.push(newAttempt);
         
+        // Save with automatic cleanup
         this.saveAllGameData(allData);
         console.log('New attempt saved:', newAttempt);
     }
@@ -241,6 +267,20 @@ class GameDataManager {
             successRate: totalAttempts > 0 ? Math.round((totalSolved / totalAttempts) * 100) : 0,
             bestTime: bestOverallTime ? this.secondsToTime(bestOverallTime) : null,
             averageTime: averageOverallTime ? this.secondsToTime(averageOverallTime) : null
+        };
+    }
+
+    // Get storage usage information
+    getStorageInfo() {
+        const allData = this.loadAllGameData();
+        const dates = Object.keys(allData).sort();
+        
+        return {
+            totalRecords: dates.length,
+            maxRecords: this.maxRecords,
+            oldestRecord: dates.length > 0 ? dates[0] : null,
+            newestRecord: dates.length > 0 ? dates[dates.length - 1] : null,
+            storageUsed: JSON.stringify(allData).length
         };
     }
 }
