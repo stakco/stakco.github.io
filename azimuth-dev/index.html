@@ -881,13 +881,19 @@
 
     <div id="container">
         <div id="layer1" class="puzzle-layer active">
-            <div class="layer-label">1</div>
+            <div class="layer-label-wrapper puzzle-layer">
+                <div class="layer-label">1</div>
+            </div>     
         </div>
         <div id="layer2" class="puzzle-layer">
-            <div class="layer-label">2</div>
+            <div class="layer-label-wrapper puzzle-layer">
+                <div class="layer-label">2</div>
+            </div> 
         </div>
         <div id="layer3" class="puzzle-layer">
-            <div class="layer-label">3</div>
+            <div class="layer-label-wrapper puzzle-layer">
+                <div class="layer-label">3</div>
+            </div> 
         </div>
     </div>
     
@@ -956,16 +962,19 @@
             layer1: { 
                 url: null, 
                 rotation: Math.floor(Math.random() * 360),
+                labelRotation: Math.floor(Math.random() * 360),
                 baseRotation: 0
             },
             layer2: { 
                 url: null, 
                 rotation: Math.floor(Math.random() * 360),
+                labelRotation: Math.floor(Math.random() * 360),
                 baseRotation: 0
             },
             layer3: { 
                 url: null, 
                 rotation: Math.floor(Math.random() * 360),
+                labelRotation: Math.floor(Math.random() * 360),
                 baseRotation: 0
             }
         };
@@ -1321,9 +1330,25 @@
             Object.keys(puzzleLayers).forEach(layerKey => {
                 const layerElement = document.getElementById(layerKey);
                 const rotation = puzzleLayers[layerKey].rotation;
+                const labelRotation = puzzleLayers[layerKey].labelRotation;
+
+                // Get the layer label element correctly
+                const layerLabelElement = layerElement.querySelector('.layer-label');
+                const layerLabelWrapperElement = layerElement.querySelector('.layer-label-wrapper');
                 
                 if (layerElement) {
+                    // Apply rotation to the layer
                     layerElement.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+                }
+
+                if(layerLabelWrapperElement) {
+                    // Apply rotation to the label wrapper (to keep it aligned with the layer)
+                    layerLabelWrapperElement.style.transform = `translateX(-50%, -50%) rotate(${labelRotation}deg)`;
+                }
+                
+                if (layerLabelElement) {
+                    // keep labels upright despite layer rotation:
+                    layerLabelElement.style.transform = `rotate(${-rotation}deg)`;
                 }
             });
         }
