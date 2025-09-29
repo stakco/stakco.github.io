@@ -1,11 +1,11 @@
 {
   "name": "Stakco Azimuth",
-  "short_name": "Stakco",
+  "short_name": "Stakco Azimuth",
   "description": "Compass-driven Stakco puzzles with device orientation controls.",
   "start_url": "/azimuth/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#f9a743",
+  "theme_color": "#3c2f38",
   "orientation": "portrait",
   "icons": [
     {
