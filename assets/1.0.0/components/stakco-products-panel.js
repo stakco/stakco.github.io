@@ -38,7 +38,6 @@ class StakcoProductsPanel extends HTMLElement {
           transition: all 0.3s ease;
           box-shadow: var(--shadow-soft);
           outline: none;
-          z-index: 3000;
           -webkit-tap-highlight-color: transparent;
         }
         .button:hover {
