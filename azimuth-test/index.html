@@ -188,12 +188,7 @@
 
     <script type="module">
         import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
-
-        // Configuration
-        const CONFIG = {
-            SOLVE_ANIMATION_DURATION: 4000,
-            VIBRATION_PATTERN: [200, 100, 300, 100, 200]
-        };
+        import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
 
         // App state
         let lastHeading = null;
@@ -316,7 +311,7 @@
 
             countdown.stop();
 
-            StakcoUtils.vibrate(CONFIG.VIBRATION_PATTERN);
+            StakcoUtils.vibrate(StakcoConfig.VIBRATION_PATTERN);
 
             // Hide UI elements
             layerControls.hide();
@@ -328,7 +323,7 @@
 
             // Animate to zero
             setTimeout(() => {
-                puzzleContainer.animateToSolution(CONFIG.SOLVE_ANIMATION_DURATION);
+                puzzleContainer.animateToSolution(StakcoConfig.SOLVE_ANIMATION_DURATION);
             }, 500);
         }
 
