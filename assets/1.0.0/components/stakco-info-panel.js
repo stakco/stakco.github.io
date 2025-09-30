@@ -30,6 +30,8 @@ class StakcoInfoPanel extends HTMLElement {
           z-index: 2000;
         }
         .button {
+            position: absolute;
+            z-index: 2000;
           border: none;
           padding: 8px;
           border-radius: 50%;
@@ -73,7 +75,6 @@ class StakcoInfoPanel extends HTMLElement {
           align-items: center;
           backdrop-filter: blur(10px);
           box-shadow: var(--shadow-soft);
-          border: 1px solid var(--glass-border);
         }
         .panel.expanded {
           width: calc(100vw - 65px);

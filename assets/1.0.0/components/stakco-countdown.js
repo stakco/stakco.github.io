@@ -42,7 +42,6 @@ class StakcoCountdown extends HTMLElement {
         }
         .container {
           background: var(--glass-bg);
-          border: 1px solid var(--glass-border);
           border-radius: 25px;
           padding: 0px 15px;
           font-family: Consolas, "Courier New", Courier, monospace;
