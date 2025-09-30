@@ -223,6 +223,20 @@ class StakcoProductsPanel extends HTMLElement {
         url: 'https://stakcos.com/dial',
         urlDisplay: 'stakcos.com/dial',
         icon: 'fa-solid fa-circle-dot'
+      },
+      {
+        title: 'Stakco Azimuth',
+        description: 'Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation',
+        url: 'https://stakcos.com/azimuth',
+        urlDisplay: 'stakcos.com/azimuth',
+        icon: 'fa-solid fa-compass'
+      },
+      {
+        title: 'Stakco Gyro',
+        description: 'Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation',
+        url: 'https://stakcos.com/gyro',
+        urlDisplay: 'stakcos.com/gyro',
+        icon: 'fa-solid fa-sensor'
       }
     ];
   }
