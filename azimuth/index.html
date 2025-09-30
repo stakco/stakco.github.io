@@ -1,9 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+    <!-- Basic Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Compass-driven Stakco puzzles with device orientation controls.">
+    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, compass puzzle, azimuth, orientation, educational games, therapy puzzles">
+    <meta name="author" content="Stakco Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3c2f38">
+
     <title>Stakco Azimuth</title>
     
     <!-- Stylesheets -->
@@ -12,6 +19,90 @@
     
     <!-- External Libraries -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+     <!-- Open Graph -->
+    <meta property="og:title" content="Stakco Azimuth">
+    <meta property="og:description" content="Compass-driven Stakco puzzles with device orientation controls.">
+    <meta property="og:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:url" content="https://stakcos.com/azimuth/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco Azimuth">
+    <meta name="twitter:description" content="Compass-driven Stakco puzzles with device orientation controls.">
+    <meta name="twitter:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:url" content="https://stakcos.com/azimuth/">
+    <meta name="twitter:site" content="@StakcoPuzzle">
+    <meta name="twitter:creator" content="@StakcoPuzzle">
+
+    <!-- Favicons / Android -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+    <!-- Apple Touch Icons (Squircles) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+    <!-- Apple Splash Screens (Portrait only) -->
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square150x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square310x310logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x310.png">
+    <meta name="msapplication-wide310x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x150.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/azimuth/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco Azimuth">
+
+    <!-- Mobile App Meta Tags (iOS) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco Azimuth">
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stakco Azimuth",
+      "url": "https://stakcos.com/azimuth/",
+      "description": "Compass-driven Stakco puzzles with device orientation controls.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stakco"
+      }
+    }
+    </script>
     
     <!-- Import Stakco Components -->
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-countdown.js"></script>
@@ -22,14 +113,15 @@
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-orientation-overlay.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-permission-prompt.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
 
     <style>
         body {
-            margin: 0;
             padding: 0;
             font-family: 'Inter', sans-serif;
             background: var(--text-primary);
-            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -41,131 +133,6 @@
             overflow: hidden;
         }
 
-        button {
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        #container {
-            position: relative;
-            width: 90vmin;
-            height: 90vmin;
-            max-width: calc(100vw - 20px);
-            max-height: calc(100vh - 200px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .puzzle-layer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            pointer-events: none;
-            transition: transform 0s;
-        }
-
-        .puzzle-layer.solving {
-            transition: transform 4s ease-out;
-        }
-
-        .puzzle-layer.active {
-            opacity: 1;
-        }
-
-        .layer-label {
-            position: absolute;
-            top: -20px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            background: var(--glass-bg);
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            box-shadow: var(--shadow-soft);
-            pointer-events: none;
-            z-index: 50000;
-        }
-
-        .puzzle-layer.active .layer-label {
-            background: var(--primary-gradient);
-            border-color: var(--primary-color);
-            color: white;
-            box-shadow: var(--shadow-glow);
-            animation: labelPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes labelPulse {
-            0%, 100% {
-                background: var(--glass-bg);
-                color: var(--text-secondary);
-                box-shadow: var(--shadow-soft);
-            }
-            50% {
-                background: var(--primary-gradient);
-                color: white;
-                box-shadow: var(--shadow-glow);
-            }
-        }
-
-        #branding {
-            position: absolute;
-            top: 18px;
-            font-size: 14px;
-            text-align: center;
-            font-family: 'Inter', sans-serif;
-            color: var(--primary-color);
-            text-shadow: var(--shadow-glow);
-            letter-spacing: 1px;
-            font-weight: 500;
-        }
-
-        #branding.hidden {
-            display: none;
-        }
-
-        #share-button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            display: none;
-            box-shadow: var(--shadow-glow);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        #share-button.show {
-            display: block;
-        }
-
-        #share-button:hover {
-            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
-        }
     </style>
 </head>
 
@@ -181,30 +148,24 @@
         <p>Initializing compass... Rotate device to control selected layer</p>
     </stakco-info-panel>
 
-    <div id="branding">
-        <p style="display: inline; margin-left: 2px; vertical-align: middle;">
-            Stakco Azimuth <span id="product-version">v2.0.0</span>
-        </p>
-        <p style="margin-top: 2px;">Compass Puzzle</p>
-    </div>
+    <stakco-branding 
+        title="Stakco Azimuth" 
+        version="v2.0.0" 
+        subtitle="Compass Puzzle">
+    </stakco-branding>
 
     <stakco-products-panel></stakco-products-panel>
 
-    <div id="container">
-        <div id="layer1" class="puzzle-layer active">
-            <div class="layer-label">1</div>
-        </div>
-        <div id="layer2" class="puzzle-layer">
-            <div class="layer-label">2</div>
-        </div>
-        <div id="layer3" class="puzzle-layer">
-            <div class="layer-label">3</div>
-        </div>
-    </div>
+    <stakco-puzzle-container
+        layers="3"
+        user-id="109949450257686494443"
+        puzzle-id="A2A3_3"
+        tolerance="2">
+    </stakco-puzzle-container>
     
     <stakco-layer-controls layers="3"></stakco-layer-controls>
 
-    <button id="share-button">Share Success!</button>
+    <stakco-share-button label="Share Success!"></stakco-share-button>
 
     <stakco-permission-prompt 
         title="Enable Device Orientation"
@@ -221,30 +182,14 @@
 
     <script type="module">
         import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
-
-        // Configuration
-        const CONFIG = {
-            ROTATION_TOLERANCE: 2,
-            SOLVE_ANIMATION_DURATION: 4000,
-            VIBRATION_PATTERN: [200, 100, 300, 100, 200],
-            USER_ID: '109949450257686494443',
-            PUZZLE_ID: 'A2A3_3'
-        };
+        import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
 
         // App state
-        let currentLayer = 1;
         let lastHeading = null;
-        let puzzleSolved = false;
         let firstInteraction = false;
 
-        // Puzzle layer data
-        const puzzleLayers = {
-            layer1: { rotation: StakcoUtils.randomRotation(), url: null },
-            layer2: { rotation: StakcoUtils.randomRotation(), url: null },
-            layer3: { rotation: StakcoUtils.randomRotation(), url: null }
-        };
-
         // Get component references
+        const puzzleContainer = document.querySelector('stakco-puzzle-container');
         const countdown = document.querySelector('stakco-countdown');
         const compassInfo = document.querySelector('stakco-compass-info');
         const layerControls = document.querySelector('stakco-layer-controls');
@@ -252,60 +197,38 @@
         const shareWindow = document.querySelector('stakco-share-window');
         const orientationOverlay = document.querySelector('stakco-orientation-overlay');
         const permissionPrompt = document.querySelector('stakco-permission-prompt');
-        const shareButton = document.getElementById('share-button');
-        const branding = document.getElementById('branding');
+        const branding = document.querySelector('stakco-branding');
+        const shareButton = document.querySelector('stakco-share-button');
 
-        // Initialize app
         async function init() {
-            console.log('Initializing Stakco Azimuth...');
-
             // Prevent zoom on mobile
             StakcoUtils.preventZoom();
-
-            // Load puzzle images
-            await loadPuzzleData();
-
-            // Apply initial rotations
-            applyInitialRotations();
-
-            // Setup event listeners
             setupEventListeners();
-
-            // Show permission prompt if needed (delayed)
             setTimeout(checkPermissionNeeded, 1000);
-
-            console.log('App initialized');
-        }
-
-        async function loadPuzzleData() {
-            const images = StakcoUtils.loadPuzzleImages(CONFIG.USER_ID, CONFIG.PUZZLE_ID);
-            
-            puzzleLayers.layer1.url = images.layer1;
-            puzzleLayers.layer2.url = images.layer2;
-            puzzleLayers.layer3.url = images.layer3;
-
-            document.getElementById('layer1').style.backgroundImage = `url('${images.layer1}')`;
-            document.getElementById('layer2').style.backgroundImage = `url('${images.layer2}')`;
-            document.getElementById('layer3').style.backgroundImage = `url('${images.layer3}')`;
-
-            console.log('Puzzle images loaded');
-        }
-
-        function applyInitialRotations() {
-            Object.keys(puzzleLayers).forEach(layerKey => {
-                const element = document.getElementById(layerKey);
-                const rotation = puzzleLayers[layerKey].rotation;
-                element.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
-            });
-
-            updateRotationDisplay();
-            console.log('Initial rotations applied');
         }
 
         function setupEventListeners() {
+            // Puzzle container events
+            puzzleContainer.addEventListener('puzzle-ready', () => {
+                console.log('Puzzle ready');
+            });
+
+            puzzleContainer.addEventListener('layer-switched', (e) => {
+                updateRotationDisplay(e.detail.rotation);
+            });
+
+            puzzleContainer.addEventListener('layer-rotated', (e) => {
+                updateRotationDisplay(e.detail.rotation);
+                puzzleContainer.checkAlignment();
+            });
+
+            puzzleContainer.addEventListener('puzzle-solved', (e) => {
+                solvePuzzle(e.detail.layers);
+            });
+
             // Layer controls
             layerControls.addEventListener('layerchange', (e) => {
-                switchLayer(e.detail.layer);
+                puzzleContainer.switchLayer(e.detail.layer);
             });
 
             // Orientation overlay
@@ -334,7 +257,7 @@
             });
 
             // Share button
-            shareButton.addEventListener('click', handleShare);
+            shareButton.addEventListener('share-clicked', handleShare);
 
             // Device orientation
             if (StakcoUtils.isOrientationSupported()) {
@@ -342,30 +265,15 @@
             }
         }
 
-        function switchLayer(layerNumber) {
-            if (puzzleSolved) return;
-
-            // Update visual state
-            document.querySelectorAll('.puzzle-layer').forEach(layer => {
-                layer.classList.remove('active');
-            });
-            document.getElementById(`layer${layerNumber}`).classList.add('active');
-
-            currentLayer = layerNumber;
-            updateRotationDisplay();
-
-            console.log(`Switched to layer ${layerNumber}`);
-        }
-
         function handleOrientation(event) {
-            if (puzzleSolved || orientationOverlay.isBlocked()) return;
+            if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
 
             // Start countdown on first interaction
             if (!firstInteraction) {
                 firstInteraction = true;
                 countdown.start();
                 compassInfo.show();
-                branding.classList.add('hidden');
+                branding.hide();
                 infoPanel.setContent('<p>Compass active - Rotate device to align all layers</p>');
             }
 
@@ -380,49 +288,24 @@
                 if (deltaHeading > 180) deltaHeading -= 360;
                 if (deltaHeading < -180) deltaHeading += 360;
 
-                // Apply to current layer
-                puzzleLayers[`layer${currentLayer}`].rotation += deltaHeading;
-
-                // Update display
-                const layerElement = document.getElementById(`layer${currentLayer}`);
-                layerElement.style.transform = `translate(-50%, -50%) rotate(${puzzleLayers[`layer${currentLayer}`].rotation}deg)`;
-
-                updateRotationDisplay();
-                checkSolution();
+                // Apply to current layer via puzzle container
+                puzzleContainer.rotateCurrentLayer(deltaHeading);
             }
 
             lastHeading = heading;
             compassInfo.updateHeading(heading);
         }
 
-        function updateRotationDisplay() {
-            const rotation = puzzleLayers[`layer${currentLayer}`].rotation;
+        function updateRotationDisplay(rotation) {
             compassInfo.updateRotation(rotation);
         }
 
-        function checkSolution() {
-            if (puzzleSolved) return;
-
-            const rotations = [
-                puzzleLayers.layer1.rotation,
-                puzzleLayers.layer2.rotation,
-                puzzleLayers.layer3.rotation
-            ];
-
-            if (StakcoUtils.rotationsAligned(rotations, CONFIG.ROTATION_TOLERANCE)) {
-                solvePuzzle();
-            }
-        }
-
-        function solvePuzzle() {
-            puzzleSolved = true;
+        function solvePuzzle(layerImages) {
             console.log('Puzzle solved!');
 
-            // Stop countdown
             countdown.stop();
 
-            // Vibrate
-            StakcoUtils.vibrate(CONFIG.VIBRATION_PATTERN);
+            StakcoUtils.vibrate(StakcoConfig.VIBRATION_PATTERN);
 
             // Hide UI elements
             layerControls.hide();
@@ -430,31 +313,20 @@
             compassInfo.hide();
 
             // Show share button
-            shareButton.classList.add('show');
+            shareButton.show();
 
             // Animate to zero
-            setTimeout(animateToZero, 500);
-        }
-
-        function animateToZero() {
-            Object.keys(puzzleLayers).forEach(layerKey => {
-                const element = document.getElementById(layerKey);
-                element.classList.add('solving');
-                element.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-                puzzleLayers[layerKey].rotation = 0;
-            });
+            setTimeout(() => {
+                puzzleContainer.animateToSolution(StakcoConfig.SOLVE_ANIMATION_DURATION);
+            }, 500);
         }
 
         async function handleShare() {
-            const finalTime = countdown.getTime();
-            const layerImages = [
-                puzzleLayers.layer1.url,
-                puzzleLayers.layer2.url,
-                puzzleLayers.layer3.url
-            ];
+            const timeToSolve = countdown.getTime();
+            const layerImages = puzzleContainer.getLayerImages();
             
-            const message = `Solved in ${finalTime} with compass navigation!`;
-            shareWindow.setAttribute('filename', `stakco-azimuth-${finalTime.replace(':', '')}.png`);
+            const message = `Solved in ${timeToSolve} with compass navigation!`;
+            shareWindow.setAttribute('filename', `stakco-azimuth-${timeToSolve.replace(':', '')}.png`);
             
             await shareWindow.open(layerImages, message, true);
         }
@@ -471,14 +343,11 @@
         function initializeOrientation() {
             if (StakcoUtils.isOrientationSupported()) {
                 infoPanel.setContent('<p>Compass ready - Rotate device to control selected layer</p>');
-                console.log('Orientation initialized');
             } else {
                 infoPanel.setContent('<p>Device orientation not supported on this device</p>');
-                console.log('Orientation not supported');
             }
         }
 
-        // Start app
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
