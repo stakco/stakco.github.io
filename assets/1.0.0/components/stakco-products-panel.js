@@ -19,6 +19,7 @@ class StakcoProductsPanel extends HTMLElement {
     
     /* html */
     this.shadowRoot.innerHTML = `
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
       <style>
         :host {
           position: absolute;
@@ -37,6 +38,7 @@ class StakcoProductsPanel extends HTMLElement {
           transition: all 0.3s ease;
           box-shadow: var(--shadow-soft);
           outline: none;
+          z-index: 3000;
           -webkit-tap-highlight-color: transparent;
         }
         .button:hover {
