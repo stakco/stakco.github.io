@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stakco App Launcher - Access all Stakco puzzle variants">
+    <title>Stakco Launcher</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 40px 20px 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 40px;
+            padding: 20px;
+            justify-content: center;
+            justify-items: center;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .app-item:hover {
+            transform: translateY(-8px);
+        }
+
+        .app-item:active {
+            transform: translateY(-4px) scale(0.98);
+        }
+
+        .app-item.hidden {
+            display: none;
+        }
+
+        .app-icon {
+            width: 80px;
+            height: 80px;
+            background: url('https://stakcos.com/assets/1.0.0/images/stakco_logo_squricle.png') no-repeat center;
+            background-size: contain;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 4px 12px rgba(249, 167, 68, 0.3));
+            transition: all 0.3s ease;
+        }
+
+        .app-item:hover .app-icon {
+            filter: drop-shadow(0 8px 20px rgba(249, 167, 68, 0.6));
+        }
+
+        .app-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            text-align: center;
+            line-height: 1.3;
+        }
+
+        .search-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: var(--text-primary);
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-bar {
+            width: 100%;
+            max-width: 600px;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-family: 'Inter', sans-serif;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50px;
+            color: white;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-bar::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-bar:focus {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 0 0 2px rgba(249, 167, 68, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .apps-grid {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+                gap: 35px;
+            }
+
+            .app-icon {
+                width: 70px;
+                height: 70px;
+            }
+
+            .app-name {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 40px 10px 100px;
+            }
+
+            .apps-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 30px;
+                max-width: 340px;
+                padding: 20px 10px;
+            }
+
+            .app-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .app-name {
+                font-size: 12px;
+            }
+
+            .search-container {
+                padding: 15px;
+            }
+
+            .search-bar {
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="apps-grid" id="apps-grid"></div>
+    </div>
+    
+    <div class="search-container">
+        <input 
+            type="text" 
+            class="search-bar" 
+            id="search-bar" 
+            placeholder="Search"
+            autocomplete="off"
+        >
+    </div>
+
+    <script>
+        const apps = [
+            {
+                name: 'Stakco Play',
+                url: 'https://stakcos.com/play',
+                tags: ['classic', 'original', 'main', 'puzzle', 'game', 'daily']
+            },
+            {
+                name: 'Stakco Azimuth',
+                url: 'https://stakcos.com/azimuth',
+                tags: ['direction', 'compass', 'angle', 'degrees', 'rotation', 'orientation']
+            },
+            {
+                name: 'Stakco Gyro',
+                url: 'https://stakcos.com/gyro',
+                tags: ['spin', 'rotate', 'twist', 'turn', 'rotation', 'circular']
+            },
+            {
+                name: 'Stakco SMRT',
+                url: 'https://stakcos.com/mrt',
+                tags: ['mrt', 'train', 'transit', 'subway', 'metro', 'transport', 'singapore']
+            },
+            {
+                name: 'Stakco MIDI',
+                url: 'https://stakcos.com/midi',
+                tags: ['music', 'sound', 'audio', 'notes', 'musical', 'melody']
+            },
+            {
+                name: 'Stakco Clock',
+                url: 'https://stakcos.com/clock',
+                tags: ['time', 'hours', 'minutes', 'watch', 'timer', 'temporal']
+            },
+            {
+                name: 'Stakco Dial',
+                url: 'https://stakcos.com/dial',
+                tags: ['phone', 'number', 'keypad', 'telephone', 'digits', 'numeric']
+            }
+        ];
+
+        function renderApps() {
+            const grid = document.getElementById('apps-grid');
+            
+            apps.forEach(app => {
+                const appItem = document.createElement('a');
+                appItem.href = app.url;
+                appItem.className = 'app-item';
+                appItem.target = '_blank';
+                appItem.dataset.tags = app.tags.join(' ');
+                
+                appItem.innerHTML = `
+                    <div class="app-icon"></div>
+                    <div class="app-name">${app.name}</div>
+                `;
+                
+                grid.appendChild(appItem);
+            });
+        }
+
+        // Render apps on load
+        document.addEventListener('DOMContentLoaded', renderApps);
+
+        // Search functionality
+        const searchBar = document.getElementById('search-bar');
+        searchBar.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            const appItems = document.querySelectorAll('.app-item');
+            
+            appItems.forEach(item => {
+                const appName = item.querySelector('.app-name').textContent.toLowerCase();
+                const appTags = item.dataset.tags.toLowerCase();
+                
+                if (appName.includes(searchTerm) || appTags.includes(searchTerm)) {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        });
+
+        // Add touch feedback for mobile
+        document.addEventListener('touchstart', function(e) {
+            if (e.target.closest('.app-item')) {
+                e.target.closest('.app-item').style.transform = 'translateY(-4px) scale(0.98)';
+            }
+        }, { passive: true });
+
+        document.addEventListener('touchend', function(e) {
+            if (e.target.closest('.app-item')) {
+                setTimeout(() => {
+                    e.target.closest('.app-item').style.transform = '';
+                }, 150);
+            }
+        }, { passive: true });
+    </script>
+</body>
+</html>
