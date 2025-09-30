@@ -35,6 +35,7 @@ class StakcoPuzzleContainer extends HTMLElement {
     render() {
         const layers = parseInt(this.getAttribute('layers')) || 3;
         
+        /* html */
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
