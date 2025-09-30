@@ -236,7 +236,7 @@ class StakcoProductsPanel extends HTMLElement {
         description: 'Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation',
         url: 'https://stakcos.com/gyro',
         urlDisplay: 'stakcos.com/gyro',
-        icon: 'fa-solid fa-sensor'
+        icon: 'fa-solid fa-globe'
       }
     ];
   }
