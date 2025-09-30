@@ -1,0 +1,30 @@
+{
+  "name": "Stakco Clock",
+  "short_name": "Stakco Clock",
+  "description": "Time-driven Stakco puzzles synchronized with clock movements",
+  "start_url": "/clock/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3c2f38",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
