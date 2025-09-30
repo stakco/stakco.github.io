@@ -115,6 +115,7 @@
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
 
     <style>
         body {
@@ -137,36 +138,6 @@
         button {
             outline: none;
             -webkit-tap-highlight-color: transparent;
-        }
-
-        #share-button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            display: none;
-            box-shadow: var(--shadow-glow);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            font-family: 'Inter', sans-serif;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        #share-button.show {
-            display: block;
-        }
-
-        #share-button:hover {
-            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
         }
     </style>
 </head>
@@ -200,7 +171,7 @@
     
     <stakco-layer-controls layers="3"></stakco-layer-controls>
 
-    <button id="share-button">Share Success!</button>
+    <stakco-share-button label="Share Success!"></stakco-share-button>
 
     <stakco-permission-prompt 
         title="Enable Device Orientation"
@@ -238,22 +209,13 @@
         const orientationOverlay = document.querySelector('stakco-orientation-overlay');
         const permissionPrompt = document.querySelector('stakco-permission-prompt');
         const branding = document.querySelector('stakco-branding');
-        const shareButton = document.getElementById('share-button');
+        const shareButton = document.querySelector('stakco-share-button');
 
-        // Initialize app
         async function init() {
-            console.log('Initializing Stakco Azimuth...');
-
             // Prevent zoom on mobile
             StakcoUtils.preventZoom();
-
-            // Setup event listeners
             setupEventListeners();
-
-            // Show permission prompt if needed (delayed)
             setTimeout(checkPermissionNeeded, 1000);
-
-            console.log('App initialized');
         }
 
         function setupEventListeners() {
@@ -306,7 +268,7 @@
             });
 
             // Share button
-            shareButton.addEventListener('click', handleShare);
+            shareButton.addEventListener('share-clicked', handleShare);
 
             // Device orientation
             if (StakcoUtils.isOrientationSupported()) {
@@ -352,10 +314,8 @@
         function solvePuzzle(layerImages) {
             console.log('Puzzle solved!');
 
-            // Stop countdown
             countdown.stop();
 
-            // Vibrate
             StakcoUtils.vibrate(CONFIG.VIBRATION_PATTERN);
 
             // Hide UI elements
@@ -364,7 +324,7 @@
             compassInfo.hide();
 
             // Show share button
-            shareButton.classList.add('show');
+            shareButton.show();
 
             // Animate to zero
             setTimeout(() => {
@@ -373,11 +333,11 @@
         }
 
         async function handleShare() {
-            const finalTime = countdown.getTime();
+            const timeToSolve = countdown.getTime();
             const layerImages = puzzleContainer.getLayerImages();
             
-            const message = `Solved in ${finalTime} with compass navigation!`;
-            shareWindow.setAttribute('filename', `stakco-azimuth-${finalTime.replace(':', '')}.png`);
+            const message = `Solved in ${timeToSolve} with compass navigation!`;
+            shareWindow.setAttribute('filename', `stakco-azimuth-${timeToSolve.replace(':', '')}.png`);
             
             await shareWindow.open(layerImages, message, true);
         }
@@ -394,14 +354,11 @@
         function initializeOrientation() {
             if (StakcoUtils.isOrientationSupported()) {
                 infoPanel.setContent('<p>Compass ready - Rotate device to control selected layer</p>');
-                console.log('Orientation initialized');
             } else {
                 infoPanel.setContent('<p>Device orientation not supported on this device</p>');
-                console.log('Orientation not supported');
             }
         }
 
-        // Start app
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
