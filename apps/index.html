@@ -197,6 +197,9 @@
     </div>
 
     <script>
+
+        
+
         const apps = [
             {
                 name: 'Stakco Play',
@@ -259,6 +262,12 @@
 
         // Search functionality
         const searchBar = document.getElementById('search-bar');
+        searchBar.addEventListener('focus', () => {
+            setTimeout(() => {
+                searchBar.scrollIntoView({ block: "center", behavior: "smooth" });
+            }, 300);
+        });
+        
         searchBar.addEventListener('input', function(e) {
             const searchTerm = e.target.value.toLowerCase().trim();
             const appItems = document.querySelectorAll('.app-item');
