@@ -36,7 +36,7 @@ class StakcoPuzzleContainer extends HTMLElement {
         const layers = parseInt(this.getAttribute('layers')) || 3;
         
         /* html */
-        this.shadowRoot.innerHTML = `
+                    this.shadowRoot.innerHTML = `
             <style>
                 :host {
                     display: block;
@@ -119,6 +119,15 @@ class StakcoPuzzleContainer extends HTMLElement {
                         box-shadow: var(--shadow-glow);
                     }
                 }
+
+                /* Slot for overlay content (like clock face) */
+                ::slotted(*) {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
             </style>
 
             <div class="container">
@@ -127,6 +136,7 @@ class StakcoPuzzleContainer extends HTMLElement {
                         <div class="layer-label">${i + 1}</div>
                     </div>
                 `).join('')}
+                <slot name="overlay"></slot>
             </div>
         `;
     }
