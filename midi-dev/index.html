@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Basic Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MIDI-driven Stakco puzzles with musical note controls.">
+    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, MIDI puzzle, music, educational games, therapy puzzles">
+    <meta name="author" content="Stakco Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3c2f38">
+
+    <title>Stakco MIDI</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+     <!-- Open Graph -->
+    <meta property="og:title" content="Stakco MIDI">
+    <meta property="og:description" content="MIDI-driven Stakco puzzles with musical note controls.">
+    <meta property="og:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:url" content="https://stakcos.com/midi/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco MIDI">
+    <meta name="twitter:description" content="MIDI-driven Stakco puzzles with musical note controls.">
+    <meta name="twitter:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:url" content="https://stakcos.com/midi/">
+    <meta name="twitter:site" content="@StakcoPuzzle">
+    <meta name="twitter:creator" content="@StakcoPuzzle">
+
+    <!-- Favicons / Android -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+    <!-- Apple Touch Icons (Squircles) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+    <!-- Apple Splash Screens (Portrait only) -->
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square150x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square310x310logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x310.png">
+    <meta name="msapplication-wide310x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x150.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/midi/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco MIDI">
+
+    <!-- Mobile App Meta Tags (iOS) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco MIDI">
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stakco MIDI",
+      "url": "https://stakcos.com/midi/",
+      "description": "MIDI-driven Stakco puzzles with musical note controls.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stakco"
+      }
+    }
+    </script>
+    
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-permission-prompt.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* MIDI Info Display */
+        #midi-info {
+            position: absolute;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 15px 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
+            display: flex;
+            gap: 30px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        #midi-info.hidden {
+            display: none;
+        }
+
+        .midi-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .midi-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .midi-value {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* MIDI Activity Indicator */
+        .midi-activity {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #333;
+            border: 2px solid #666;
+            transition: all 0.2s ease;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .midi-activity.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Note Visualization */
+        .note-visual {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+            z-index: 800;
+        }
+
+        .note-bar {
+            width: 8px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            transition: all 0.1s ease;
+        }
+
+        .note-bar.active {
+            background: var(--primary-gradient);
+            box-shadow: var(--shadow-glow);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Components -->
+    <stakco-info-panel icon="fa-music">
+        <p>Initializing MIDI... Connect keyboard to play</p>
+    </stakco-info-panel>
+
+    <stakco-branding 
+        title="Stakco MIDI" 
+        version="v2.0.0" 
+        subtitle="Music Puzzle">
+    </stakco-branding>
+
+    <stakco-products-panel></stakco-products-panel>
+
+    <!-- MIDI Info Display -->
+    <div id="midi-info" class="hidden">
+        <div class="midi-row">
+            <span class="midi-label">Note:</span>
+            <span class="midi-value" id="last-note">---</span>
+            <span class="midi-activity" id="midi-indicator"></span>
+        </div>
+        <div class="midi-row">
+            <span class="midi-label">Layer:</span>
+            <span class="midi-value" id="active-layer">1</span>
+        </div>
+        <div class="midi-row">
+            <span class="midi-label">Rotation:</span>
+            <span class="midi-value" id="rotation-value">0°</span>
+        </div>
+    </div>
+
+    <stakco-puzzle-container
+        layers="3"
+        user-id="109949450257686494443"
+        puzzle-id="A2A3_3"
+        tolerance="2">
+    </stakco-puzzle-container>
+
+    <!-- Note Visualization -->
+    <div class="note-visual" id="note-visual"></div>
+    
+    <stakco-layer-controls layers="3"></stakco-layer-controls>
+
+    <stakco-share-button label="Share Success!"></stakco-share-button>
+
+    <stakco-permission-prompt 
+        title="Enable MIDI Access"
+        message="This app needs access to your MIDI devices to control puzzle layers with musical input. Connect a MIDI keyboard, then enable MIDI. When you solve the puzzle, your keyboard will play celebration music!"
+        primary-label="Enable MIDI"
+        secondary-label="Skip">
+    </stakco-permission-prompt>
+
+    <stakco-share-window 
+        title="Stakco MIDI"
+        share-url="https://stakcos.com/midi/">
+        <div slot="text">Solved with music!</div>
+    </stakco-share-window>
+
+    <script type="module">
+        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+        import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
+
+        // Get configuration
+        const CONFIG = StakcoConfig.getConfig('midi');
+
+        // MIDI state
+        let midiAccess = null;
+        let midiOutput = null;
+        let noteCount = 0;
+        let isPlayingCelebration = false;
+
+        // MIDI note names
+        const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+
+        // Celebration melodies
+        const celebrationMelody = [
+            { note: 67, duration: 300 }, { note: 69, duration: 300 }, { note: 71, duration: 300 },
+            { note: 74, duration: 300 }, { note: 76, duration: 300 }, { note: 78, duration: 300 },
+            { note: 79, duration: 600 }, { note: 0, duration: 200 }, { note: 83, duration: 300 },
+            { note: 81, duration: 300 }, { note: 79, duration: 300 }, { note: 76, duration: 300 },
+            { note: 74, duration: 300 }, { note: 72, duration: 300 }, { note: 67, duration: 800 }
+        ];
+
+        const victoryFanfare = [
+            { note: 60, duration: 300 }, { note: 64, duration: 300 }, { note: 67, duration: 300 },
+            { note: 72, duration: 300 }, { note: 0, duration: 100 }, { note: 65, duration: 300 },
+            { note: 69, duration: 300 }, { note: 72, duration: 300 }, { note: 77, duration: 300 },
+            { note: 0, duration: 100 }, { note: 67, duration: 300 }, { note: 71, duration: 300 },
+            { note: 74, duration: 300 }, { note: 79, duration: 300 }, { note: 0, duration: 200 },
+            { note: 60, duration: 800 }, { note: 64, duration: 800 }, { note: 67, duration: 800 },
+            { note: 72, duration: 800 }, { note: 76, duration: 800 }
+        ];
+
+        // Get component references
+        const puzzleContainer = document.querySelector('stakco-puzzle-container');
+        const layerControls = document.querySelector('stakco-layer-controls');
+        const infoPanel = document.querySelector('stakco-info-panel');
+        const shareWindow = document.querySelector('stakco-share-window');
+        const permissionPrompt = document.querySelector('stakco-permission-prompt');
+        const branding = document.querySelector('stakco-branding');
+        const shareButton = document.querySelector('stakco-share-button');
+        
+        // Display elements
+        const midiInfo = document.getElementById('midi-info');
+        const lastNoteSpan = document.getElementById('last-note');
+        const activeLayerSpan = document.getElementById('active-layer');
+        const rotationValueSpan = document.getElementById('rotation-value');
+        const midiIndicator = document.getElementById('midi-indicator');
+        const noteVisual = document.getElementById('note-visual');
+
+        async function init() {
+            console.log('Initializing Stakco MIDI...');
+
+            StakcoUtils.preventZoom();
+            createNoteVisual();
+            setupEventListeners();
+
+            setTimeout(checkPermissionNeeded, 1000);
+
+            console.log('App initialized');
+        }
+
+        function setupEventListeners() {
+            puzzleContainer.addEventListener('puzzle-ready', () => {
+                console.log('Puzzle ready');
+            });
+
+            puzzleContainer.addEventListener('puzzle-solved', () => {
+                handlePuzzleSolved();
+            });
+
+            layerControls.addEventListener('layerchange', (e) => {
+                puzzleContainer.switchLayer(e.detail.layer);
+                activeLayerSpan.textContent = e.detail.layer;
+                updateRotationDisplay();
+            });
+
+            permissionPrompt.addEventListener('primary-action', async () => {
+                await requestMIDIAccess();
+            });
+
+            permissionPrompt.addEventListener('secondary-action', () => {
+                initializeMIDI();
+            });
+
+            shareButton.addEventListener('share-clicked', handleShare);
+        }
+
+        function createNoteVisual() {
+            noteVisual.innerHTML = '';
+            for (let i = 0; i < 12; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'note-bar';
+                bar.dataset.note = i;
+                noteVisual.appendChild(bar);
+            }
+        }
+
+        async function requestMIDIAccess() {
+            if (!navigator.requestMIDIAccess) {
+                infoPanel.setContent('<p>MIDI not supported in this browser</p>');
+                return;
+            }
+
+            try {
+                midiAccess = await navigator.requestMIDIAccess({ sysex: false });
+                
+                for (let input of midiAccess.inputs.values()) {
+                    input.onmidimessage = handleMIDIMessage;
+                    console.log('MIDI input connected:', input.name);
+                }
+                
+                for (let output of midiAccess.outputs.values()) {
+                    if (!midiOutput) {
+                        midiOutput = output;
+                        console.log('MIDI output connected:', output.name);
+                        break;
+                    }
+                }
+                
+                midiAccess.onstatechange = (event) => {
+                    if (event.port.type === 'input' && event.port.state === 'connected') {
+                        event.port.onmidimessage = handleMIDIMessage;
+                    }
+                    if (event.port.type === 'output' && event.port.state === 'connected' && !midiOutput) {
+                        midiOutput = event.port;
+                    }
+                };
+                
+                initializeMIDI();
+                
+            } catch (error) {
+                console.error('MIDI access denied:', error);
+                infoPanel.setContent('<p>MIDI access denied</p>');
+            }
+        }
+
+        function initializeMIDI() {
+            const outputStatus = midiOutput ? ' (Output: ✓)' : ' (Output: ✗)';
+            infoPanel.setContent(`<p>MIDI active - Play notes to rotate layers${outputStatus}</p>`);
+            midiInfo.classList.remove('hidden');
+            branding.hide();
+        }
+
+        function handleMIDIMessage(message) {
+            if (puzzleContainer.isSolved || isPlayingCelebration) return;
+
+            const [status, note, velocity] = message.data;
+            
+            if ((status & 0xF0) === 0x90 && velocity > 0) {
+                noteCount++;
+                
+                const noteName = noteNames[note % 12];
+                const octave = Math.floor(note / 12) - 1;
+                
+                showMIDIActivity();
+                updateNoteVisual(note % 12);
+                lastNoteSpan.textContent = `${noteName}${octave}`;
+                
+                const baseRotation = (note % 12) * 3;
+                const velocityMultiplier = velocity / 127;
+                const rotationDelta = (baseRotation + 1) * velocityMultiplier;
+                
+                puzzleContainer.rotateCurrentLayer(rotationDelta);
+                updateRotationDisplay();
+                puzzleContainer.checkAlignment();
+            }
+        }
+
+        function showMIDIActivity() {
+            midiIndicator.classList.add('active');
+            setTimeout(() => midiIndicator.classList.remove('active'), 200);
+        }
+
+        function updateNoteVisual(noteIndex) {
+            document.querySelectorAll('.note-bar').forEach(bar => bar.classList.remove('active'));
+            const activeBar = document.querySelector(`[data-note="${noteIndex}"]`);
+            if (activeBar) {
+                activeBar.classList.add('active');
+                setTimeout(() => activeBar.classList.remove('active'), 300);
+            }
+        }
+
+        function updateRotationDisplay() {
+            const rotation = puzzleContainer.getCurrentRotation();
+            let displayRotation = rotation % 360;
+            if (displayRotation < 0) displayRotation += 360;
+            rotationValueSpan.textContent = `${Math.round(displayRotation)}°`;
+        }
+
+        function handlePuzzleSolved() {
+            console.log(`Puzzle solved with ${noteCount} notes!`);
+
+            StakcoUtils.vibrate(CONFIG.VIBRATION_PATTERN);
+
+            if (midiOutput) {
+                playCelebrationMelody();
+            } else {
+                infoPanel.setContent(`<p>Puzzle solved with ${noteCount} notes!</p>`);
+            }
+
+            setTimeout(() => {
+                layerControls.hide();
+                midiInfo.classList.add('hidden');
+                shareButton.show();
+            }, 2000);
+
+            setTimeout(() => {
+                puzzleContainer.animateToSolution(CONFIG.SOLVE_ANIMATION_DURATION);
+            }, 500);
+        }
+
+        async function playCelebrationMelody() {
+            if (!midiOutput || isPlayingCelebration) return;
+
+            isPlayingCelebration = true;
+            infoPanel.setContent('<p>Playing celebration music!</p>');
+
+            for (let { note, duration } of celebrationMelody) {
+                if (note > 0) sendMIDINote(note, 90, duration * 0.8);
+                await new Promise(resolve => setTimeout(resolve, duration));
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            for (let { note, duration } of victoryFanfare) {
+                if (note > 0) sendMIDINote(note, 110, duration * 0.9);
+                await new Promise(resolve => setTimeout(resolve, duration));
+            }
+
+            isPlayingCelebration = false;
+            infoPanel.setContent(`<p>Puzzle solved with ${noteCount} notes!</p>`);
+        }
+
+        function sendMIDINote(note, velocity = 100, duration = 500) {
+            if (!midiOutput) return;
+
+            try {
+                midiOutput.send([0x90, note, velocity]);
+                setTimeout(() => midiOutput.send([0x80, note, 0]), duration);
+                
+                showMIDIActivity();
+                updateNoteVisual(note % 12);
+                
+                const noteName = noteNames[note % 12];
+                const octave = Math.floor(note / 12) - 1;
+                lastNoteSpan.textContent = `${noteName}${octave}`;
+            } catch (error) {
+                console.error('Error sending MIDI note:', error);
+            }
+        }
+
+        async function handleShare() {
+            const layerImages = puzzleContainer.getLayerImages();
+            const message = `Solved with ${noteCount} notes!`;
+            shareWindow.setAttribute('filename', `stakco-midi-${noteCount}notes.png`);
+            await shareWindow.open(layerImages, message, true);
+        }
+
+        async function checkPermissionNeeded() {
+            if (navigator.requestMIDIAccess) {
+                permissionPrompt.show();
+            } else {
+                infoPanel.setContent('<p>MIDI not supported in this browser</p>');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
