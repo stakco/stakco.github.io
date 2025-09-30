@@ -49,6 +49,7 @@ export const StakcoConfig = {
         SOLVE_ANIMATION_DURATION: 4000,
         VIBRATION_PATTERN: [200, 100, 300, 100, 200],
         GYRO_SENSITIVITY: 0.5,
+        PERMISSION_PROMPT_DELAY: 1000,
         MESSAGES: {
             INITIALIZING: 'Initializing gyroscope... Tilt device to control selected layer',
             READY: 'Gyroscope ready - Tilt device to control selected layer',
