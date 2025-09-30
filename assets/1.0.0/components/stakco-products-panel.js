@@ -44,8 +44,8 @@ class StakcoProductsPanel extends HTMLElement {
         }
         .panel {
           position: absolute;
-          top: 20px;
-          right: 20px;
+          top: 0;
+          right: 0;
           border: none;
           height: 50px;
           border-radius: 25px;
