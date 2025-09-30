@@ -20,16 +20,19 @@
         body {
             font-family: 'Inter', sans-serif;
             background: var(--text-primary);
-            min-height: 100vh;
-            height: 100vh;
+            min-height: 100dvh;
             overflow-x: hidden;
-            overflow-y: auto;
             padding: 40px 20px 120px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
         }
+
+        html, body {
+            height: 100%;
+            overflow: hidden; /* prevent resize shifts */
+        }
+
 
         .container {
             width: 100%;
@@ -37,7 +40,8 @@
             display: flex;
             flex-direction: column;
             flex-grow: 1;
-            overflow-y: auto;
+            flex: 1;
+            overflow-y: auto; /* scrollable if needed */
         }
 
         .apps-grid {
