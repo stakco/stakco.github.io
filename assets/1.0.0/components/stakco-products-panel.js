@@ -28,6 +28,8 @@ class StakcoProductsPanel extends HTMLElement {
           z-index: 2500;
         }
         .button {
+            position: absolute;
+            left: -50px;
           border: none;
           cursor: pointer;
           width: 50px;
