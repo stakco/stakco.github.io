@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gyroscope-driven Stakco puzzles with device tilt controls.">
+    <title>Stakco Gyro</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-countdown.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-orientation-overlay.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-permission-prompt.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        button {
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #container {
+            position: relative;
+            width: 90vmin;
+            height: 90vmin;
+            max-width: calc(100vw - 20px);
+            max-height: calc(100vh - 200px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .puzzle-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            pointer-events: none;
+            transition: transform 0s;
+        }
+
+        .puzzle-layer.solving {
+            transition: transform 4s ease-out;
+        }
+
+        .layer-label {
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: var(--shadow-soft);
+            pointer-events: none;
+            z-index: 50000;
+        }
+
+        #branding {
+            position: absolute;
+            top: 18px;
+            font-size: 14px;
+            text-align: center;
+            font-family: 'Inter', sans-serif;
+            color: var(--primary-color);
+            text-shadow: var(--shadow-glow);
+            letter-spacing: 1px;
+            font-weight: 500;
+        }
+
+        #branding.hidden {
+            display: none;
+        }
+
+        #share-button {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            display: none;
+            box-shadow: var(--shadow-glow);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            font-family: 'Inter', sans-serif;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #share-button.show {
+            display: block;
+        }
+
+        #share-button:hover {
+            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
+        }
+
+        /* Gyro Info Display */
+        #gyro-info {
+            position: absolute;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 15px 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            min-width: 280px;
+        }
+
+        #gyro-info.show {
+            display: flex;
+        }
+
+        .gyro-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .gyro-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+            min-width: 80px;
+        }
+
+        .gyro-value {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+            text-align: right;
+            flex: 1;
+        }
+
+        .gyro-bar {
+            width: 100px;
+            height: 4px;
+            background: var(--glass-bg);
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gyro-bar-fill {
+            height: 100%;
+            background: var(--primary-gradient);
+            transition: width 0.1s ease;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Components -->
+    <stakco-orientation-overlay></stakco-orientation-overlay>
+    
+    <stakco-countdown></stakco-countdown>
+    
+    <stakco-info-panel icon="fa-rotate">
+        <p>Initializing gyroscope... Tilt device to rotate puzzle layers</p>
+    </stakco-info-panel>
+
+    <div id="branding">
+        <p style="display: inline; margin-left: 2px; vertical-align: middle;">
+            Stakco Gyro <span id="product-version">v1.0.0</span>
+        </p>
+        <p style="margin-top: 2px;">Tilt Puzzle</p>
+    </div>
+
+    <stakco-products-panel></stakco-products-panel>
+
+    <!-- Gyro Info Display -->
+    <div id="gyro-info">
+        <div class="gyro-row">
+            <span class="gyro-label">Layer 1 (β)</span>
+            <span class="gyro-value" id="beta-value">0°</span>
+            <div class="gyro-bar"><div class="gyro-bar-fill" id="beta-bar"></div></div>
+        </div>
+        <div class="gyro-row">
+            <span class="gyro-label">Layer 2 (γ)</span>
+            <span class="gyro-value" id="gamma-value">0°</span>
+            <div class="gyro-bar"><div class="gyro-bar-fill" id="gamma-bar"></div></div>
+        </div>
+        <div class="gyro-row">
+            <span class="gyro-label">Layer 3 (α)</span>
+            <span class="gyro-value" id="alpha-value">0°</span>
+            <div class="gyro-bar"><div class="gyro-bar-fill" id="alpha-bar"></div></div>
+        </div>
+    </div>
+
+    <div id="container">
+        <div id="layer1" class="puzzle-layer">
+            <div class="layer-label">1</div>
+        </div>
+        <div id="layer2" class="puzzle-layer">
+            <div class="layer-label">2</div>
+        </div>
+        <div id="layer3" class="puzzle-layer">
+            <div class="layer-label">3</div>
+        </div>
+    </div>
+
+    <button id="share-button">Share Success!</button>
+
+    <stakco-permission-prompt 
+        title="Enable Device Motion"
+        message="This app needs access to your device's gyroscope to rotate puzzle layers by tilting your device."
+        primary-label="Enable Gyroscope"
+        secondary-label="Skip">
+    </stakco-permission-prompt>
+
+    <stakco-share-window 
+        title="Stakco Gyro"
+        share-url="https://stakcos.com/gyro/">
+        <div slot="text">Solved with gyroscope navigation!</div>
+    </stakco-share-window>
+
+    <script type="module">
+        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+
+        // Configuration
+        const CONFIG = {
+            ROTATION_TOLERANCE: 5,
+            SOLVE_ANIMATION_DURATION: 4000,
+            VIBRATION_PATTERN: [200, 100, 300, 100, 200],
+            USER_ID: '109949450257686494443',
+            PUZZLE_ID: 'A2A3_3',
+            SENSITIVITY: 2.0 // Rotation multiplier
+        };
+
+        // App state
+        let puzzleSolved = false;
+        let firstInteraction = false;
+        let lastOrientation = { alpha: 0, beta: 0, gamma: 0 };
+
+        // Puzzle layer data
+        const puzzleLayers = {
+            layer1: { rotation: StakcoUtils.randomRotation(), url: null },
+            layer2: { rotation: StakcoUtils.randomRotation(), url: null },
+            layer3: { rotation: StakcoUtils.randomRotation(), url: null }
+        };
+
+        // Get component references
+        const countdown = document.querySelector('stakco-countdown');
+        const infoPanel = document.querySelector('stakco-info-panel');
+        const shareWindow = document.querySelector('stakco-share-window');
+        const orientationOverlay = document.querySelector('stakco-orientation-overlay');
+        const permissionPrompt = document.querySelector('stakco-permission-prompt');
+        const shareButton = document.getElementById('share-button');
+        const branding = document.getElementById('branding');
+        const gyroInfo = document.getElementById('gyro-info');
+
+        // Gyro display elements
+        const betaValue = document.getElementById('beta-value');
+        const gammaValue = document.getElementById('gamma-value');
+        const alphaValue = document.getElementById('alpha-value');
+        const betaBar = document.getElementById('beta-bar');
+        const gammaBar = document.getElementById('gamma-bar');
+        const alphaBar = document.getElementById('alpha-bar');
+
+        // Initialize app
+        async function init() {
+            console.log('Initializing Stakco Gyro...');
+
+            StakcoUtils.preventZoom();
+            await loadPuzzleData();
+            applyInitialRotations();
+            setupEventListeners();
+            setTimeout(checkPermissionNeeded, 1000);
+
+            console.log('App initialized');
+        }
+
+        async function loadPuzzleData() {
+            const images = StakcoUtils.loadPuzzleImages(CONFIG.USER_ID, CONFIG.PUZZLE_ID);
+            
+            puzzleLayers.layer1.url = images.layer1;
+            puzzleLayers.layer2.url = images.layer2;
+            puzzleLayers.layer3.url = images.layer3;
+
+            document.getElementById('layer1').style.backgroundImage = `url('${images.layer1}')`;
+            document.getElementById('layer2').style.backgroundImage = `url('${images.layer2}')`;
+            document.getElementById('layer3').style.backgroundImage = `url('${images.layer3}')`;
+
+            console.log('Puzzle images loaded');
+        }
+
+        function applyInitialRotations() {
+            Object.keys(puzzleLayers).forEach(layerKey => {
+                const element = document.getElementById(layerKey);
+                const rotation = puzzleLayers[layerKey].rotation;
+                element.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+            });
+
+            console.log('Initial rotations applied');
+        }
+
+        function setupEventListeners() {
+            orientationOverlay.addEventListener('blocked', () => {
+                if (countdown && countdown.active) countdown.pause();
+            });
+
+            orientationOverlay.addEventListener('unblocked', () => {
+                if (countdown && countdown.paused) countdown.resume();
+            });
+
+            permissionPrompt.addEventListener('primary-action', async () => {
+                const granted = await StakcoUtils.requestOrientationPermission();
+                if (granted) initializeOrientation();
+            });
+
+            permissionPrompt.addEventListener('secondary-action', () => {
+                initializeOrientation();
+            });
+
+            shareButton.addEventListener('click', handleShare);
+
+            if (StakcoUtils.isOrientationSupported()) {
+                window.addEventListener('deviceorientation', handleOrientation);
+            }
+        }
+
+        function handleOrientation(event) {
+            if (puzzleSolved || orientationOverlay.isBlocked()) return;
+
+            // Start countdown on first interaction
+            if (!firstInteraction) {
+                firstInteraction = true;
+                countdown.start();
+                gyroInfo.classList.add('show');
+                branding.classList.add('hidden');
+                infoPanel.setContent('<p>Gyroscope active - Tilt device to align all layers</p>');
+            }
+
+            const alpha = event.alpha || 0;  // Z-axis (rotation around vertical)
+            const beta = event.beta || 0;    // X-axis (front-back tilt, -180 to 180)
+            const gamma = event.gamma || 0;  // Y-axis (left-right tilt, -90 to 90)
+
+            // Calculate deltas
+            const deltaAlpha = calculateDelta(alpha, lastOrientation.alpha, 360);
+            const deltaBeta = calculateDelta(beta, lastOrientation.beta, 360);
+            const deltaGamma = calculateDelta(gamma, lastOrientation.gamma, 180);
+
+            // Apply deltas to layers with sensitivity multiplier
+            puzzleLayers.layer1.rotation += deltaBeta * CONFIG.SENSITIVITY;
+            puzzleLayers.layer2.rotation += deltaGamma * CONFIG.SENSITIVITY;
+            puzzleLayers.layer3.rotation += deltaAlpha * CONFIG.SENSITIVITY;
+
+            // Update display
+            updateLayerDisplay('layer1', puzzleLayers.layer1.rotation);
+            updateLayerDisplay('layer2', puzzleLayers.layer2.rotation);
+            updateLayerDisplay('layer3', puzzleLayers.layer3.rotation);
+
+            // Update gyro info
+            updateGyroDisplay(alpha, beta, gamma);
+
+            // Store last orientation
+            lastOrientation = { alpha, beta, gamma };
+
+            // Check solution
+            checkSolution();
+        }
+
+        function calculateDelta(current, last, range) {
+            let delta = current - last;
+            
+            // Handle wrapping for circular values
+            if (delta > range / 2) delta -= range;
+            if (delta < -range / 2) delta += range;
+            
+            return delta;
+        }
+
+        function updateLayerDisplay(layerId, rotation) {
+            const element = document.getElementById(layerId);
+            element.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+        }
+
+        function updateGyroDisplay(alpha, beta, gamma) {
+            // Update values
+            alphaValue.textContent = `${Math.round(alpha)}°`;
+            betaValue.textContent = `${Math.round(beta)}°`;
+            gammaValue.textContent = `${Math.round(gamma)}°`;
+
+            // Update bars (normalized to 0-100%)
+            const alphaPercent = ((alpha % 360) / 360) * 100;
+            const betaPercent = ((beta + 180) / 360) * 100;
+            const gammaPercent = ((gamma + 90) / 180) * 100;
+
+            alphaBar.style.width = `${alphaPercent}%`;
+            betaBar.style.width = `${betaPercent}%`;
+            gammaBar.style.width = `${gammaPercent}%`;
+        }
+
+        function checkSolution() {
+            if (puzzleSolved) return;
+
+            const rotations = [
+                puzzleLayers.layer1.rotation,
+                puzzleLayers.layer2.rotation,
+                puzzleLayers.layer3.rotation
+            ];
+
+            if (StakcoUtils.rotationsAligned(rotations, CONFIG.ROTATION_TOLERANCE)) {
+                solvePuzzle();
+            }
+        }
+
+        function solvePuzzle() {
+            puzzleSolved = true;
+            console.log('Puzzle solved!');
+
+            countdown.stop();
+            StakcoUtils.vibrate(CONFIG.VIBRATION_PATTERN);
+
+            infoPanel.collapse();
+            gyroInfo.classList.remove('show');
+
+            shareButton.classList.add('show');
+
+            setTimeout(animateToZero, 500);
+        }
+
+        function animateToZero() {
+            Object.keys(puzzleLayers).forEach(layerKey => {
+                const element = document.getElementById(layerKey);
+                element.classList.add('solving');
+                element.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+                puzzleLayers[layerKey].rotation = 0;
+            });
+        }
+
+        async function handleShare() {
+            const finalTime = countdown.getTime();
+            const layerImages = [
+                puzzleLayers.layer1.url,
+                puzzleLayers.layer2.url,
+                puzzleLayers.layer3.url
+            ];
+            
+            const message = `Solved in ${finalTime} with gyroscope navigation!`;
+            shareWindow.setAttribute('filename', `stakco-gyro-${finalTime.replace(':', '')}.png`);
+            
+            await shareWindow.open(layerImages, message, true);
+        }
+
+        async function checkPermissionNeeded() {
+            if (typeof DeviceOrientationEvent !== 'undefined' && 
+                typeof DeviceOrientationEvent.requestPermission === 'function') {
+                permissionPrompt.show();
+            } else {
+                initializeOrientation();
+            }
+        }
+
+        function initializeOrientation() {
+            if (StakcoUtils.isOrientationSupported()) {
+                infoPanel.setContent('<p>Gyroscope ready - Tilt device to control layers</p>');
+                console.log('Orientation initialized');
+            } else {
+                infoPanel.setContent('<p>Device orientation not supported</p>');
+                console.log('Orientation not supported');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
