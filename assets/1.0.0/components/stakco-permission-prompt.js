@@ -15,6 +15,7 @@ class StakcoPermissionPrompt extends HTMLElement {
     const primaryLabel = this.getAttribute('primary-label') || 'Enable';
     const secondaryLabel = this.getAttribute('secondary-label') || 'Skip';
     
+    /* html */
     this.shadowRoot.innerHTML = `
       <style>
         :host {

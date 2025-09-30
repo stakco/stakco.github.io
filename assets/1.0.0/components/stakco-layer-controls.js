@@ -23,6 +23,7 @@ class StakcoLayerControls extends HTMLElement {
       return `<button class="layer-button ${activeClass}" data-layer="${num}">${num}</button>`;
     }).join('');
 
+    /* html */
     this.shadowRoot.innerHTML = `
       <style>
         :host {

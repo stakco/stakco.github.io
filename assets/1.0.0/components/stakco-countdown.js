@@ -24,6 +24,8 @@ class StakcoCountdown extends HTMLElement {
   }
 
   render() {
+
+    /* html */
     this.shadowRoot.innerHTML = `
       <style>
         :host {

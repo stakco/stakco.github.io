@@ -17,6 +17,7 @@ class StakcoProductsPanel extends HTMLElement {
   render() {
     const products = this.getProducts();
     
+    /* html */
     this.shadowRoot.innerHTML = `
       <style>
         :host {

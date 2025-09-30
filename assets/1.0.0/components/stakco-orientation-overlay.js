@@ -15,6 +15,8 @@ class StakcoOrientationOverlay extends HTMLElement {
   }
 
   render() {
+
+    /* html */
     this.shadowRoot.innerHTML = `
       <style>
         :host {

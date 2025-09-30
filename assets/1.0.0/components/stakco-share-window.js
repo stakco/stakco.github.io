@@ -15,6 +15,8 @@ class StakcoShareWindow extends HTMLElement {
   }
 
   render() {
+
+    /* html */
     this.shadowRoot.innerHTML = `
       <style>
         :host {

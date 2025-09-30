@@ -9,6 +9,8 @@ class StakcoCompassInfo extends HTMLElement {
   }
 
   render() {
+    
+    /* html */
     this.shadowRoot.innerHTML = `
       <style>
         :host {

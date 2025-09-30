@@ -18,6 +18,8 @@ class StakcoInfoPanel extends HTMLElement {
     const icon = this.getAttribute('icon') || 'fa-compass';
     const buttonStyle = this.getAttribute('button-style') || '';
     
+
+    /* html */
     this.shadowRoot.innerHTML = `
       <style>
         :host {
