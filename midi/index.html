@@ -130,10 +130,9 @@
             overflow: hidden;
         }
 
-        /* MIDI Info Display */
         #midi-info {
             position: absolute;
-            top: 70px;
+            top: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--glass-bg);
@@ -148,6 +147,13 @@
             font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 500;
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            #midi-info {
+                top: 80px; /* override for mobile */
+            }
         }
 
         #midi-info.hidden {
@@ -171,9 +177,9 @@
             color: var(--primary-color);
             font-weight: 600;
             font-family: 'Courier New', monospace;
+            white-space: nowrap;
         }
 
-        /* MIDI Activity Indicator */
         .midi-activity {
             width: 12px;
             height: 12px;
@@ -191,7 +197,6 @@
             box-shadow: var(--shadow-glow);
         }
 
-        /* Note Visualization */
         .note-visual {
             position: absolute;
             bottom: 100px;
@@ -218,7 +223,6 @@
 </head>
 
 <body>
-    <!-- Components -->
     <stakco-info-panel icon="fa-music">
         <p>Initializing MIDI... Connect keyboard to play</p>
     </stakco-info-panel>
@@ -231,11 +235,10 @@
 
     <stakco-products-panel></stakco-products-panel>
 
-    <!-- MIDI Info Display -->
     <div id="midi-info" class="hidden">
         <div class="midi-row">
             <span class="midi-label">Note:</span>
-            <span class="midi-value" id="last-note">---</span>
+            <span class="midi-value" id="last-note">-</span>
             <span class="midi-activity" id="midi-indicator"></span>
         </div>
         <div class="midi-row">
@@ -255,7 +258,6 @@
         tolerance="2">
     </stakco-puzzle-container>
 
-    <!-- Note Visualization -->
     <div class="note-visual" id="note-visual"></div>
     
     <stakco-layer-controls layers="3"></stakco-layer-controls>
@@ -279,7 +281,6 @@
         import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
         import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
 
-        // Get configuration
         const CONFIG = StakcoConfig.getConfig('midi');
 
         // MIDI state
@@ -287,11 +288,10 @@
         let midiOutput = null;
         let noteCount = 0;
         let isPlayingCelebration = false;
+        let puzzleSolved = false;
 
-        // MIDI note names
         const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-        // Celebration melodies
         const celebrationMelody = [
             { note: 67, duration: 300 }, { note: 69, duration: 300 }, { note: 71, duration: 300 },
             { note: 74, duration: 300 }, { note: 76, duration: 300 }, { note: 78, duration: 300 },
@@ -310,7 +310,6 @@
             { note: 72, duration: 800 }, { note: 76, duration: 800 }
         ];
 
-        // Get component references
         const puzzleContainer = document.querySelector('stakco-puzzle-container');
         const layerControls = document.querySelector('stakco-layer-controls');
         const infoPanel = document.querySelector('stakco-info-panel');
@@ -319,7 +318,6 @@
         const branding = document.querySelector('stakco-branding');
         const shareButton = document.querySelector('stakco-share-button');
         
-        // Display elements
         const midiInfo = document.getElementById('midi-info');
         const lastNoteSpan = document.getElementById('last-note');
         const activeLayerSpan = document.getElementById('active-layer');
@@ -334,8 +332,16 @@
             createNoteVisual();
             setupEventListeners();
 
-            setTimeout(checkPermissionNeeded, 1000);
+            // Wait for puzzle container to be ready
+            await new Promise(resolve => {
+                if (puzzleContainer.shadowRoot) {
+                    resolve();
+                } else {
+                    puzzleContainer.addEventListener('puzzle-ready', resolve, { once: true });
+                }
+            });
 
+            setTimeout(checkPermissionNeeded, 1000);
             console.log('App initialized');
         }
 
@@ -345,6 +351,7 @@
             });
 
             puzzleContainer.addEventListener('puzzle-solved', () => {
+                puzzleSolved = true;
                 handlePuzzleSolved();
             });
 
@@ -400,9 +407,11 @@
                 midiAccess.onstatechange = (event) => {
                     if (event.port.type === 'input' && event.port.state === 'connected') {
                         event.port.onmidimessage = handleMIDIMessage;
+                        console.log('New MIDI input connected');
                     }
                     if (event.port.type === 'output' && event.port.state === 'connected' && !midiOutput) {
                         midiOutput = event.port;
+                        console.log('New MIDI output connected');
                     }
                 };
                 
@@ -422,7 +431,7 @@
         }
 
         function handleMIDIMessage(message) {
-            if (puzzleContainer.isSolved || isPlayingCelebration) return;
+            if (puzzleSolved || isPlayingCelebration) return;
 
             const [status, note, velocity] = message.data;
             
@@ -436,12 +445,19 @@
                 updateNoteVisual(note % 12);
                 lastNoteSpan.textContent = `${noteName}${octave}`;
                 
+                // Calculate rotation delta
                 const baseRotation = (note % 12) * 3;
                 const velocityMultiplier = velocity / 127;
                 const rotationDelta = (baseRotation + 1) * velocityMultiplier;
                 
+                // Use the puzzle container's rotateCurrentLayer method
                 puzzleContainer.rotateCurrentLayer(rotationDelta);
+                
+                console.log(`MIDI: ${noteName}${octave}, vel:${velocity}, rot:+${rotationDelta.toFixed(1)}°`);
+                
                 updateRotationDisplay();
+                
+                // Use the puzzle container's checkAlignment method
                 puzzleContainer.checkAlignment();
             }
         }
@@ -470,7 +486,7 @@
         function handlePuzzleSolved() {
             console.log(`Puzzle solved with ${noteCount} notes!`);
 
-            StakcoUtils.vibrate(CONFIG.VIBRATION_PATTERN);
+            StakcoUtils.vibrate([200, 100, 300, 100, 200]);
 
             if (midiOutput) {
                 playCelebrationMelody();
@@ -484,8 +500,9 @@
                 shareButton.show();
             }, 2000);
 
+            // Animate all layers to zero
             setTimeout(() => {
-                puzzleContainer.animateToSolution(CONFIG.SOLVE_ANIMATION_DURATION);
+                puzzleContainer.animateToSolution(2000);
             }, 500);
         }
 
