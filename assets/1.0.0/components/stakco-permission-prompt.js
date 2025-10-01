@@ -27,11 +27,11 @@ class StakcoPermissionPrompt extends HTMLElement {
           border: 2px solid var(--primary-color);
           border-radius: 20px;
           color: var(--text-primary);
-          padding: 40px;
+          padding: 20px;
           text-align: center;
           z-index: 10000;
           max-width: 400px;
-          width: 90%;
+          width: 80%;
           display: none;
           backdrop-filter: blur(20px);
           box-shadow: var(--shadow-glow);
