@@ -48,7 +48,7 @@ class StakcoPermissionPrompt extends HTMLElement {
           margin-top: 0;
         }
         p {
-          color: var(--text-primary);
+          color: white;
           margin-bottom: 30px;
           line-height: 1.5;
           font-size: 16px;
