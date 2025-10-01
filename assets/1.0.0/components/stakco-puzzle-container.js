@@ -1,6 +1,6 @@
 /**
  * Stakco Puzzle Container Component
- * Manages puzzle layers, rotations, and animations
+ * Manages puzzle layers, rotations, and animations with Background and Top layer support
  * Usage: <stakco-puzzle-container layers="3" user-id="..." puzzle-id="..." highlight-all="true"></stakco-puzzle-container>
  */
 
@@ -14,6 +14,8 @@ class StakcoPuzzleContainer extends HTMLElement {
         // State
         this.currentLayer = 1;
         this.puzzleLayers = {};
+        this.backgroundLayer = { rotation: 0, url: null, customImage: null };
+        this.topLayer = { rotation: 0, url: null, customImage: null };
         this.isSolved = false;
     }
 
@@ -39,7 +41,6 @@ class StakcoPuzzleContainer extends HTMLElement {
     render() {
         const layers = parseInt(this.getAttribute('layers')) || 3;
         
-        /* html */
         this.shadowRoot.innerHTML = `
             <style>
                 :host {
@@ -60,6 +61,22 @@ class StakcoPuzzleContainer extends HTMLElement {
                     justify-content: center;
                 }
 
+                /* Background layer - lowest z-index */
+                .background-layer {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 100%;
+                    height: 100%;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    pointer-events: none;
+                    z-index: 1;
+                }
+
+                /* Regular puzzle layers - medium z-index */
                 .puzzle-layer {
                     position: absolute;
                     top: 50%;
@@ -72,6 +89,22 @@ class StakcoPuzzleContainer extends HTMLElement {
                     background-position: center;
                     pointer-events: none;
                     transition: transform 0s;
+                    z-index: 10;
+                }
+
+                /* Top layer - highest z-index */
+                .top-layer {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 100%;
+                    height: 100%;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    pointer-events: none;
+                    z-index: 100;
                 }
 
                 .puzzle-layer.solving {
@@ -81,6 +114,13 @@ class StakcoPuzzleContainer extends HTMLElement {
                 .puzzle-layer.active {
                     opacity: 1;
                 }
+
+                /* Stacking order for multiple puzzle layers */
+                #layer1 { z-index: 10; }
+                #layer2 { z-index: 20; }
+                #layer3 { z-index: 30; }
+                #layer4 { z-index: 40; }
+                #layer5 { z-index: 50; }
 
                 .layer-label {
                     position: absolute;
@@ -145,11 +185,19 @@ class StakcoPuzzleContainer extends HTMLElement {
             </style>
 
             <div class="container">
+                <!-- Background Layer (B) - z-index: 1 -->
+                <div id="background-layer" class="background-layer"></div>
+                
+                <!-- Puzzle Layers (rotating) - z-index: 10-50 -->
                 ${Array.from({ length: layers }, (_, i) => `
                     <div id="layer${i + 1}" class="puzzle-layer ${i === 0 ? 'active' : ''}">
                         <div class="layer-label">${i + 1}</div>
                     </div>
                 `).join('')}
+                
+                <!-- Top Layer (T) - z-index: 100 -->
+                <div id="top-layer" class="top-layer"></div>
+                
                 <slot name="overlay"></slot>
             </div>
         `;
@@ -170,7 +218,8 @@ class StakcoPuzzleContainer extends HTMLElement {
         for (let i = 1; i <= layers; i++) {
             this.puzzleLayers[`layer${i}`] = {
                 rotation: StakcoUtils.randomRotation(),
-                url: null
+                url: null,
+                customImage: null
             };
         }
 
@@ -182,7 +231,11 @@ class StakcoPuzzleContainer extends HTMLElement {
 
         // Dispatch ready event
         this.dispatchEvent(new CustomEvent('puzzle-ready', {
-            detail: { layers: this.puzzleLayers }
+            detail: { 
+                layers: this.puzzleLayers,
+                background: this.backgroundLayer,
+                top: this.topLayer
+            }
         }));
     }
 
@@ -213,19 +266,55 @@ class StakcoPuzzleContainer extends HTMLElement {
     }
 
     updateHighlighting() {
-        // This method is called when highlight-all attribute changes
-        // The CSS will automatically handle the visual update via :host([highlight-all="true"])
         this.dispatchEvent(new CustomEvent('highlight-changed', {
             detail: { highlightAll: this.getHighlightAll() }
         }));
     }
 
-    // Public API methods
+    // Public API methods for Background and Top layers
+
+    setBackgroundImage(imageUrl) {
+        this.backgroundLayer.customImage = imageUrl;
+        const element = this.shadowRoot.getElementById('background-layer');
+        if (element) {
+            element.style.backgroundImage = `url('${imageUrl}')`;
+        }
+        this.dispatchEvent(new CustomEvent('background-updated', {
+            detail: { imageUrl }
+        }));
+    }
+
+    setTopImage(imageUrl) {
+        this.topLayer.customImage = imageUrl;
+        const element = this.shadowRoot.getElementById('top-layer');
+        if (element) {
+            element.style.backgroundImage = `url('${imageUrl}')`;
+        }
+        this.dispatchEvent(new CustomEvent('top-updated', {
+            detail: { imageUrl }
+        }));
+    }
+
+    setLayerImage(layerNumber, imageUrl) {
+        const layerKey = `layer${layerNumber}`;
+        if (!this.puzzleLayers[layerKey]) return;
+
+        this.puzzleLayers[layerKey].customImage = imageUrl;
+        const element = this.shadowRoot.getElementById(layerKey);
+        if (element) {
+            element.style.backgroundImage = `url('${imageUrl}')`;
+        }
+        
+        this.dispatchEvent(new CustomEvent('layer-image-updated', {
+            detail: { layer: layerNumber, imageUrl }
+        }));
+    }
+
+    // Existing public API methods
 
     switchLayer(layerNumber) {
         if (this.isSolved) return;
 
-        // Update visual state
         this.shadowRoot.querySelectorAll('.puzzle-layer').forEach(layer => {
             layer.classList.remove('active');
         });
@@ -237,7 +326,6 @@ class StakcoPuzzleContainer extends HTMLElement {
 
         this.currentLayer = layerNumber;
 
-        // Dispatch event
         this.dispatchEvent(new CustomEvent('layer-switched', {
             detail: { 
                 layer: layerNumber,
@@ -252,13 +340,11 @@ class StakcoPuzzleContainer extends HTMLElement {
         const layerKey = `layer${this.currentLayer}`;
         this.puzzleLayers[layerKey].rotation += delta;
 
-        // Update display
         const element = this.shadowRoot.getElementById(layerKey);
         if (element) {
             element.style.transform = `translate(-50%, -50%) rotate(${this.puzzleLayers[layerKey].rotation}deg)`;
         }
 
-        // Dispatch event
         this.dispatchEvent(new CustomEvent('layer-rotated', {
             detail: { 
                 layer: this.currentLayer,
@@ -276,10 +362,21 @@ class StakcoPuzzleContainer extends HTMLElement {
 
         this.puzzleLayers[layerKey].rotation += delta;
 
-        // Update display
         const element = this.shadowRoot.getElementById(layerKey);
         if (element) {
             element.style.transform = `translate(-50%, -50%) rotate(${this.puzzleLayers[layerKey].rotation}deg)`;
+        }
+    }
+
+    setLayerRotation(layerNumber, angle) {
+        const layerKey = `layer${layerNumber}`;
+        if (!this.puzzleLayers[layerKey]) return;
+
+        this.puzzleLayers[layerKey].rotation = angle;
+
+        const element = this.shadowRoot.getElementById(layerKey);
+        if (element) {
+            element.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
         }
     }
 
@@ -314,7 +411,6 @@ class StakcoPuzzleContainer extends HTMLElement {
             }
         });
 
-        // Dispatch event when animation completes
         setTimeout(() => {
             this.dispatchEvent(new CustomEvent('animation-complete'));
         }, duration);
