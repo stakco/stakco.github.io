@@ -1,307 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
+
+    <!-- Basic Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MIDI Compass Puzzle</title>
+    <meta name="description" content="MIDI-driven Stakco puzzles with musical note controls.">
+    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, MIDI puzzle, music, educational games, therapy puzzles">
+    <meta name="author" content="Stakco Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3c2f38">
+
+    <title>Stakco MIDI</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+     <!-- Open Graph -->
+    <meta property="og:title" content="Stakco MIDI">
+    <meta property="og:description" content="MIDI-driven Stakco puzzles with musical note controls.">
+    <meta property="og:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:url" content="https://stakcos.com/midi/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco MIDI">
+    <meta name="twitter:description" content="MIDI-driven Stakco puzzles with musical note controls.">
+    <meta name="twitter:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:url" content="https://stakcos.com/midi/">
+    <meta name="twitter:site" content="@StakcoPuzzle">
+    <meta name="twitter:creator" content="@StakcoPuzzle">
+
+    <!-- Favicons / Android -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+    <!-- Apple Touch Icons (Squircles) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+    <!-- Apple Splash Screens (Portrait only) -->
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square150x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square310x310logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x310.png">
+    <meta name="msapplication-wide310x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x150.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/midi/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco MIDI">
+
+    <!-- Mobile App Meta Tags (iOS) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco MIDI">
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stakco MIDI",
+      "url": "https://stakcos.com/midi/",
+      "description": "MIDI-driven Stakco puzzles with musical note controls.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stakco"
+      }
+    }
+    </script>
+    
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-permission-prompt.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+
     <style>
         body {
-            margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: #000;
-            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
 
-        #container {
-            position: relative;
-            width: 90vmin;
-            height: 90vmin;
-            max-width: calc(100vw - 20px);
-            max-height: calc(100vh - 200px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .puzzle-layer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
+        html, body {
+            margin: 0;
             height: 100%;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+            overflow: hidden;
         }
 
-        .puzzle-layer.active {
-            opacity: 1;
-            z-index: 10;
-        }
-
-        #layer1 {
-            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png');
-            z-index: 3;
-        }
-
-        #layer2 {
-            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png');
-            z-index: 2;
-        }
-
-        #layer3 {
-            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png');
-            z-index: 1;
-        }
-
-        #info {
+        /* MIDI Info Display */
+        #midi-info {
             position: absolute;
             top: 70px;
-            left: 20px;
-            right: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            display: none;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 15px 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
+            display: flex;
             gap: 30px;
-            justify-content: center;
-            align-items: center;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
         }
 
-        #status {
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            right: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            color: #0f0;
-            text-shadow:
-                0 0 5px #0f0,
-                0 0 10px #0f0,
-                0 0 20px #0f0,
-                0 0 40px #0f0;
+        #midi-info.hidden {
+            display: none;
+        }
+
+        .midi-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .midi-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 11px;
             letter-spacing: 1px;
         }
 
-        #status.hidden {
-            display: none;
-        }
-
-        #controls {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 1000;
-        }
-
-        #controls.hidden {
-            display: none;
-        }
-
-        #share-button {
-            position: absolute;
-            bottom: 20px;
-            background: #00ff00;
-            color: #000;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            display: none;
-            box-shadow: 0 0 30px #00ff00;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            text-align: center;
-            width: auto;
-        }
-
-        #share-button.show {
-            display: block;
-        }
-
-        #share-button:hover {
-            box-shadow: 0 0 40px #00ff00;
-        }
-
-        .layer-button {
-            width: 60px;
-            height: 60px;
-            border: 3px solid #555;
-            border-radius: 50%;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            color: #777;
-            background: rgba(68, 68, 68, 0.3);
-        }
-
-        .layer-button.layer1 {
-            border-color: #555;
-        }
-
-        .layer-button.layer2 {
-            border-color: #555;
-        }
-
-        .layer-button.layer3 {
-            border-color: #555;
-        }
-
-        .layer-button.active {
-            background: #00ff00;
-            border-color: #00ff00;
-            color: #000;
-            box-shadow: 0 0 20px #00ff00;
-            transform: scale(1.1);
-        }
-
-        .layer-button:hover:not(.active) {
-            border-color: #888;
-            color: #aaa;
-            background: rgba(136, 136, 136, 0.2);
-        }
-
-        /* LED Text Styling */
-        .led-text {
-            display: inline-block;
-            margin: 0 10px;
+        .midi-value {
+            color: var(--primary-color);
+            font-weight: 600;
             font-family: 'Courier New', monospace;
-            font-size: 16px;
-            color: #0f0;
-            text-shadow:
-                0 0 5px #0f0,
-                0 0 10px #0f0,
-                0 0 20px #0f0,
-                0 0 40px #0f0;
-            letter-spacing: 2px;
-        }
-
-        .led-label {
-            color: #0a0;
-            font-weight: bold;
-            margin-right: 6px;
-            text-shadow:
-                0 0 3px #060,
-                0 0 6px #090;
-        }
-
-        .led-value {
-            color: #0f0;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-
-        .led-midi {
-            color: #ff0;
-            text-shadow: 0 0 5px #ff0, 0 0 15px #ff0;
-        }
-
-        .led-layer {
-            color: #f0f;
-            text-shadow: 0 0 5px #f0f, 0 0 15px #f0f;
-        }
-
-        .led-puzzle {
-            color: #0ff;
-            text-shadow: 0 0 5px #0ff, 0 0 15px #0ff;
-        }
-
-        @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-                opacity: 1;
-            }
-            20%, 24%, 55% {
-                opacity: 0.8;
-            }
-            22% {
-                opacity: 0.6;
-            }
-        }
-
-        .led-text,
-        .led-value {
-            animation: flicker 2.5s infinite;
-        }
-
-        .permission-prompt {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(0, 0, 0, 0.9);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            z-index: 10000;
-            width: 70%;
-            display: none;
-            border: 2px solid #fff;
-        }
-
-        .permission-prompt.show {
-            display: block;
-        }
-
-        .permission-button {
-            background: #4ecdc4;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 6px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s ease;
-        }
-
-        .permission-button:hover {
-            background: #45a049;
-            transform: scale(1.05);
         }
 
         /* MIDI Activity Indicator */
         .midi-activity {
-            position: absolute;
-            top: 50%;
-            right: 20px;
-            transform: translateY(-50%);
-            width: 20px;
-            height: 20px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: #333;
             border: 2px solid #666;
             transition: all 0.2s ease;
+            display: inline-block;
+            margin-left: 10px;
         }
 
         .midi-activity.active {
-            background: #00ff00;
-            border-color: #00ff00;
-            box-shadow: 0 0 20px #00ff00;
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
         }
 
-        /* MIDI Note Visualization */
+        /* Note Visualization */
         .note-visual {
             position: absolute;
             bottom: 100px;
@@ -309,206 +199,172 @@
             transform: translateX(-50%);
             display: flex;
             gap: 5px;
-            z-index: 1000;
+            z-index: 800;
         }
 
         .note-bar {
             width: 8px;
             height: 40px;
-            background: #333;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
             transition: all 0.1s ease;
         }
 
         .note-bar.active {
-            background: linear-gradient(to top, #ff0066, #ff6600, #ffff00);
-            box-shadow: 0 0 10px #ff6600;
+            background: var(--primary-gradient);
+            box-shadow: var(--shadow-glow);
         }
     </style>
 </head>
 
 <body>
-    <div id="status">
-        <p id="midi-status">Initializing MIDI...</p>
-        <div class="midi-activity" id="midi-indicator"></div>
+    <!-- Components -->
+    <stakco-info-panel icon="fa-music">
+        <p>Initializing MIDI... Connect keyboard to play</p>
+    </stakco-info-panel>
+
+    <stakco-branding 
+        title="Stakco MIDI" 
+        version="v2.0.0" 
+        subtitle="Music Puzzle">
+    </stakco-branding>
+
+    <stakco-products-panel></stakco-products-panel>
+
+    <!-- MIDI Info Display -->
+    <div id="midi-info" class="hidden">
+        <div class="midi-row">
+            <span class="midi-label">Note:</span>
+            <span class="midi-value" id="last-note">---</span>
+            <span class="midi-activity" id="midi-indicator"></span>
+        </div>
+        <div class="midi-row">
+            <span class="midi-label">Layer:</span>
+            <span class="midi-value" id="active-layer">1</span>
+        </div>
+        <div class="midi-row">
+            <span class="midi-label">Rotation:</span>
+            <span class="midi-value" id="rotation-value">0°</span>
+        </div>
     </div>
 
-    <div id="info">
-        <span class="led-text">
-            <span class="led-label">NOTE:</span>
-            <span class="led-value led-midi" id="last-note">---</span>
-        </span>
-        <span class="led-text">
-            <span class="led-label">LYR:</span>
-            <span class="led-value led-layer" id="active-layer">1</span>
-        </span>
-        <span class="led-text">
-            <span class="led-label">ROT:</span>
-            <span class="led-value led-puzzle" id="rotation-value">0°</span>
-        </span>
-    </div>
+    <stakco-puzzle-container
+        layers="3"
+        user-id="109949450257686494443"
+        puzzle-id="A2A3_3"
+        tolerance="2">
+    </stakco-puzzle-container>
 
-    <div id="container">
-        <div id="layer1" class="puzzle-layer active"></div>
-        <div id="layer2" class="puzzle-layer"></div>
-        <div id="layer3" class="puzzle-layer"></div>
-    </div>
+    <!-- Note Visualization -->
+    <div class="note-visual" id="note-visual"></div>
+    
+    <stakco-layer-controls layers="3"></stakco-layer-controls>
 
-    <div class="note-visual" id="note-visual">
-        <!-- Note bars will be generated here -->
-    </div>
+    <stakco-share-button label="Share Success!"></stakco-share-button>
 
-    <div id="controls">
-        <button class="layer-button layer1 active" data-layer="1">1</button>
-        <button class="layer-button layer2" data-layer="2">2</button>
-        <button class="layer-button layer3" data-layer="3">3</button>
-    </div>
+    <stakco-permission-prompt 
+        title="Enable MIDI Access"
+        message="This app needs access to your MIDI devices to control puzzle layers with musical input. Connect a MIDI keyboard, then enable MIDI. When you solve the puzzle, your keyboard will play celebration music!"
+        primary-label="Enable MIDI"
+        secondary-label="Skip">
+    </stakco-permission-prompt>
 
-    <div id="share-button" onclick="sharePuzzle()">🎉 Share Success!</div>
+    <stakco-share-window 
+        title="Stakco MIDI"
+        share-url="https://stakcos.com/midi/">
+        <div slot="text">Solved with music!</div>
+    </stakco-share-window>
 
-    <div id="permission-prompt" class="permission-prompt">
-        <h3>Enable MIDI Access</h3>
-        <p>This app needs access to your MIDI devices to control the puzzle layers with musical input.</p>
-        <p><strong>Connect a MIDI keyboard or controller, then click Enable MIDI.</strong></p>
-        <p><small>✨ When you solve the puzzle, your keyboard will play celebration music! 🎵</small></p>
-        <button class="permission-button" onclick="requestMIDIAccess()">Enable MIDI</button>
-        <button class="permission-button" onclick="hidePermissionPrompt()">Skip</button>
-    </div>
+    <script type="module">
+        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+        import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
 
-    <script>
-        // App state
-        let currentLayer = 1;
-        let lastNote = null;
-        let midiSupported = false;
+        // Get configuration
+        const CONFIG = StakcoConfig.getConfig('midi');
+
+        // MIDI state
         let midiAccess = null;
         let midiOutput = null;
-        let puzzleSolved = false;
-        let rotationAccumulator = 0;
         let noteCount = 0;
         let isPlayingCelebration = false;
 
-        // Puzzle layer data structure with random initial rotations
-        const puzzleLayers = {
-            layer1: { 
-                url: null, 
-                rotation: 350, // Random initial rotation
-                baseRotation: 350 // Store the base rotation
-            },
-            layer2: { 
-                url: null, 
-                rotation: 83, // Random initial rotation
-                baseRotation: 83 // Store the base rotation
-            },
-            layer3: { 
-                url: null, 
-                rotation: 270, // Random initial rotation
-                baseRotation: 270 // Store the base rotation
-            }
-        };
-
-        // MIDI note names for display
+        // MIDI note names
         const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
-        // Celebration melody - 
+        // Celebration melodies
         const celebrationMelody = [
-            { note: 67, duration: 300 }, // G4
-            { note: 69, duration: 300 }, // A4
-            { note: 71, duration: 300 }, // B4
-            { note: 74, duration: 300 }, // D5
-            { note: 76, duration: 300 }, // E5
-            { note: 78, duration: 300 }, // F#5
-            { note: 79, duration: 600 }, // G5
-            { note: 0, duration: 200 },   // Rest
-            { note: 83, duration: 300 }, // B5
-            { note: 81, duration: 300 }, // A5
-            { note: 79, duration: 300 }, // G5
-            { note: 76, duration: 300 }, // E5
-            { note: 74, duration: 300 }, // D5
-            { note: 72, duration: 300 }, // C5
-            { note: 67, duration: 800 }, // G4
+            { note: 67, duration: 300 }, { note: 69, duration: 300 }, { note: 71, duration: 300 },
+            { note: 74, duration: 300 }, { note: 76, duration: 300 }, { note: 78, duration: 300 },
+            { note: 79, duration: 600 }, { note: 0, duration: 200 }, { note: 83, duration: 300 },
+            { note: 81, duration: 300 }, { note: 79, duration: 300 }, { note: 76, duration: 300 },
+            { note: 74, duration: 300 }, { note: 72, duration: 300 }, { note: 67, duration: 800 }
         ];
 
-        // Victory fanfare - triumphant chord progression
         const victoryFanfare = [
-            // C Major chord
-            { note: 60, duration: 300 }, // C4
-            { note: 64, duration: 300 }, // E4
-            { note: 67, duration: 300 }, // G4
-            { note: 72, duration: 300 }, // C5
-            { note: 0, duration: 100 },   // Rest
-            // F Major chord
-            { note: 65, duration: 300 }, // F4
-            { note: 69, duration: 300 }, // A4
-            { note: 72, duration: 300 }, // C5
-            { note: 77, duration: 300 }, // F5
-            { note: 0, duration: 100 },   // Rest
-            // G Major chord
-            { note: 67, duration: 300 }, // G4
-            { note: 71, duration: 300 }, // B4
-            { note: 74, duration: 300 }, // D5
-            { note: 79, duration: 300 }, // G5
-            { note: 0, duration: 200 },   // Rest
-            // Final C Major chord (longer)
-            { note: 60, duration: 800 }, // C4
-            { note: 64, duration: 800 }, // E4
-            { note: 67, duration: 800 }, // G4
-            { note: 72, duration: 800 }, // C5
-            { note: 76, duration: 800 }, // E5
+            { note: 60, duration: 300 }, { note: 64, duration: 300 }, { note: 67, duration: 300 },
+            { note: 72, duration: 300 }, { note: 0, duration: 100 }, { note: 65, duration: 300 },
+            { note: 69, duration: 300 }, { note: 72, duration: 300 }, { note: 77, duration: 300 },
+            { note: 0, duration: 100 }, { note: 67, duration: 300 }, { note: 71, duration: 300 },
+            { note: 74, duration: 300 }, { note: 79, duration: 300 }, { note: 0, duration: 200 },
+            { note: 60, duration: 800 }, { note: 64, duration: 800 }, { note: 67, duration: 800 },
+            { note: 72, duration: 800 }, { note: 76, duration: 800 }
         ];
 
-        // DOM elements
+        // Get component references
+        const puzzleContainer = document.querySelector('stakco-puzzle-container');
+        const layerControls = document.querySelector('stakco-layer-controls');
+        const infoPanel = document.querySelector('stakco-info-panel');
+        const shareWindow = document.querySelector('stakco-share-window');
+        const permissionPrompt = document.querySelector('stakco-permission-prompt');
+        const branding = document.querySelector('stakco-branding');
+        const shareButton = document.querySelector('stakco-share-button');
+        
+        // Display elements
+        const midiInfo = document.getElementById('midi-info');
         const lastNoteSpan = document.getElementById('last-note');
         const activeLayerSpan = document.getElementById('active-layer');
         const rotationValueSpan = document.getElementById('rotation-value');
-        const midiStatus = document.getElementById('midi-status');
         const midiIndicator = document.getElementById('midi-indicator');
-        const permissionPrompt = document.getElementById('permission-prompt');
-        const controlsDiv = document.getElementById('controls');
-        const statusDiv = document.getElementById('status');
-        const shareButton = document.getElementById('share-button');
         const noteVisual = document.getElementById('note-visual');
 
-        // Load today's puzzle data
-        async function loadPuzzleData() {
-            try {
-                console.log('Loading puzzle...');
-                
-                // Direct image URLs - no server loading needed
-                puzzleLayers.layer1.url = 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png';
-                puzzleLayers.layer2.url = 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png';
-                puzzleLayers.layer3.url = 'https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png';
+        async function init() {
+            console.log('Initializing Stakco MIDI...');
 
-                // Apply initial random rotations to all layers
-                applyInitialRotations();
-                updateRotationDisplay();
+            StakcoUtils.preventZoom();
+            createNoteVisual();
+            setupEventListeners();
 
-                console.log('Puzzle images loaded successfully');
-                console.log('Initial rotations:', {
-                    layer1: puzzleLayers.layer1.rotation + '°',
-                    layer2: puzzleLayers.layer2.rotation + '°',
-                    layer3: puzzleLayers.layer3.rotation + '°'
-                });
+            setTimeout(checkPermissionNeeded, 1000);
 
-            } catch (error) {
-                console.error('Error loading puzzle data:', error);
-                midiStatus.textContent = 'Failed to load puzzle data';
-            }
+            console.log('App initialized');
         }
 
-        // Apply initial random rotations to all layers
-        function applyInitialRotations() {
-            Object.keys(puzzleLayers).forEach(layerKey => {
-                const layerNumber = layerKey.replace('layer', '');
-                const layerElement = document.getElementById(layerKey);
-                const rotation = puzzleLayers[layerKey].rotation;
-                
-                if (layerElement) {
-                    layerElement.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
-                }
+        function setupEventListeners() {
+            puzzleContainer.addEventListener('puzzle-ready', () => {
+                console.log('Puzzle ready');
             });
+
+            puzzleContainer.addEventListener('puzzle-solved', () => {
+                handlePuzzleSolved();
+            });
+
+            layerControls.addEventListener('layerchange', (e) => {
+                puzzleContainer.switchLayer(e.detail.layer);
+                activeLayerSpan.textContent = e.detail.layer;
+                updateRotationDisplay();
+            });
+
+            permissionPrompt.addEventListener('primary-action', async () => {
+                await requestMIDIAccess();
+            });
+
+            permissionPrompt.addEventListener('secondary-action', () => {
+                initializeMIDI();
+            });
+
+            shareButton.addEventListener('share-clicked', handleShare);
         }
 
-        // Create note visualization bars
         function createNoteVisual() {
             noteVisual.innerHTML = '';
             for (let i = 0; i < 12; i++) {
@@ -519,175 +375,20 @@
             }
         }
 
-        // Handle MIDI message
-        function handleMIDIMessage(message) {
-            if (puzzleSolved || isPlayingCelebration) return;
-
-            const [status, note, velocity] = message.data;
-            
-            // Only handle note on messages (0x90 = 144)
-            if ((status & 0xF0) === 0x90 && velocity > 0) {
-                noteCount++;
-                
-                // Calculate rotation delta based on note and velocity
-                const noteName = noteNames[note % 12];
-                const octave = Math.floor(note / 12) - 1;
-                const noteDisplay = `${noteName}${octave}`;
-                
-                // Visual feedback
-                showMIDIActivity();
-                updateNoteVisual(note % 12);
-                lastNoteSpan.textContent = noteDisplay;
-                
-                // Calculate rotation delta
-                // Higher notes rotate more, velocity affects rotation speed
-                const baseRotation = (note % 12) * 3; // 0-33 degrees base
-                const velocityMultiplier = velocity / 127; // 0-1
-                const rotationDelta = (baseRotation + 1) * velocityMultiplier; // 5-38 degrees
-                
-                // Apply rotation to current layer
-                puzzleLayers[`layer${currentLayer}`].rotation += rotationDelta;
-                
-                // Apply rotation to the layer element
-                const activeLayerElement = document.getElementById(`layer${currentLayer}`);
-                if (activeLayerElement) {
-                    activeLayerElement.style.transform = `translate(-50%, -50%) rotate(${puzzleLayers[`layer${currentLayer}`].rotation}deg)`;
-                }
-                
-                // Update display
-                updateRotationDisplay();
-                
-                // Check for solution
-                checkSolution();
-                
-                console.log(`MIDI Note: ${noteDisplay}, Velocity: ${velocity}, Rotation: +${rotationDelta.toFixed(1)}°`);
-            }
-        }
-
-        // Send MIDI note
-        function sendMIDINote(note, velocity = 100, duration = 500) {
-            if (!midiOutput) return;
-
-            try {
-                // Note on message
-                const noteOnMessage = [0x90, note, velocity];
-                midiOutput.send(noteOnMessage);
-
-                // Note off message after duration
-                setTimeout(() => {
-                    const noteOffMessage = [0x80, note, 0];
-                    midiOutput.send(noteOffMessage);
-                }, duration);
-
-                // Visual feedback
-                showMIDIActivity();
-                updateNoteVisual(note % 12);
-                
-                const noteName = noteNames[note % 12];
-                const octave = Math.floor(note / 12) - 1;
-                lastNoteSpan.textContent = `${noteName}${octave}`;
-
-            } catch (error) {
-                console.error('Error sending MIDI note:', error);
-            }
-        }
-
-        // Play celebration melody
-        async function playCelebrationMelody() {
-            if (!midiOutput || isPlayingCelebration) return;
-
-            isPlayingCelebration = true;
-            midiStatus.textContent = '🎉 Playing celebration music!';
-
-            for (let i = 0; i < celebrationMelody.length; i++) {
-                const { note, duration } = celebrationMelody[i];
-                
-                if (note > 0) {
-                    sendMIDINote(note, 90, duration * 0.8); // Slightly shorter than gap
-                }
-                
-                // Wait for the duration before next note
-                await new Promise(resolve => setTimeout(resolve, duration));
-            }
-
-            // Play victory fanfare after melody
-            await new Promise(resolve => setTimeout(resolve, 500)); // Brief pause
-            
-            for (let i = 0; i < victoryFanfare.length; i++) {
-                const { note, duration } = victoryFanfare[i];
-                
-                if (note > 0) {
-                    sendMIDINote(note, 110, duration * 0.9);
-                }
-                
-                await new Promise(resolve => setTimeout(resolve, duration));
-            }
-
-            isPlayingCelebration = false;
-            midiStatus.textContent = `Puzzle solved with ${noteCount} notes! 🎵`;
-        }
-
-        // Send chord (multiple notes simultaneously)
-        function sendMIDIChord(notes, velocity = 100, duration = 1000) {
-            if (!midiOutput) return;
-
-            // Send all note on messages
-            notes.forEach(note => {
-                const noteOnMessage = [0x90, note, velocity];
-                midiOutput.send(noteOnMessage);
-                updateNoteVisual(note % 12);
-            });
-
-            // Send all note off messages after duration
-            setTimeout(() => {
-                notes.forEach(note => {
-                    const noteOffMessage = [0x80, note, 0];
-                    midiOutput.send(noteOffMessage);
-                });
-            }, duration);
-        }
-        function showMIDIActivity() {
-            midiIndicator.classList.add('active');
-            setTimeout(() => {
-                midiIndicator.classList.remove('active');
-            }, 200);
-        }
-
-        // Update note visualization
-        function updateNoteVisual(noteIndex) {
-            // Reset all bars
-            document.querySelectorAll('.note-bar').forEach(bar => {
-                bar.classList.remove('active');
-            });
-            
-            // Activate current note bar
-            const activeBar = document.querySelector(`[data-note="${noteIndex}"]`);
-            if (activeBar) {
-                activeBar.classList.add('active');
-                setTimeout(() => {
-                    activeBar.classList.remove('active');
-                }, 300);
-            }
-        }
-
-        // Request MIDI access
         async function requestMIDIAccess() {
             if (!navigator.requestMIDIAccess) {
-                midiStatus.textContent = 'MIDI not supported in this browser';
+                infoPanel.setContent('<p>MIDI not supported in this browser</p>');
                 return;
             }
 
             try {
                 midiAccess = await navigator.requestMIDIAccess({ sysex: false });
-                midiSupported = true;
                 
-                // Set up MIDI input listeners
                 for (let input of midiAccess.inputs.values()) {
                     input.onmidimessage = handleMIDIMessage;
                     console.log('MIDI input connected:', input.name);
                 }
                 
-                // Set up MIDI output (use first available output)
                 for (let output of midiAccess.outputs.values()) {
                     if (!midiOutput) {
                         midiOutput = output;
@@ -696,241 +397,154 @@
                     }
                 }
                 
-                // Listen for new MIDI connections
                 midiAccess.onstatechange = (event) => {
-                    console.log('MIDI state change:', event.port.name, event.port.state);
                     if (event.port.type === 'input' && event.port.state === 'connected') {
                         event.port.onmidimessage = handleMIDIMessage;
                     }
                     if (event.port.type === 'output' && event.port.state === 'connected' && !midiOutput) {
                         midiOutput = event.port;
-                        console.log('MIDI output connected:', event.port.name);
                     }
                 };
                 
-                const outputStatus = midiOutput ? ' (Output: ✓)' : ' (Output: ✗)';
-                midiStatus.textContent = `MIDI active - Play notes to rotate layer ${currentLayer}${outputStatus}`;
-                hidePermissionPrompt();
+                initializeMIDI();
                 
             } catch (error) {
                 console.error('MIDI access denied:', error);
-                midiStatus.textContent = 'MIDI access denied';
+                infoPanel.setContent('<p>MIDI access denied</p>');
             }
         }
 
-        // Share function
-        function sharePuzzle() {
-            const shareData = {
-                title: 'MIDI Azimuth Puzzle',
-                text: `I solved the stakco MIDI puzzle with ${noteCount} notes!`,
-                url: 'https://stakcos.com/azimuth-midi/'
-            };
+        function initializeMIDI() {
+            const outputStatus = midiOutput ? ' (Output: ✓)' : ' (Output: ✗)';
+            infoPanel.setContent(`<p>MIDI active - Play notes to rotate layers${outputStatus}</p>`);
+            midiInfo.classList.remove('hidden');
+            branding.hide();
+        }
 
-            if (navigator.share) {
-                navigator.share(shareData)
-                    .then(() => console.log('Successful share'))
-                    .catch((error) => console.log('Error sharing:', error));
-            } else {
-                // Fallback for browsers that don't support Web Share API
-                const textArea = document.createElement('textarea');
-                textArea.value = 'https://stakcos.com/azimuth-midi/';
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert('Link copied to clipboard: https://stakcos.com/azimuth-midi/');
+        function handleMIDIMessage(message) {
+            if (puzzleContainer.isSolved || isPlayingCelebration) return;
+
+            const [status, note, velocity] = message.data;
+            
+            if ((status & 0xF0) === 0x90 && velocity > 0) {
+                noteCount++;
+                
+                const noteName = noteNames[note % 12];
+                const octave = Math.floor(note / 12) - 1;
+                
+                showMIDIActivity();
+                updateNoteVisual(note % 12);
+                lastNoteSpan.textContent = `${noteName}${octave}`;
+                
+                const baseRotation = (note % 12) * 3;
+                const velocityMultiplier = velocity / 127;
+                const rotationDelta = (baseRotation + 1) * velocityMultiplier;
+                
+                puzzleContainer.rotateCurrentLayer(rotationDelta);
+                updateRotationDisplay();
+                puzzleContainer.checkAlignment();
             }
         }
 
-        function checkSolution() {
-            if (puzzleSolved) return;
+        function showMIDIActivity() {
+            midiIndicator.classList.add('active');
+            setTimeout(() => midiIndicator.classList.remove('active'), 200);
+        }
 
-            // Normalize all layer rotations for comparison
-            const layer1Normalized = ((puzzleLayers.layer1.rotation % 360) + 360) % 360;
-            const layer2Normalized = ((puzzleLayers.layer2.rotation % 360) + 360) % 360;
-            const layer3Normalized = ((puzzleLayers.layer3.rotation % 360) + 360) % 360;
-
-            // Check if all layers are aligned (within 2 degrees tolerance)
-            const tolerance = 2;
-            const isAligned = Math.abs(layer1Normalized - layer2Normalized) <= tolerance &&
-                             Math.abs(layer2Normalized - layer3Normalized) <= tolerance &&
-                             Math.abs(layer1Normalized - layer3Normalized) <= tolerance;
-
-            if (isAligned) {
-                // Vibrate if available
-                if (navigator.vibrate) {
-                    navigator.vibrate([200, 100, 300, 100, 200]);
-                }
-                
-                puzzleSolved = true;
-                console.log(`Puzzle solved with ${noteCount} notes!`);
-                
-                // Play celebration music immediately
-                if (midiOutput) {
-                    playCelebrationMelody();
-                } else {
-                    midiStatus.textContent = `Puzzle solved with ${noteCount} notes! 🎉`;
-                }
-                
-                // Hide controls and status after a delay to let music play
-                setTimeout(() => {
-                    controlsDiv.classList.add('hidden');
-                    statusDiv.classList.add('hidden');
-                    shareButton.classList.add('show');
-                }, 2000);
-                
-                // Smoothly rotate all layers to zero
-                rotateAllLayersToZero();
+        function updateNoteVisual(noteIndex) {
+            document.querySelectorAll('.note-bar').forEach(bar => bar.classList.remove('active'));
+            const activeBar = document.querySelector(`[data-note="${noteIndex}"]`);
+            if (activeBar) {
+                activeBar.classList.add('active');
+                setTimeout(() => activeBar.classList.remove('active'), 300);
             }
         }
 
-        // Smoothly rotate all layers to zero degrees
-        function rotateAllLayersToZero() {
-            Object.keys(puzzleLayers).forEach(layerKey => {
-                const layerElement = document.getElementById(layerKey);
-                if (layerElement) {
-                    // Add transition for smooth animation to zero
-                    layerElement.style.transition = 'transform 2s ease-out';
-                    layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-                    
-                    // Update internal rotation value
-                    puzzleLayers[layerKey].rotation = 0;
-                }
-            });
-        }
-
-        // Update rotation value display
         function updateRotationDisplay() {
-            const currentRotation = puzzleLayers[`layer${currentLayer}`].rotation;
-            // Normalize only for display purposes
-            let displayRotation = currentRotation % 360;
+            const rotation = puzzleContainer.getCurrentRotation();
+            let displayRotation = rotation % 360;
             if (displayRotation < 0) displayRotation += 360;
             rotationValueSpan.textContent = `${Math.round(displayRotation)}°`;
         }
 
-        // Switch active layer
-        function switchLayer(layerNumber) {
-            if (puzzleSolved) return;
+        function handlePuzzleSolved() {
+            console.log(`Puzzle solved with ${noteCount} notes!`);
 
-            // Remove active class from all layers and buttons
-            document.querySelectorAll('.puzzle-layer').forEach(layer => {
-                layer.classList.remove('active');
-            });
-            document.querySelectorAll('.layer-button').forEach(button => {
-                button.classList.remove('active');
-            });
+            StakcoUtils.vibrate(CONFIG.VIBRATION_PATTERN);
 
-            // Add active class to selected layer and button
-            document.getElementById(`layer${layerNumber}`).classList.add('active');
-            document.querySelector(`[data-layer="${layerNumber}"]`).classList.add('active');
-
-            currentLayer = layerNumber;
-            activeLayerSpan.textContent = layerNumber;
-
-            // Update rotation display for the new layer
-            updateRotationDisplay();
-            
-            // Update status message
-            if (midiSupported) {
-                const outputStatus = midiOutput ? ' (Output: ✓)' : ' (Output: ✗)';
-                midiStatus.textContent = `MIDI active - Play notes to rotate layer ${currentLayer}${outputStatus}`;
-            }
-
-            console.log(`Switched to layer ${layerNumber}, rotation: ${Math.round(puzzleLayers[`layer${layerNumber}`].rotation)}°`);
-        }
-
-        // Hide permission prompt
-        function hidePermissionPrompt() {
-            permissionPrompt.classList.remove('show');
-        }
-
-        // Show permission prompt if needed
-        function showPermissionPromptIfNeeded() {
-            if (navigator.requestMIDIAccess) {
-                permissionPrompt.classList.add('show');
+            if (midiOutput) {
+                playCelebrationMelody();
             } else {
-                midiStatus.textContent = 'MIDI not supported in this browser';
+                infoPanel.setContent(`<p>Puzzle solved with ${noteCount} notes!</p>`);
             }
-        }
 
-        // Initialize the app
-        function initApp() {
-            console.log('Initializing MIDI Compass Puzzle App...');
-
-            // Load puzzle data
-            loadPuzzleData();
-            
-            // Create note visualization
-            createNoteVisual();
-
-            // Add layer button event listeners
-            document.querySelectorAll('.layer-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const layerNumber = parseInt(button.dataset.layer);
-                    switchLayer(layerNumber);
-                });
-            });
-
-            // Add keyboard shortcuts
-            document.addEventListener('keydown', (event) => {
-                if (puzzleSolved) return;
-                
-                switch (event.key) {
-                    case '1':
-                        switchLayer(1);
-                        break;
-                    case '2':
-                        switchLayer(2);
-                        break;
-                    case '3':
-                        switchLayer(3);
-                        break;
-                    case ' ': // Spacebar to request MIDI access
-                        event.preventDefault();
-                        if (!midiSupported) {
-                            requestMIDIAccess();
-                        }
-                        break;
-                    case 'm': // Test melody playback
-                        if (midiOutput && !isPlayingCelebration && !puzzleSolved) {
-                            console.log('Testing celebration melody...');
-                            playCelebrationMelody();
-                        }
-                        break;
-                    case 'c': // Test chord
-                        if (midiOutput && !isPlayingCelebration) {
-                            console.log('Testing C major chord...');
-                            sendMIDIChord([60, 64, 67, 72], 100, 1000); // C major chord
-                        }
-                        break;
-                }
-            });
-
-            // Show permission prompt if needed
             setTimeout(() => {
-                showPermissionPromptIfNeeded();
-            }, 1000);
+                layerControls.hide();
+                midiInfo.classList.add('hidden');
+                shareButton.show();
+            }, 2000);
+
+            setTimeout(() => {
+                puzzleContainer.animateToSolution(CONFIG.SOLVE_ANIMATION_DURATION);
+            }, 500);
         }
 
-        // Start the app when page loads
-        document.addEventListener('DOMContentLoaded', initApp);
+        async function playCelebrationMelody() {
+            if (!midiOutput || isPlayingCelebration) return;
 
-        // Prevent zoom on mobile
-        document.addEventListener('touchstart', function (e) {
-            if (e.touches.length > 1) {
-                e.preventDefault();
-            }
-        }, { passive: false });
+            isPlayingCelebration = true;
+            infoPanel.setContent('<p>Playing celebration music!</p>');
 
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function (event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
+            for (let { note, duration } of celebrationMelody) {
+                if (note > 0) sendMIDINote(note, 90, duration * 0.8);
+                await new Promise(resolve => setTimeout(resolve, duration));
             }
-            lastTouchEnd = now;
-        }, false);
+
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            for (let { note, duration } of victoryFanfare) {
+                if (note > 0) sendMIDINote(note, 110, duration * 0.9);
+                await new Promise(resolve => setTimeout(resolve, duration));
+            }
+
+            isPlayingCelebration = false;
+            infoPanel.setContent(`<p>Puzzle solved with ${noteCount} notes!</p>`);
+        }
+
+        function sendMIDINote(note, velocity = 100, duration = 500) {
+            if (!midiOutput) return;
+
+            try {
+                midiOutput.send([0x90, note, velocity]);
+                setTimeout(() => midiOutput.send([0x80, note, 0]), duration);
+                
+                showMIDIActivity();
+                updateNoteVisual(note % 12);
+                
+                const noteName = noteNames[note % 12];
+                const octave = Math.floor(note / 12) - 1;
+                lastNoteSpan.textContent = `${noteName}${octave}`;
+            } catch (error) {
+                console.error('Error sending MIDI note:', error);
+            }
+        }
+
+        async function handleShare() {
+            const layerImages = puzzleContainer.getLayerImages();
+            const message = `Solved with ${noteCount} notes!`;
+            shareWindow.setAttribute('filename', `stakco-midi-${noteCount}notes.png`);
+            await shareWindow.open(layerImages, message, true);
+        }
+
+        async function checkPermissionNeeded() {
+            if (navigator.requestMIDIAccess) {
+                permissionPrompt.show();
+            } else {
+                infoPanel.setContent('<p>MIDI not supported in this browser</p>');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-
 </html>
