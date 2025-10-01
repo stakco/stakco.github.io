@@ -271,7 +271,9 @@
         layers="3"
         user-id="109949450257686494443"
         puzzle-id="A2A3_3"
-        tolerance="2">
+        tolerance="2"
+        highlight-all="true"
+        >
         <!-- Clock face overlay inside puzzle container -->
         <div id="clock-wrapper" slot="overlay">
             <div class="clock-face">
@@ -337,8 +339,16 @@
             puzzleContainer.addEventListener('puzzle-ready', () => {
                 console.log('Puzzle ready - starting clock sync');
                 
+                // Verify setLayerRotation method exists
+                if (typeof puzzleContainer.setLayerRotation !== 'function') {
+                    console.error('setLayerRotation method not found on puzzle container!');
+                    return;
+                }
+                
                 // Set initial angles to current time
                 const angles = calculateClockAngles();
+                console.log('Setting initial angles:', angles);
+                
                 puzzleContainer.setLayerRotation(1, angles.hour);
                 puzzleContainer.setLayerRotation(2, angles.minute);
                 puzzleContainer.setLayerRotation(3, angles.second);
@@ -349,6 +359,7 @@
                 updateDisplays(angles);
                 updateClockHands(angles);
                 
+                console.log('Initial setup complete, starting animation loop');
                 startClockUpdate();
             });
 
@@ -357,6 +368,12 @@
                 if (document.hidden) {
                     stopClockUpdate();
                 } else {
+                    // Resync when tab becomes visible again
+                    const angles = calculateClockAngles();
+                    puzzleContainer.setLayerRotation(1, angles.hour);
+                    puzzleContainer.setLayerRotation(2, angles.minute);
+                    puzzleContainer.setLayerRotation(3, angles.second);
+                    lastAngles = angles;
                     startClockUpdate();
                 }
             });
@@ -402,10 +419,15 @@
             const minuteDelta = calculateDelta(angles.minute, lastAngles.minute);
             const secondDelta = calculateDelta(angles.second, lastAngles.second);
 
+            // Log significant changes (debug)
+            if (Math.abs(secondDelta) > 0.1) {
+                console.log('Rotating layers - Hour:', hourDelta.toFixed(2), 'Min:', minuteDelta.toFixed(2), 'Sec:', secondDelta.toFixed(2));
+            }
+
             // Apply rotations to puzzle layers
-            if (hourDelta !== 0) puzzleContainer.rotateLayer(1, hourDelta);
-            if (minuteDelta !== 0) puzzleContainer.rotateLayer(2, minuteDelta);
-            if (secondDelta !== 0) puzzleContainer.rotateLayer(3, secondDelta);
+            if (Math.abs(hourDelta) > 0.001) puzzleContainer.rotateLayer(1, hourDelta);
+            if (Math.abs(minuteDelta) > 0.001) puzzleContainer.rotateLayer(2, minuteDelta);
+            if (Math.abs(secondDelta) > 0.001) puzzleContainer.rotateLayer(3, secondDelta);
 
             // Update reference clock hands and displays
             updateClockHands(angles);
