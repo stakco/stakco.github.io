@@ -1,110 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-    <!-- Basic Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Time-driven Stakco puzzles synchronized with clock movements.">
-    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, clock puzzle, time, educational games, therapy puzzles">
-    <meta name="author" content="Stakco Team">
-    <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#3c2f38">
-
     <title>Stakco Clock</title>
     
-    <!-- Stylesheets -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
     
-    <!-- External Libraries -->
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
-     <!-- Open Graph -->
-    <meta property="og:title" content="Stakco Clock">
-    <meta property="og:description" content="Time-driven Stakco puzzles synchronized with clock movements.">
-    <meta property="og:image"
-        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
-    <meta property="og:url" content="https://stakcos.com/clock/">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Stakco">
-    <meta property="og:locale" content="en_US">
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Stakco Clock">
-    <meta name="twitter:description" content="Time-driven Stakco puzzles synchronized with clock movements.">
-    <meta name="twitter:image"
-        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
-    <meta name="twitter:url" content="https://stakcos.com/clock/">
-    <meta name="twitter:site" content="@StakcoPuzzle">
-    <meta name="twitter:creator" content="@StakcoPuzzle">
-
-    <!-- Favicons / Android -->
-    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
-
-    <!-- Apple Touch Icons (Squircles) -->
-    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
-    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
-
-    <!-- Apple Splash Screens (Portrait only) -->
-    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
-    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
-    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
-
-    <!-- Microsoft Tiles -->
-    <meta name="msapplication-TileColor" content="#FFFFFF">
-    <meta name="msapplication-TileImage" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
-    <meta name="msapplication-square150x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
-    <meta name="msapplication-square310x310logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x310.png">
-    <meta name="msapplication-wide310x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x150.png">
-
-    <!-- PWA -->
-    <link rel="manifest" href="/clock/manifest.json">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Stakco Clock">
-
-    <!-- Mobile App Meta Tags (iOS) -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Stakco Clock">
-
-    <!-- Structured Data (Schema.org) -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Stakco Clock",
-      "url": "https://stakcos.com/clock/",
-      "description": "Time-driven Stakco puzzles synchronized with clock movements.",
-      "applicationCategory": "Game",
-      "operatingSystem": "Web",
-      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Stakco"
-      }
-    }
-    </script>
-    
-    <!-- Import Stakco Components -->
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
@@ -126,142 +29,125 @@
             overflow: hidden;
         }
 
-        /* Clock Info Display */
+        /* Clock Info Display - Bottom Horizontal Layout */
         #clock-info {
             position: absolute;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-            z-index: 1000;
-        }
-
-        .time-indicator {
-            width: 70px;
-            height: 70px;
-            border: 3px solid var(--glass-border);
-            border-radius: 50%;
-            font-size: 12px;
-            font-weight: bold;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(5px);
             background: var(--glass-bg);
-            transition: all 0.3s ease;
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 8px 12px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            z-index: 1000;
+            display: flex;
+            flex-direction: row;
+            gap: 0;
             font-family: 'Inter', sans-serif;
+            align-items: center;
         }
 
-        .time-indicator.hour {
-            border-color: #ff6b6b;
-            color: #ff6b6b;
-            background: rgba(255, 107, 107, 0.1);
+        .clock-segment {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-radius: 20px;
+            position: relative;
         }
 
-        .time-indicator.minute {
-            border-color: #4ecdc4;
-            color: #4ecdc4;
-            background: rgba(78, 205, 196, 0.1);
+        .clock-segment:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
 
-        .time-indicator.second {
-            border-color: #45b7d1;
-            color: #45b7d1;
-            background: rgba(69, 183, 209, 0.1);
+        .clock-segment.has-image::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border: 2px solid var(--text-primary);
+            border-radius: 50%;
         }
 
-        .time-label {
-            font-size: 9px;
-            margin-top: 4px;
+        .segment-label {
+            font-size: 10px;
+            font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
-        .angle-display {
-            font-size: 14px;
+        .segment-label.background,
+        .segment-label.top {
+            color: #9ca3af;
+        }
+
+        .segment-label.hour {
+            color: #ff6b6b;
+        }
+
+        .segment-label.minute {
+            color: #4ecdc4;
+        }
+
+        .segment-label.second {
+            color: #45b7d1;
+        }
+
+        .segment-value {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
             font-weight: 600;
+            letter-spacing: 0.5px;
+            min-width: 38px;
+            text-align: center;
+            color: var(--text-secondary);
         }
 
-        /* Clock face overlay */
-        .clock-face {
+        .segment-divider {
+            width: 1px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Upload hint on hover */
+        .clock-segment:hover .upload-hint {
+            opacity: 1;
+        }
+
+        .upload-hint {
             position: absolute;
-            top: 50%;
+            bottom: -25px;
             left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80%;
-            height: 80%;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            border-radius: 50%;
-            z-index: 5;
-            pointer-events: none;
-        }
-
-        .clock-hand {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform-origin: bottom center;
-            background: var(--primary-color);
-            opacity: 0.4;
-        }
-
-        .hour-hand {
-            width: 4px;
-            height: 25%;
-            transform: translate(-50%, -100%) rotate(0deg);
-            background: #ff6b6b;
-        }
-
-        .minute-hand {
-            width: 3px;
-            height: 35%;
-            transform: translate(-50%, -100%) rotate(0deg);
-            background: #4ecdc4;
-        }
-
-        .second-hand {
-            width: 2px;
-            height: 40%;
-            transform: translate(-50%, -100%) rotate(0deg);
-            background: #45b7d1;
-        }
-
-        .clock-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 10px;
-            height: 10px;
-            background: var(--primary-color);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 10;
-            box-shadow: var(--shadow-glow);
-        }
-
-        /* Container wrapper for clock face */
-        #clock-wrapper {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: var(--text-secondary);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            white-space: nowrap;
             pointer-events: none;
         }
     </style>
 </head>
 
 <body>
-    <!-- Components -->
     <stakco-info-panel icon="fa-clock">
-        <p>Clock synchronized • Layers rotate with time</p>
+        <p>Clock synchronized • Upload custom images</p>
     </stakco-info-panel>
 
     <stakco-branding 
         title="Stakco Clock" 
-        version="v2.0.0" 
+        version="v2.1.0" 
         subtitle="Time Puzzle">
     </stakco-branding>
 
@@ -272,80 +158,95 @@
         user-id="109949450257686494443"
         puzzle-id="A2A3_3"
         tolerance="2"
-        highlight-all="true"
-        >
-        <!-- Clock face overlay inside puzzle container -->
-        <div id="clock-wrapper" slot="overlay">
-            <div class="clock-face">
-                <div class="hour-hand clock-hand" id="ref-hour-hand"></div>
-                <div class="minute-hand clock-hand" id="ref-minute-hand"></div>
-                <div class="second-hand clock-hand" id="ref-second-hand"></div>
-                <div class="clock-center"></div>
-            </div>
-        </div>
+        highlight-all="true">
     </stakco-puzzle-container>
 
     <!-- Clock Info Display -->
     <div id="clock-info">
-        <div class="time-indicator hour">
-            <div class="angle-display" id="hour-angle">0°</div>
-            <div class="time-label">Hour</div>
+        <!-- Background -->
+        <div class="clock-segment" data-segment="background">
+            <span class="segment-label background">B</span>
+            <span class="segment-value" id="background-value">---'</span>
+            <span class="upload-hint">Upload</span>
         </div>
-        <div class="time-indicator minute">
-            <div class="angle-display" id="minute-angle">0°</div>
-            <div class="time-label">Min</div>
+        
+        <div class="segment-divider"></div>
+        
+        <!-- Hour -->
+        <div class="clock-segment" data-segment="hour">
+            <span class="segment-label hour">H</span>
+            <span class="segment-value" id="hour-value">000'</span>
+            <span class="upload-hint">Upload</span>
         </div>
-        <div class="time-indicator second">
-            <div class="angle-display" id="second-angle">0°</div>
-            <div class="time-label">Sec</div>
+        
+        <div class="segment-divider"></div>
+        
+        <!-- Minute -->
+        <div class="clock-segment" data-segment="minute">
+            <span class="segment-label minute">M</span>
+            <span class="segment-value" id="minute-value">000'</span>
+            <span class="upload-hint">Upload</span>
         </div>
+        
+        <div class="segment-divider"></div>
+        
+        <!-- Second -->
+        <div class="clock-segment" data-segment="second">
+            <span class="segment-label second">S</span>
+            <span class="segment-value" id="second-value">000'</span>
+            <span class="upload-hint">Upload</span>
+        </div>
+        
+        <div class="segment-divider"></div>
+        
+        <!-- Top -->
+        <div class="clock-segment" data-segment="top">
+            <span class="segment-label top">T</span>
+            <span class="segment-value" id="top-value">---'</span>
+            <span class="upload-hint">Upload</span>
+        </div>
+
+        <!-- Hidden file inputs -->
+        <input type="file" id="file-background" class="file-input" accept="image/*">
+        <input type="file" id="file-hour" class="file-input" accept="image/*">
+        <input type="file" id="file-minute" class="file-input" accept="image/*">
+        <input type="file" id="file-second" class="file-input" accept="image/*">
+        <input type="file" id="file-top" class="file-input" accept="image/*">
     </div>
 
     <script type="module">
         import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
         import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
 
-        // Get configuration for this app
         const CONFIG = StakcoConfig.getConfig('clock');
 
-        // App state
         let animationId = null;
         let lastAngles = { hour: 0, minute: 0, second: 0 };
 
-        // Get component references
         const puzzleContainer = document.querySelector('stakco-puzzle-container');
-        const infoPanel = document.querySelector('stakco-info-panel');
-        const branding = document.querySelector('stakco-branding');
         
         // Display elements
-        const hourAngleDisplay = document.getElementById('hour-angle');
-        const minuteAngleDisplay = document.getElementById('minute-angle');
-        const secondAngleDisplay = document.getElementById('second-angle');
-        const refHourHand = document.getElementById('ref-hour-hand');
-        const refMinuteHand = document.getElementById('ref-minute-hand');
-        const refSecondHand = document.getElementById('ref-second-hand');
+        const hourValueDisplay = document.getElementById('hour-value');
+        const minuteValueDisplay = document.getElementById('minute-value');
+        const secondValueDisplay = document.getElementById('second-value');
 
         async function init() {
             console.log('Initializing Stakco Clock...');
-
             StakcoUtils.preventZoom();
             setupEventListeners();
-
+            setupImageUpload();
             console.log('App initialized');
         }
 
         function setupEventListeners() {
-            // Puzzle container events
             puzzleContainer.addEventListener('puzzle-ready', () => {
                 console.log('Puzzle ready - starting clock sync');
                 
-                // Verify setLayerRotation method exists
                 if (typeof puzzleContainer.setLayerRotation !== 'function') {
                     console.error('setLayerRotation method not found on puzzle container!');
                     return;
                 }
                 
-                // Set initial angles to current time
                 const angles = calculateClockAngles();
                 console.log('Setting initial angles:', angles);
                 
@@ -354,21 +255,16 @@
                 puzzleContainer.setLayerRotation(3, angles.second);
                 
                 lastAngles = angles;
-                
-                // Update displays
                 updateDisplays(angles);
-                updateClockHands(angles);
                 
                 console.log('Initial setup complete, starting animation loop');
                 startClockUpdate();
             });
 
-            // Handle page visibility for performance
             document.addEventListener('visibilitychange', () => {
                 if (document.hidden) {
                     stopClockUpdate();
                 } else {
-                    // Resync when tab becomes visible again
                     const angles = calculateClockAngles();
                     puzzleContainer.setLayerRotation(1, angles.hour);
                     puzzleContainer.setLayerRotation(2, angles.minute);
@@ -379,7 +275,54 @@
             });
         }
 
-        // Calculate clock hand angles
+        function setupImageUpload() {
+            const segments = ['background', 'hour', 'minute', 'second', 'top'];
+            
+            segments.forEach(segment => {
+                const segmentBtn = document.querySelector(`[data-segment="${segment}"]`);
+                const fileInput = document.getElementById(`file-${segment}`);
+                
+                segmentBtn.addEventListener('click', () => {
+                    fileInput.click();
+                });
+                
+                fileInput.addEventListener('change', (e) => {
+                    handleImageUpload(segment, e);
+                });
+            });
+        }
+
+        function handleImageUpload(segment, event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const imageUrl = e.target.result;
+                
+                // Update puzzle container based on segment type
+                if (segment === 'background') {
+                    puzzleContainer.setBackgroundImage(imageUrl);
+                } else if (segment === 'top') {
+                    puzzleContainer.setTopImage(imageUrl);
+                } else {
+                    // Map segment names to layer numbers
+                    const layerMap = { hour: 1, minute: 2, second: 3 };
+                    const layerNum = layerMap[segment];
+                    if (layerNum) {
+                        puzzleContainer.setLayerImage(layerNum, imageUrl);
+                    }
+                }
+                
+                // Add visual indicator
+                const segmentBtn = document.querySelector(`[data-segment="${segment}"]`);
+                segmentBtn.classList.add('has-image');
+                
+                console.log(`Image uploaded for ${segment}:`, file.name);
+            };
+            reader.readAsDataURL(file);
+        }
+
         function calculateClockAngles() {
             const now = new Date();
             const hours = now.getHours() % 12;
@@ -387,10 +330,9 @@
             const seconds = now.getSeconds();
             const milliseconds = now.getMilliseconds();
 
-            // Calculate angles (0° = 12 o'clock, clockwise)
-            const secondAngle = (seconds + milliseconds / 1000) * 6; // 6° per second
-            const minuteAngle = (minutes + seconds / 60) * 6; // 6° per minute
-            const hourAngle = (hours + minutes / 60) * 30; // 30° per hour
+            const secondAngle = (seconds + milliseconds / 1000) * 6;
+            const minuteAngle = (minutes + seconds / 60) * 6;
+            const hourAngle = (hours + minutes / 60) * 30;
 
             return {
                 hour: hourAngle,
@@ -399,80 +341,50 @@
             };
         }
 
-        // Calculate smooth rotation delta
         function calculateDelta(current, last) {
             let delta = current - (last % 360);
             
-            // Handle wrapping (e.g., 359° → 0° should be +1°)
             if (delta < -180) delta += 360;
             if (delta > 180) delta -= 360;
             
             return delta;
         }
 
-        // Update layers based on current time
         function updateLayers() {
             const angles = calculateClockAngles();
 
-            // Calculate deltas for smooth rotation
             const hourDelta = calculateDelta(angles.hour, lastAngles.hour);
             const minuteDelta = calculateDelta(angles.minute, lastAngles.minute);
             const secondDelta = calculateDelta(angles.second, lastAngles.second);
 
-            // Log significant changes (debug)
-            if (Math.abs(secondDelta) > 0.1) {
-                console.log('Rotating layers - Hour:', hourDelta.toFixed(2), 'Min:', minuteDelta.toFixed(2), 'Sec:', secondDelta.toFixed(2));
-            }
-
-            // Apply rotations to puzzle layers
             if (Math.abs(hourDelta) > 0.001) puzzleContainer.rotateLayer(1, hourDelta);
             if (Math.abs(minuteDelta) > 0.001) puzzleContainer.rotateLayer(2, minuteDelta);
             if (Math.abs(secondDelta) > 0.001) puzzleContainer.rotateLayer(3, secondDelta);
 
-            // Update reference clock hands and displays
-            updateClockHands(angles);
             updateDisplays(angles);
-
-            // Store last angles
             lastAngles = angles;
         }
 
-        // Update clock hand visuals
-        function updateClockHands(angles) {
-            if (refHourHand) {
-                refHourHand.style.transform = `translate(-50%, -100%) rotate(${angles.hour}deg)`;
-            }
-            if (refMinuteHand) {
-                refMinuteHand.style.transform = `translate(-50%, -100%) rotate(${angles.minute}deg)`;
-            }
-            if (refSecondHand) {
-                refSecondHand.style.transform = `translate(-50%, -100%) rotate(${angles.second}deg)`;
-            }
-        }
-
-        // Update display elements
         function updateDisplays(angles) {
-            hourAngleDisplay.textContent = `${Math.round(angles.hour)}°`;
-            minuteAngleDisplay.textContent = `${Math.round(angles.minute)}°`;
-            secondAngleDisplay.textContent = `${Math.round(angles.second)}°`;
+            hourValueDisplay.textContent = `${Math.round(angles.hour).toString().padStart(3, '0')}'`;
+            minuteValueDisplay.textContent = `${Math.round(angles.minute).toString().padStart(3, '0')}'`;
+            secondValueDisplay.textContent = `${Math.round(angles.second).toString().padStart(3, '0')}'`;
         }
 
-        // Start the clock update loop
         function startClockUpdate() {
-            if (animationId) return; // Already running
+            if (animationId) return;
 
             function update() {
                 updateLayers();
                 animationId = requestAnimationFrame(update);
             }
             
-            updateLayers(); // Initial update
+            updateLayers();
             animationId = requestAnimationFrame(update);
             
             console.log('Clock update loop started');
         }
 
-        // Stop the clock update loop
         function stopClockUpdate() {
             if (animationId) {
                 cancelAnimationFrame(animationId);
@@ -481,10 +393,7 @@
             }
         }
 
-        // Cleanup on unload
         window.addEventListener('beforeunload', stopClockUpdate);
-
-        // Start app
         document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
