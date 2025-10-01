@@ -131,26 +131,26 @@
             overflow: hidden;
         }
 
-        /* Gyro Info Display */
+        /* Gyro Info Display - Bottom Horizontal Layout */
         #gyro-info {
             position: absolute;
-            top: 80px;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: 25px;
-            padding: 15px 25px;
+            padding: 12px 20px;
             backdrop-filter: blur(10px);
             box-shadow: var(--shadow-soft);
             z-index: 800;
             display: none;
-            flex-direction: column;
+            flex-direction: row;
             gap: 10px;
             font-family: 'Inter', sans-serif;
             font-size: 13px;
             font-weight: 500;
-            min-width: 280px;
+            align-items: center;
         }
 
         #gyro-info.show {
@@ -161,28 +161,27 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 15px;
         }
 
         .gyro-label {
             color: var(--text-secondary);
             text-transform: uppercase;
-            font-size: 11px;
-            letter-spacing: 1px;
-            min-width: 80px;
+            font-size: 10px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
         }
 
         .gyro-value {
             color: var(--primary-color);
             font-weight: 600;
             font-family: 'Courier New', monospace;
-            letter-spacing: 1px;
-            text-align: right;
-            flex: 1;
+            letter-spacing: 0.5px;
+            min-width: 35px;
+            text-align: center;
         }
 
         .gyro-bar {
-            width: 100px;
+            width: 60px;
             height: 4px;
             background: var(--glass-bg);
             border-radius: 2px;
@@ -195,6 +194,28 @@
             background: var(--primary-gradient);
             transition: width 0.1s ease;
             border-radius: 2px;
+        }
+
+        /* Responsive adjustments for smaller screens */
+        @media (max-width: 600px) {
+            #gyro-info {
+                gap: 12px;
+                padding: 10px 15px;
+                font-size: 11px;
+            }
+
+            .gyro-label {
+                font-size: 9px;
+            }
+
+            .gyro-value {
+                min-width: 30px;
+                font-size: 11px;
+            }
+
+            .gyro-bar {
+                width: 30px;
+            }
         }
     </style>
 </head>
@@ -220,17 +241,17 @@
     <!-- Gyro Info Display -->
     <div id="gyro-info">
         <div class="gyro-row">
-            <span class="gyro-label">Layer 1 (β)</span>
+            <span class="gyro-label">L1 (β)</span>
             <span class="gyro-value" id="beta-value">0°</span>
             <div class="gyro-bar"><div class="gyro-bar-fill" id="beta-bar"></div></div>
         </div>
         <div class="gyro-row">
-            <span class="gyro-label">Layer 2 (γ)</span>
+            <span class="gyro-label">L2 (γ)</span>
             <span class="gyro-value" id="gamma-value">0°</span>
             <div class="gyro-bar"><div class="gyro-bar-fill" id="gamma-bar"></div></div>
         </div>
         <div class="gyro-row">
-            <span class="gyro-label">Layer 3 (α)</span>
+            <span class="gyro-label">L3 (α)</span>
             <span class="gyro-value" id="alpha-value">0°</span>
             <div class="gyro-bar"><div class="gyro-bar-fill" id="alpha-bar"></div></div>
         </div>
