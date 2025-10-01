@@ -1,7 +1,7 @@
 /**
  * Stakco Puzzle Container Component
  * Manages puzzle layers, rotations, and animations
- * Usage: <stakco-puzzle-container layers="3" user-id="..." puzzle-id="..."></stakco-puzzle-container>
+ * Usage: <stakco-puzzle-container layers="3" user-id="..." puzzle-id="..." highlight-all="true"></stakco-puzzle-container>
  */
 
 import { StakcoUtils } from './stakco-utils.js';
@@ -23,12 +23,16 @@ class StakcoPuzzleContainer extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['layers', 'user-id', 'puzzle-id', 'tolerance'];
+        return ['layers', 'user-id', 'puzzle-id', 'tolerance', 'highlight-all'];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         if (oldValue !== newValue && this.shadowRoot.innerHTML) {
-            this.initialize();
+            if (name === 'highlight-all') {
+                this.updateHighlighting();
+            } else {
+                this.initialize();
+            }
         }
     }
 
@@ -36,7 +40,7 @@ class StakcoPuzzleContainer extends HTMLElement {
         const layers = parseInt(this.getAttribute('layers')) || 3;
         
         /* html */
-                    this.shadowRoot.innerHTML = `
+        this.shadowRoot.innerHTML = `
             <style>
                 :host {
                     display: block;
@@ -99,7 +103,17 @@ class StakcoPuzzleContainer extends HTMLElement {
                     z-index: 50000;
                 }
 
+                /* Default: Only active layer is highlighted */
                 .puzzle-layer.active .layer-label {
+                    background: var(--primary-gradient);
+                    border-color: var(--primary-color);
+                    color: white;
+                    box-shadow: var(--shadow-glow);
+                    animation: labelPulse 2s ease-in-out infinite;
+                }
+
+                /* When highlight-all is true: All layers are highlighted */
+                :host([highlight-all="true"]) .layer-label {
                     background: var(--primary-gradient);
                     border-color: var(--primary-color);
                     color: white;
@@ -196,6 +210,14 @@ class StakcoPuzzleContainer extends HTMLElement {
                 element.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
             }
         });
+    }
+
+    updateHighlighting() {
+        // This method is called when highlight-all attribute changes
+        // The CSS will automatically handle the visual update via :host([highlight-all="true"])
+        this.dispatchEvent(new CustomEvent('highlight-changed', {
+            detail: { highlightAll: this.getHighlightAll() }
+        }));
     }
 
     // Public API methods
@@ -315,6 +337,14 @@ class StakcoPuzzleContainer extends HTMLElement {
 
     getLayerImages() {
         return Object.values(this.puzzleLayers).map(layer => layer.url);
+    }
+
+    getHighlightAll() {
+        return this.getAttribute('highlight-all') === 'true';
+    }
+
+    setHighlightAll(value) {
+        this.setAttribute('highlight-all', value.toString());
     }
 
     reset() {
