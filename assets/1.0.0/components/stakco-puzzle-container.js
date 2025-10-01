@@ -123,12 +123,12 @@ class StakcoPuzzleContainer extends HTMLElement {
 
                 @keyframes labelPulse {
                     0%, 100% {
-                        background: var(--glass-bg);
+                        background-color: var(--glass-bg);
                         color: var(--text-secondary);
                         box-shadow: var(--shadow-soft);
                     }
                     50% {
-                        background: var(--primary-gradient);
+                        background-color: var(--primary-gradient);
                         color: white;
                         box-shadow: var(--shadow-glow);
                     }
