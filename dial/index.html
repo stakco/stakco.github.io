@@ -1,399 +1,291 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Basic Meta -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Brings life to papers with interactive Stakco puzzles controlled by Surface Dial.">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="description" content="Surface Dial-driven Stakco puzzles with hardware control.">
+    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, Surface Dial, hardware control, educational games, therapy puzzles">
+    <meta name="author" content="Stakco Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3c2f38">
 
-    <title>Stakco Play - Surface Dial Edition</title>
+    <title>Stakco Surface Dial</title>
     
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Stakco Surface Dial">
+    <meta property="og:description" content="Surface Dial-driven Stakco puzzles with hardware control.">
+    <meta property="og:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:url" content="https://stakcos.com/dial/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco Surface Dial">
+    <meta name="twitter:description" content="Surface Dial-driven Stakco puzzles with hardware control.">
+    <meta name="twitter:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:url" content="https://stakcos.com/dial/">
+    <meta name="twitter:site" content="@StakcoPuzzle">
+    <meta name="twitter:creator" content="@StakcoPuzzle">
+
+    <!-- Favicons / Android -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+    <!-- Apple Touch Icons (Squircles) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+    <!-- Apple Splash Screens (Portrait only) -->
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square150x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square310x310logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x310.png">
+    <meta name="msapplication-wide310x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x150.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/dial/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco Surface Dial">
+
+    <!-- Mobile App Meta Tags (iOS) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco Surface Dial">
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stakco Surface Dial",
+      "url": "https://stakcos.com/dial/",
+      "description": "Surface Dial-driven Stakco puzzles with hardware control.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stakco"
+      }
+    }
+    </script>
+    
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-permission-prompt.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+
     <style>
-        /* CSS Variables for consistent theming */
-        :root {
-            --primary-green: #00ff00;
-            --background-dark: #000;
-            --text-green: #0f0;
-            --button-inactive: #555;
-            --button-inactive-bg: rgba(68, 68, 68, 0.3);
-            --button-hover: #888;
-            --button-hover-bg: rgba(136, 136, 136, 0.2);
-            --text-inactive: #777;
-            --text-hover: #aaa;
-            --container-size: 90vmin;
-            --button-size: 50px;
-            --border-radius: 50%;
-            --transition-duration: 0.3s;
-        }
-
         body {
-            margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: var(--background-dark);
-            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
 
-        #container {
-            position: relative;
-            width: var(--container-size);
-            height: var(--container-size);
-            max-width: calc(100vw - 20px);
-            max-height: calc(100vh - 200px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .puzzle-layer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
+        html, body {
+            margin: 0;
             height: 100%;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            pointer-events: none;
-            transition: transform 0.1s ease-out;
+            overflow: hidden;
         }
 
-        .puzzle-layer.active {
-            opacity: 1;
-            z-index: 10;
-            border-radius: 10px;
-        }
-
-        /* Surface Dial Connection Panel */
-        #dial-connection {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid var(--primary-green);
-            border-radius: 15px;
-            padding: 15px;
-            font-family: 'Courier New', monospace;
-            color: var(--text-green);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px var(--primary-green);
-            z-index: 2000;
-            min-width: 200px;
-        }
-
-        #dial-connection.error {
-            border-color: #ff6b6b;
-            color: #ff6b6b;
-        }
-
-        #dial-connection.connected {
-            border-color: var(--primary-green);
-        }
-
-        #connect-dial-btn {
-            background: linear-gradient(45deg, #4ecdc4, #45b7aa);
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: all 0.3s ease;
-        }
-
-        #connect-dial-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        #connect-dial-btn:disabled {
-            background: #666;
-            cursor: not-allowed;
-        }
-
-        .dial-status {
-            font-size: 12px;
-            margin: 5px 0;
-        }
-
-        /* Countdown Timer */
-        #countdown-container {
+        #dial-info {
+            max-width: 75%;
             position: absolute;
             top: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid var(--primary-green);
-            border-radius: 15px;
-            padding: 5px 15px;
-            font-family: 'Courier New', monospace;
-            color: var(--text-green);
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            letter-spacing: 2px;
+            background: var(--glass-bg);
+            border-radius: 25px;
+            padding: 15px 30px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px var(--primary-green);
-            z-index: 2000;
-            display: none;
-        }
-
-        #countdown-container.show {
-            display: block;
-        }
-
-        #branding {
-            position: absolute;
-            top: 7px;
-            right: 20px;
-            font-size: 14px;
-            text-align: right;
-            font-family: 'Courier New', monospace;
-            color: var(--text-green);
-            text-shadow: 0 0 5px var(--text-green);
-            letter-spacing: 1px;
-        }
-
-        #branding.hidden {
-            display: none;
-        }
-
-        #status {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 16px;
-            text-align: center;
-            font-family: 'Courier New', monospace;
-            color: var(--text-green);
-            text-shadow: 0 0 10px var(--text-green);
-            letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 10px 20px;
-            border-radius: 20px;
-            border: 1px solid var(--primary-green);
-        }
-
-        #status.hidden {
-            display: none;
-        }
-
-        #controls {
-            position: absolute;
-            bottom: 80px;
-            left: 50%;
-            transform: translateX(-50%);
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
             display: flex;
-            gap: 15px;
-            z-index: 1000;
+            gap: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
         }
 
-        #controls.hidden {
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            #dial-info {
+                top: 80px;
+            }
+        }
+
+        #dial-info.hidden {
             display: none;
         }
 
-        .layer-button {
-            width: var(--button-size);
-            height: var(--button-size);
-            border: 3px solid var(--button-inactive);
-            border-radius: var(--border-radius);
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
+        .dial-row {
             display: flex;
             align-items: center;
-            justify-content: center;
-            transition: all var(--transition-duration) ease;
-            backdrop-filter: blur(5px);
-            color: var(--text-inactive);
-            background: var(--button-inactive-bg);
         }
 
-        .layer-button.active {
-            background: var(--primary-green);
-            border-color: var(--primary-green);
-            color: var(--background-dark);
-            box-shadow: 0 0 20px var(--primary-green);
+        .dial-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
         }
 
-        .layer-button:hover:not(.active) {
-            border-color: var(--button-hover);
-            color: var(--text-hover);
-            background: var(--button-hover-bg);
+        .dial-value {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            white-space: nowrap;
         }
 
-        #share-button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--primary-green);
-            color: var(--background-dark);
-            border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            display: none;
-            box-shadow: 0 0 30px var(--primary-green);
-            transition: all var(--transition-duration) ease;
-            z-index: 1000;
+        .dial-activity {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #333;
+            border: 2px solid #666;
+            transition: all 0.2s ease;
+            display: inline-block;
+            margin-left: 10px;
         }
 
-        #share-button.show {
-            display: block;
-        }
-
-        #options-container {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 2000;
-        }
-
-        .option-button {
-            padding: 10px 15px;
-            border: 2px solid var(--button-inactive);
-            border-radius: 8px;
-            background: var(--button-inactive-bg);
-            color: var(--text-inactive);
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all var(--transition-duration) ease;
-            backdrop-filter: blur(5px);
-            text-align: center;
-        }
-
-        .option-button:hover {
-            border-color: var(--button-hover);
-            color: var(--text-hover);
-            background: var(--button-hover-bg);
-        }
-
-        .option-button.primary {
-            border-color: var(--primary-green);
-            color: var(--primary-green);
-            background: rgba(0, 255, 0, 0.1);
-        }
-
-        .option-button.primary:hover {
-            background: rgba(0, 255, 0, 0.2);
-            box-shadow: 0 0 15px var(--primary-green);
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 0 20px var(--primary-green);
-            }
-            50% {
-                box-shadow: 0 0 30px var(--primary-green), 0 0 40px var(--primary-green);
-            }
-        }
-
-        @keyframes flicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-            20%, 24%, 55% { opacity: 0.8; }
-            22% { opacity: 0.6; }
-        }
-
-        .led-text {
-            animation: flicker 2.5s infinite;
-        }
-
-        @media (max-width: 768px) {
-            #dial-connection {
-                position: relative;
-                margin: 10px;
-            }
-            
-            #container {
-                --container-size: 80vmin;
-            }
+        .dial-activity.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
         }
     </style>
 </head>
 
 <body>
-    <!-- Surface Dial Connection Panel -->
-    <div id="dial-connection">
-        <div class="led-text">Surface Dial Control</div>
-        <div id="dial-status" class="dial-status">Not Connected</div>
-        <div class="dial-status">
-            <small>Rotation: <span id="dial-rotation">0°</span></small><br>
-            <small>Button: <span id="dial-button">Released</span></small>
+    <stakco-info-panel icon="fa-gamepad">
+        <p>Initializing Surface Dial... Connect device to play</p>
+    </stakco-info-panel>
+
+    <stakco-branding 
+        title="Stakco Surface Dial" 
+        version="v2.0.0" 
+        subtitle="Hardware Puzzle">
+    </stakco-branding>
+
+    <stakco-products-panel></stakco-products-panel>
+
+    <div id="dial-info" class="hidden">
+        <div class="dial-row">
+            <span class="dial-label">Rotation:</span>
+            <span class="dial-value" id="dial-rotation">0°</span>
+            <span class="dial-activity" id="dial-indicator"></span>
         </div>
-        <button id="connect-dial-btn">Connect Surface Dial</button>
+        <div class="dial-row">
+            <span class="dial-label">Layer:</span>
+            <span class="dial-value" id="active-layer">1</span>
+        </div>
+        <div class="dial-row">
+            <span class="dial-label">Actions:</span>
+            <span class="dial-value" id="rotation-count">0</span>
+        </div>
     </div>
 
-    <!-- Countdown Timer -->
-    <div id="countdown-container">
-        <div id="countdown-timer">00:00</div>
-    </div>
+    <stakco-puzzle-container
+        layers="3"
+        user-id="109949450257686494443"
+        puzzle-id="A2A3_3"
+        tolerance="2">
+    </stakco-puzzle-container>
+    
+    <stakco-layer-controls layers="3"></stakco-layer-controls>
 
-    <div id="branding">
-        <p class="led-text">Stakco Play - Surface Dial Edition</p>
-        <p id="puzzle-title"></p> 
-    </div>
+    <stakco-share-button label="Share Success!"></stakco-share-button>
 
-    <div id="status">
-        <p id="orientation-status">Connect Surface Dial • Rotate to control selected layer • Press to switch layers</p>    
-    </div>
+    <stakco-permission-prompt 
+        title="Enable Surface Dial Access"
+        message="This app needs access to your Surface Dial device to control puzzle layers with rotation and button press. Connect your Surface Dial via Bluetooth, then enable access."
+        primary-label="Connect Surface Dial"
+        secondary-label="Skip">
+    </stakco-permission-prompt>
 
-    <div id="options-container">
-        <button class="option-button primary" onclick="solvePuzzleInstantly()">Solve</button>
-        <button class="option-button" onclick="remixPuzzle()">Remix</button>
-    </div>
+    <stakco-share-window 
+        title="Stakco Surface Dial"
+        share-url="https://stakcos.com/dial/">
+        <div slot="text">Solved with Surface Dial!</div>
+    </stakco-share-window>
 
-    <div id="container"></div>
-    <div id="controls"></div>
+    <script type="module">
+        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+        import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
 
-    <button id="share-button" onclick="sharePuzzle()">🎉 Share Success!</button>
+        const CONFIG = StakcoConfig.getConfig('dial');
 
-    <script>
-        // Surface Dial WebHID Integration
+        // Surface Dial state
+        let dialDevice = null;
+        let rotationCount = 0;
+        let puzzleSolved = false;
+
+        const puzzleContainer = document.querySelector('stakco-puzzle-container');
+        const layerControls = document.querySelector('stakco-layer-controls');
+        const infoPanel = document.querySelector('stakco-info-panel');
+        const shareWindow = document.querySelector('stakco-share-window');
+        const permissionPrompt = document.querySelector('stakco-permission-prompt');
+        const branding = document.querySelector('stakco-branding');
+        const shareButton = document.querySelector('stakco-share-button');
+        
+        const dialInfo = document.getElementById('dial-info');
+        const dialRotationSpan = document.getElementById('dial-rotation');
+        const activeLayerSpan = document.getElementById('active-layer');
+        const rotationCountSpan = document.getElementById('rotation-count');
+        const dialIndicator = document.getElementById('dial-indicator');
+
+        // Surface Dial Controller
         class SurfaceDialController {
-            constructor(onRotation, onButtonPress) {
+            constructor() {
                 this.device = null;
-                this.currentRotation = 0.0;
+                this.currentRotation = 0;
                 this.isButtonPressed = false;
-                this.onRotation = onRotation;
-                this.onButtonPress = onButtonPress;
                 this.prevBytes = null;
-                
-                // Fixed settings for optimal Stakco control
                 this.sensitivity = 1.0;
                 this.maxDelta = 1.0;
-                
-                // UI elements
-                this.statusElement = document.getElementById('dial-status');
-                this.rotationElement = document.getElementById('dial-rotation');
-                this.buttonElement = document.getElementById('dial-button');
-                this.connectionPanel = document.getElementById('dial-connection');
-                this.connectButton = document.getElementById('connect-dial-btn');
-                
-                this.setupEventHandlers();
             }
-            
-            setupEventHandlers() {
-                this.connectButton.addEventListener('click', () => this.connectDevice());
-            }
-            
-            async connectDevice() {
+
+            async connect() {
                 try {
-                    this.connectButton.disabled = true;
-                    this.statusElement.textContent = 'Requesting device...';
-                    
                     const devices = await navigator.hid.requestDevice({
                         filters: [
                             { vendorId: 0x045E, usagePage: 0x01, usage: 0x0E },
@@ -401,578 +293,225 @@
                         ]
                     });
                     
-                    if (!devices || devices.length === 0) {
-                        throw new Error('No Surface Dial selected');
-                    }
+                    if (!devices?.length) throw new Error('No Surface Dial selected');
                     
                     this.device = devices[0];
                     await this.device.open();
                     
-                    this.device.addEventListener('inputreport', (event) => {
-                        this.handleInputReport(event);
-                    });
+                    this.device.addEventListener('inputreport', (e) => this.handleInput(e));
                     
-                    this.statusElement.textContent = 'Connected!';
-                    this.connectionPanel.classList.add('connected');
-                    this.connectButton.textContent = 'Disconnect';
-                    this.connectButton.disabled = false;
-                    this.connectButton.onclick = () => this.disconnectDevice();
-                    
-                    console.log('Surface Dial connected for Stakco control');
+                    console.log('Surface Dial connected:', this.device.productName);
+                    return true;
                     
                 } catch (error) {
                     console.error('Connection failed:', error);
-                    this.statusElement.textContent = `Error: ${error.message}`;
-                    this.connectionPanel.classList.add('error');
-                    this.connectButton.disabled = false;
+                    return false;
                 }
             }
-            
-            async disconnectDevice() {
-                if (this.device) {
-                    try { await this.device.close(); } catch (e) { /* ignore */ }
-                    this.device = null;
-                }
-                
-                this.statusElement.textContent = 'Not Connected';
-                this.connectionPanel.classList.remove('connected', 'error');
-                this.connectButton.textContent = 'Connect Surface Dial';
-                this.connectButton.onclick = () => this.connectDevice();
-                this.connectButton.disabled = false;
-            }
-            
-            handleInputReport(event) {
+
+            handleInput(event) {
                 const { data } = event;
-                const dataView = new DataView(data.buffer);
+                const view = new DataView(data.buffer);
                 
                 try {
                     let rotationDelta = 0;
                     let buttonPressed = this.isButtonPressed;
                     
-                    if (dataView.byteLength >= 2) {
-                        // Fixed-point /256 decoding for smooth rotation
-                        const rawValue = dataView.getInt16(0, true);
-                        rotationDelta = rawValue / 256.0;
+                    if (view.byteLength >= 2) {
+                        const rawValue = view.getInt16(0, true);
+                        rotationDelta = (rawValue / 256.0) * this.sensitivity;
                         
-                        // Apply sensitivity and clamp
-                        rotationDelta *= this.sensitivity;
                         if (Math.abs(rotationDelta) > this.maxDelta) {
                             rotationDelta = Math.sign(rotationDelta) * this.maxDelta;
                         }
-                        
-                        // Ignore tiny noise
-                        if (Math.abs(rotationDelta) < 0.001) {
-                            rotationDelta = 0;
-                        }
+                        if (Math.abs(rotationDelta) < 0.001) rotationDelta = 0;
                     }
                     
-                    // Button detection through byte comparison
-                    if (this.prevBytes && dataView.byteLength > 0) {
-                        for (let i = 0; i < Math.min(4, dataView.byteLength, this.prevBytes.length); i++) {
-                            const currentByte = dataView.getUint8(i);
-                            const prevByte = this.prevBytes[i];
-                            const changed = currentByte ^ prevByte;
+                    if (this.prevBytes && view.byteLength > 0) {
+                        for (let i = 0; i < Math.min(4, view.byteLength, this.prevBytes.length); i++) {
+                            const curr = view.getUint8(i);
+                            const prev = this.prevBytes[i];
+                            const changed = curr ^ prev;
                             
-                            if (changed !== 0) {
-                                if ((changed & 0x01) !== 0) {
-                                    buttonPressed = (currentByte & 0x01) !== 0;
-                                    break;
-                                }
+                            if (changed & 0x01) {
+                                buttonPressed = (curr & 0x01) !== 0;
+                                break;
                             }
                         }
                     }
                     
-                    // Store bytes for next comparison
-                    this.prevBytes = Array.from(new Uint8Array(dataView.buffer)).slice(0, 8);
+                    this.prevBytes = Array.from(new Uint8Array(view.buffer)).slice(0, 8);
                     
-                    // Handle rotation
                     if (rotationDelta !== 0) {
-                        this.currentRotation += rotationDelta;
-                        this.currentRotation = ((this.currentRotation % 360) + 360) % 360;
-                        this.rotationElement.textContent = `${this.currentRotation.toFixed(1)}°`;
-                        
-                        if (this.onRotation) {
-                            this.onRotation(rotationDelta);
-                        }
+                        this.currentRotation = ((this.currentRotation + rotationDelta) % 360 + 360) % 360;
+                        handleRotation(rotationDelta);
                     }
                     
-                    // Handle button press
                     if (buttonPressed !== this.isButtonPressed) {
                         this.isButtonPressed = buttonPressed;
-                        this.buttonElement.textContent = buttonPressed ? 'Pressed' : 'Released';
-                        
-                        if (buttonPressed && this.onButtonPress) {
-                            this.onButtonPress();
+                        if (buttonPressed) {
+                            handleButtonPress();
                         }
                     }
                     
                 } catch (error) {
-                    console.error('Error parsing Surface Dial data:', error);
+                    console.error('Error parsing dial data:', error);
                 }
             }
         }
 
-        // Configuration constants
-        const CONFIG = {
-            DEFAULT_LAYERS: 3,
-            ROTATION_TOLERANCE: 2,
-            SOLVE_ANIMATION_DELAY: 1000,
-            SOLVE_ANIMATION_DURATION: 3000,
-            BASE_IMAGE_URL: 'https://storage.googleapis.com/stakco-images',
-            DEFAULT_USER_ID: '109949450257686494443',
-            DEFAULT_PUZZLE_ID: 'A2A3_3'
-        };
+        async function init() {
+            console.log('Initializing Stakco Surface Dial...');
 
-        // App state
-        let totalLayers = CONFIG.DEFAULT_LAYERS;
-        let currentLayer = 1;
-        let puzzleSolved = false;
-        let imagesLoaded = false;
-        let puzzleLayers = {};
-        let surfaceDial = null;
+            StakcoUtils.preventZoom();
+            setupEventListeners();
 
-        // Countdown state
-        let countdownActive = false;
-        let countdownStartTime = null;
-        let countdownInterval = null;
-        let firstInteractionOccurred = false;
+            // Wait for puzzle container to be ready
+            await new Promise(resolve => {
+                if (puzzleContainer.shadowRoot) {
+                    resolve();
+                } else {
+                    puzzleContainer.addEventListener('puzzle-ready', resolve, { once: true });
+                }
+            });
 
-        // Parse URL parameters
-        const urlParams = new URLSearchParams(window.location.search);
-        const username = urlParams.get('username');
-        const puzzle = urlParams.get('puzzle');
-        const hasUrlParams = urlParams.toString() !== '';
-
-        // Generate today's date string
-        const today = new Date();
-        const dateStr = today.toISOString().split('T')[0];
-
-        // DOM elements
-        let orientationStatus, controlsDiv, statusDiv, shareButton, container, brandingDiv, countdownContainer, countdownTimer;
-
-        // Countdown functions
-        function startCountdown() {
-            if (countdownActive || hasUrlParams) return;
-            
-            countdownActive = true;
-            countdownStartTime = Date.now();
-            
-            countdownContainer.classList.add('show');
-            brandingDiv.classList.add('hidden');
-            statusDiv.classList.add('hidden');
-            
-            countdownInterval = setInterval(updateCountdownDisplay, 100);
-            console.log('Countdown started');
+            setTimeout(checkPermissionNeeded, 1000);
+            console.log('App initialized');
         }
 
-        function stopCountdown() {
-            if (!countdownActive) return;
-            
-            countdownActive = false;
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-                countdownInterval = null;
-            }
+        function setupEventListeners() {
+            puzzleContainer.addEventListener('puzzle-ready', () => {
+                console.log('Puzzle ready');
+            });
+
+            puzzleContainer.addEventListener('puzzle-solved', () => {
+                puzzleSolved = true;
+                handlePuzzleSolved();
+            });
+
+            layerControls.addEventListener('layerchange', (e) => {
+                puzzleContainer.switchLayer(e.detail.layer);
+                activeLayerSpan.textContent = e.detail.layer;
+                updateRotationDisplay();
+            });
+
+            permissionPrompt.addEventListener('primary-action', async () => {
+                await requestDialAccess();
+            });
+
+            permissionPrompt.addEventListener('secondary-action', () => {
+                initializeDial();
+            });
+
+            shareButton.addEventListener('share-clicked', handleShare);
         }
 
-        function updateCountdownDisplay() {
-            if (!countdownActive || !countdownStartTime) return;
-            
-            const elapsed = Date.now() - countdownStartTime;
-            const seconds = Math.floor(elapsed / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            
-            const timeString = `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-            countdownTimer.textContent = timeString;
-        }
-
-        function resetCountdown() {
-            stopCountdown();
-            countdownContainer.classList.remove('show');
-            countdownTimer.textContent = '00:00';
-            firstInteractionOccurred = false;
-            
-            if (!puzzleSolved) {
-                brandingDiv.classList.remove('hidden');
-                statusDiv.classList.remove('hidden');
-            }
-        }
-
-        function getFinalTime() {
-            if (!countdownStartTime) return '00:00';
-            
-            const elapsed = Date.now() - countdownStartTime;
-            const seconds = Math.floor(elapsed / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const remainingSeconds = seconds % 60;
-            
-            return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-        }
-
-        // Surface Dial event handlers
-        function handleDialRotation(deltaAngle) {
-            if (puzzleSolved || !imagesLoaded) return;
-            
-            // Trigger countdown on first interaction
-            if (!firstInteractionOccurred && !hasUrlParams) {
-                firstInteractionOccurred = true;
-                startCountdown();
-            }
-            
-            applyRotation(deltaAngle);
-        }
-
-        function handleDialButtonPress() {
-            if (puzzleSolved) return;
-            
-            // Switch to next layer
-            const nextLayer = (currentLayer % totalLayers) + 1;
-            switchLayer(nextLayer);
-            
-            // Visual feedback
-            if (navigator.vibrate) {
-                navigator.vibrate([50]);
-            }
-        }
-
-        // Initialize the app
-        function initApp() {
-            console.log('Initializing Stakco Surface Dial Edition...');
-            
-            // Check WebHID support
-            if (!('hid' in navigator)) {
-                alert('WebHID not supported in this browser. Please use Chrome or Edge.');
+        async function requestDialAccess() {
+            if (!navigator.hid) {
+                infoPanel.setContent('<p>WebHID not supported in this browser</p>');
                 return;
             }
-            
-            // Cache DOM elements
-            orientationStatus = document.getElementById('orientation-status');
-            controlsDiv = document.getElementById('controls');
-            statusDiv = document.getElementById('status');
-            shareButton = document.getElementById('share-button');
-            container = document.getElementById('container');
-            brandingDiv = document.getElementById('branding');
-            countdownContainer = document.getElementById('countdown-container');
-            countdownTimer = document.getElementById('countdown-timer');
 
-            // Set puzzle title
-            const puzzleTitleElem = document.getElementById('puzzle-title');
-            if (username && puzzle) {
-                puzzleTitleElem.textContent = `${puzzle} by ${username}`;
-            } else {
-                puzzleTitleElem.textContent = `Daily Puzzle : ${dateStr}`;
-            }
-
-            // Initialize Surface Dial controller
-            surfaceDial = new SurfaceDialController(handleDialRotation, handleDialButtonPress);
-
-            // Determine puzzle configuration
-            const customPuzzle = parseCustomPuzzle();
-            if (customPuzzle) {
-                totalLayers = customPuzzle.noOfLayers;
-            }
-
-            // Initialize puzzle
-            initializePuzzleLayers();
-            createDynamicElements();
-            loadImages(customPuzzle);
-
-            console.log('Stakco Surface Dial Edition initialized');
-        }
-
-        // Parse custom puzzle parameters
-        function parseCustomPuzzle() {
-            if (!username || !puzzle) return null;
-
-            const puzzleParts = puzzle.split('_');
-            if (puzzleParts.length < 2) return null;
-
-            const puzzleId = puzzleParts[0];
-            const puzzleIdFull = `${puzzleParts[0]}_${puzzleParts[1]}`;
-            const noOfLayers = parseInt(puzzleParts[1], 10);
-
-            return { username, puzzleId, puzzleIdFull, noOfLayers };
-        }
-
-        // Initialize puzzle layer data
-        function initializePuzzleLayers() {
-            puzzleLayers = {};
-            for (let i = 1; i <= totalLayers; i++) {
-                puzzleLayers[`layer${i}`] = { 
-                    rotation: Math.floor(Math.random() * 360) 
-                };
-            }
-        }
-
-        // Create dynamic DOM elements
-        function createDynamicElements() {
-            container.innerHTML = '';
-            controlsDiv.innerHTML = '';
-
-            // Create layer elements
-            for (let i = 1; i <= totalLayers; i++) {
-                const layerDiv = document.createElement('div');
-                layerDiv.id = `layer${i}`;
-                layerDiv.className = `puzzle-layer${i === 1 ? ' active' : ''}`;
-                layerDiv.style.zIndex = totalLayers - i + 1;
-                container.appendChild(layerDiv);
-
-                const button = document.createElement('button');
-                button.className = `layer-button${i === 1 ? ' active' : ''}`;
-                button.dataset.layer = i;
-                button.textContent = i;
-                button.addEventListener('click', () => switchLayer(i));
-                controlsDiv.appendChild(button);
-            }
-        }
-
-        // Generate image URLs
-        function generateImageUrls(customPuzzle) {
-            const urls = { primary: {}, backup: {} };
-
-            if (customPuzzle) {
-                for (let i = 1; i <= totalLayers; i++) {
-                    urls.primary[`layer${i}`] = 
-                        `${CONFIG.BASE_IMAGE_URL}/${customPuzzle.username}/${customPuzzle.puzzleIdFull}/${customPuzzle.puzzleId}_${i-1}.png`;
-                }
-                
-                for (let i = 1; i <= 3; i++) {
-                    urls.backup[`layer${i}`] = 
-                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${i-1}.png`;
-                }
-            } else {
-                for (let i = 1; i <= totalLayers; i++) {
-                    const imageIndex = i - 1;
-                    urls.primary[`layer${i}`] = 
-                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/${dateStr}/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
-                    urls.backup[`layer${i}`] = 
-                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
-                }
-            }
-
-            return urls;
-        }
-
-        // Load images with fallback
-        async function loadImages(customPuzzle) {
-            orientationStatus.textContent = 'Loading puzzle images...';
-            
-            const imageUrls = generateImageUrls(customPuzzle);
-            let loadedCount = 0;
-
-            for (let i = 1; i <= totalLayers; i++) {
-                const layerKey = `layer${i}`;
-                const layerElement = document.getElementById(layerKey);
-                
-                if (!layerElement) continue;
-
-                try {
-                    const primaryUrl = imageUrls.primary[layerKey];
-                    const imageExists = await checkImageExists(primaryUrl);
-                    
-                    if (imageExists) {
-                        layerElement.style.backgroundImage = `url('${primaryUrl}')`;
-                    } else {
-                        const backupUrl = imageUrls.backup[layerKey];
-                        if (backupUrl) {
-                            layerElement.style.backgroundImage = `url('${backupUrl}')`;
-                        }
-                    }
-                    loadedCount++;
-                } catch (error) {
-                    console.error(`Error loading ${layerKey}:`, error);
-                    const backupUrl = imageUrls.backup[layerKey];
-                    if (backupUrl) {
-                        layerElement.style.backgroundImage = `url('${backupUrl}')`;
-                    }
-                    loadedCount++;
-                }
-            }
-
-            applyInitialRotations();
-            orientationStatus.textContent = 'Connect Surface Dial • Rotate to control selected layer • Press to switch layers';
-            imagesLoaded = true;
-            
-            console.log(`Loaded ${loadedCount}/${totalLayers} images`);
-        }
-
-        // Check if image exists
-        async function checkImageExists(url) {
             try {
-                const response = await fetch(url, { method: 'GET', mode: 'cors' });
-                return response.ok;
-            } catch (error) {
-                return false;
-            }
-        }
-
-        // Apply initial rotations
-        function applyInitialRotations() {
-            Object.entries(puzzleLayers).forEach(([layerKey, data]) => {
-                const layerElement = document.getElementById(layerKey);
-                if (layerElement) {
-                    layerElement.style.transform = 
-                        `translate(-50%, -50%) rotate(${data.rotation}deg)`;
+                dialDevice = new SurfaceDialController();
+                const connected = await dialDevice.connect();
+                
+                if (connected) {
+                    initializeDial();
+                } else {
+                    infoPanel.setContent('<p>Surface Dial connection failed</p>');
                 }
-            });
-        }
-
-        // Apply rotation to current layer
-        function applyRotation(deltaAngle) {
-            const layerKey = `layer${currentLayer}`;
-            puzzleLayers[layerKey].rotation += deltaAngle;
-
-            const layerElement = document.getElementById(layerKey);
-            if (layerElement) {
-                layerElement.style.transform = 
-                    `translate(-50%, -50%) rotate(${puzzleLayers[layerKey].rotation}deg)`;
+                
+            } catch (error) {
+                console.error('Dial access denied:', error);
+                infoPanel.setContent('<p>Surface Dial access denied</p>');
             }
-
-            checkSolution();
         }
 
-        // Switch active layer
-        function switchLayer(layerNumber) {
-            if (puzzleSolved || layerNumber === currentLayer) return;
-
-            document.querySelectorAll('.puzzle-layer, .layer-button').forEach(el => {
-                el.classList.remove('active');
-            });
-
-            const targetLayer = document.getElementById(`layer${layerNumber}`);
-            const targetButton = document.querySelector(`[data-layer="${layerNumber}"]`);
-            
-            if (targetLayer) targetLayer.classList.add('active');
-            if (targetButton) targetButton.classList.add('active');
-
-            currentLayer = layerNumber;
-            console.log(`Switched to layer ${layerNumber}`);
+        function initializeDial() {
+            infoPanel.setContent('<p>Surface Dial ready - Rotate to control layers, press to switch</p>');
+            dialInfo.classList.remove('hidden');
+            branding.hide();
         }
 
-        // Check if puzzle is solved
-        function checkSolution() {
+        function handleRotation(delta) {
             if (puzzleSolved) return;
 
-            const rotations = Object.values(puzzleLayers).map(layer => 
-                ((layer.rotation % 360) + 360) % 360
-            );
-
-            const allAligned = rotations.every(rotation =>
-                Math.abs(rotation - rotations[0]) <= CONFIG.ROTATION_TOLERANCE
-            );
-
-            if (allAligned) {
-                solvePuzzle();
-            }
-        }
-
-        // Handle puzzle completion
-        function solvePuzzle() {
-            puzzleSolved = true;
-            const finalTime = getFinalTime();
-            console.log(`Puzzle solved in ${finalTime}!`);
-
-            stopCountdown();
-
-            if (navigator.vibrate) {
-                navigator.vibrate([200, 100, 200, 100, 200]);
-            }
-
-            controlsDiv.classList.add('hidden');
-            statusDiv.classList.add('hidden');
-            countdownContainer.classList.remove('show');
-            shareButton.classList.add('show');
-
-            shareButton.textContent = `🎉 Solved in ${finalTime}! Share Success!`;
-
-            setTimeout(rotateAllLayersToZero, CONFIG.SOLVE_ANIMATION_DELAY);
-        }
-
-        // Animate all layers to zero
-        function rotateAllLayersToZero() {
-            Object.keys(puzzleLayers).forEach(layerKey => {
-                const layerElement = document.getElementById(layerKey);
-                if (layerElement) {
-                    let currentRotation = puzzleLayers[layerKey].rotation || 0;
-
-                    if (currentRotation > 0) {
-                        currentRotation -= 360;
-                    }
-
-                    puzzleLayers[layerKey].rotation = currentRotation;
-                    layerElement.style.transform = `translate(-50%, -50%) rotate(${currentRotation}deg)`;
-
-                    requestAnimationFrame(() => {
-                        layerElement.style.transition = `transform ${CONFIG.SOLVE_ANIMATION_DURATION}ms ease-out`;
-                        layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-                    });
-                    puzzleLayers[layerKey].rotation = 0;
-                }
-            });
-        }
-
-        // Solve puzzle instantly
-        function solvePuzzleInstantly() {
-            Object.keys(puzzleLayers).forEach(layerKey => {
-                puzzleLayers[layerKey].rotation = 0;
-                const layerElement = document.getElementById(layerKey);
-                if (layerElement) {
-                    layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-                }
-            });
+            rotationCount++;
             
-            solvePuzzle();
+            showDialActivity();
+            dialRotationSpan.textContent = `${dialDevice.currentRotation.toFixed(1)}°`;
+            rotationCountSpan.textContent = rotationCount;
+            
+            puzzleContainer.rotateCurrentLayer(delta);
+            
+            console.log(`Dial rotation: ${delta.toFixed(1)}°, total: ${rotationCount}`);
+            
+            updateRotationDisplay();
+            puzzleContainer.checkAlignment();
         }
 
-        // Remix puzzle
-        function remixPuzzle() {
-            if (puzzleSolved) {
-                puzzleSolved = false;
-                controlsDiv.classList.remove('hidden');
-                if (!countdownActive) {
-                    statusDiv.classList.remove('hidden');
-                }
-                shareButton.classList.remove('show');
-                orientationStatus.textContent = 'Connect Surface Dial • Rotate to control selected layer • Press to switch layers';
-            }
+        function handleButtonPress() {
+            if (puzzleSolved) return;
+
+            const currentLayer = puzzleContainer.currentLayer;
+            const totalLayers = parseInt(puzzleContainer.getAttribute('layers'));
+            const nextLayer = (currentLayer % totalLayers) + 1;
             
-            resetCountdown();
-            initializePuzzleLayers();
-            applyInitialRotations();
+            puzzleContainer.switchLayer(nextLayer);
+            activeLayerSpan.textContent = nextLayer;
             
-            console.log('Puzzle remixed with new rotations');
+            showDialActivity();
+            console.log(`Button pressed: switched to layer ${nextLayer}`);
         }
 
-        // Share functionality
-        function sharePuzzle() {
-            const shareParams = urlParams.toString() ? '?' + urlParams.toString() : '';
-            const shareUrl = 'https://stakcos.com/play/' + shareParams;
-            const finalTime = getFinalTime();
+        function showDialActivity() {
+            dialIndicator.classList.add('active');
+            setTimeout(() => dialIndicator.classList.remove('active'), 200);
+        }
 
-            const shareData = {
-                title: 'Stakco Surface Dial Puzzle',
-                text: `I just solved a Stakco puzzle using Surface Dial! Time: ${finalTime}`,
-                url: shareUrl
-            };
+        function updateRotationDisplay() {
+            const rotation = puzzleContainer.getCurrentRotation();
+            let displayRotation = rotation % 360;
+            if (displayRotation < 0) displayRotation += 360;
+            dialRotationSpan.textContent = `${Math.round(displayRotation)}°`;
+        }
 
-            if (navigator.share) {
-                navigator.share(shareData)
-                    .then(() => console.log('Successful share'))
-                    .catch(error => console.log('Error sharing:', error));
+        function handlePuzzleSolved() {
+            console.log(`Puzzle solved with ${rotationCount} rotations!`);
+
+            StakcoUtils.vibrate([200, 100, 300, 100, 200]);
+
+            infoPanel.setContent(`<p>Puzzle solved with ${rotationCount} rotations!</p>`);
+
+            setTimeout(() => {
+                layerControls.hide();
+                dialInfo.classList.add('hidden');
+                shareButton.show();
+            }, 2000);
+
+            // Animate all layers to zero
+            setTimeout(() => {
+                puzzleContainer.animateToSolution(2000);
+            }, 500);
+        }
+
+        async function handleShare() {
+            const layerImages = puzzleContainer.getLayerImages();
+            const message = `Solved with ${rotationCount} rotations!`;
+            shareWindow.setAttribute('filename', `stakco-dial-${rotationCount}rot.png`);
+            await shareWindow.open(layerImages, message, true);
+        }
+
+        async function checkPermissionNeeded() {
+            if (navigator.hid) {
+                permissionPrompt.show();
             } else {
-                const textArea = document.createElement('textarea');
-                textArea.value = `${shareData.text} ${shareUrl}`;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert(`Copied to clipboard: ${shareData.text} ${shareUrl}`);
+                infoPanel.setContent('<p>WebHID not supported in this browser</p>');
             }
         }
 
-        // Initialize app when DOM is loaded
-        document.addEventListener('DOMContentLoaded', initApp);
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
