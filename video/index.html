@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Touch-controlled Stakco video puzzles with interactive layers.">
+    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, touch control, video puzzle, educational games">
+    <meta name="author" content="Stakco Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3c2f38">
+
+    <title>Stakco Touch Video</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Stakco Touch Video">
+    <meta property="og:description" content="Touch-controlled Stakco video puzzles with interactive layers.">
+    <meta property="og:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:url" content="https://stakcos.com/touch-video/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco Touch Video">
+    <meta name="twitter:description" content="Touch-controlled Stakco video puzzles with interactive layers.">
+    <meta name="twitter:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:url" content="https://stakcos.com/touch-video/">
+    <meta name="twitter:site" content="@StakcoPuzzle">
+    <meta name="twitter:creator" content="@StakcoPuzzle">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/video/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco Touch Video">
+
+    <!-- Mobile App Meta Tags (iOS) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco Touch Video">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stakco Touch Video",
+      "url": "https://stakcos.com/touch-video/",
+      "description": "Touch-controlled Stakco video puzzles with interactive layers.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stakco"
+      }
+    }
+    </script>
+    
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        #touch-info {
+            max-width: 75%;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            border-radius: 25px;
+            padding: 15px 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
+            display: flex;
+            gap: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 600px) {
+            #touch-info {
+                top: 80px;
+            }
+        }
+
+        #touch-info.hidden {
+            display: none;
+        }
+
+        .touch-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .touch-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .touch-value {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            white-space: nowrap;
+        }
+
+        #video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+        }
+
+        .video-layer {
+            display: block;
+            position: absolute;
+            border-radius: 50%;
+            overflow: hidden;
+            touch-action: none;
+            cursor: grab;
+        }
+
+        .video-layer:active {
+            cursor: grabbing;
+        }
+
+        .video-layer video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            pointer-events: none;
+        }
+
+        #layer1 {
+            z-index: 3;
+            width: 40vmin;
+            height: 40vmin;
+            max-width: calc(100vw - 20px);
+            max-height: calc(100vh - 200px);
+        }
+
+        #layer2 {
+            z-index: 2;
+            width: 55vmin;
+            height: 55vmin;
+            max-width: calc(100vw - 20px);
+            max-height: calc(100vh - 200px);
+            opacity: 0.8;
+        }
+
+        #layer3 {
+            z-index: 1;
+            width: 70vmin;
+            height: 70vmin;
+            max-width: calc(100vw - 20px);
+            max-height: calc(100vh - 200px);
+            opacity: 0.6;
+        }
+
+        .video-layer.active {
+            z-index: 10;
+            box-shadow: 0 0 30px rgba(255, 107, 107, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <stakco-info-panel icon="fa-hand-pointer">
+        <p>Touch and drag to rotate layers - Align all videos to solve!</p>
+    </stakco-info-panel>
+
+    <stakco-branding 
+        title="Stakco Touch" 
+        version="v2.0.0" 
+        subtitle="Video Puzzle">
+    </stakco-branding>
+
+    <stakco-products-panel></stakco-products-panel>
+
+    <div id="touch-info" class="hidden">
+        <div class="touch-row">
+            <span class="touch-label">Rotation:</span>
+            <span class="touch-value" id="rotation-value">0°</span>
+        </div>
+        <div class="touch-row">
+            <span class="touch-label">Layer:</span>
+            <span class="touch-value" id="active-layer">1</span>
+        </div>
+        <div class="touch-row">
+            <span class="touch-label">Moves:</span>
+            <span class="touch-value" id="move-count">0</span>
+        </div>
+    </div>
+
+    <div id="video-container">
+        <div id="layer3" class="video-layer">
+            <video id="video3" playsinline muted loop></video>
+        </div>
+        <div id="layer2" class="video-layer">
+            <video id="video2" playsinline muted loop></video>
+        </div>
+        <div id="layer1" class="video-layer active">
+            <video id="video1" playsinline muted loop></video>
+        </div>
+    </div>
+    
+    <stakco-layer-controls layers="3"></stakco-layer-controls>
+
+    <stakco-share-button label="Share Success!"></stakco-share-button>
+
+    <stakco-share-window 
+        title="Stakco Touch Video"
+        share-url="https://stakcos.com/touch-video/">
+        <div slot="text">Solved the video puzzle!</div>
+    </stakco-share-window>
+
+    <script type="module">
+        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+
+        const VIDEO_URL = 'https://storage.googleapis.com/stakco-videos/bsc2fast/638554242059093107_3/638554242059093107_1.mp4';
+        
+        let currentLayer = 1;
+        let moveCount = 0;
+        let puzzleSolved = false;
+        let layerRotations = { 1: 0, 2: 120, 3: 240 };
+        const ALIGNMENT_TOLERANCE = 5;
+
+        const layerControls = document.querySelector('stakco-layer-controls');
+        const infoPanel = document.querySelector('stakco-info-panel');
+        const shareWindow = document.querySelector('stakco-share-window');
+        const branding = document.querySelector('stakco-branding');
+        const shareButton = document.querySelector('stakco-share-button');
+        
+        const touchInfo = document.getElementById('touch-info');
+        const rotationValueSpan = document.getElementById('rotation-value');
+        const activeLayerSpan = document.getElementById('active-layer');
+        const moveCountSpan = document.getElementById('move-count');
+
+        const layer1El = document.getElementById('layer1');
+        const layer2El = document.getElementById('layer2');
+        const layer3El = document.getElementById('layer3');
+        const video1 = document.getElementById('video1');
+        const video2 = document.getElementById('video2');
+        const video3 = document.getElementById('video3');
+
+        const layers = {
+            1: { element: layer1El, video: video1, rotation: 0 },
+            2: { element: layer2El, video: video2, rotation: 120 },
+            3: { element: layer3El, video: video3, rotation: 240 }
+        };
+
+        async function init() {
+            console.log('Initializing Stakco Touch Video...');
+            
+            StakcoUtils.preventZoom();
+            setupEventListeners();
+            await loadVideos();
+            playAllVideos();
+            
+            setTimeout(() => {
+                touchInfo.classList.remove('hidden');
+                branding.hide();
+                randomizeRotations();
+            }, 1000);
+            
+            console.log('App initialized');
+        }
+
+        async function loadVideos() {
+            const videos = [video1, video2, video3];
+            const loadPromises = videos.map(video => {
+                return new Promise((resolve) => {
+                    video.src = VIDEO_URL;
+                    video.addEventListener('loadeddata', resolve, { once: true });
+                    video.load();
+                });
+            });
+            await Promise.all(loadPromises);
+            console.log('All videos loaded');
+        }
+
+        function playAllVideos() {
+            video1.play().catch(e => console.log('Video 1 autoplay prevented'));
+            video2.play().catch(e => console.log('Video 2 autoplay prevented'));
+            video3.play().catch(e => console.log('Video 3 autoplay prevented'));
+        }
+
+        function randomizeRotations() {
+            layers[1].rotation = Math.random() * 360;
+            layers[2].rotation = Math.random() * 360;
+            layers[3].rotation = Math.random() * 360;
+            updateAllLayers();
+        }
+
+        function setupEventListeners() {
+            // Touch/Mouse events for each layer
+            Object.keys(layers).forEach(layerNum => {
+                const layer = layers[layerNum];
+                setupLayerInteraction(layer.element, parseInt(layerNum));
+            });
+
+            layerControls.addEventListener('layerchange', (e) => {
+                switchLayer(e.detail.layer);
+            });
+
+            shareButton.addEventListener('share-clicked', handleShare);
+
+            // Play videos on user interaction (for browsers that block autoplay)
+            document.addEventListener('click', () => {
+                playAllVideos();
+            }, { once: true });
+        }
+
+        function setupLayerInteraction(element, layerNum) {
+            let isDragging = false;
+            let startAngle = 0;
+            let startRotation = 0;
+
+            const getAngle = (e) => {
+                const rect = element.getBoundingClientRect();
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const x = (e.touches ? e.touches[0].clientX : e.clientX) - centerX;
+                const y = (e.touches ? e.touches[0].clientY : e.clientY) - centerY;
+                return Math.atan2(y, x) * (180 / Math.PI);
+            };
+
+            const handleStart = (e) => {
+                if (puzzleSolved) return;
+                e.preventDefault();
+                isDragging = true;
+                startAngle = getAngle(e);
+                startRotation = layers[layerNum].rotation;
+                switchLayer(layerNum);
+                element.classList.add('active');
+            };
+
+            const handleMove = (e) => {
+                if (!isDragging || puzzleSolved) return;
+                e.preventDefault();
+                
+                const currentAngle = getAngle(e);
+                const deltaAngle = currentAngle - startAngle;
+                layers[layerNum].rotation = (startRotation + deltaAngle + 360) % 360;
+                
+                updateLayer(layerNum);
+                rotationValueSpan.textContent = `${Math.round(layers[layerNum].rotation)}°`;
+            };
+
+            const handleEnd = (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+                element.classList.remove('active');
+                moveCount++;
+                moveCountSpan.textContent = moveCount;
+                checkAlignment();
+            };
+
+            // Touch events
+            element.addEventListener('touchstart', handleStart, { passive: false });
+            element.addEventListener('touchmove', handleMove, { passive: false });
+            element.addEventListener('touchend', handleEnd);
+
+            // Mouse events
+            element.addEventListener('mousedown', handleStart);
+            document.addEventListener('mousemove', handleMove);
+            document.addEventListener('mouseup', handleEnd);
+        }
+
+        function switchLayer(layerNum) {
+            currentLayer = layerNum;
+            activeLayerSpan.textContent = layerNum;
+            
+            Object.keys(layers).forEach(num => {
+                layers[num].element.classList.remove('active');
+            });
+            layers[layerNum].element.classList.add('active');
+            
+            rotationValueSpan.textContent = `${Math.round(layers[layerNum].rotation)}°`;
+        }
+
+        function updateLayer(layerNum) {
+            const layer = layers[layerNum];
+            layer.element.style.transform = `rotate(${layer.rotation}deg)`;
+        }
+
+        function updateAllLayers() {
+            Object.keys(layers).forEach(num => updateLayer(parseInt(num)));
+        }
+
+        function checkAlignment() {
+            const rot1 = layers[1].rotation % 360;
+            const rot2 = layers[2].rotation % 360;
+            const rot3 = layers[3].rotation % 360;
+
+            const aligned = Math.abs(rot1 - rot2) < ALIGNMENT_TOLERANCE &&
+                          Math.abs(rot2 - rot3) < ALIGNMENT_TOLERANCE &&
+                          Math.abs(rot1 - rot3) < ALIGNMENT_TOLERANCE;
+
+            if (aligned && !puzzleSolved) {
+                handlePuzzleSolved();
+            }
+        }
+
+        function handlePuzzleSolved() {
+            puzzleSolved = true;
+            console.log(`Puzzle solved in ${moveCount} moves!`);
+
+            StakcoUtils.vibrate([200, 100, 300, 100, 200]);
+
+            infoPanel.setContent(`<p>Puzzle solved in ${moveCount} moves!</p>`);
+
+            // Animate to perfect alignment
+            layers[1].rotation = 0;
+            layers[2].rotation = 0;
+            layers[3].rotation = 0;
+            updateAllLayers();
+
+            setTimeout(() => {
+                layerControls.hide();
+                touchInfo.classList.add('hidden');
+                shareButton.show();
+            }, 2000);
+        }
+
+        async function handleShare() {
+            const canvas = document.createElement('canvas');
+            canvas.width = 500;
+            canvas.height = 500;
+            const ctx = canvas.getContext('2d');
+
+            // Draw all three video frames
+            ctx.drawImage(video3, 0, 0, 500, 500);
+            ctx.globalAlpha = 0.8;
+            ctx.drawImage(video2, 50, 50, 400, 400);
+            ctx.globalAlpha = 1;
+            ctx.drawImage(video1, 100, 100, 300, 300);
+
+            const dataUrl = canvas.toDataURL('image/png');
+            const message = `Solved in ${moveCount} moves!`;
+            
+            shareWindow.setAttribute('filename', `stakco-touch-video-${moveCount}moves.png`);
+            await shareWindow.open([dataUrl, dataUrl, dataUrl], message, true);
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
