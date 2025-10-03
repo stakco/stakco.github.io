@@ -2,7 +2,7 @@
   "name": "Stakco VOC",
   "short_name": "Stakco VOC",
   "description": "Kiwrious VOC sensor-driven Stakco puzzles with air quality control",
-  "start_url": "/voc/",
+  "start_url": "/kiwrious/voc/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3c2f38",
