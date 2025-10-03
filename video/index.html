@@ -46,7 +46,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
 
     <!-- PWA -->
-    <link rel="manifest" href="/video/manifest.json">
+    <link rel="manifest" href="/touch-video/manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Stakco Touch Video">
 
@@ -179,47 +179,52 @@
 
         #layer1 {
             z-index: 3;
-            width: 60%;
-            height: 60%;
-            -webkit-mask-image: url('https://storage.googleapis.com/stakco-images/masks/jigsaw_layer1.png');
-            mask-image: url('https://storage.googleapis.com/stakco-images/masks/jigsaw_layer1.png');
-            -webkit-mask-size: contain;
-            mask-size: contain;
-            -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-            -webkit-mask-position: center;
-            mask-position: center;
+            width: 100%;
+            height: 100%;
+            /* Apply your shape mask */
+            -webkit-mask-image: url('./masks/jigsaw_red-3.png');
+            mask-image: url('./masks/jigsaw_red-3.png');
         }
 
         #layer2 {
             z-index: 2;
-            width: 80%;
-            height: 80%;
-            opacity: 0.8;
-            -webkit-mask-image: url('https://storage.googleapis.com/stakco-images/masks/jigsaw_layer2.png');
-            mask-image: url('https://storage.googleapis.com/stakco-images/masks/jigsaw_layer2.png');
-            -webkit-mask-size: contain;
-            mask-size: contain;
-            -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-            -webkit-mask-position: center;
-            mask-position: center;
+            width: 100%;
+            height: 100%;
+            /* Apply your shape mask */
+  -webkit-mask-image: url('./masks/jigsaw_green-3.png');
+  mask-image: url('./masks/jigsaw_green-3.png');
         }
 
         #layer3 {
             z-index: 1;
             width: 100%;
             height: 100%;
-            opacity: 0.6;
-            -webkit-mask-image: url('https://storage.googleapis.com/stakco-images/masks/jigsaw_layer3.png');
-            mask-image: url('https://storage.googleapis.com/stakco-images/masks/jigsaw_layer3.png');
-            -webkit-mask-size: contain;
-            mask-size: contain;
-            -webkit-mask-repeat: no-repeat;
-            mask-repeat: no-repeat;
-            -webkit-mask-position: center;
-            mask-position: center;
+            /* Apply your shape mask */
+  -webkit-mask-image: url('./masks/jigsaw_blue-3.png');
+  mask-image: url('./masks/jigsaw_blue-3.png');
         }
+
+        /* Base mask setup */
+.masked {
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+
+  -webkit-mask-size: contain;
+  mask-size: contain;
+
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* Inverse masking utility */
+.mask-invert {
+  -webkit-mask-image: linear-gradient(#fff, #fff);
+  mask-image: linear-gradient(#fff, #fff);
+
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
 
         .video-layer.active {
             z-index: 10;
@@ -257,13 +262,13 @@
     </div>
 
     <div id="video-container">
-        <div id="layer3" class="video-layer">
+        <div id="layer3" class="video-layer masked mask-invert">
             <video id="video3" playsinline muted loop></video>
         </div>
-        <div id="layer2" class="video-layer">
+        <div id="layer2" class="video-layer masked mask-invert">
             <video id="video2" playsinline muted loop></video>
         </div>
-        <div id="layer1" class="video-layer active">
+        <div id="layer1" class="video-layer masked mask-invert active">
             <video id="video1" playsinline muted loop></video>
         </div>
     </div>
@@ -445,7 +450,7 @@
 
         function updateLayer(layerNum) {
             const layer = layers[layerNum];
-            layer.element.style.transform = `rotate(${layer.rotation}deg)`;
+            layer.element.style.transform = `translate(-50%, -50%) rotate(${layer.rotation}deg)`;
         }
 
         function updateAllLayers() {
