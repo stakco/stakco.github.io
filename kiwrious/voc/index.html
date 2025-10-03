@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Basic Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Kiwrious VOC sensor-driven Stakco puzzles with air quality control.">
+    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, VOC sensor, Kiwrious, air quality, educational games">
+    <meta name="author" content="Stakco Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3c2f38">
+
+    <title>Stakco VOC Sensor</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Stakco VOC Sensor">
+    <meta property="og:description" content="Kiwrious VOC sensor-driven Stakco puzzles with air quality control.">
+    <meta property="og:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:url" content="https://stakcos.com/voc/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco VOC Sensor">
+    <meta name="twitter:description" content="Kiwrious VOC sensor-driven Stakco puzzles with air quality control.">
+    <meta name="twitter:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:url" content="https://stakcos.com/voc/">
+    <meta name="twitter:site" content="@StakcoPuzzle">
+    <meta name="twitter:creator" content="@StakcoPuzzle">
+
+    <!-- Favicons / Android -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+    <!-- Apple Touch Icons (Squircles) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+    <!-- Apple Splash Screens (Portrait only) -->
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square150x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square310x310logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x310.png">
+    <meta name="msapplication-wide310x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x150.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/voc/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco VOC">
+
+    <!-- Mobile App Meta Tags (iOS) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco VOC">
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stakco VOC Sensor",
+      "url": "https://stakcos.com/voc/",
+      "description": "Kiwrious VOC sensor-driven Stakco puzzles with air quality control.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stakco"
+      }
+    }
+    </script>
+    
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-permission-prompt.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #sensor-info {
+            max-width: 75%;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            border-radius: 25px;
+            padding: 15px 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
+            display: flex;
+            gap: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            #sensor-info {
+                top: 80px;
+            }
+        }
+
+        #sensor-info.hidden {
+            display: none;
+        }
+
+        .sensor-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .sensor-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .sensor-value {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            white-space: nowrap;
+        }
+
+        .sensor-activity {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #333;
+            border: 2px solid #666;
+            transition: all 0.2s ease;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .sensor-activity.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .air-quality-bar {
+            height: 8px;
+            background: linear-gradient(to right, #4ade80, #fbbf24, #f87171);
+            border-radius: 4px;
+            position: relative;
+            margin-left: 10px;
+            width: 100px;
+            overflow: hidden;
+        }
+
+        .air-quality-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: white;
+            transition: left 0.3s ease;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+
+<body>
+    <stakco-info-panel icon="fa-wind">
+        <p>Initializing VOC Sensor... Connect device to play</p>
+    </stakco-info-panel>
+
+    <stakco-branding 
+        title="Stakco VOC" 
+        version="v2.0.0" 
+        subtitle="Air Quality Puzzle">
+    </stakco-branding>
+
+    <stakco-products-panel></stakco-products-panel>
+
+    <div id="sensor-info" class="hidden">
+        <div class="sensor-row">
+            <span class="sensor-label">VOC Level:</span>
+            <span class="sensor-value" id="voc-value">0</span>
+            <span class="sensor-activity" id="sensor-indicator"></span>
+        </div>
+        <div class="sensor-row">
+            <span class="sensor-label">Quality:</span>
+            <div class="air-quality-bar">
+                <div class="air-quality-indicator" id="quality-indicator"></div>
+            </div>
+        </div>
+        <div class="sensor-row">
+            <span class="sensor-label">Layer:</span>
+            <span class="sensor-value" id="active-layer">1</span>
+        </div>
+        <div class="sensor-row">
+            <span class="sensor-label">Actions:</span>
+            <span class="sensor-value" id="action-count">0</span>
+        </div>
+    </div>
+
+    <stakco-puzzle-container
+        layers="3"
+        user-id="109949450257686494443"
+        puzzle-id="A2A3_3"
+        tolerance="2">
+    </stakco-puzzle-container>
+    
+    <stakco-layer-controls layers="3"></stakco-layer-controls>
+
+    <stakco-share-button label="Share Success!"></stakco-share-button>
+
+    <stakco-permission-prompt 
+        title="Enable VOC Sensor Access"
+        message="This app needs access to your Kiwrious VOC sensor to control puzzle layers with air quality readings. Connect your sensor via USB, then enable access."
+        primary-label="Connect VOC Sensor"
+        secondary-label="Skip">
+    </stakco-permission-prompt>
+
+    <stakco-share-window 
+        title="Stakco VOC Sensor"
+        share-url="https://stakcos.com/voc/">
+        <div slot="text">Solved with air quality control!</div>
+    </stakco-share-window>
+
+    <script type="module">
+        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+        import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
+
+        const CONFIG = StakcoConfig.getConfig('voc');
+
+        // VOC Sensor state
+        let sensorConnected = false;
+        let actionCount = 0;
+        let puzzleSolved = false;
+        let currentVOC = 0;
+        let previousVOC = 0;
+        let vocThresholds = { low: 100, medium: 300, high: 500 };
+
+        const puzzleContainer = document.querySelector('stakco-puzzle-container');
+        const layerControls = document.querySelector('stakco-layer-controls');
+        const infoPanel = document.querySelector('stakco-info-panel');
+        const shareWindow = document.querySelector('stakco-share-window');
+        const permissionPrompt = document.querySelector('stakco-permission-prompt');
+        const branding = document.querySelector('stakco-branding');
+        const shareButton = document.querySelector('stakco-share-button');
+        
+        const sensorInfo = document.getElementById('sensor-info');
+        const vocValueSpan = document.getElementById('voc-value');
+        const activeLayerSpan = document.getElementById('active-layer');
+        const actionCountSpan = document.getElementById('action-count');
+        const sensorIndicator = document.getElementById('sensor-indicator');
+        const qualityIndicator = document.getElementById('quality-indicator');
+
+        // Kiwrious VOC Sensor Controller (native WebSerial implementation)
+        class KiwriousVOCController {
+            constructor() {
+                this.port = null;
+                this.reader = null;
+                this.isReading = false;
+                this.onSerialData = null;
+                this.onSerialConnection = null;
+            }
+
+            async connectAndReadAsync() {
+                try {
+                    // Request serial port with Kiwrious filters
+                    this.port = await navigator.serial.requestPort({
+                        filters: [
+                            { usbVendorId: 0x04d8 },  // Microchip vendor ID
+                            { usbVendorId: 0x0d28, usbProductId: 0x0204 }
+                        ]
+                    });
+
+                    // Open port with Kiwrious baud rate
+                    await this.port.open({ baudRate: 230400 });
+                    
+                    console.log('Kiwrious VOC sensor connected');
+                    
+                    if (this.onSerialConnection) {
+                        this.onSerialConnection(true);
+                    }
+
+                    // Start reading data
+                    this.startReading();
+                    
+                } catch (error) {
+                    console.error('Failed to connect:', error);
+                    throw error;
+                }
+            }
+
+            async startReading() {
+                if (!this.port || !this.port.readable) {
+                    console.error('Port not readable');
+                    return;
+                }
+
+                this.isReading = true;
+                this.reader = this.port.readable.getReader();
+
+                try {
+                    while (this.isReading) {
+                        const { value, done } = await this.reader.read();
+                        
+                        if (done) {
+                            break;
+                        }
+
+                        if (value) {
+                            this.parseVOCData(value);
+                        }
+                    }
+                } catch (error) {
+                    console.error('Reading error:', error);
+                } finally {
+                    this.reader.releaseLock();
+                }
+            }
+
+            parseVOCData(data) {
+                // Kiwrious VOC sensor sends 26 bytes per packet
+                // VOC value is at bytes 6-7 (16-bit little-endian)
+                if (data.length >= 8) {
+                    const dataView = new DataView(data.buffer);
+                    
+                    // Read VOC value (16-bit unsigned integer at offset 6)
+                    const vocValue = dataView.getUint16(6, true); // true = little-endian
+                    
+                    if (this.onSerialData && vocValue !== undefined) {
+                        const decodedData = {
+                            decodedValues: [{
+                                label: 'voc',
+                                value: vocValue
+                            }],
+                            sensorType: 'VOC'
+                        };
+                        this.onSerialData(decodedData);
+                    }
+                }
+            }
+
+            async disconnect() {
+                this.isReading = false;
+                
+                if (this.reader) {
+                    await this.reader.cancel();
+                    this.reader = null;
+                }
+                
+                if (this.port) {
+                    await this.port.close();
+                    this.port = null;
+                }
+                
+                if (this.onSerialConnection) {
+                    this.onSerialConnection(false);
+                }
+            }
+        }
+
+        // Mock service for testing without hardware
+        class MockVOCService {
+            constructor() {
+                this.onSerialData = null;
+                this.onSerialConnection = null;
+            }
+
+            async connectAndReadAsync() {
+                console.log('Mock: Connecting to VOC sensor...');
+                if (this.onSerialConnection) {
+                    this.onSerialConnection(true);
+                }
+                this.startMockReadings();
+            }
+
+            startMockReadings() {
+                setInterval(() => {
+                    if (this.onSerialData && !puzzleSolved) {
+                        const mockVOC = Math.floor(Math.random() * 600);
+                        const mockData = {
+                            decodedValues: [{
+                                label: 'voc',
+                                value: mockVOC
+                            }],
+                            sensorType: 'VOC'
+                        };
+                        this.onSerialData(mockData);
+                    }
+                }, 500);
+            }
+
+            async disconnect() {
+                if (this.onSerialConnection) {
+                    this.onSerialConnection(false);
+                }
+            }
+        }
+
+        let serialService;
+
+        async function init() {
+            console.log('Initializing Stakco VOC Sensor...');
+
+            StakcoUtils.preventZoom();
+            setupEventListeners();
+
+            // Initialize real Kiwrious VOC controller
+            serialService = new KiwriousVOCController();
+
+            // Wait for puzzle container to be ready
+            await new Promise(resolve => {
+                if (puzzleContainer.shadowRoot) {
+                    resolve();
+                } else {
+                    puzzleContainer.addEventListener('puzzle-ready', resolve, { once: true });
+                }
+            });
+
+            setTimeout(checkPermissionNeeded, 1000);
+            console.log('App initialized');
+        }
+
+        function setupEventListeners() {
+            puzzleContainer.addEventListener('puzzle-ready', () => {
+                console.log('Puzzle ready');
+            });
+
+            puzzleContainer.addEventListener('puzzle-solved', () => {
+                puzzleSolved = true;
+                handlePuzzleSolved();
+            });
+
+            layerControls.addEventListener('layerchange', (e) => {
+                puzzleContainer.switchLayer(e.detail.layer);
+                activeLayerSpan.textContent = e.detail.layer;
+            });
+
+            permissionPrompt.addEventListener('primary-action', async () => {
+                await requestSensorAccess();
+            });
+
+            permissionPrompt.addEventListener('secondary-action', () => {
+                initializeSensor();
+            });
+
+            shareButton.addEventListener('share-clicked', handleShare);
+        }
+
+        async function requestSensorAccess() {
+            if (!navigator.serial) {
+                infoPanel.setContent('<p>Web Serial API not supported in this browser</p>');
+                return;
+            }
+
+            try {
+                await serialService.connectAndReadAsync();
+                
+                // Set up data callback
+                serialService.onSerialData = handleSensorData;
+                
+                // Set up connection callback
+                if (serialService.onSerialConnection) {
+                    serialService.onSerialConnection = (connected) => {
+                        sensorConnected = connected;
+                        if (!connected) {
+                            infoPanel.setContent('<p>VOC Sensor disconnected</p>');
+                        }
+                    };
+                }
+                
+                initializeSensor();
+                
+            } catch (error) {
+                console.error('Sensor access denied:', error);
+                infoPanel.setContent('<p>VOC Sensor access denied</p>');
+            }
+        }
+
+        function initializeSensor() {
+            infoPanel.setContent('<p>VOC Sensor ready - Air quality controls puzzle layers</p>');
+            sensorInfo.classList.remove('hidden');
+            branding.hide();
+            sensorConnected = true;
+        }
+
+        function handleSensorData(decodedData) {
+            if (puzzleSolved) return;
+
+            const values = decodedData.decodedValues;
+            
+            // VOC sensor has 1 observable
+            if (values && values.length > 0) {
+                const vocData = values.find(v => v.label.toLowerCase() === 'voc') || values[0];
+                currentVOC = vocData.value;
+                
+                showSensorActivity();
+                vocValueSpan.textContent = Math.round(currentVOC);
+                
+                // Update air quality indicator
+                updateAirQualityBar(currentVOC);
+                
+                // Control puzzle based on VOC level changes
+                handleVOCChange();
+                
+                previousVOC = currentVOC;
+            }
+        }
+
+        function handleVOCChange() {
+            const vocDelta = currentVOC - previousVOC;
+            
+            // Threshold-based layer switching
+            if (Math.abs(vocDelta) > 50) { // Significant change threshold
+                actionCount++;
+                actionCountSpan.textContent = actionCount;
+                
+                // Map VOC ranges to layers
+                let targetLayer;
+                if (currentVOC < vocThresholds.low) {
+                    targetLayer = 1;
+                } else if (currentVOC < vocThresholds.medium) {
+                    targetLayer = 2;
+                } else {
+                    targetLayer = 3;
+                }
+                
+                const currentLayer = puzzleContainer.currentLayer;
+                if (targetLayer !== currentLayer) {
+                    puzzleContainer.switchLayer(targetLayer);
+                    activeLayerSpan.textContent = targetLayer;
+                    layerControls.setActiveLayer(targetLayer);
+                }
+            }
+            
+            // Use VOC delta for rotation
+            if (Math.abs(vocDelta) > 5) {
+                const rotationAmount = vocDelta / 10; // Scale factor
+                puzzleContainer.rotateCurrentLayer(rotationAmount);
+                puzzleContainer.checkAlignment();
+            }
+        }
+
+        function updateAirQualityBar(voc) {
+            // Map VOC to 0-100% position
+            const maxVOC = 600;
+            const percentage = Math.min((voc / maxVOC) * 100, 100);
+            qualityIndicator.style.left = `${percentage}%`;
+        }
+
+        function showSensorActivity() {
+            sensorIndicator.classList.add('active');
+            setTimeout(() => sensorIndicator.classList.remove('active'), 200);
+        }
+
+        function handlePuzzleSolved() {
+            console.log(`Puzzle solved with ${actionCount} sensor actions!`);
+
+            StakcoUtils.vibrate([200, 100, 300, 100, 200]);
+
+            infoPanel.setContent(`<p>Puzzle solved with ${actionCount} sensor actions!</p>`);
+
+            setTimeout(() => {
+                layerControls.hide();
+                sensorInfo.classList.add('hidden');
+                shareButton.show();
+            }, 2000);
+
+            // Animate all layers to zero
+            setTimeout(() => {
+                puzzleContainer.animateToSolution(2000);
+            }, 500);
+        }
+
+        async function handleShare() {
+            const layerImages = puzzleContainer.getLayerImages();
+            const message = `Solved with VOC sensor in ${actionCount} actions!`;
+            shareWindow.setAttribute('filename', `stakco-voc-${actionCount}actions.png`);
+            await shareWindow.open(layerImages, message, true);
+        }
+
+        async function checkPermissionNeeded() {
+            if (navigator.serial) {
+                permissionPrompt.show();
+            } else {
+                infoPanel.setContent('<p>Web Serial API not supported in this browser. Please use Chrome, Edge, or Opera.</p>');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
