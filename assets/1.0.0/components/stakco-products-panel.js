@@ -244,6 +244,13 @@ class StakcoProductsPanel extends HTMLElement {
         url: 'https://stakcos.com/kiwrious/voc',
         urlDisplay: 'stakcos.com/kiwrious/voc',
         icon: 'fa-solid fa-wind'
+      },
+      {
+        title: 'Stakco Video',
+        description: 'Touch-controlled Stakco video puzzles with interactive layers',
+        url: 'https://stakcos.com/video',
+        urlDisplay: 'stakcos.com/video',
+        icon: 'fa-solid fa-hand-pointer'
       }
     ];
   }
