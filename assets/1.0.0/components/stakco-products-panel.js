@@ -237,6 +237,13 @@ class StakcoProductsPanel extends HTMLElement {
         url: 'https://stakcos.com/gyro',
         urlDisplay: 'stakcos.com/gyro',
         icon: 'fa-solid fa-globe'
+      },
+      {
+        title: 'Stakco VOC',
+        description: 'Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation',
+        url: 'https://stakcos.com/kiwrious/voc',
+        urlDisplay: 'stakcos.com/kiwrious/voc',
+        icon: 'fa-solid fa-wind'
       }
     ];
   }

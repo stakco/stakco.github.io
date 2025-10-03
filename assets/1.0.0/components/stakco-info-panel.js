@@ -65,7 +65,7 @@ class StakcoInfoPanel extends HTMLElement {
           height: 50px;
           border-radius: 0 25px 25px 0;
           background: var(--glass-bg);
-          color: var(--text-primary);
+          color: white;
           font-family: 'Inter', sans-serif;
           z-index: 1500;
           width: 0;
