@@ -41,10 +41,10 @@
       "tags": ["phone", "number", "keypad", "telephone", "digits", "numeric"]
     },
     {
-      "title": "Stakco Azimuth",
+      "title": "Stakco Azimut",
       "description": "Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation",
       "url": "https://stakcos.com/azimuth",
-      "urlDisplay": "stakcos.com/azimuth",
+      "urlDisplay": "stakcos.com/azimut",
       "icon": "fa-solid fa-compass",
       "tags": ["direction", "compass", "angle", "degrees", "rotation", "orientation"]
     },
