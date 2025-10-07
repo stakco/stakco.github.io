@@ -125,6 +125,82 @@
             font-weight: bold;
             z-index: 1;
         }
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        .image-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .image-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .image-preview {
+            width: 100%;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f5f5f5;
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+        }
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .image-name {
+            font-size: 0.85rem;
+            color: #333;
+            margin-bottom: 0.75rem;
+            word-break: break-all;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+        .image-actions {
+            display: flex;
+            gap: 0.5rem;
+            width: 100%;
+        }
+        .btn {
+            flex: 1;
+            padding: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.25rem;
+        }
+        .btn-copy {
+            background: #2196f3;
+            color: white;
+        }
+        .btn-copy:hover {
+            background: #1976d2;
+        }
+        .btn-download {
+            background: #4caf50;
+            color: white;
+        }
+        .btn-download:hover {
+            background: #388e3c;
+        }
         .loading {
             text-align: center;
             color: #666;
@@ -166,6 +242,12 @@
         <div class="loading">Loading theme variables...</div>
     </div>
 
+    <!-- Image Assets Reference -->
+    <div class="section-title">Image Assets</div>
+    <div id="image-list" class="image-section">
+        <div class="loading">Loading image assets...</div>
+    </div>
+
     <!-- Copy feedback element -->
     <div id="copy-feedback" class="copy-feedback">Copied to clipboard!</div>
 
@@ -183,100 +265,6 @@
         ];
 
         const methodListDiv = document.getElementById('method-list');
-
-        async function loadAndInspect(file) {
-            try {
-                const module = await import(`${CDN_BASE}${file}`);
-                const exportedMethods = Object.keys(module);
-
-                const section = document.createElement('div');
-                section.className = 'file-section';
-
-                const header = document.createElement('div');
-                header.className = 'file-header';
-
-                const title = document.createElement('h2');
-                title.textContent = `${file} (${exportedMethods.length} methods)`;
-
-                const expandIcon = document.createElement('span');
-                expandIcon.className = 'expand-icon';
-                expandIcon.textContent = '▶';
-
-                header.appendChild(title);
-                header.appendChild(expandIcon);
-                section.appendChild(header);
-
-                const methodsDiv = document.createElement('div');
-                methodsDiv.className = 'methods-list';
-
-                // Create method items with enhanced display
-                exportedMethods.forEach(methodName => {
-                    const methodItem = document.createElement('div');
-                    methodItem.className = 'method-item';
-                    methodItem.title = `Click to copy: ${methodName}`;
-
-                    const nameDiv = document.createElement('div');
-                    nameDiv.className = 'method-name';
-                    nameDiv.textContent = methodName;
-
-                    const signatureDiv = document.createElement('div');
-                    signatureDiv.className = 'method-signature';
-                    
-                    try {
-                        const method = module[methodName];
-                        if (typeof method === 'function') {
-                            const funcStr = method.toString();
-                            // Extract parameters from function
-                            const paramMatch = funcStr.match(/\(([^)]*)\)/);
-                            const params = paramMatch ? paramMatch[1].trim() : '';
-                            
-                            if (params) {
-                                signatureDiv.textContent = `(${params})`;
-                            } else {
-                                signatureDiv.textContent = '()';
-                            }
-                        } else {
-                            signatureDiv.textContent = `[${typeof method}]`;
-                        }
-                    } catch (e) {
-                        signatureDiv.textContent = '(...)';
-                    }
-
-                    methodItem.appendChild(nameDiv);
-                    methodItem.appendChild(signatureDiv);
-
-                    // Add click handler to copy method name
-                    methodItem.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        copyToClipboard(methodName);
-                    });
-
-                    methodsDiv.appendChild(methodItem);
-                });
-
-                section.appendChild(methodsDiv);
-
-                // Add click handler to entire header for expansion
-                header.addEventListener('click', () => {
-                    const visible = methodsDiv.style.display === 'block';
-                    methodsDiv.style.display = visible ? 'none' : 'block';
-                    expandIcon.classList.toggle('expanded', !visible);
-                });
-
-                methodListDiv.appendChild(section);
-            } catch (err) {
-                console.error(`Error loading ${file}:`, err);
-                const errorSection = document.createElement('div');
-                errorSection.className = 'file-section error';
-                errorSection.textContent = `Error loading ${file}: ${err.message}`;
-                methodListDiv.appendChild(errorSection);
-            }
-        }
-
-        jsFiles.forEach(loadAndInspect);
-
-        // Theme Variables Reference - Fixed Implementation
-        const themeListDiv = document.getElementById('theme-list');
         const copyFeedback = document.getElementById('copy-feedback');
 
         // Copy to clipboard function
@@ -285,7 +273,6 @@
                 await navigator.clipboard.writeText(text);
                 showCopyFeedback();
             } catch (err) {
-                // Fallback for older browsers
                 const textArea = document.createElement('textarea');
                 textArea.value = text;
                 textArea.style.position = 'fixed';
@@ -312,32 +299,116 @@
             }, 2000);
         }
 
+        async function loadAndInspect(file) {
+            try {
+                const module = await import(`${CDN_BASE}${file}`);
+                const exportedMethods = Object.keys(module);
+
+                const section = document.createElement('div');
+                section.className = 'file-section';
+
+                const header = document.createElement('div');
+                header.className = 'file-header';
+
+                const title = document.createElement('h2');
+                title.textContent = `${file} (${exportedMethods.length} methods)`;
+
+                const expandIcon = document.createElement('span');
+                expandIcon.className = 'expand-icon';
+                expandIcon.textContent = '▶';
+
+                header.appendChild(title);
+                header.appendChild(expandIcon);
+                section.appendChild(header);
+
+                const methodsDiv = document.createElement('div');
+                methodsDiv.className = 'methods-list';
+
+                exportedMethods.forEach(methodName => {
+                    const methodItem = document.createElement('div');
+                    methodItem.className = 'method-item';
+                    methodItem.title = `Click to copy: ${methodName}`;
+
+                    const nameDiv = document.createElement('div');
+                    nameDiv.className = 'method-name';
+                    nameDiv.textContent = methodName;
+
+                    const signatureDiv = document.createElement('div');
+                    signatureDiv.className = 'method-signature';
+                    
+                    try {
+                        const method = module[methodName];
+                        if (typeof method === 'function') {
+                            const funcStr = method.toString();
+                            const paramMatch = funcStr.match(/\(([^)]*)\)/);
+                            const params = paramMatch ? paramMatch[1].trim() : '';
+                            
+                            if (params) {
+                                signatureDiv.textContent = `(${params})`;
+                            } else {
+                                signatureDiv.textContent = '()';
+                            }
+                        } else {
+                            signatureDiv.textContent = `[${typeof method}]`;
+                        }
+                    } catch (e) {
+                        signatureDiv.textContent = '(...)';
+                    }
+
+                    methodItem.appendChild(nameDiv);
+                    methodItem.appendChild(signatureDiv);
+
+                    methodItem.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        copyToClipboard(methodName);
+                    });
+
+                    methodsDiv.appendChild(methodItem);
+                });
+
+                section.appendChild(methodsDiv);
+
+                header.addEventListener('click', () => {
+                    const visible = methodsDiv.style.display === 'block';
+                    methodsDiv.style.display = visible ? 'none' : 'block';
+                    expandIcon.classList.toggle('expanded', !visible);
+                });
+
+                methodListDiv.appendChild(section);
+            } catch (err) {
+                console.error(`Error loading ${file}:`, err);
+                const errorSection = document.createElement('div');
+                errorSection.className = 'file-section error';
+                errorSection.textContent = `Error loading ${file}: ${err.message}`;
+                methodListDiv.appendChild(errorSection);
+            }
+        }
+
+        jsFiles.forEach(loadAndInspect);
+
+        // Theme Variables Reference
+        const themeListDiv = document.getElementById('theme-list');
+
         async function loadTheme() {
             try {
-                // Method 1: Try to fetch and parse the CSS file directly
                 const response = await fetch(`${CDN_BASE}theme.css`);
                 const cssText = await response.text();
                 
-                // Parse CSS variables from the text
                 const variableMatches = cssText.match(/--[\w-]+\s*:\s*[^;]+;/g);
                 
                 if (variableMatches && variableMatches.length > 0) {
-                    // Clear loading message
                     themeListDiv.innerHTML = '';
                     
-                    // Create a style element to inject the CSS
                     const styleElement = document.createElement('style');
                     styleElement.textContent = cssText;
                     document.head.appendChild(styleElement);
                     
-                    // Wait for CSS to be applied
                     await new Promise(r => setTimeout(r, 200));
                     
                     const grid = document.createElement('div');
                     grid.className = 'swatch-grid';
 
                     variableMatches.forEach(match => {
-                        // Extract variable name and value
                         const [, varName, value] = match.match(/(--[\w-]+)\s*:\s*([^;]+);/);
                         const cleanValue = value.trim();
                         
@@ -349,7 +420,6 @@
                         textDiv.className = 'swatch-text';
                         textDiv.textContent = varName;
 
-                        // Add click handler for copying
                         swatch.addEventListener('click', () => {
                             copyToClipboard(`${varName}: ${cleanValue}`);
                         });
@@ -362,7 +432,6 @@
                             swatch.style.backgroundColor = cleanValue;
                             textDiv.style.color = getTextColor(cleanValue);
                         } else {
-                            // For non-color values, show as text
                             swatch.style.backgroundColor = '#f5f5f5';
                             textDiv.textContent = `${varName}: ${cleanValue}`;
                             textDiv.style.fontSize = '0.7rem';
@@ -375,7 +444,6 @@
 
                     themeListDiv.appendChild(grid);
                 } else {
-                    // Fallback: try the original method
                     await fallbackThemeLoad();
                 }
             } catch (error) {
@@ -386,19 +454,15 @@
 
         async function fallbackThemeLoad() {
             try {
-                // Load theme.css as a link element
                 const link = document.createElement('link');
                 link.rel = 'stylesheet';
                 link.href = `${CDN_BASE}theme.css`;
                 document.head.appendChild(link);
 
-                // Wait longer for CSS to load
                 await new Promise(r => setTimeout(r, 500));
 
-                // Get computed styles from root
                 const styles = getComputedStyle(document.documentElement);
                 
-                // Try to find CSS variables
                 const allProps = [];
                 for (let i = 0; i < styles.length; i++) {
                     const prop = styles[i];
@@ -432,7 +496,6 @@
                     swatch.className = 'swatch';
                     swatch.title = `Click to copy: ${varName}: ${value}`;
 
-                    // Add click handler for copying
                     swatch.addEventListener('click', () => {
                         copyToClipboard(`${varName}: ${value}`);
                     });
@@ -459,7 +522,6 @@
             }
         }
 
-        // Helper function to determine if a color is light or dark
         function isLightColor(color) {
             if (color.startsWith('#')) {
                 const hex = color.slice(1);
@@ -478,18 +540,114 @@
                     return brightness > 128;
                 }
             }
-            return true; // Default to light for unknown formats
+            return true;
         }
 
-        // Function to determine text color based on background
         function getTextColor(backgroundColor) {
             if (backgroundColor.includes('gradient')) {
-                return '#fff'; // Default to white for gradients
+                return '#fff';
             }
             return isLightColor(backgroundColor) ? '#000' : '#fff';
         }
 
         loadTheme();
+
+        // Image Assets Reference
+        const imageListDiv = document.getElementById('image-list');
+
+        async function loadImages() {
+            try {
+                const response = await fetch(`${CDN_BASE}images/manifest.json`);
+                const data = await response.json();
+                
+                if (!data.images || data.images.length === 0) {
+                    imageListDiv.innerHTML = '<div class="error">No images found in manifest</div>';
+                    return;
+                }
+
+                imageListDiv.innerHTML = '';
+                
+                const grid = document.createElement('div');
+                grid.className = 'image-grid';
+
+                data.images.forEach(imageName => {
+                    const imageUrl = `${CDN_BASE}images/${imageName}`;
+                    
+                    const card = document.createElement('div');
+                    card.className = 'image-card';
+
+                    const preview = document.createElement('div');
+                    preview.className = 'image-preview';
+
+                    const img = document.createElement('img');
+                    img.src = imageUrl;
+                    img.alt = imageName;
+                    img.loading = 'lazy';
+                    
+                    preview.appendChild(img);
+                    card.appendChild(preview);
+
+                    const name = document.createElement('div');
+                    name.className = 'image-name';
+                    name.textContent = imageName;
+                    card.appendChild(name);
+
+                    const actions = document.createElement('div');
+                    actions.className = 'image-actions';
+
+                    const copyBtn = document.createElement('button');
+                    copyBtn.className = 'btn btn-copy';
+                    copyBtn.innerHTML = '📋 Copy Link';
+                    copyBtn.addEventListener('click', () => {
+                        copyToClipboard(imageUrl);
+                    });
+
+                    const downloadBtn = document.createElement('button');
+                    downloadBtn.className = 'btn btn-download';
+                    downloadBtn.innerHTML = '⬇️ Download';
+                    downloadBtn.addEventListener('click', async () => {
+                        try {
+                            const response = await fetch(imageUrl);
+                            const blob = await response.blob();
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = imageName;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            window.URL.revokeObjectURL(url);
+                        } catch (err) {
+                            console.error('Download failed:', err);
+                            alert('Download failed. Please try right-clicking the image and selecting "Save image as..."');
+                        }
+                    });
+
+                    actions.appendChild(copyBtn);
+                    actions.appendChild(downloadBtn);
+                    card.appendChild(actions);
+
+                    grid.appendChild(card);
+                });
+
+                imageListDiv.appendChild(grid);
+
+            } catch (error) {
+                console.error('Error loading images:', error);
+                imageListDiv.innerHTML = `
+                    <div class="error">
+                        Failed to load image manifest. Please ensure:
+                        <ul>
+                            <li>The file exists at ${CDN_BASE}images/manifest.json</li>
+                            <li>CORS is properly configured</li>
+                            <li>The JSON format is valid</li>
+                        </ul>
+                    </div>
+                `;
+            }
+        }
+
+        loadImages();
     </script>
 </body>
 </html>
