@@ -120,9 +120,8 @@
 
         html, body {
             height: 100%;
-            overflow: hidden; /* prevent resize shifts */
+            overflow: hidden;
         }
-
 
         .container {
             width: 100%;
@@ -131,7 +130,7 @@
             flex-direction: column;
             flex-grow: 1;
             flex: 1;
-            overflow-y: auto; /* scrollable if needed */
+            overflow-y: auto;
         }
 
         .apps-grid {
@@ -161,15 +160,21 @@
         .app-icon {
             width: 80px;
             height: 80px;
-            background: url('https://stakcos.com/assets/1.0.0/images/stakco_logo_squricle.png') no-repeat center;
-            background-size: contain;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(249, 167, 68, 0.1);
+            border-radius: 20px;
             margin-bottom: 12px;
             filter: drop-shadow(0 4px 12px rgba(249, 167, 68, 0.3));
             transition: all 0.3s ease;
+            font-size: 36px;
+            color: rgba(249, 167, 68, 0.9);
         }
 
         .app-item:hover .app-icon {
             filter: drop-shadow(0 8px 20px rgba(249, 167, 68, 0.6));
+            background: rgba(249, 167, 68, 0.15);
         }
 
         .app-name {
@@ -214,6 +219,20 @@
             box-shadow: 0 0 0 2px rgba(249, 167, 68, 0.3);
         }
 
+        .loading {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            padding: 40px;
+            font-size: 14px;
+        }
+
+        .error {
+            text-align: center;
+            color: rgba(255, 100, 100, 0.8);
+            padding: 40px;
+            font-size: 14px;
+        }
+
         @media (max-width: 768px) {
             .apps-grid {
                 grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
@@ -223,6 +242,7 @@
             .app-icon {
                 width: 70px;
                 height: 70px;
+                font-size: 32px;
             }
 
             .app-name {
@@ -245,6 +265,7 @@
             .app-icon {
                 width: 60px;
                 height: 60px;
+                font-size: 28px;
             }
 
             .app-name {
@@ -265,7 +286,9 @@
 
 <body>
     <div class="container">
-        <div class="apps-grid" id="apps-grid"></div>
+        <div class="apps-grid" id="apps-grid">
+            <div class="loading">Loading apps...</div>
+        </div>
     </div>
     
     <div class="search-container">
@@ -279,69 +302,71 @@
     </div>
 
     <script>
+        const MANIFEST_URL = 'https://stakcos.com/assets/1.0.0/apps/manifest.json';
+        let appsData = [];
 
-        const apps = [
-            {
-                name: 'Stakco Play',
-                url: 'https://stakcos.com/play',
-                tags: ['classic', 'original', 'main', 'puzzle', 'game', 'daily']
-            },
-            {
-                name: 'Stakco Azimuth',
-                url: 'https://stakcos.com/azimuth',
-                tags: ['direction', 'compass', 'angle', 'degrees', 'rotation', 'orientation']
-            },
-            {
-                name: 'Stakco Gyro',
-                url: 'https://stakcos.com/gyro',
-                tags: ['spin', 'rotate', 'twist', 'turn', 'rotation', 'circular']
-            },
-            {
-                name: 'Stakco SMRT',
-                url: 'https://stakcos.com/mrt',
-                tags: ['mrt', 'train', 'transit', 'subway', 'metro', 'transport', 'singapore']
-            },
-            {
-                name: 'Stakco MIDI',
-                url: 'https://stakcos.com/midi',
-                tags: ['music', 'sound', 'audio', 'notes', 'musical', 'melody']
-            },
-            {
-                name: 'Stakco Clock',
-                url: 'https://stakcos.com/clock',
-                tags: ['time', 'hours', 'minutes', 'watch', 'timer', 'temporal']
-            },
-            {
-                name: 'Stakco Dial',
-                url: 'https://stakcos.com/dial',
-                tags: ['phone', 'number', 'keypad', 'telephone', 'digits', 'numeric']
+        async function fetchManifest() {
+            try {
+                const response = await fetch(MANIFEST_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch manifest: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                return data.apps || [];
+            } catch (error) {
+                console.error('Error fetching manifest:', error);
+                throw error;
             }
-        ];
+        }
 
-        function renderApps() {
+        function renderApps(apps) {
             const grid = document.getElementById('apps-grid');
+            grid.innerHTML = '';
             
+            if (apps.length === 0) {
+                grid.innerHTML = '<div class="loading">No apps found</div>';
+                return;
+            }
+
             apps.forEach(app => {
                 const appItem = document.createElement('a');
                 appItem.href = app.url;
                 appItem.className = 'app-item';
                 appItem.target = '_blank';
-                appItem.dataset.tags = app.tags.join(' ');
+                appItem.title = app.description || app.title;
+                appItem.dataset.tags = (app.tags || []).join(' ');
                 
                 appItem.innerHTML = `
-                    <div class="app-icon"></div>
-                    <div class="app-name">${app.name}</div>
+                    <div class="app-icon">
+                        <i class="${app.icon || 'fa-solid fa-puzzle-piece'}"></i>
+                    </div>
+                    <div class="app-name">${app.title}</div>
                 `;
                 
                 grid.appendChild(appItem);
             });
         }
 
-        // Render apps on load
-        document.addEventListener('DOMContentLoaded', renderApps);
+        function showError(message) {
+            const grid = document.getElementById('apps-grid');
+            grid.innerHTML = `<div class="error">${message}</div>`;
+        }
 
-        // Search functionality
+        async function initializeApp() {
+            try {
+                appsData = await fetchManifest();
+                renderApps(appsData);
+            } catch (error) {
+                showError('Failed to load apps. Please try again later.');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
         const searchBar = document.getElementById('search-bar');
+        
         searchBar.addEventListener('focus', () => {
             setTimeout(() => {
                 searchBar.scrollIntoView({ block: "center", behavior: "smooth" });
@@ -355,15 +380,17 @@
             appItems.forEach(item => {
                 const appName = item.querySelector('.app-name').textContent.toLowerCase();
                 const appTags = item.dataset.tags.toLowerCase();
+                const appTitle = item.title.toLowerCase();
                 
-                if (appName.includes(searchTerm) || appTags.includes(searchTerm)) {
+                if (appName.includes(searchTerm) || 
+                    appTags.includes(searchTerm) || 
+                    appTitle.includes(searchTerm)) {
                     item.classList.remove('hidden');
                 } else {
                     item.classList.add('hidden');
                 }
             });
         });
-
     </script>
 </body>
 </html>
