@@ -5,63 +5,72 @@
       "description": "Classic Stakco - Touch and drag to rotate puzzle layers and align all pieces",
       "url": "https://stakcos.com/play",
       "urlDisplay": "stakcos.com/play",
-      "icon": "fa-solid fa-gamepad"
+      "icon": "fa-solid fa-gamepad",
+      "tags": ["classic", "original", "main", "puzzle", "game", "daily"]
     },
     {
       "title": "Stakco SMRT",
       "description": "MRT driven Stakco - Journey through Singapore's rail network while solving intricate puzzles",
       "url": "https://stakcos.com/mrt",
       "urlDisplay": "stakcos.com/mrt",
-      "icon": "fa-solid fa-train-subway"
+      "icon": "fa-solid fa-train-subway",
+      "tags": ["mrt", "train", "transit", "subway", "metro", "transport", "singapore"]
     },
     {
       "title": "Stakco MIDI",
       "description": "MIDI driven Stakco - Create musical compositions while solving puzzles through sound and rhythm",
       "url": "https://stakcos.com/midi",
       "urlDisplay": "stakcos.com/midi",
-      "icon": "fa-solid fa-music"
+      "icon": "fa-solid fa-music",
+      "tags": ["music", "sound", "audio", "notes", "musical", "melody"]
     },
     {
       "title": "Stakco Clock",
       "description": "Time-driven Stakco - Solve puzzles synchronized with real-time clock movements and temporal challenges",
       "url": "https://stakcos.com/clock",
       "urlDisplay": "stakcos.com/clock",
-      "icon": "fa-solid fa-clock"
+      "icon": "fa-solid fa-clock",
+      "tags": ["time", "hours", "minutes", "watch", "timer", "temporal"]
     },
     {
       "title": "Stakco Dial",
       "description": "Surface Dial driven Stakco - Experience tactile puzzle solving with Microsoft Surface Dial's precise rotational control",
       "url": "https://stakcos.com/dial",
       "urlDisplay": "stakcos.com/dial",
-      "icon": "fa-solid fa-circle-dot"
+      "icon": "fa-solid fa-circle-dot",
+      "tags": ["phone", "number", "keypad", "telephone", "digits", "numeric"]
     },
     {
       "title": "Stakco Azimuth",
       "description": "Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation",
       "url": "https://stakcos.com/azimuth",
       "urlDisplay": "stakcos.com/azimuth",
-      "icon": "fa-solid fa-compass"
+      "icon": "fa-solid fa-compass",
+      "tags": ["direction", "compass", "angle", "degrees", "rotation", "orientation"]
     },
     {
       "title": "Stakco Gyro",
       "description": "Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation",
       "url": "https://stakcos.com/gyro",
       "urlDisplay": "stakcos.com/gyro",
-      "icon": "fa-solid fa-globe"
+      "icon": "fa-solid fa-globe",
+      "tags": ["spin", "rotate", "twist", "turn", "rotation", "circular"]
     },
     {
       "title": "Stakco VOC",
       "description": "Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation",
       "url": "https://stakcos.com/kiwrious/voc",
       "urlDisplay": "stakcos.com/kiwrious/voc",
-      "icon": "fa-solid fa-wind"
+      "icon": "fa-solid fa-wind",
+      "tags": ["voc", "sensor", "air", "quality", "environment", "kiwrious"]
     },
     {
       "title": "Stakco Video",
       "description": "Touch-controlled Stakco video puzzles with interactive layers",
       "url": "https://stakcos.com/video",
       "urlDisplay": "stakcos.com/video",
-      "icon": "fa-solid fa-hand-pointer"
+      "icon": "fa-solid fa-hand-pointer",
+      "tags": ["video", "touch", "interactive", "visual", "motion", "media"]
     }
   ]
 }
