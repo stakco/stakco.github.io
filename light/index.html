@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stakco App Template">
+    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, educational games, therapy puzzles">
+    <meta name="author" content="Stakco Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3c2f38">
+
+    <title>Stakco Template</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+     <!-- Open Graph -->
+    <meta property="og:title" content="Stakco Gyro">
+    <meta property="og:description" content="Gyroscope-driven Stakco puzzles with device tilt controls.">
+    <meta property="og:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:url" content="https://stakcos.com/gyro/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco Gyro">
+    <meta name="twitter:description" content="Gyroscope-driven Stakco puzzles with device tilt controls.">
+    <meta name="twitter:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:url" content="https://stakcos.com/gyro/">
+    <meta name="twitter:site" content="@StakcoPuzzle">
+    <meta name="twitter:creator" content="@StakcoPuzzle">
+
+    <!-- Favicons / Android -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+    <!-- Apple Touch Icons (Squircles) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+    <!-- Apple Splash Screens (Portrait only) -->
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square150x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square310x310logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x310.png">
+    <meta name="msapplication-wide310x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x150.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/light/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco Light">
+
+    <!-- Mobile App Meta Tags (iOS) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco Gyro">
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stakco Gyro",
+      "url": "https://stakcos.com/gyro/",
+      "description": "Gyroscope-driven Stakco puzzles with device tilt controls.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stakco"
+      }
+    }
+    </script>
+
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-countdown.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-orientation-overlay.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-permission-prompt.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #ffffff; /* WHITE BACKGROUND */
+            color: #333333; /* DARK TEXT */
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #canvas {
+            background: #ffffff; /* WHITE CANVAS */
+            border: 2px solid #cccccc; /* LIGHT GRAY BORDER */
+            cursor: grab;
+        }
+
+        #canvas:active {
+            cursor: grabbing;
+        }
+
+        .controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95); /* LIGHT BACKGROUND */
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 2px solid #4a90e2;
+            min-width: 240px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .controls h2 {
+            margin-bottom: 8px;
+            color: #4a90e2;
+            font-size: 16px;
+        }
+
+        .control-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            padding: 4px 6px;
+            background: rgba(74, 144, 226, 0.08); /* LIGHT BLUE TINT */
+            border-radius: 4px;
+        }
+
+        .control-label {
+            font-size: 11px;
+            color: #555555; /* DARK GRAY TEXT */
+        }
+
+        .control-value {
+            font-size: 12px;
+            font-weight: bold;
+            color: #4a90e2;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95); /* LIGHT BACKGROUND */
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 2px solid #50c878;
+            max-width: 280px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .instructions h3 {
+            margin-bottom: 6px;
+            color: #50c878;
+            font-size: 14px;
+        }
+
+        .instructions ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .instructions li {
+            margin-bottom: 4px;
+            font-size: 11px;
+            color: #555555; /* DARK GRAY TEXT */
+            padding-left: 15px;
+            position: relative;
+            line-height: 1.3;
+        }
+
+        .instructions li:before {
+            content: "→";
+            position: absolute;
+            left: 0;
+            color: #50c878;
+            font-size: 10px;
+        }
+
+        .angle-display {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(74, 144, 226, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            min-width: 200px;
+            border: 3px solid #4a90e2;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .angle-display .angle-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .angle-display .angle-label {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .marker-info {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95); /* LIGHT BACKGROUND */
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #9b59b6;
+            max-width: 250px;
+            max-height: 400px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .marker-info h3 {
+            margin-bottom: 10px;
+            color: #9b59b6;
+            font-size: 16px;
+        }
+
+        .marker-info .marker-list {
+            font-size: 12px;
+            color: #555555; /* DARK GRAY TEXT */
+            line-height: 1.6;
+            max-height: 330px;
+            overflow-y: auto;
+        }
+
+        button {
+            background: #4a90e2;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            margin-top: 6px;
+            width: 100%;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #357abd;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .speed-control {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #dddddd; /* LIGHT BORDER */
+        }
+
+        input[type="range"] {
+            width: 100%;
+            margin-top: 3px;
+            height: 4px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <canvas id="canvas"></canvas>
+
+    <div class="controls">
+        <h2>⚙️ Simulation Controls</h2>
+        <div class="control-row">
+            <span class="control-label">Current Angle</span>
+            <span class="control-value" id="currentAngle">0.0°</span>
+        </div>
+        <div class="control-row">
+            <span class="control-label">Rotation Speed</span>
+            <span class="control-value" id="rotationSpeed">0.0°/s</span>
+        </div>
+        <div class="control-row">
+            <span class="control-label">Circle Diameter</span>
+            <span class="control-value" id="diameter">800px</span>
+        </div>
+        <div class="control-row">
+            <span class="control-label">Marker Size</span>
+            <span class="control-value" id="markerSize">80px</span>
+        </div>
+        <div class="control-row">
+            <span class="control-label">Auto-Rotate</span>
+            <span class="control-value" id="autoRotateStatus">OFF</span>
+        </div>
+        <div class="control-row">
+            <span class="control-label">Active Ring</span>
+            <span class="control-value" id="activeRingStatus">All Rings</span>
+        </div>
+
+        <button id="toggleAutoRotate">Toggle Auto-Rotate</button>
+        <button id="resetRotation">Reset to 0°</button>
+
+        <div class="speed-control">
+            <div class="control-label">Rotation Step Size</div>
+            <input type="range" id="stepSize" min="1" max="15" value="5" step="1">
+            <div class="control-value" id="stepSizeValue">5°</div>
+        </div>
+
+        <div class="speed-control">
+            <div class="control-label">Marker Size</div>
+            <input type="range" id="markerSizeSlider" min="20" max="120" value="80" step="5">
+            <div class="control-value" id="markerSizeDisplay">80px</div>
+        </div>
+    </div>
+
+    <div class="angle-display">
+        <div class="angle-value" id="angleDisplayValue">0.0°</div>
+        <div class="angle-label">Rotation Angle</div>
+    </div>
+
+    <div class="instructions">
+        <h3>🎮 Controls</h3>
+        <ul>
+            <li><strong>← →:</strong> Rotate</li>
+            <li><strong>0-3:</strong> Select ring</li>
+            <li><strong>Space:</strong> Auto-rotate</li>
+            <li><strong>R:</strong> Reset all</li>
+            <li><strong>[ ]:</strong> Marker size</li>
+            <li><strong>Scroll:</strong> Rotate</li>
+            <li><strong>Drag:</strong> Manual rotate</li>
+        </ul>
+    </div>
+
+    <div class="marker-info">
+        <h3>📍 Marker Reference</h3>
+        <div class="marker-list" id="markerList">
+            Loading markers...
+        </div>
+    </div>
+</div>
+
+<script>
+    // Canvas setup
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas to full window size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Configuration
+    const config = {
+        // Ring configurations
+        rings: [
+            {
+                name: 'Ring 1 (Outer)',
+                markerCount: 12,
+                markerStartId: 0,
+                diameter: 800, // pixels - will scale to fit screen
+                color: 'rgba(155, 89, 182, 0.3)',
+                strokeColor: '#9b59b6',
+                rotation: 0,
+                targetRotation: 0
+            },
+            {
+                name: 'Ring 2 (Middle)',
+                markerCount: 12,
+                markerStartId: 12,
+                diameter: 690, // 975mm / 1125mm * 800 = ~690px
+                color: 'rgba(231, 76, 60, 0.3)',
+                strokeColor: '#e74c3c',
+                rotation: 0,
+                targetRotation: 0
+            },
+            {
+                name: 'Ring 3 (Inner)',
+                markerCount: 12,
+                markerStartId: 24,
+                diameter: 586, // 825mm / 1125mm * 800 = ~586px
+                color: 'rgba(243, 156, 18, 0.3)',
+                strokeColor: '#f39c12',
+                rotation: 0,
+                targetRotation: 0
+            }
+        ],
+        markerSize: 80, // pixels
+        rotationStep: 5, // degrees per keypress
+        autoRotate: false,
+        autoRotateSpeed: 30, // degrees per second
+        smoothing: 0.1, // for smooth rotation animation
+        activeRing: 0 // Which ring is controlled (0, 1, 2, or -1 for all)
+    };
+
+    // ArUco marker images cache
+    const markerImages = {};
+    let imagesLoaded = 0;
+    let allImagesReady = false;
+
+    // Preload all marker images
+    function preloadMarkerImages() {
+        const totalMarkers = 36; // 12 markers per ring × 3 rings
+        for (let i = 0; i < totalMarkers; i++) {
+            const img = new Image();
+            img.onload = () => {
+                imagesLoaded++;
+                if (imagesLoaded === totalMarkers) {
+                    allImagesReady = true;
+                    console.log('All marker images loaded successfully');
+                }
+            };
+            img.onerror = () => {
+                console.error(`Failed to load marker image: 4x4_1000-${i}.svg`);
+                imagesLoaded++;
+                if (imagesLoaded === totalMarkers) {
+                    allImagesReady = true;
+                }
+            };
+            img.src = `4x4_1000-${i}.svg`;
+            markerImages[i] = img;
+        }
+    }
+
+    // Draw ArUco marker using actual image
+    function drawArucoMarker(x, y, size, markerId, angle) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.rotate(angle);
+
+        const img = markerImages[markerId];
+
+        if (img && img.complete && img.naturalWidth > 0) {
+            // Draw the actual marker image
+            ctx.drawImage(img, -size/2, -size/2, size, size);
+        } else {
+            // Fallback: draw a placeholder if image not loaded
+            ctx.fillStyle = 'white';
+            ctx.fillRect(-size/2, -size/2, size, size);
+            ctx.strokeStyle = 'red';
+            ctx.lineWidth = 3;
+            ctx.strokeRect(-size/2, -size/2, size, size);
+
+            // Draw X pattern to indicate missing image
+            ctx.beginPath();
+            ctx.moveTo(-size/2, -size/2);
+            ctx.lineTo(size/2, size/2);
+            ctx.moveTo(size/2, -size/2);
+            ctx.lineTo(-size/2, size/2);
+            ctx.stroke();
+        }
+
+        // Draw marker ID below
+        ctx.fillStyle = markerId === 0 ? '#9b59b6' : '#4a90e2';
+        ctx.font = 'bold 16px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText(`ID ${markerId}`, 0, size/2 + 10);
+
+        ctx.restore();
+    }
+
+    // Animation variables
+    let lastTime = Date.now();
+    let isDragging = false;
+    let lastMouseAngle = 0;
+
+    // Draw the simulation
+    function draw() {
+        // Clear canvas with WHITE background
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Show loading message if images not ready
+        if (!allImagesReady) {
+            ctx.fillStyle = '#333333'; /* DARK TEXT for visibility on white */
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(
+                `Loading marker images... ${imagesLoaded}/36`,
+                canvas.width / 2,
+                canvas.height / 2
+            );
+            ctx.font = '16px Arial';
+            ctx.fillText(
+                'Place marker images (4x4_1000-0.svg to 4x4_1000-35.svg) in the same folder',
+                canvas.width / 2,
+                canvas.height / 2 + 40
+            );
+            return;
+        }
+
+        // Calculate canvas center
+        const centerX = canvas.width / 2;
+        const centerY = canvas.height / 2;
+        const maxSize = Math.min(canvas.width, canvas.height) * 0.7;
+
+        // Draw reference line (0°) - shared by all rings
+        ctx.strokeStyle = '#9b59b6';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath();
+        const maxRadius = Math.min(config.rings[0].diameter / 2, maxSize / 2);
+        ctx.moveTo(centerX, centerY);
+        ctx.lineTo(centerX, centerY - maxRadius - 30);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Draw "0° Reference" label
+        ctx.fillStyle = '#9b59b6';
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('0° Reference', centerX, centerY - maxRadius - 45);
+
+        // Draw all three rings
+        config.rings.forEach((ring, ringIndex) => {
+            const radius = Math.min(ring.diameter / 2, maxSize / 2 * (ring.diameter / config.rings[0].diameter));
+
+            // Draw circle outline (light gray for white background)
+            ctx.strokeStyle = ring.strokeColor;
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 10]);
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Draw ring name label
+            ctx.fillStyle = ring.strokeColor;
+            ctx.font = 'bold 13px Arial';
+            ctx.textAlign = 'center';
+            const labelAngle = 135 * Math.PI / 180; // Bottom-left position
+            const labelX = centerX + radius * 0.7 * Math.cos(labelAngle);
+            const labelY = centerY + radius * 0.7 * Math.sin(labelAngle);
+            ctx.fillText(ring.name, labelX, labelY);
+
+            // Use current rotation without normalization for smooth drawing
+            const drawRotation = ring.rotation;
+
+            // Draw markers for this ring
+            const markerRadius = radius; // Markers are on the edge of the circle
+
+            for (let i = 0; i < ring.markerCount; i++) {
+                // Calculate marker position
+                // Marker 0 is at 0° (top), markers go clockwise
+                const markerAngle = (i * 360 / ring.markerCount);
+                const totalAngle = markerAngle + drawRotation;
+                const angleRad = (totalAngle - 90) * Math.PI / 180; // -90 to start at top
+
+                const markerX = centerX + markerRadius * Math.cos(angleRad);
+                const markerY = centerY + markerRadius * Math.sin(angleRad);
+
+                // Calculate marker ID
+                const markerId = ring.markerStartId + i;
+
+                // Draw marker
+                drawArucoMarker(
+                    markerX,
+                    markerY,
+                    config.markerSize,
+                    markerId,
+                    angleRad + Math.PI / 2 // Rotate marker to face outward
+                );
+            }
+
+            // Draw rotation angle indicator for this ring
+            const rotAngleRad = (drawRotation - 90) * Math.PI / 180;
+            ctx.strokeStyle = ring.strokeColor;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(
+                centerX + (radius - 50) * Math.cos(rotAngleRad),
+                centerY + (radius - 50) * Math.sin(rotAngleRad)
+            );
+            ctx.stroke();
+
+            // Draw angle arc (normalized for display)
+            const normalizedRotation = ((drawRotation % 360) + 360) % 360;
+            const arcEndAngle = (normalizedRotation - 90) * Math.PI / 180;
+            ctx.strokeStyle = ring.color.replace('0.3', '0.6'); // More opaque for arc
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(
+                centerX,
+                centerY,
+                radius - 70,
+                -Math.PI / 2,
+                arcEndAngle,
+                false
+            );
+            ctx.stroke();
+        });
+
+        // Draw center point
+        ctx.fillStyle = '#4a90e2';
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
+        ctx.fill();
+    }
+
+    // Update simulation
+    function update() {
+        const currentTime = Date.now();
+        const deltaTime = (currentTime - lastTime) / 1000; // seconds
+        lastTime = currentTime;
+
+        // Auto-rotate
+        if (config.autoRotate) {
+            if (config.activeRing === -1) {
+                // Rotate all rings
+                config.rings.forEach(ring => {
+                    ring.targetRotation += config.autoRotateSpeed * deltaTime;
+                });
+            } else {
+                // Rotate only active ring
+                config.rings[config.activeRing].targetRotation += config.autoRotateSpeed * deltaTime;
+            }
+        }
+
+        // Smooth rotation with proper wraparound handling for each ring
+        config.rings.forEach(ring => {
+            let diff = ring.targetRotation - ring.rotation;
+
+            // Handle wraparound: find shortest path
+            if (diff > 180) {
+                diff -= 360;
+            } else if (diff < -180) {
+                diff += 360;
+            }
+
+            ring.rotation += diff * config.smoothing;
+        });
+
+        // Update UI with normalized values
+        updateUI();
+    }
+
+    // Update UI elements
+    function updateUI() {
+        // Display angles for all rings
+        const ring1Angle = ((config.rings[0].rotation % 360) + 360) % 360;
+        const ring2Angle = ((config.rings[1].rotation % 360) + 360) % 360;
+        const ring3Angle = ((config.rings[2].rotation % 360) + 360) % 360;
+
+        document.getElementById('currentAngle').textContent =
+            `R1:${ring1Angle.toFixed(1)}° R2:${ring2Angle.toFixed(1)}° R3:${ring3Angle.toFixed(1)}°`;
+        document.getElementById('angleDisplayValue').textContent =
+            `R1:${ring1Angle.toFixed(0)}° R2:${ring2Angle.toFixed(0)}° R3:${ring3Angle.toFixed(0)}°`;
+
+        document.getElementById('rotationSpeed').textContent =
+            (config.autoRotate ? config.autoRotateSpeed.toFixed(1) : '0.0') + '°/s';
+        document.getElementById('autoRotateStatus').textContent =
+            config.autoRotate ? 'ON' : 'OFF';
+        document.getElementById('stepSizeValue').textContent = config.rotationStep + '°';
+        document.getElementById('markerSize').textContent = config.markerSize + 'px';
+        document.getElementById('markerSizeDisplay').textContent = config.markerSize + 'px';
+
+        // Update active ring status
+        const activeRingText = config.activeRing === -1 ? 'All Rings' : `Ring ${config.activeRing + 1}`;
+        document.getElementById('activeRingStatus').textContent = activeRingText;
+
+        // Update marker list (show all 36 markers)
+        const markerList = document.getElementById('markerList');
+        let markerInfo = '';
+        config.rings.forEach((ring, ringIndex) => {
+            markerInfo += `<div style="color: ${ring.strokeColor}; font-weight: bold; margin-top: 8px;">${ring.name}</div>`;
+            for (let i = 0; i < ring.markerCount; i++) {
+                const markerId = ring.markerStartId + i;
+                const angle = (i * 30) % 360;
+                markerInfo += `<div style="color: ${ring.strokeColor}; font-size: 11px;">ID ${markerId}: ${angle}°</div>`;
+            }
+        });
+        markerList.innerHTML = markerInfo;
+    }
+
+    // Animation loop
+    function animate() {
+        update();
+        draw();
+        requestAnimationFrame(animate);
+    }
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+        switch(e.key) {
+            case 'ArrowLeft':
+                if (config.activeRing === -1) {
+                    // Rotate all rings
+                    config.rings.forEach(ring => {
+                        ring.targetRotation -= config.rotationStep;
+                    });
+                } else {
+                    // Rotate only active ring
+                    config.rings[config.activeRing].targetRotation -= config.rotationStep;
+                }
+                e.preventDefault();
+                break;
+            case 'ArrowRight':
+                if (config.activeRing === -1) {
+                    // Rotate all rings
+                    config.rings.forEach(ring => {
+                        ring.targetRotation += config.rotationStep;
+                    });
+                } else {
+                    // Rotate only active ring
+                    config.rings[config.activeRing].targetRotation += config.rotationStep;
+                }
+                e.preventDefault();
+                break;
+            case ' ':
+                config.autoRotate = !config.autoRotate;
+                e.preventDefault();
+                break;
+            case 'r':
+            case 'R':
+                config.rings.forEach(ring => {
+                    ring.targetRotation = 0;
+                    ring.rotation = 0;
+                });
+                break;
+            case '1':
+                config.activeRing = 0; // Ring 1
+                updateUI();
+                break;
+            case '2':
+                config.activeRing = 1; // Ring 2
+                updateUI();
+                break;
+            case '3':
+                config.activeRing = 2; // Ring 3
+                updateUI();
+                break;
+            case '0':
+                config.activeRing = -1; // All rings
+                updateUI();
+                break;
+            case '+':
+            case '=':
+                config.rotationStep = Math.min(config.rotationStep + 1, 30);
+                document.getElementById('stepSize').value = config.rotationStep;
+                break;
+            case '-':
+            case '_':
+                config.rotationStep = Math.max(config.rotationStep - 1, 1);
+                document.getElementById('stepSize').value = config.rotationStep;
+                break;
+            case '[':
+                config.markerSize = Math.max(config.markerSize - 5, 20);
+                document.getElementById('markerSizeSlider').value = config.markerSize;
+                break;
+            case ']':
+                config.markerSize = Math.min(config.markerSize + 5, 120);
+                document.getElementById('markerSizeSlider').value = config.markerSize;
+                break;
+        }
+    });
+
+    // Mouse drag rotation
+    canvas.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left - canvas.width / 2;
+        const y = e.clientY - rect.top - canvas.height / 2;
+        lastMouseAngle = Math.atan2(y, x) * 180 / Math.PI;
+    });
+
+    canvas.addEventListener('mousemove', (e) => {
+        if (isDragging) {
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left - canvas.width / 2;
+            const y = e.clientY - rect.top - canvas.height / 2;
+            const currentMouseAngle = Math.atan2(y, x) * 180 / Math.PI;
+            const angleDiff = currentMouseAngle - lastMouseAngle;
+
+            if (config.activeRing === -1) {
+                // Rotate all rings
+                config.rings.forEach(ring => {
+                    ring.targetRotation += angleDiff;
+                });
+            } else {
+                // Rotate only active ring
+                config.rings[config.activeRing].targetRotation += angleDiff;
+            }
+
+            lastMouseAngle = currentMouseAngle;
+        }
+    });
+
+    canvas.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+
+    canvas.addEventListener('mouseleave', () => {
+        isDragging = false;
+    });
+
+    // Mouse wheel/scroll control for rotation
+    canvas.addEventListener('wheel', (e) => {
+        e.preventDefault();
+
+        // Normalize scroll delta (different browsers/devices report different values)
+        const delta = Math.sign(e.deltaY);
+
+        // Rotate by a fraction of step size for smoother control (30% of step size)
+        const rotationAmount = delta * config.rotationStep * 0.3;
+
+        if (config.activeRing === -1) {
+            // Rotate all rings
+            config.rings.forEach(ring => {
+                ring.targetRotation += rotationAmount;
+            });
+        } else {
+            // Rotate only active ring
+            config.rings[config.activeRing].targetRotation += rotationAmount;
+        }
+    }, { passive: false });
+
+    // Button controls
+    document.getElementById('toggleAutoRotate').addEventListener('click', () => {
+        config.autoRotate = !config.autoRotate;
+    });
+
+    document.getElementById('resetRotation').addEventListener('click', () => {
+        config.rings.forEach(ring => {
+            ring.targetRotation = 0;
+            ring.rotation = 0;
+        });
+    });
+
+    document.getElementById('stepSize').addEventListener('input', (e) => {
+        config.rotationStep = parseInt(e.target.value);
+    });
+
+    // Marker size slider control
+    document.getElementById('markerSizeSlider').addEventListener('input', (e) => {
+        config.markerSize = parseInt(e.target.value);
+    });
+
+    // Window resize
+    window.addEventListener('resize', () => {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+    });
+
+    // Preload marker images before starting animation
+    preloadMarkerImages();
+
+    // Start animation
+    animate();
+    updateUI();
+
+    // Initial message
+    console.log('ArUco Marker Simulator Started - Multi-Ring Mode');
+    console.log('Loading marker images: 4x4_1000-0.svg to 4x4_1000-35.svg');
+    console.log('Ring 1 (Outer): IDs 0-11, Ring 2 (Middle): IDs 12-23, Ring 3 (Inner): IDs 24-35');
+    console.log('Use arrow keys to rotate, space to auto-rotate, 0-3 to select ring');
+    console.log('Configuration:', config);
+</script>
+</body>
+</html>

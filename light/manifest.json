@@ -1,0 +1,30 @@
+{
+  "name": "Stakco Light",
+  "short_name": "Stakco Light",
+  "description": "Stakco light is a platform to test Stakco light puzzle",
+  "start_url": "/light/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#3c2f38",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
