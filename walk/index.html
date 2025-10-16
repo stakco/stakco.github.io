@@ -60,8 +60,8 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Stakco Walk",
-      "url": "https://stakcos.com/walk/",
+      "name": "Stakco Steps",
+      "url": "https://stakcos.com/steps/",
       "description": "Pedometer-driven Stakco puzzles with step counter controls.",
       "applicationCategory": "Game",
       "operatingSystem": "Web",
@@ -178,6 +178,47 @@
                 font-size: 20px;
             }
         }
+
+        /* Debug Panel */
+        #debug-panel {
+            position: fixed;
+            bottom: 100px;
+            left: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #0f0;
+            z-index: 1000;
+            display: none;
+            max-width: 250px;
+        }
+
+        #debug-panel.show {
+            display: block;
+        }
+
+        #debug-panel div {
+            margin: 2px 0;
+        }
+
+        #debug-toggle {
+            position: fixed;
+            bottom: 50px;
+            left: 10px;
+            background: var(--glass-bg);
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            z-index: 1001;
+            backdrop-filter: blur(10px);
+        }
     </style>
 </head>
 
@@ -186,6 +227,20 @@
     <stakco-orientation-overlay></stakco-orientation-overlay>
     
     <stakco-countdown></stakco-countdown>
+    
+    <!-- Debug Toggle -->
+    <button id="debug-toggle">Show Debug</button>
+    
+    <!-- Debug Panel -->
+    <div id="debug-panel">
+        <div><strong>SENSOR DEBUG</strong></div>
+        <div>Baseline: <span id="debug-baseline">--</span></div>
+        <div>Current: <span id="debug-current">--</span></div>
+        <div>Deviation: <span id="debug-deviation">--</span></div>
+        <div>Peak: <span id="debug-peak">--</span></div>
+        <div>State: <span id="debug-state">INIT</span></div>
+        <div>Steps: <span id="debug-steps">0</span></div>
+    </div>
     
     <!-- Steps Info Display -->
     <div id="steps-info">
@@ -245,11 +300,13 @@
 
         // Step Detection Algorithm Configuration
         const STEP_CONFIG = {
-            THRESHOLD: 1.3,              // Minimum acceleration magnitude to detect step
-            MIN_STEP_INTERVAL: 250,      // Minimum ms between steps (prevents double counting)
+            THRESHOLD_LOW: 0.5,          // Minimum acceleration change to consider
+            THRESHOLD_HIGH: 3.0,         // Maximum acceleration (filter out impacts/drops)
+            MIN_STEP_INTERVAL: 300,      // Minimum ms between steps (prevents double counting)
             MAX_STEP_INTERVAL: 2000,     // Maximum ms between steps (resets walking state)
             ROTATION_PER_STEP: 15,       // Degrees to rotate per step
-            SMOOTHING_WINDOW: 5          // Number of samples for smoothing
+            SMOOTHING_WINDOW: 10,        // Number of samples for smoothing
+            BASELINE_SAMPLES: 20         // Samples to establish baseline
         };
 
         // App state
@@ -258,8 +315,10 @@
         let isWalking = false;
         let firstInteraction = false;
         let accelerationHistory = [];
-        let lastMagnitude = 0;
-        let peakDetected = false;
+        let baselineHistory = [];
+        let baselineMagnitude = 0;
+        let lastPeakMagnitude = 0;
+        let lookingForPeak = true;
 
         // Get component references
         const puzzleContainer = document.querySelector('stakco-puzzle-container');
@@ -277,6 +336,22 @@
         const totalStepsSpan = document.getElementById('total-steps');
         const rotationValueSpan = document.getElementById('rotation-value');
         const walkingIndicator = document.getElementById('walking-indicator');
+
+        // Debug elements
+        const debugPanel = document.getElementById('debug-panel');
+        const debugToggle = document.getElementById('debug-toggle');
+        const debugBaseline = document.getElementById('debug-baseline');
+        const debugCurrent = document.getElementById('debug-current');
+        const debugDeviation = document.getElementById('debug-deviation');
+        const debugPeak = document.getElementById('debug-peak');
+        const debugState = document.getElementById('debug-state');
+        const debugSteps = document.getElementById('debug-steps');
+
+        // Debug toggle
+        debugToggle.addEventListener('click', () => {
+            debugPanel.classList.toggle('show');
+            debugToggle.textContent = debugPanel.classList.contains('show') ? 'Hide Debug' : 'Show Debug';
+        });
 
         async function init() {
             StakcoUtils.preventZoom();
@@ -363,15 +438,6 @@
         function handleMotion(event) {
             if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
 
-            // Start countdown on first motion
-            if (!firstInteraction) {
-                firstInteraction = true;
-                countdown.start();
-                stepsInfo.classList.add('show');
-                branding.hide();
-                infoPanel.setContent('<p>Pedometer active - Walk to align all layers!</p>');
-            }
-
             // Get acceleration data
             const accel = event.accelerationIncludingGravity;
             if (!accel || accel.x === null || accel.y === null || accel.z === null) return;
@@ -383,6 +449,26 @@
                 accel.z * accel.z
             );
 
+            // Build baseline during initial samples
+            if (baselineHistory.length < STEP_CONFIG.BASELINE_SAMPLES) {
+                baselineHistory.push(magnitude);
+                if (baselineHistory.length === STEP_CONFIG.BASELINE_SAMPLES) {
+                    // Calculate baseline (average when device is relatively still)
+                    baselineMagnitude = baselineHistory.reduce((a, b) => a + b, 0) / baselineHistory.length;
+                    console.log('Baseline established:', baselineMagnitude.toFixed(2), 'm/s²');
+                }
+                return;
+            }
+
+            // Start countdown on first motion (after baseline established)
+            if (!firstInteraction) {
+                firstInteraction = true;
+                countdown.start();
+                stepsInfo.classList.add('show');
+                branding.hide();
+                infoPanel.setContent('<p>Pedometer active - Walk to align all layers!</p>');
+            }
+
             // Add to history for smoothing
             accelerationHistory.push(magnitude);
             if (accelerationHistory.length > STEP_CONFIG.SMOOTHING_WINDOW) {
@@ -392,19 +478,26 @@
             // Calculate smoothed magnitude
             const smoothedMagnitude = accelerationHistory.reduce((a, b) => a + b, 0) / accelerationHistory.length;
 
-            // Detect step using peak detection
-            detectStep(smoothedMagnitude);
+            // Calculate deviation from baseline
+            const deviation = Math.abs(smoothedMagnitude - baselineMagnitude);
+
+            // Update debug display
+            debugCurrent.textContent = smoothedMagnitude.toFixed(2);
+            debugDeviation.textContent = deviation.toFixed(2);
+            debugBaseline.textContent = baselineMagnitude.toFixed(2);
+            debugState.textContent = lookingForPeak ? 'LOOKING_PEAK' : 'LOOKING_VALLEY';
+
+            // Detect step using improved algorithm
+            detectStep(smoothedMagnitude, deviation);
 
             // Update walking state
             const now = Date.now();
             if (now - lastStepTime > STEP_CONFIG.MAX_STEP_INTERVAL) {
                 setWalkingState(false);
             }
-
-            lastMagnitude = smoothedMagnitude;
         }
 
-        function detectStep(currentMagnitude) {
+        function detectStep(currentMagnitude, deviation) {
             const now = Date.now();
             
             // Check if enough time has passed since last step
@@ -412,32 +505,46 @@
                 return;
             }
 
-            // Detect peak: current magnitude is above threshold and decreasing
-            if (currentMagnitude > STEP_CONFIG.THRESHOLD && 
-                currentMagnitude > lastMagnitude && 
-                !peakDetected) {
-                peakDetected = true;
-            }
-
-            // Detect valley after peak: magnitude decreases below threshold
-            if (peakDetected && currentMagnitude < lastMagnitude) {
-                // Step detected!
-                totalSteps++;
-                lastStepTime = now;
-                peakDetected = false;
-                
-                // Update UI
-                totalStepsSpan.textContent = totalSteps;
-                setWalkingState(true);
-                
-                // Rotate puzzle layer
-                const rotationDelta = STEP_CONFIG.ROTATION_PER_STEP;
-                puzzleContainer.rotateCurrentLayer(rotationDelta);
-                
-                // Small vibration feedback
-                StakcoUtils.vibrate([10]);
-                
-                console.log(`Step detected! Total: ${totalSteps}`);
+            // Looking for peak (upward motion)
+            if (lookingForPeak) {
+                // Check if we have a significant peak above baseline
+                if (deviation > STEP_CONFIG.THRESHOLD_LOW && 
+                    deviation < STEP_CONFIG.THRESHOLD_HIGH &&
+                    currentMagnitude > lastPeakMagnitude) {
+                    lastPeakMagnitude = currentMagnitude;
+                    debugPeak.textContent = lastPeakMagnitude.toFixed(2);
+                } else if (lastPeakMagnitude > baselineMagnitude + STEP_CONFIG.THRESHOLD_LOW) {
+                    // We found a peak, now look for valley
+                    lookingForPeak = false;
+                }
+            } 
+            // Looking for valley (downward motion after peak)
+            else {
+                // Check if magnitude is decreasing and close to baseline
+                if (deviation < STEP_CONFIG.THRESHOLD_LOW * 0.7) {
+                    // Step detected! Peak followed by valley = one step
+                    totalSteps++;
+                    lastStepTime = now;
+                    
+                    // Reset for next step
+                    lookingForPeak = true;
+                    lastPeakMagnitude = 0;
+                    debugPeak.textContent = '--';
+                    
+                    // Update UI
+                    totalStepsSpan.textContent = totalSteps;
+                    debugSteps.textContent = totalSteps;
+                    setWalkingState(true);
+                    
+                    // Rotate puzzle layer
+                    const rotationDelta = STEP_CONFIG.ROTATION_PER_STEP;
+                    puzzleContainer.rotateCurrentLayer(rotationDelta);
+                    
+                    // Small vibration feedback
+                    StakcoUtils.vibrate([10]);
+                    
+                    console.log(`Step ${totalSteps} detected! Deviation: ${deviation.toFixed(2)}`);
+                }
             }
         }
 
