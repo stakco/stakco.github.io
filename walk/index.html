@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Basic Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pedometer-driven Stakco puzzles with step counter controls.">
+    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, pedometer, step counter, walking puzzle, educational games, therapy puzzles">
+    <meta name="author" content="Stakco Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3c2f38">
+
+    <title>Stakco Walk</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+     <!-- Open Graph -->
+    <meta property="og:title" content="Stakco Walk">
+    <meta property="og:description" content="Pedometer-driven Stakco puzzles with step counter controls.">
+    <meta property="og:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:url" content="https://stakcos.com/walk/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco Walk">
+    <meta name="twitter:description" content="Pedometer-driven Stakco puzzles with step counter controls.">
+    <meta name="twitter:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:creator" content="@stakco">
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-touch-icon.png">
+    <link rel="icon" type="image/svg+xml" href="https://stakcos.com/assets/1.0.0/images/favicon.svg">
+    <link rel="shortcut icon" href="https://stakcos.com/assets/1.0.0/images/favicon.ico">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/walk/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco Walk">
+
+    <!-- Mobile App Meta Tags (iOS) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco Steps">
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stakco Walk",
+      "url": "https://stakcos.com/walk/",
+      "description": "Pedometer-driven Stakco puzzles with step counter controls.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stakco"
+      }
+    }
+    </script>
+    
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-countdown.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-orientation-overlay.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-permission-prompt.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* Steps Info Panel */
+        #steps-info {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            border: 2px solid var(--primary-color);
+            color: white;
+            border-radius: 15px;
+            padding: 15px 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
+            display: none;
+            gap: 30px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #steps-info.show {
+            display: flex;
+        }
+
+        .steps-row {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .steps-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .steps-value {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 24px;
+            font-family: 'Courier New', monospace;
+        }
+
+        .walking-indicator {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: #333;
+            border: 2px solid #666;
+            transition: all 0.2s ease;
+        }
+
+        .walking-indicator.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            #steps-info {
+                top: 80px;
+                padding: 12px 20px;
+                gap: 20px;
+            }
+
+            .steps-value {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Components -->
+    <stakco-orientation-overlay></stakco-orientation-overlay>
+    
+    <stakco-countdown></stakco-countdown>
+    
+    <!-- Steps Info Display -->
+    <div id="steps-info">
+        <div class="steps-row">
+            <span class="steps-label">Total Steps</span>
+            <span class="steps-value" id="total-steps">0</span>
+        </div>
+        <div class="steps-row">
+            <span class="steps-label">Rotation</span>
+            <span class="steps-value" id="rotation-value">0°</span>
+        </div>
+        <div class="steps-row">
+            <span class="steps-label">Walking</span>
+            <div class="walking-indicator" id="walking-indicator"></div>
+        </div>
+    </div>
+    
+    <stakco-info-panel icon="fa-shoe-prints">
+        <p>Initializing pedometer... Walk to rotate selected layer</p>
+    </stakco-info-panel>
+
+    <stakco-branding 
+        title="Stakco Steps" 
+        version="v1.0.0" 
+        subtitle="Pedometer Puzzle">
+    </stakco-branding>
+
+    <stakco-products-panel></stakco-products-panel>
+
+    <stakco-puzzle-container
+        layers="3"
+        user-id="109949450257686494443"
+        puzzle-id="A2A3_3"
+        tolerance="2">
+    </stakco-puzzle-container>
+    
+    <stakco-layer-controls layers="3"></stakco-layer-controls>
+
+    <stakco-share-button label="Share Success!"></stakco-share-button>
+
+    <stakco-permission-prompt 
+        title="Enable Motion Sensors"
+        message="This app needs access to your device's motion sensors to count your steps and rotate puzzle layers as you walk."
+        primary-label="Enable Motion"
+        secondary-label="Skip">
+    </stakco-permission-prompt>
+
+    <stakco-share-window 
+        title="Stakco Steps"
+        share-url="https://stakcos.com/steps/">
+        <div slot="text">Solved by walking!</div>
+    </stakco-share-window>
+
+    <script type="module">
+        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+        import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
+
+        // Step Detection Algorithm Configuration
+        const STEP_CONFIG = {
+            THRESHOLD: 1.3,              // Minimum acceleration magnitude to detect step
+            MIN_STEP_INTERVAL: 250,      // Minimum ms between steps (prevents double counting)
+            MAX_STEP_INTERVAL: 2000,     // Maximum ms between steps (resets walking state)
+            ROTATION_PER_STEP: 15,       // Degrees to rotate per step
+            SMOOTHING_WINDOW: 5          // Number of samples for smoothing
+        };
+
+        // App state
+        let totalSteps = 0;
+        let lastStepTime = 0;
+        let isWalking = false;
+        let firstInteraction = false;
+        let accelerationHistory = [];
+        let lastMagnitude = 0;
+        let peakDetected = false;
+
+        // Get component references
+        const puzzleContainer = document.querySelector('stakco-puzzle-container');
+        const countdown = document.querySelector('stakco-countdown');
+        const layerControls = document.querySelector('stakco-layer-controls');
+        const infoPanel = document.querySelector('stakco-info-panel');
+        const shareWindow = document.querySelector('stakco-share-window');
+        const orientationOverlay = document.querySelector('stakco-orientation-overlay');
+        const permissionPrompt = document.querySelector('stakco-permission-prompt');
+        const branding = document.querySelector('stakco-branding');
+        const shareButton = document.querySelector('stakco-share-button');
+        
+        // Steps info elements
+        const stepsInfo = document.getElementById('steps-info');
+        const totalStepsSpan = document.getElementById('total-steps');
+        const rotationValueSpan = document.getElementById('rotation-value');
+        const walkingIndicator = document.getElementById('walking-indicator');
+
+        async function init() {
+            StakcoUtils.preventZoom();
+            setupEventListeners();
+            setTimeout(checkPermissionNeeded, 1000);
+        }
+
+        function setupEventListeners() {
+            // Puzzle container events
+            puzzleContainer.addEventListener('puzzle-ready', () => {
+                console.log('Puzzle ready');
+            });
+
+            puzzleContainer.addEventListener('layer-switched', (e) => {
+                updateRotationDisplay(e.detail.rotation);
+            });
+
+            puzzleContainer.addEventListener('layer-rotated', (e) => {
+                updateRotationDisplay(e.detail.rotation);
+                puzzleContainer.checkAlignment();
+            });
+
+            puzzleContainer.addEventListener('puzzle-solved', (e) => {
+                solvePuzzle(e.detail.layers);
+            });
+
+            // Layer controls
+            layerControls.addEventListener('layerchange', (e) => {
+                puzzleContainer.switchLayer(e.detail.layer);
+            });
+
+            // Orientation overlay
+            orientationOverlay.addEventListener('blocked', () => {
+                if (countdown && countdown.active) {
+                    countdown.pause();
+                }
+            });
+
+            orientationOverlay.addEventListener('unblocked', () => {
+                if (countdown && countdown.paused) {
+                    countdown.resume();
+                }
+            });
+
+            // Permission prompt
+            permissionPrompt.addEventListener('primary-action', async () => {
+                const granted = await requestMotionPermission();
+                if (granted) {
+                    initializeMotion();
+                }
+            });
+
+            permissionPrompt.addEventListener('secondary-action', () => {
+                initializeMotion();
+            });
+
+            // Share button
+            shareButton.addEventListener('share-clicked', handleShare);
+        }
+
+        async function requestMotionPermission() {
+            if (typeof DeviceMotionEvent !== 'undefined' && 
+                typeof DeviceMotionEvent.requestPermission === 'function') {
+                try {
+                    const response = await DeviceMotionEvent.requestPermission();
+                    return response === 'granted';
+                } catch (error) {
+                    console.error('Permission request failed:', error);
+                    return false;
+                }
+            }
+            return true; // Permission not needed on Android
+        }
+
+        function initializeMotion() {
+            if (window.DeviceMotionEvent) {
+                window.addEventListener('devicemotion', handleMotion);
+                infoPanel.setContent('<p>Walk to rotate selected layer - Each step rotates the puzzle!</p>');
+            } else {
+                infoPanel.setContent('<p>Motion sensors not supported on this device</p>');
+            }
+        }
+
+        function handleMotion(event) {
+            if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
+
+            // Start countdown on first motion
+            if (!firstInteraction) {
+                firstInteraction = true;
+                countdown.start();
+                stepsInfo.classList.add('show');
+                branding.hide();
+                infoPanel.setContent('<p>Pedometer active - Walk to align all layers!</p>');
+            }
+
+            // Get acceleration data
+            const accel = event.accelerationIncludingGravity;
+            if (!accel || accel.x === null || accel.y === null || accel.z === null) return;
+
+            // Calculate magnitude of acceleration vector
+            const magnitude = Math.sqrt(
+                accel.x * accel.x + 
+                accel.y * accel.y + 
+                accel.z * accel.z
+            );
+
+            // Add to history for smoothing
+            accelerationHistory.push(magnitude);
+            if (accelerationHistory.length > STEP_CONFIG.SMOOTHING_WINDOW) {
+                accelerationHistory.shift();
+            }
+
+            // Calculate smoothed magnitude
+            const smoothedMagnitude = accelerationHistory.reduce((a, b) => a + b, 0) / accelerationHistory.length;
+
+            // Detect step using peak detection
+            detectStep(smoothedMagnitude);
+
+            // Update walking state
+            const now = Date.now();
+            if (now - lastStepTime > STEP_CONFIG.MAX_STEP_INTERVAL) {
+                setWalkingState(false);
+            }
+
+            lastMagnitude = smoothedMagnitude;
+        }
+
+        function detectStep(currentMagnitude) {
+            const now = Date.now();
+            
+            // Check if enough time has passed since last step
+            if (now - lastStepTime < STEP_CONFIG.MIN_STEP_INTERVAL) {
+                return;
+            }
+
+            // Detect peak: current magnitude is above threshold and decreasing
+            if (currentMagnitude > STEP_CONFIG.THRESHOLD && 
+                currentMagnitude > lastMagnitude && 
+                !peakDetected) {
+                peakDetected = true;
+            }
+
+            // Detect valley after peak: magnitude decreases below threshold
+            if (peakDetected && currentMagnitude < lastMagnitude) {
+                // Step detected!
+                totalSteps++;
+                lastStepTime = now;
+                peakDetected = false;
+                
+                // Update UI
+                totalStepsSpan.textContent = totalSteps;
+                setWalkingState(true);
+                
+                // Rotate puzzle layer
+                const rotationDelta = STEP_CONFIG.ROTATION_PER_STEP;
+                puzzleContainer.rotateCurrentLayer(rotationDelta);
+                
+                // Small vibration feedback
+                StakcoUtils.vibrate([10]);
+                
+                console.log(`Step detected! Total: ${totalSteps}`);
+            }
+        }
+
+        function setWalkingState(walking) {
+            if (walking !== isWalking) {
+                isWalking = walking;
+                if (walking) {
+                    walkingIndicator.classList.add('active');
+                } else {
+                    walkingIndicator.classList.remove('active');
+                }
+            }
+        }
+
+        function updateRotationDisplay(rotation) {
+            rotationValueSpan.textContent = `${Math.round(rotation)}°`;
+        }
+
+        function solvePuzzle(layerImages) {
+            console.log('Puzzle solved!');
+            
+            countdown.stop();
+            StakcoUtils.vibrate(StakcoConfig.VIBRATION_PATTERN);
+            
+            // Hide UI elements
+            layerControls.hide();
+            infoPanel.collapse();
+            stepsInfo.classList.remove('show');
+            
+            // Show share button
+            shareButton.show();
+            
+            // Animate to zero
+            setTimeout(() => {
+                puzzleContainer.animateToSolution(StakcoConfig.SOLVE_ANIMATION_DURATION);
+            }, 500);
+        }
+
+        async function handleShare() {
+            const timeToSolve = countdown.getTime();
+            const layerImages = puzzleContainer.getLayerImages();
+            
+            const message = `Solved in ${timeToSolve} with ${totalSteps} steps!`;
+            shareWindow.setAttribute('filename', `stakco-steps-${totalSteps}steps.png`);
+            
+            await shareWindow.open(layerImages, message, true);
+        }
+
+        async function checkPermissionNeeded() {
+            if (typeof DeviceMotionEvent !== 'undefined' && 
+                typeof DeviceMotionEvent.requestPermission === 'function') {
+                permissionPrompt.show();
+            } else {
+                initializeMotion();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
