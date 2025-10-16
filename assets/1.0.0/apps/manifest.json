@@ -8,14 +8,7 @@
       "icon": "fa-solid fa-gamepad",
       "tags": ["classic", "original", "main", "puzzle", "game", "daily"]
     },
-    {
-      "title": "Stakco SMRT",
-      "description": "MRT driven Stakco - Journey through Singapore's rail network while solving intricate puzzles",
-      "url": "https://stakcos.com/mrt",
-      "urlDisplay": "stakcos.com/mrt",
-      "icon": "fa-solid fa-train-subway",
-      "tags": ["mrt", "train", "transit", "subway", "metro", "transport", "singapore"]
-    },
+   
     {
       "title": "Stakco MIDI",
       "description": "MIDI driven Stakco - Create musical compositions while solving puzzles through sound and rhythm",
@@ -70,6 +63,22 @@
       "url": "https://stakcos.com/video",
       "urlDisplay": "stakcos.com/video",
       "icon": "fa-solid fa-hand-pointer",
+      "tags": ["video", "touch", "interactive", "visual", "motion", "media"]
+    },
+    {
+      "title": "Stakco Camera",
+      "description": "Touch-controlled Stakco webcam puzzles with interactive layers",
+      "url": "https://stakcos.com/camera",
+      "urlDisplay": "stakcos.com/camera",
+      "icon": "fa-solid fa-camera",
+      "tags": ["camera", "touch", "interactive", "visual", "motion", "media"]
+    },
+    {
+      "title": "Stakco Walk",
+      "description": "Pedometer-driven Stakco puzzles with step counter controls",
+      "url": "https://stakcos.com/walk",
+      "urlDisplay": "stakcos.com/walk",
+      "icon": "fa-solid fa-shoe-prints",
       "tags": ["video", "touch", "interactive", "visual", "motion", "media"]
     }
   ]

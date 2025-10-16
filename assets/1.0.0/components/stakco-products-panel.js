@@ -3,9 +3,12 @@ class StakcoProductsPanel extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.expanded = false;
+    this.MANIFEST_URL = 'https://stakcos.com/assets/1.0.0/apps/manifest.json';
+    this.products = null;
   }
 
-  connectedCallback() {
+  async connectedCallback() {
+    await this.loadProducts();
     this.render();
     this.setupEventListeners();
   }
@@ -14,8 +17,19 @@ class StakcoProductsPanel extends HTMLElement {
     document.removeEventListener('click', this.outsideClickHandler);
   }
 
+  async loadProducts() {
+    try {
+      const response = await fetch(this.MANIFEST_URL);
+      const data = await response.json();
+      this.products = data.apps || this.getDefaultProducts();
+    } catch (error) {
+      console.error('Failed to load products manifest:', error);
+      this.products = this.getDefaultProducts();
+    }
+  }
+
   render() {
-    const products = this.getProducts();
+    const products = this.products || this.getDefaultProducts();
     
     /* html */
     this.shadowRoot.innerHTML = `
@@ -187,7 +201,7 @@ class StakcoProductsPanel extends HTMLElement {
     `;
   }
 
-  getProducts() {
+  getDefaultProducts() {
     return [
       {
         title: 'Stakco Play',
@@ -195,62 +209,6 @@ class StakcoProductsPanel extends HTMLElement {
         url: 'https://stakcos.com/play',
         urlDisplay: 'stakcos.com/play',
         icon: 'fa-solid fa-gamepad'
-      },
-      {
-        title: 'Stakco SMRT',
-        description: 'MRT driven Stakco - Journey through Singapore\'s rail network while solving intricate puzzles',
-        url: 'https://stakcos.com/mrt',
-        urlDisplay: 'stakcos.com/mrt',
-        icon: 'fa-solid fa-train-subway'
-      },
-      {
-        title: 'Stakco MIDI',
-        description: 'MIDI driven Stakco - Create musical compositions while solving puzzles through sound and rhythm',
-        url: 'https://stakcos.com/midi',
-        urlDisplay: 'stakcos.com/midi',
-        icon: 'fa-solid fa-music'
-      },
-      {
-        title: 'Stakco Clock',
-        description: 'Time-driven Stakco - Solve puzzles synchronized with real-time clock movements and temporal challenges',
-        url: 'https://stakcos.com/clock',
-        urlDisplay: 'stakcos.com/clock',
-        icon: 'fa-solid fa-clock'
-      },
-      {
-        title: 'Stakco Dial',
-        description: 'Surface Dial driven Stakco - Experience tactile puzzle solving with Microsoft Surface Dial\'s precise rotational control',
-        url: 'https://stakcos.com/dial',
-        urlDisplay: 'stakcos.com/dial',
-        icon: 'fa-solid fa-circle-dot'
-      },
-      {
-        title: 'Stakco Azimuth',
-        description: 'Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation',
-        url: 'https://stakcos.com/azimuth',
-        urlDisplay: 'stakcos.com/azimuth',
-        icon: 'fa-solid fa-compass'
-      },
-      {
-        title: 'Stakco Gyro',
-        description: 'Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation',
-        url: 'https://stakcos.com/gyro',
-        urlDisplay: 'stakcos.com/gyro',
-        icon: 'fa-solid fa-globe'
-      },
-      {
-        title: 'Stakco VOC',
-        description: 'Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation',
-        url: 'https://stakcos.com/kiwrious/voc',
-        urlDisplay: 'stakcos.com/kiwrious/voc',
-        icon: 'fa-solid fa-wind'
-      },
-      {
-        title: 'Stakco Video',
-        description: 'Touch-controlled Stakco video puzzles with interactive layers',
-        url: 'https://stakcos.com/video',
-        urlDisplay: 'stakcos.com/video',
-        icon: 'fa-solid fa-hand-pointer'
       }
     ];
   }
