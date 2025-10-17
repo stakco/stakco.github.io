@@ -47,6 +47,10 @@
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-countdown.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
 
+    <!-- Import Stakco Components - Phase 3 -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
@@ -67,6 +71,17 @@
     </script>
 
     <title>Stakco Play</title>
+    
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-countdown.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-orientation-overlay.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
 
     <style>
         /* Apply Stakcos theme variables and override app-specific styles */
@@ -90,131 +105,6 @@
         button {
             outline: none;
             -webkit-tap-highlight-color: transparent;
-        }
-
-        #container {
-            position: relative;
-            width: 90vmin;
-            height: 90vmin;
-            max-width: calc(100vw - 20px);
-            max-height: calc(100vh - 200px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: grab;
-        }
-
-        #container.dragging {
-            cursor: grabbing;
-        }
-
-        .puzzle-layer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            pointer-events: none;
-        }
-
-        .puzzle-layer.active {
-            opacity: 1;
-            z-index: 10;
-        }
-
-        /* Share Window Styles */
-        #share-window {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: var(--text-primary);
-            z-index: 10000;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-
-        #share-window.show {
-            display: flex;
-        }
-
-        #share-container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-            max-width: 80vw;
-            max-height: 60vh;
-            margin-bottom: 30px;
-        }
-
-        .share-puzzle-layer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-        }
-
-        #share-text {
-            background: var(--glass-bg);
-            border: 2px solid var(--primary-color);
-            border-radius: 20px;
-            padding: 20px 30px;
-            color: var(--primary-color);
-            font-family: 'Inter', sans-serif;
-            font-size: 18px;
-            font-weight: 600;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            margin-bottom: 30px;
-            box-shadow: var(--shadow-glow);
-        }
-
-        #share-buttons {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .share-action-button {
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 15px 25px;
-            border-radius: 25px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: 'Inter', sans-serif;
-            transition: all 0.3s ease;
-            box-shadow: var(--shadow-soft);
-        }
-
-        .share-action-button:hover {
-            box-shadow: var(--shadow-glow);
-        }
-
-        .share-action-button.secondary {
-            background: var(--glass-bg);
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-        }
-
-        .share-action-button.secondary:hover {
-            background: rgba(249, 167, 68, 0.1);
         }
 
         #solve-button {
@@ -264,33 +154,6 @@
             }
         }
 
-        #share-button {
-            position: absolute;
-            bottom: 20px;
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            border-radius: 25px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            display: none;
-            box-shadow: var(--shadow-glow);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            text-align: center;
-            font-family: 'Inter', sans-serif;
-        }
-
-        #share-button.show {
-            display: block;
-        }
-
-        #share-button:hover {
-            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
-        }
-
         #replay-button {
             position: absolute;
             bottom: 20px;
@@ -299,15 +162,12 @@
             border: none;
             padding: 15px 20px;
             border-radius: 25px;
-            font-size: 18px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: bold;
             cursor: pointer;
             display: none;
-            box-shadow: var(--shadow-glow);
             transition: all 0.3s ease;
             z-index: 1000;
-            text-align: center;
-            font-family: 'Inter', sans-serif;
         }
 
         #replay-button.show {
@@ -315,6 +175,7 @@
         }
 
         #replay-button:hover {
+            transform: scale(1.05);
             box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
         }
 
@@ -327,25 +188,13 @@
 </head>
 
 <body>
-    <!-- Share Window -->
-    <div id="share-window">
-        <div id="share-container">
-            <!-- Share puzzle layers will be populated here -->
-        </div>
-        <div id="share-text">
-            Solved in 02:30 • First try today!
-        </div>
-    </div>
-
-    <!-- PHASE 2 COMPONENTS -->
+    <!-- Components -->
     <stakco-orientation-overlay></stakco-orientation-overlay>
-
+    
     <stakco-countdown></stakco-countdown>
-
-    <!-- Solve Button -->
+    
     <button id="solve-button">Solve</button>
-
-    <!-- PHASE 1 COMPONENTS -->
+    
     <stakco-info-panel icon="fa-gamepad">
         <p>Drag to rotate selected layer • Align all layers • Share</p>
     </stakco-info-panel>
@@ -358,11 +207,23 @@
 
     <stakco-products-panel></stakco-products-panel>
 
-    <div id="container"></div>
+    <stakco-puzzle-container
+        layers="3"
+        user-id="109949450257686494443"
+        puzzle-id="A2A3_3"
+        tolerance="2">
+    </stakco-puzzle-container>
     
     <stakco-layer-controls layers="3"></stakco-layer-controls>
 
-    <button id="share-button">Share Success!</button>
+    <stakco-share-button label="Share Success!"></stakco-share-button>
+
+    <stakco-share-window 
+        title="Stakco Play"
+        share-url="https://stakcos.com/play/">
+        <div slot="text">Solved in 02:30 • First try today!</div>
+    </stakco-share-window>
+
     <button id="replay-button">Remix and try again</button>
 
     <script type="module">
@@ -376,15 +237,72 @@
             normalizeAngleDelta, 
         } from 'https://stakcos.com/assets/1.0.0/utils.js';
 
-        // Get component references - Phase 1
+        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+
+        // Simple Game Data Manager - Define class FIRST before using it
+        class GameDataManager {
+            constructor() {
+                this.storageKey = 'stakco-play-attempts';
+            }
+
+            loadAttempts(dateKey) {
+                try {
+                    const data = localStorage.getItem(this.storageKey);
+                    if (!data) return { attempts: [], solved: false };
+                    
+                    const allData = JSON.parse(data);
+                    return allData[dateKey] || { attempts: [], solved: false };
+                } catch (error) {
+                    console.error('Error loading attempts:', error);
+                    return { attempts: [], solved: false };
+                }
+            }
+
+            saveAttempt(dateKey, solved, time) {
+                try {
+                    const data = localStorage.getItem(this.storageKey);
+                    const allData = data ? JSON.parse(data) : {};
+                    
+                    if (!allData[dateKey]) {
+                        allData[dateKey] = { attempts: [], solved: false };
+                    }
+                    
+                    allData[dateKey].attempts.push({ time, timestamp: Date.now() });
+                    allData[dateKey].solved = solved;
+                    
+                    localStorage.setItem(this.storageKey, JSON.stringify(allData));
+                } catch (error) {
+                    console.error('Error saving attempt:', error);
+                }
+            }
+
+            generatePerformanceText(dateKey, time) {
+                const data = this.loadAttempts(dateKey);
+                const attemptCount = data.attempts.length;
+                
+                let text = '';
+                if (attemptCount === 1) {
+                    text = 'First try today!';
+                } else {
+                    text = `Attempt ${attemptCount} today`;
+                }
+                
+                return text;
+            }
+        }
+
+        // Get component references
+        const puzzleContainer = document.querySelector('stakco-puzzle-container');
         const infoPanel = document.querySelector('stakco-info-panel');
         const branding = document.querySelector('stakco-branding');
         const productsPanel = document.querySelector('stakco-products-panel');
-
-        // Get component references - Phase 2
         const orientationOverlay = document.querySelector('stakco-orientation-overlay');
         const countdown = document.querySelector('stakco-countdown');
         const layerControls = document.querySelector('stakco-layer-controls');
+        const shareWindow = document.querySelector('stakco-share-window');
+        const shareButton = document.querySelector('stakco-share-button');
+        const solveButton = document.getElementById('solve-button');
+        const replayButton = document.getElementById('replay-button');
 
         // Configuration constants
         const CONFIG = {
@@ -415,17 +333,10 @@
 
         // App state
         let totalLayers = CONFIG.DEFAULT_LAYERS;
-        let currentLayer = 1;
-        let puzzleSolved = false;
+        let firstInteractionOccurred = false;
         let isDragging = false;
         let lastAngle = 0;
-        let imagesLoaded = false;
-        let puzzleLayers = {};
         let performanceText = '';
-        let firstInteractionOccurred = false;
-
-        // Share window state
-        let shareWindowOpen = false;
 
         // Parse URL parameters
         const urlParams = new URLSearchParams(window.location.search);
@@ -443,7 +354,7 @@
         const today = new Date();
         const dateStr = today.toISOString().split('T')[0];
 
-        // Load game data
+        // Load game data - Now GameDataManager is defined above
         const gameManager = new GameDataManager();
 
         // Update branding based on puzzle type
@@ -451,242 +362,6 @@
             branding.updateSubtitle('User Puzzle');
         } else {
             branding.updateSubtitle('Daily Puzzle');
-        }
-
-        // DOM elements (cached)
-        let shareButton, replayButton, container, solveButton, shareWindow, shareContainer, shareText;
-
-        // Share window functions
-        async function openShareWindow() {
-            shareWindowOpen = true;
-            shareWindow.classList.add('show');
-            populateShareWindow();
-            console.log('Share window opened');
-            
-            setTimeout(async () => {
-                try {
-                    const screenshotBlob = await captureShareWindow();
-                    await sharePuzzleWithScreenshot(screenshotBlob);
-                } catch (error) {
-                    console.error('Error executing auto-share:', error);
-                    sharePuzzleTextOnly();
-                } finally {
-                    closeShareWindow();
-                }
-            }, 300);
-        }
-
-        function closeShareWindow() {
-            shareWindowOpen = false;
-            shareWindow.classList.remove('show');
-            console.log('Share window closed');
-        }
-
-        function populateShareWindow() {
-            shareContainer.innerHTML = '';
-
-            for (let i = 1; i <= totalLayers; i++) {
-                const layerDiv = document.createElement('div');
-                layerDiv.id = `share-layer${i}`;
-                layerDiv.className = 'share-puzzle-layer';
-                
-                const mainLayer = document.getElementById(`layer${i}`);
-                if (mainLayer) {
-                    layerDiv.style.backgroundImage = mainLayer.style.backgroundImage;
-                    layerDiv.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-                }
-                
-                shareContainer.appendChild(layerDiv);
-            }
-
-            shareText.textContent = `Solved in ${countdown.getTime()} • ${performanceText}`;
-        }
-
-        async function captureShareWindow() {
-            try {
-                const canvas = await html2canvas(shareWindow, {
-                    backgroundColor: getComputedStyle(document.body).getPropertyValue('--text-primary') || '#000000',
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: false
-                });
-
-                return new Promise((resolve) => {
-                    canvas.toBlob((blob) => {
-                        resolve(blob);
-                    }, 'image/png', 0.9);
-                });
-            } catch (error) {
-                console.error("Error capturing share window screenshot:", error);
-                return null;
-            }
-        }
-
-        function hideCountdown() {
-            if (!countdownActive) return;
-
-            solveButton.classList.add('show');
-            countdownContainer.classList.add('hidden');
-            console.log('Countdown hidden for 3 seconds');
-            
-            if (countdownHideTimeout) {
-                clearTimeout(countdownHideTimeout);
-            }
-            
-            countdownHideTimeout = setTimeout(() => {
-                showCountdown();
-            }, CONFIG.COUNTDOWN_HIDE_DURATION);
-        }
-
-        function showCountdown() {
-            if (!countdownActive) return;
-            
-            countdownContainer.classList.remove('hidden');
-            solveButton.classList.remove('show');
-
-            console.log('Countdown shown again');
-            
-            if (countdownHideTimeout) {
-                clearTimeout(countdownHideTimeout);
-                countdownHideTimeout = null;
-            }
-        }
-
-        function startCountdown() {
-            if (countdownActive || hasUrlParams || orientationBlocked) return;
-
-            countdownActive = true;
-            countdownPaused = false;
-            countdownStartTime = Date.now();
-            pausedElapsedTime = 0;
-
-            countdownContainer.classList.add('show');
-            branding.hide();
-
-            countdownInterval = setInterval(updateCountdownDisplay, 100);
-            console.log('Countdown started');
-        }
-
-        function stopCountdown() {
-            if (!countdownActive) return;
-
-            countdownActive = false;
-            countdownPaused = false;
-            
-            if (countdownInterval) {
-                clearInterval(countdownInterval);
-                countdownInterval = null;
-            }
-            
-            if (countdownHideTimeout) {
-                clearTimeout(countdownHideTimeout);
-                countdownHideTimeout = null;
-            }
-            
-            countdownTimer.style.opacity = '1';
-            countdownContainer.style.borderColor = 'var(--glass-border)';
-            countdownContainer.classList.remove('hidden');
-
-            console.log('Countdown stopped');
-        }
-
-        function updateCountdownDisplay() {
-            if (!countdownActive || countdownPaused || !countdownStartTime) return;
-
-            const elapsed = Date.now() - countdownStartTime;
-            const timeString = formatTime(elapsed);
-            countdownTimer.textContent = timeString;
-
-            const seconds = Math.floor(elapsed / 1000);
-            countdownTimer.className = '';
-            if (seconds < 120) {
-                countdownTimer.classList.add('countdown-green');
-            } else if (seconds < 180) {
-                countdownTimer.classList.add('countdown-yellow');
-            } else if (seconds < 300) {
-                countdownTimer.classList.add('countdown-orange');
-            } else {
-                countdownTimer.classList.add('countdown-red');
-            }
-        }
-
-        function getFinalTime() {
-            if (!countdownStartTime) return '00:00';
-
-            let finalElapsed;
-            if (countdownPaused && pausedElapsedTime > 0) {
-                finalElapsed = pausedElapsedTime;
-            } else {
-                finalElapsed = Date.now() - countdownStartTime;
-            }
-            
-            return formatTime(finalElapsed);
-        }
-
-        function cacheDOMElements() {
-            shareButton = document.getElementById('share-button');
-            replayButton = document.getElementById('replay-button');
-            container = document.getElementById('container');
-            solveButton = document.getElementById('solve-button');
-            shareWindow = document.getElementById('share-window');
-            shareContainer = document.getElementById('share-container');
-            shareText = document.getElementById('share-text');
-        }
-
-        function loadAttempts() {
-            return gameManager.loadAttempts(dateStr);
-        }
-        
-        function saveAttempts(solved, time) {
-            gameManager.saveAttempt(dateStr, solved, time);
-            performanceText = gameManager.generatePerformanceText(dateStr, time);
-            console.log(performanceText);
-        }
-
-        function initApp() {
-            console.log('Initializing Stakco Play Puzzle App...');
-
-            cacheDOMElements();
-            loadAttempts();
-            setupComponentEventListeners();
-
-            const customPuzzle = parseCustomPuzzle();
-            if (customPuzzle) {
-                totalLayers = customPuzzle.noOfLayers;
-                console.log(`Loading custom puzzle: ${customPuzzle.puzzleId} for user: ${customPuzzle.username} with ${totalLayers} layers`);
-                
-                // Update layer controls for custom puzzles
-                layerControls.setAttribute('layers', totalLayers);
-            } else {
-                console.log(`Loading daily puzzle for date: ${dateStr} with ${totalLayers} layers`);
-            }
-
-            setPuzzleLayerInitialRotation();
-            createDynamicElements();
-            loadImages(customPuzzle);
-            setupEventHandlers();
-
-            console.log('App initialized successfully');
-        }
-
-        function setupComponentEventListeners() {
-            // Orientation overlay events
-            orientationOverlay.addEventListener('blocked', () => {
-                if (countdown && countdown.active) {
-                    countdown.pause();
-                }
-            });
-
-            orientationOverlay.addEventListener('unblocked', () => {
-                if (countdown && countdown.paused) {
-                    countdown.resume();
-                }
-            });
-
-            // Layer controls events
-            layerControls.addEventListener('layerchange', (e) => {
-                switchLayer(e.detail.layer);
-            });
         }
 
         function parseCustomPuzzle() {
@@ -702,159 +377,95 @@
             return { username, puzzleId, puzzleIdFull, noOfLayers };
         }
 
-        function setPuzzleLayerInitialRotation() {
-            puzzleLayers = {};
-            
-            const isCustomPuzzle = username && puzzle;
-            
-            if (isCustomPuzzle) {
-                console.log('Using random rotations for custom puzzle');
-                for (let i = 1; i <= totalLayers; i++) {
-                    puzzleLayers[`layer${i}`] = {
-                        rotation: Math.floor(Math.random() * 360)
-                    };
-                }
-            } else {
-                console.log('Using daily deterministic rotations for daily puzzle');
-                const dailyRotations = getDailyRotations();
-                
-                for (let i = 1; i <= totalLayers; i++) {
-                    puzzleLayers[`layer${i}`] = {
-                        rotation: dailyRotations[i - 1]
-                    };
-                }
-                
-                console.log('Today\'s rotations:', dailyRotations.slice(0, totalLayers));
-            }
-        }
+        async function init() {
+            // Prevent zoom on mobile
+            StakcoUtils.preventZoom();
 
-        function createDynamicElements() {
-            container.innerHTML = '';
-
-            for (let i = 1; i <= totalLayers; i++) {
-                const layerDiv = document.createElement('div');
-                layerDiv.id = `layer${i}`;
-                layerDiv.className = `puzzle-layer${i === 1 ? ' active' : ''}`;
-                layerDiv.style.zIndex = totalLayers - i + 1;
-                container.appendChild(layerDiv);
-            }
-        }
-
-        function remixPuzzle() {
-            location.reload();
-        }
-
-        function generateImageUrls(customPuzzle) {
-            const urls = { primary: {}, backup: {} };
-
+            // Parse custom puzzle if provided
+            const customPuzzle = parseCustomPuzzle();
             if (customPuzzle) {
-                for (let i = 1; i <= totalLayers; i++) {
-                    urls.primary[`layer${i}`] =
-                        `${CONFIG.BASE_IMAGE_URL}/${customPuzzle.username}/${customPuzzle.puzzleIdFull}/${customPuzzle.puzzleId}_${i - 1}.png`;
-                }
-
-                for (let i = 1; i <= 3; i++) {
-                    urls.backup[`layer${i}`] =
-                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${i - 1}.png`;
-                }
-            } else {
-                for (let i = 1; i <= totalLayers; i++) {
-                    const imageIndex = i - 1;
-                    urls.primary[`layer${i}`] =
-                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/${dateStr}/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
-                    urls.backup[`layer${i}`] =
-                        `${CONFIG.BASE_IMAGE_URL}/${CONFIG.DEFAULT_USER_ID}/latest/${CONFIG.DEFAULT_PUZZLE_ID}/${CONFIG.DEFAULT_PUZZLE_ID.split('_')[0]}_${imageIndex}.png`;
-                }
+                totalLayers = customPuzzle.noOfLayers;
+                puzzleContainer.setAttribute('layers', totalLayers);
+                puzzleContainer.setAttribute('user-id', customPuzzle.username);
+                puzzleContainer.setAttribute('puzzle-id', customPuzzle.puzzleIdFull);
+                layerControls.setAttribute('layers', totalLayers);
             }
 
-            return urls;
+            setupEventListeners();
+            gameManager.loadAttempts(dateStr);
         }
 
-        async function loadImages(customPuzzle) {
-            const loadingMessage = customPuzzle ? MESSAGES.LOADING_USER : MESSAGES.LOADING_DAILY;
-            infoPanel.setContent(`<p>${loadingMessage}</p>`);
-
-            const imageUrls = generateImageUrls(customPuzzle);
-            let loadedCount = 0;
-
-            for (let i = 1; i <= totalLayers; i++) {
-                const layerKey = `layer${i}`;
-                const layerElement = document.getElementById(layerKey);
-
-                if (!layerElement) continue;
-
-                try {
-                    const primaryUrl = imageUrls.primary[layerKey];
-                    const imageExists = await checkImageExists(primaryUrl);
-
-                    if (imageExists) {
-                        layerElement.style.backgroundImage = `url('${primaryUrl}')`;
-                        console.log(`Loaded image for ${layerKey}: ${primaryUrl}`);
-                    } else {
-                        const backupUrl = imageUrls.backup[layerKey];
-                        if (backupUrl) {
-                            layerElement.style.backgroundImage = `url('${backupUrl}')`;
-                            console.log(`Using backup image for ${layerKey}: ${backupUrl}`);
-                        }
-                    }
-                    loadedCount++;
-                } catch (error) {
-                    console.error(`Error loading ${layerKey}:`, error);
-                    const backupUrl = imageUrls.backup[layerKey];
-                    if (backupUrl) {
-                        layerElement.style.backgroundImage = `url('${backupUrl}')`;
-                        console.log(`Error fallback for ${layerKey}, using backup`);
-                    }
-                    loadedCount++;
-                }
-            }
-
-            applyInitialRotations();
-            infoPanel.setContent(`<p>${MESSAGES.INSTRUCTIONS}</p>`);
-            imagesLoaded = true;
-
-            console.log(`Loaded ${loadedCount}/${totalLayers} images successfully`);
-        }
-
-        function applyInitialRotations() {
-            Object.entries(puzzleLayers).forEach(([layerKey, data]) => {
-                const layerElement = document.getElementById(layerKey);
-                if (layerElement) {
-                    layerElement.style.transform =
-                        `translate(-50%, -50%) rotate(${data.rotation}deg)`;
-                }
+        function setupEventListeners() {
+            // Puzzle container events (like azimuth)
+            puzzleContainer.addEventListener('puzzle-ready', () => {
+                console.log('Puzzle ready');
             });
-        }
 
-        function setupEventHandlers() {
-            container.addEventListener('mousedown', startDrag);
-            document.addEventListener('mousemove', handleDrag);
-            document.addEventListener('mouseup', endDrag);
+            puzzleContainer.addEventListener('layer-switched', (e) => {
+                console.log('Layer switched:', e.detail.layer);
+            });
 
-            container.addEventListener('touchstart', startTouch, { passive: false });
-            document.addEventListener('touchmove', handleTouch, { passive: false });
-            document.addEventListener('touchend', endTouch);
+            puzzleContainer.addEventListener('layer-rotated', (e) => {
+                puzzleContainer.checkAlignment();
+            });
 
+            puzzleContainer.addEventListener('puzzle-solved', (e) => {
+                solvePuzzle(e.detail.layers);
+            });
+
+            // Drag events - attach to puzzle container's internal container
+            setTimeout(() => {
+                const shadowRoot = puzzleContainer.shadowRoot;
+                if (shadowRoot) {
+                    const container = shadowRoot.querySelector('.container');
+                    if (container) {
+                        container.addEventListener('mousedown', startDrag);
+                        document.addEventListener('mousemove', handleDrag);
+                        document.addEventListener('mouseup', endDrag);
+
+                        container.addEventListener('touchstart', startTouch, { passive: false });
+                        document.addEventListener('touchmove', handleTouch, { passive: false });
+                        document.addEventListener('touchend', endTouch);
+
+                        container.addEventListener('wheel', handleScroll, { passive: false });
+                        container.addEventListener('contextmenu', handleRightClick);
+                    }
+                }
+            }, 100);
+
+            // Keyboard controls
             document.addEventListener('keydown', handleKeyboard);
-            container.addEventListener('wheel', handleScroll, { passive: false });
-            container.addEventListener('contextmenu', handleRightClick);
 
-            preventMobileZoom();
+            // Layer controls (like azimuth)
+            layerControls.addEventListener('layerchange', (e) => {
+                puzzleContainer.switchLayer(e.detail.layer);
+            });
 
-            solveButton.addEventListener('click', () => solvePuzzle(true));
-
-            document.addEventListener('keydown', (e) => {
-                if (shareWindowOpen && e.key === 'Escape') {
-                    closeShareWindow();
+            // Orientation overlay events
+            orientationOverlay.addEventListener('blocked', () => {
+                if (countdown && countdown.active) {
+                    countdown.pause();
                 }
             });
 
-            shareButton.addEventListener('click', openShareWindow);
+            orientationOverlay.addEventListener('unblocked', () => {
+                if (countdown && countdown.paused) {
+                    countdown.resume();
+                }
+            });
+
+            // Solve button
+            solveButton.addEventListener('click', () => solvePuzzle(null, true));
+
+            // Replay button
             replayButton.addEventListener('click', remixPuzzle);
+
+            // Share button
+            shareButton.addEventListener('share-clicked', handleShare);
         }
 
         function handleFirstInteraction() {
-            if (!firstInteractionOccurred && !hasUrlParams && !puzzleSolved && !orientationOverlay.isBlocked()) {
+            if (!firstInteractionOccurred && !hasUrlParams && !puzzleContainer.isSolved && !orientationOverlay.isBlocked()) {
                 firstInteractionOccurred = true;
                 countdown.start();
                 branding.hide();
@@ -863,32 +474,43 @@
         }
 
         function startDrag(e) {
-            if (puzzleSolved || orientationOverlay.isBlocked()) return;
+            if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
             e.preventDefault();
             handleFirstInteraction();
             isDragging = true;
-            container.classList.add('dragging');
+            e.target.closest('.container').style.cursor = 'grabbing';
             lastAngle = getAngleFromEvent(e, e.clientX, e.clientY);
         }
 
         function handleDrag(e) {
-            if (!isDragging || puzzleSolved || orientationOverlay.isBlocked()) return;
+            if (!isDragging || puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
             e.preventDefault();
 
             const currentAngle = getAngleFromEvent(e, e.clientX, e.clientY);
-            const deltaAngle = normalizeAngleDelta(currentAngle - lastAngle);
+            let deltaAngle = currentAngle - lastAngle;
+            
+            // Normalize angle delta
+            if (deltaAngle > 180) deltaAngle -= 360;
+            if (deltaAngle < -180) deltaAngle += 360;
 
-            applyRotation(deltaAngle);
+            // Use the same method as azimuth
+            puzzleContainer.rotateCurrentLayer(deltaAngle);
             lastAngle = currentAngle;
         }
 
         function endDrag() {
             isDragging = false;
-            container.classList.remove('dragging');
+            const shadowRoot = puzzleContainer.shadowRoot;
+            if (shadowRoot) {
+                const container = shadowRoot.querySelector('.container');
+                if (container) {
+                    container.style.cursor = 'grab';
+                }
+            }
         }
 
         function startTouch(e) {
-            if (puzzleSolved || orientationOverlay.isBlocked()) return;
+            if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
             e.preventDefault();
             handleFirstInteraction();
             isDragging = true;
@@ -897,14 +519,18 @@
         }
 
         function handleTouch(e) {
-            if (!isDragging || puzzleSolved || orientationOverlay.isBlocked()) return;
+            if (!isDragging || puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
             e.preventDefault();
 
             const touch = e.touches[0];
             const currentAngle = getAngleFromEvent(e, touch.clientX, touch.clientY);
-            const deltaAngle = normalizeAngleDelta(currentAngle - lastAngle);
+            let deltaAngle = currentAngle - lastAngle;
+            
+            // Normalize angle delta
+            if (deltaAngle > 180) deltaAngle -= 360;
+            if (deltaAngle < -180) deltaAngle += 360;
 
-            applyRotation(deltaAngle);
+            puzzleContainer.rotateCurrentLayer(deltaAngle);
             lastAngle = currentAngle;
         }
 
@@ -913,6 +539,12 @@
         }
 
         function getAngleFromEvent(e, clientX, clientY) {
+            const shadowRoot = puzzleContainer.shadowRoot;
+            if (!shadowRoot) return 0;
+            
+            const container = shadowRoot.querySelector('.container');
+            if (!container) return 0;
+            
             const rect = container.getBoundingClientRect();
             const centerX = rect.left + rect.width / 2;
             const centerY = rect.top + rect.height / 2;
@@ -920,18 +552,23 @@
         }
 
         function handleKeyboard(e) {
-            if (puzzleSolved || orientationOverlay.isBlocked()) return;
+            if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
 
             if (!firstInteractionOccurred && (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
                 handleFirstInteraction();
             }
 
             const keyActions = {
-                ' ': () => switchLayer((currentLayer % totalLayers) + 1),
-                'ArrowLeft': () => applyRotation(-CONFIG.ROTATION_STEP_LARGE),
-                'ArrowRight': () => applyRotation(CONFIG.ROTATION_STEP_LARGE),
-                'ArrowUp': () => applyRotation(CONFIG.ROTATION_STEP_SMALL),
-                'ArrowDown': () => applyRotation(-CONFIG.ROTATION_STEP_SMALL)
+                ' ': () => {
+                    const currentLayer = puzzleContainer.currentLayer;
+                    const nextLayer = (currentLayer % totalLayers) + 1;
+                    puzzleContainer.switchLayer(nextLayer);
+                    layerControls.setActiveLayer(nextLayer); // Sync UI
+                },
+                'ArrowLeft': () => puzzleContainer.rotateCurrentLayer(-CONFIG.ROTATION_STEP_LARGE),
+                'ArrowRight': () => puzzleContainer.rotateCurrentLayer(CONFIG.ROTATION_STEP_LARGE),
+                'ArrowUp': () => puzzleContainer.rotateCurrentLayer(CONFIG.ROTATION_STEP_SMALL),
+                'ArrowDown': () => puzzleContainer.rotateCurrentLayer(-CONFIG.ROTATION_STEP_SMALL)
             };
 
             if (keyActions[e.key]) {
@@ -940,77 +577,32 @@
             } else if (!isNaN(e.key)) {
                 const num = parseInt(e.key);
                 if (num >= 1 && num <= totalLayers) {
-                    switchLayer(num);
+                    puzzleContainer.switchLayer(num);
+                    layerControls.setActiveLayer(num); // Sync UI
                 }
             }
         }
 
         function handleScroll(e) {
-            if (puzzleSolved || orientationOverlay.isBlocked()) return;
+            if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
             e.preventDefault();
             handleFirstInteraction();
             const delta = e.deltaY > 0 ? CONFIG.ROTATION_STEP_SMALL : -CONFIG.ROTATION_STEP_SMALL;
-            applyRotation(delta);
+            puzzleContainer.rotateCurrentLayer(delta);
         }
 
         function handleRightClick(e) {
-            if (puzzleSolved || orientationOverlay.isBlocked()) return;
+            if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
             e.preventDefault();
-            switchLayer((currentLayer % totalLayers) + 1);
+            const currentLayer = puzzleContainer.currentLayer;
+            const nextLayer = (currentLayer % totalLayers) + 1;
+            puzzleContainer.switchLayer(nextLayer);
+            layerControls.setActiveLayer(nextLayer); // Sync UI
         }
 
-        function applyRotation(deltaAngle) {
-            const layerKey = `layer${currentLayer}`;
-            puzzleLayers[layerKey].rotation += deltaAngle;
-
-            const layerElement = document.getElementById(layerKey);
-            if (layerElement) {
-                layerElement.style.transform =
-                    `translate(-50%, -50%) rotate(${puzzleLayers[layerKey].rotation}deg)`;
-            }
-
-            checkSolution();
-        }
-
-        function switchLayer(layerNumber) {
-            if (puzzleSolved || layerNumber === currentLayer || orientationOverlay.isBlocked()) return;
-
-            // Update puzzle layer visuals
-            document.querySelectorAll('.puzzle-layer').forEach(el => {
-                el.classList.remove('active');
-            });
-
-            const targetLayer = document.getElementById(`layer${layerNumber}`);
-            if (targetLayer) targetLayer.classList.add('active');
-
-            currentLayer = layerNumber;
-            
-            // Update layer controls component
-            layerControls.setActiveLayer(layerNumber);
-            
-            console.log(`Switched to layer ${layerNumber}`);
-        }
-
-        function checkSolution() {
-            if (puzzleSolved) return;
-
-            const rotations = Object.values(puzzleLayers).map(layer =>
-                ((layer.rotation % 360) + 360) % 360
-            );
-
-            const allAligned = rotations.every(rotation =>
-                Math.abs(rotation - rotations[0]) <= CONFIG.ROTATION_TOLERANCE
-            );
-
-            if (allAligned) {
-                solvePuzzle();
-            }
-        }
-
-        function solvePuzzle(simulate = false) {
-            puzzleSolved = true;
+        function solvePuzzle(layerImages, simulate = false) {
+            console.log('Puzzle solved!');
             const finalTime = countdown.getTime();
-            console.log(`Puzzle solved in ${finalTime}!`);
 
             countdown.stop();
 
@@ -1020,127 +612,47 @@
 
             layerControls.hide();
             infoPanel.collapse();
-            solveButton.classList.remove('show');
+            solveButton.style.display = 'none';
 
-            if(!simulate){
-                shareButton.textContent = `Share Success!`;
-                shareButton.classList.add('show');
-                saveAttempts(true, finalTime);          
-            } else{
+            if (!simulate) {
+                shareButton.show();
+                gameManager.saveAttempt(dateStr, true, finalTime);
+                performanceText = gameManager.generatePerformanceText(dateStr, finalTime);
+                
+                // Update share window text
+                const shareText = `Solved in ${finalTime} • ${performanceText}`;
+                shareWindow.querySelector('[slot="text"]').textContent = shareText;
+            } else {
                 replayButton.classList.add('show');
             }
-
-            setTimeout(rotateAllLayersToZero, CONFIG.SOLVE_ANIMATION_DELAY);
         }
 
-        function rotateAllLayersToZero() {
-            Object.keys(puzzleLayers).forEach(layerKey => {
-                const layerElement = document.getElementById(layerKey);
-                if (layerElement) {
-                    let currentRotation = puzzleLayers[layerKey].rotation || 0;
-
-                    if (currentRotation > 0) {
-                        currentRotation -= 360;
-                    }
-
-                    puzzleLayers[layerKey].rotation = currentRotation;
-                    layerElement.style.transform = `translate(-50%, -50%) rotate(${currentRotation}deg)`;
-
-                    requestAnimationFrame(() => {
-                        layerElement.style.transition = `transform ${CONFIG.SOLVE_ANIMATION_DURATION}ms ease-out`;
-                        layerElement.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-                    });
-                    puzzleLayers[layerKey].rotation = 0;
-                }
-            });
+        function remixPuzzle() {
+            location.reload();
         }
 
-        async function sharePuzzleWithScreenshot(screenshotBlob = null) {
-            const shareUrlWithParams = CONFIG.SHARE_URL + shareParams;
+        function handleShare() {
             const finalTime = countdown.getTime();
+            const shareText = performanceText || `Solved in ${finalTime}`;
             
-            const shareData = {
-                title: MESSAGES.SHARE_TITLE,
-                text: `${MESSAGES.SHARE_TEXT}; Time: ${finalTime}; ${performanceText}`,
-                url: shareUrlWithParams
-            };
-            
-            if (screenshotBlob) {
-                shareData.files = [new File([screenshotBlob], `stakco-puzzle-${finalTime.replace(':', '')}.png`, { 
-                    type: 'image/png' 
-                })];
-            }
-            
-            if (navigator.share && navigator.canShare && screenshotBlob && navigator.canShare(shareData)) {
-                try {
-                    await navigator.share(shareData);
-                    console.log('Successful share with screenshot');
-                    closeShareWindow();
-                    return;
-                } catch (error) {
-                    console.log('Error sharing with screenshot, falling back:', error);
-                }
-            }
-            
-            if (screenshotBlob && navigator.clipboard && navigator.clipboard.write) {
-                try {
-                    await navigator.clipboard.write([
-                        new ClipboardItem({
-                            'image/png': screenshotBlob,
-                            'text/plain': `${shareData.text} ${shareData.url}`
-                        })
-                    ]);
-                    alert('Screenshot and text copied to clipboard!');
-                    closeShareWindow();
-                    return;
-                } catch (error) {
-                    console.log('Error copying to clipboard, using text fallback:', error);
-                }
-            }
-            
-            sharePuzzleTextOnly(shareData);
-        }
-
-        function sharePuzzleTextOnly(shareData = null) {
-            if (!shareData) {
-                const shareUrlWithParams = CONFIG.SHARE_URL + shareParams;
-                const finalTime = countdown.getTime();
-                shareData = {
-                    title: MESSAGES.SHARE_TITLE,
-                    text: `${MESSAGES.SHARE_TEXT}; Time: ${finalTime}; ${performanceText}`,
-                    url: shareUrlWithParams
-                };
-            }
-
-            if (navigator.share) {
-                navigator.share({
-                    title: shareData.title,
-                    text: shareData.text,
-                    url: shareData.url
-                }).then(() => {
-                    console.log('Successful text-only share');
-                    closeShareWindow();
-                }).catch(error => {
-                    console.log('Error with text share:', error);
-                    textOnlyFallback(shareData);
+            // Get layer images from puzzle container
+            const layerImages = [];
+            if (puzzleContainer.puzzleLayers) {
+                Object.keys(puzzleContainer.puzzleLayers).forEach(key => {
+                    if (puzzleContainer.puzzleLayers[key].url) {
+                        layerImages.push(puzzleContainer.puzzleLayers[key].url);
+                    }
                 });
-            } else {
-                textOnlyFallback(shareData);
             }
+            
+            const shareUrlWithParams = CONFIG.SHARE_URL + shareParams;
+            shareWindow.setAttribute('share-url', shareUrlWithParams);
+            shareWindow.setAttribute('filename', `stakco-play-${finalTime.replace(':', '')}.png`);
+            shareWindow.open(layerImages, shareText, true);
         }
 
-        function textOnlyFallback(shareData) {
-            const textArea = document.createElement('textarea');
-            textArea.value = `${shareData.text} ${shareData.url}`;
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            alert(`Copied to clipboard: ${shareData.text} ${shareData.url}`);
-            closeShareWindow();
-        }
-
-        document.addEventListener('DOMContentLoaded', initApp);
+        // Initialize the app
+        init();
     </script>
 </body>
 
