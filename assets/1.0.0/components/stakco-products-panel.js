@@ -17,6 +17,16 @@ class StakcoProductsPanel extends HTMLElement {
     document.removeEventListener('click', this.outsideClickHandler);
   }
 
+  getParentUrlParams() {
+    try {
+      const parentUrl = new URL(window.location.href);
+      return parentUrl.search;
+    } catch (error) {
+      console.error('Failed to get parent URL params:', error);
+      return '';
+    }
+  }
+
   async loadProducts() {
     try {
       const response = await fetch(this.MANIFEST_URL);
@@ -30,6 +40,7 @@ class StakcoProductsPanel extends HTMLElement {
 
   render() {
     const products = this.products || this.getDefaultProducts();
+    const urlParams = this.getParentUrlParams();
     
     /* html */
     this.shadowRoot.innerHTML = `
@@ -185,8 +196,10 @@ class StakcoProductsPanel extends HTMLElement {
           <h3>Explore Stakco Apps</h3>
           <p>Same puzzle, endless experiences</p>
           <div class="products-grid">
-            ${products.map(product => `
-              <a href="${product.url}" class="product-card" target="_blank">
+            ${products.map(product => {
+              const productUrl = product.url + urlParams;
+              return `
+              <a href="${productUrl}" class="product-card" target="_blank">
                 <div class="product-thumbnail">
                   <i class="${product.icon}"></i>
                 </div>
@@ -194,7 +207,8 @@ class StakcoProductsPanel extends HTMLElement {
                 <div class="product-description">${product.description}</div>
                 <div class="product-url">${product.urlDisplay}</div>
               </a>
-            `).join('')}
+            `;
+            }).join('')}
           </div>
         </div>
       </div>
