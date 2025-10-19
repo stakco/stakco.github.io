@@ -1,15 +1,23 @@
 export const StakcoUtils = {
   // Image loading utilities
-  loadPuzzleImages(userId, puzzleId, date = new Date()) {
+  loadPuzzleImages(userId, puzzleId, puzzleType, noOfLayers = 3) {
     const dateStr = date.toISOString().split('T')[0];
     const baseUrl = 'https://storage.googleapis.com/stakco-images';
     const puzzlePrefix = puzzleId.split('_')[0];
-    
-    return {
-      layer1: `${baseUrl}/${userId}/${dateStr}/${puzzleId}/${puzzlePrefix}_0.png`,
-      layer2: `${baseUrl}/${userId}/${dateStr}/${puzzleId}/${puzzlePrefix}_1.png`,
-      layer3: `${baseUrl}/${userId}/${dateStr}/${puzzleId}/${puzzlePrefix}_2.png`
-    };
+
+    // Base path conditionally includes date for non-user puzzles
+    const basePath =
+      puzzleType === 'play'
+        ? `${baseUrl}/${userId}/${dateStr}/${puzzleId}`
+        : `${baseUrl}/${userId}/${puzzleId}`;
+
+    const layers = {};
+
+    for (let i = 0; i < noOfLayers; i++) {
+      layers[`layer${i + 1}`] = `${basePath}/${puzzlePrefix}_${i}.png`;
+    }
+
+    return layers;
   },
 
   // Rotation utilities

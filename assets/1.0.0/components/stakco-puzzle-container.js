@@ -207,6 +207,7 @@ class StakcoPuzzleContainer extends HTMLElement {
     async initialize() {
         const userId = this.getAttribute('user-id');
         const puzzleId = this.getAttribute('puzzle-id');
+        const puzzleType = this.getAttribute('puzzle-type') || 'play';
         const layers = parseInt(this.getAttribute('layers')) || 3;
 
         if (!userId || !puzzleId) {
@@ -225,7 +226,7 @@ class StakcoPuzzleContainer extends HTMLElement {
         }
 
         // Load images
-        await this.loadPuzzleImages(userId, puzzleId);
+        await this.loadPuzzleImages(userId, puzzleId, puzzleType, layers);
 
         // Apply initial rotations
         this.applyInitialRotations();
@@ -240,8 +241,8 @@ class StakcoPuzzleContainer extends HTMLElement {
         }));
     }
 
-    async loadPuzzleImages(userId, puzzleId) {
-        const images = StakcoUtils.loadPuzzleImages(userId, puzzleId);
+    async loadPuzzleImages(userId, puzzleId, puzzleType, layers) {
+        const images = StakcoUtils.loadPuzzleImages(userId, puzzleId, puzzleType, layers);
         
         Object.keys(this.puzzleLayers).forEach((layerKey, index) => {
             const url = images[layerKey];
