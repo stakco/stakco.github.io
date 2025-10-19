@@ -392,6 +392,7 @@ class StakcoPuzzleContainer extends HTMLElement {
 
         if (aligned) {
             this.isSolved = true;
+            animateToSolution();
             this.dispatchEvent(new CustomEvent('puzzle-solved', {
                 detail: { 
                     rotations: this.puzzleLayers,
