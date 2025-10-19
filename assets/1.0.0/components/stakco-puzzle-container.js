@@ -25,7 +25,7 @@ class StakcoPuzzleContainer extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['layers', 'user-id', 'puzzle-id', 'tolerance', 'highlight-all'];
+        return ['layers', 'user-id', 'puzzle-id', 'puzzle-type', 'tolerance', 'highlight-all'];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
