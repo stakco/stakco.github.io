@@ -405,19 +405,41 @@ class StakcoPuzzleContainer extends HTMLElement {
     }
 
     animateToSolution(duration = 4000) {
-        Object.keys(this.puzzleLayers).forEach(layerKey => {
+        // PHASE 1: Align all layers to a common rotation first
+        const layerKeys = Object.keys(this.puzzleLayers);
+        const referenceRotation = this.puzzleLayers[layerKeys[0]].rotation; // or compute average
+
+        layerKeys.forEach(layerKey => {
             const element = this.shadowRoot.getElementById(layerKey);
             if (element) {
-                element.classList.add('solving');
-                element.style.transform = 'translate(-50%, -50%) rotate(0deg)';
-                this.puzzleLayers[layerKey].rotation = 0;
+                element.classList.add('aligning');
+                element.style.transition = 'transform 0.4s ease-out'; // quick smooth align
+                element.style.transform = `translate(-50%, -50%) rotate(${referenceRotation}deg)`;
+                this.puzzleLayers[layerKey].rotation = referenceRotation;
             }
         });
 
+        // Wait 0.5s after alignment finishes
         setTimeout(() => {
-            this.dispatchEvent(new CustomEvent('animation-complete'));
-        }, duration);
+            // PHASE 2: Now rotate all to zero
+            layerKeys.forEach(layerKey => {
+                const element = this.shadowRoot.getElementById(layerKey);
+                if (element) {
+                    element.classList.remove('aligning');
+                    element.classList.add('solving');
+                    element.style.transition = `transform ${duration}ms ease-in-out`; // main animation
+                    element.style.transform = 'translate(-50%, -50%) rotate(0deg)';
+                    this.puzzleLayers[layerKey].rotation = 0;
+                }
+            });
+
+            // Complete after full duration
+            setTimeout(() => {
+                this.dispatchEvent(new CustomEvent('animation-complete'));
+            }, duration);
+        }, 400 + 500); // 0.4s align + 0.5s wait
     }
+
 
     getCurrentLayer() {
         return this.currentLayer;
