@@ -1,6 +1,7 @@
 export const StakcoUtils = {
   // Image loading utilities
   loadPuzzleImages(userId, puzzleId, puzzleType, noOfLayers = 3) {
+    const date = new Date();
     const dateStr = date.toISOString().split('T')[0];
     const baseUrl = 'https://storage.googleapis.com/stakco-images';
     const puzzlePrefix = puzzleId.split('_')[0];
