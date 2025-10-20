@@ -1,8 +1,7 @@
 /**
  * Stakco Puzzle Container Component
  * Manages puzzle layers, rotations, and animations with Background and Top layer support
- * Usage: <stakco-puzzle-container layers="3" puzzle-type="play" tolerance="2"></stakco-puzzle-container>
- * Note: user-id and puzzle-id are now read from URL parameters (?userId=...&puzzleId=...)
+ * Usage: <stakco-puzzle-container layers="3" user-id="..." puzzle-id="..." highlight-all="true"></stakco-puzzle-container>
  */
 
 import { StakcoUtils } from './stakco-utils.js';
@@ -18,10 +17,6 @@ class StakcoPuzzleContainer extends HTMLElement {
         this.backgroundLayer = { rotation: 0, url: null, customImage: null };
         this.topLayer = { rotation: 0, url: null, customImage: null };
         this.isSolved = false;
-        
-        // Default values
-        this.DEFAULT_USER_ID = '109949450257686494443';
-        this.DEFAULT_PUZZLE_ID = 'A2A3_3';
     }
 
     connectedCallback() {
@@ -30,7 +25,7 @@ class StakcoPuzzleContainer extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['layers', 'puzzle-type', 'tolerance', 'highlight-all'];
+        return ['layers', 'user-id', 'puzzle-id', 'puzzle-type', 'tolerance', 'highlight-all'];
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
@@ -40,22 +35,6 @@ class StakcoPuzzleContainer extends HTMLElement {
             } else {
                 this.initialize();
             }
-        }
-    }
-
-    getUrlParams() {
-        try {
-            const params = new URLSearchParams(window.location.search);
-            return {
-                userId: params.get('username') || params.get('user-id') || this.DEFAULT_USER_ID,
-                puzzleId: params.get('puzzle') || params.get('puzzle-id') || this.DEFAULT_PUZZLE_ID
-            };
-        } catch (error) {
-            console.error('Failed to parse URL params:', error);
-            return {
-                userId: this.DEFAULT_USER_ID,
-                puzzleId: this.DEFAULT_PUZZLE_ID
-            };
         }
     }
 
@@ -226,13 +205,15 @@ class StakcoPuzzleContainer extends HTMLElement {
     }
 
     async initialize() {
-        // Get userId and puzzleId from URL params with fallback to defaults
-        const { userId, puzzleId } = this.getUrlParams();
-        
+        const userId = this.getAttribute('user-id');
+        const puzzleId = this.getAttribute('puzzle-id');
         const puzzleType = this.getAttribute('puzzle-type') || 'play';
         const layers = parseInt(this.getAttribute('layers')) || 3;
 
-        console.log(`Initializing puzzle - User: ${userId}, Puzzle: ${puzzleId}, Type: ${puzzleType}`);
+        if (!userId || !puzzleId) {
+            console.error('StakcoPuzzleContainer: user-id and puzzle-id are required');
+            return;
+        }
 
         // Initialize puzzle layers
         this.puzzleLayers = {};
@@ -254,21 +235,17 @@ class StakcoPuzzleContainer extends HTMLElement {
         this.dispatchEvent(new CustomEvent('puzzle-ready', {
             detail: { 
                 layers: this.puzzleLayers,
-                userId: userId,
-                puzzleId: puzzleId
+                background: this.backgroundLayer,
+                top: this.topLayer
             }
         }));
     }
 
     async loadPuzzleImages(userId, puzzleId, puzzleType, layers) {
-        const imagePromises = Array.from({ length: layers }, (_, i) => 
-            StakcoUtils.getPuzzleImageUrl(userId, puzzleId, puzzleType, i + 1)
-        );
-
-        const urls = await Promise.all(imagePromises);
-
-        urls.forEach((url, i) => {
-            const layerKey = `layer${i + 1}`;
+        const images = StakcoUtils.loadPuzzleImages(userId, puzzleId, puzzleType, layers);
+        
+        Object.keys(this.puzzleLayers).forEach((layerKey, index) => {
+            const url = images[layerKey];
             this.puzzleLayers[layerKey].url = url;
             
             const element = this.shadowRoot.getElementById(layerKey);
@@ -499,15 +476,6 @@ class StakcoPuzzleContainer extends HTMLElement {
 
     setSolved(value) {
         this.isSolved = value;
-    }
-    
-    // Getter methods for current userId and puzzleId
-    getUserId() {
-        return this.getUrlParams().userId;
-    }
-    
-    getPuzzleId() {
-        return this.getUrlParams().puzzleId;
     }
 }
 
