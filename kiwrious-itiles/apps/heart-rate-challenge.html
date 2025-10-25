@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heart Rate Challenge - Kiwrious + iTiles</title>
+    <link rel="stylesheet" href="../styles/shared.css">
+    <style>
+        .zone-display {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .zone-box {
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .zone-box.active {
+            border-color: white;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+            transform: scale(1.1);
+        }
+        
+        .zone-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .zone-range {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .challenge-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+        
+        .challenge-timer {
+            font-size: 3rem;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .exercise-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .exercise-btn {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .exercise-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .exercise-btn.active {
+            background: white;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-button">← Back to Apps</a>
+        
+        <div class="app-header">
+            <h1>❤️ Heart Rate Challenge</h1>
+            <p>Exercise game with real-time heart rate zone tracking</p>
+        </div>
+
+        <!-- Connection Card -->
+        <div class="card">
+            <h2>Connection Status</h2>
+            <div class="status-bar">
+                <div class="status-indicator">
+                    <div class="status-dot" id="kiwriousStatus"></div>
+                    <span>Kiwrious Cardio Sensor</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot" id="itilesStatus"></div>
+                    <span>iTiles Feedback System</span>
+                </div>
+            </div>
+            <div class="button-group">
+                <button id="connectBtn">🔌 Connect All Devices</button>
+                <button id="disconnectBtn" disabled>❌ Disconnect</button>
+            </div>
+        </div>
+
+        <!-- User Setup -->
+        <div class="card">
+            <h2>User Profile</h2>
+            <div class="control-group">
+                <label>Age (for target heart rate calculation)</label>
+                <input type="number" id="userAge" min="10" max="100" value="25">
+            </div>
+            <div class="control-group">
+                <label>Resting Heart Rate (optional)</label>
+                <input type="number" id="restingHR" min="40" max="100" value="70" placeholder="Leave blank to auto-detect">
+            </div>
+            <button id="calculateZonesBtn">Calculate My Heart Rate Zones</button>
+        </div>
+
+        <!-- Heart Rate Display -->
+        <div class="card">
+            <h2>Current Heart Rate</h2>
+            <div class="sensor-display">
+                <div class="sensor-label">Live Heart Rate</div>
+                <div class="sensor-value">
+                    <span id="hrValue">--</span>
+                    <span class="sensor-unit">BPM</span>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <span id="hrZone" class="badge" style="font-size: 1.2rem;">--</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Heart Rate Zones -->
+        <div class="card" style="background: #1e1e1e; color: white;">
+            <h2>Heart Rate Zones</h2>
+            <div class="zone-display" id="zoneDisplay">
+                <div class="zone-box" style="background: #0066ff;" data-zone="rest">
+                    <div class="zone-name">Rest</div>
+                    <div class="zone-range" id="restRange">40-60 BPM</div>
+                </div>
+                <div class="zone-box" style="background: #00cc66;" data-zone="fatburn">
+                    <div class="zone-name">Fat Burn</div>
+                    <div class="zone-range" id="fatburnRange">60-70%</div>
+                </div>
+                <div class="zone-box" style="background: #ffcc00;" data-zone="cardio">
+                    <div class="zone-name">Cardio</div>
+                    <div class="zone-range" id="cardioRange">70-80%</div>
+                </div>
+                <div class="zone-box" style="background: #ff6600;" data-zone="peak">
+                    <div class="zone-name">Peak</div>
+                    <div class="zone-range" id="peakRange">80-90%</div>
+                </div>
+                <div class="zone-box" style="background: #ff0000;" data-zone="max">
+                    <div class="zone-name">Maximum</div>
+                    <div class="zone-range" id="maxRange">90%+</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Challenge Mode -->
+        <div class="card">
+            <h2>Challenge Mode</h2>
+            <div class="challenge-card">
+                <h3 style="margin-bottom: 15px;">Current Challenge</h3>
+                <div id="challengeDescription">Touch a tile below to select an exercise!</div>
+                <div class="challenge-timer" id="challengeTimer">--:--</div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <span id="challengeStatus" class="badge">Ready</span>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 20px;">Select Exercise:</h3>
+            <div class="exercise-list">
+                <button class="exercise-btn" data-exercise="jumping-jacks" data-target="cardio">
+                    🤸 Jumping Jacks<br>(Cardio Zone)
+                </button>
+                <button class="exercise-btn" data-exercise="high-knees" data-target="peak">
+                    🦵 High Knees<br>(Peak Zone)
+                </button>
+                <button class="exercise-btn" data-exercise="burpees" data-target="peak">
+                    💪 Burpees<br>(Peak Zone)
+                </button>
+                <button class="exercise-btn" data-exercise="squats" data-target="cardio">
+                    🏋️ Squats<br>(Cardio Zone)
+                </button>
+                <button class="exercise-btn" data-exercise="walking" data-target="fatburn">
+                    🚶 Walking<br>(Fat Burn)
+                </button>
+                <button class="exercise-btn" data-exercise="rest" data-target="rest">
+                    😌 Rest<br>(Recovery)
+                </button>
+            </div>
+            
+            <div class="button-group" style="margin-top: 20px;">
+                <button id="startChallengeBtn" disabled class="success">▶️ Start Challenge</button>
+                <button id="stopChallengeBtn" disabled class="danger">⏹️ Stop</button>
+            </div>
+        </div>
+
+        <!-- Workout Statistics -->
+        <div class="card">
+            <h2>Workout Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="avgHR">--</div>
+                    <div class="stat-label">Avg Heart Rate</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="peakHR">--</div>
+                    <div class="stat-label">Peak Heart Rate</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="workoutTime">0:00</div>
+                    <div class="stat-label">Workout Time</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="zonePoints">0</div>
+                    <div class="stat-label">Zone Points</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Log -->
+        <div class="card">
+            <h2>Workout Log</h2>
+            <div class="log-container" id="logContainer"></div>
+            <button id="clearLogBtn" style="margin-top: 10px;">🗑️ Clear Log</button>
+        </div>
+    </div>
+
+    <script src="../js/shared-utils.js"></script>
+    <script type="module">
+        const app = new AppController();
+        
+        // UI Elements
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const startChallengeBtn = document.getElementById('startChallengeBtn');
+        const stopChallengeBtn = document.getElementById('stopChallengeBtn');
+        const calculateZonesBtn = document.getElementById('calculateZonesBtn');
+        const hrValue = document.getElementById('hrValue');
+        const hrZone = document.getElementById('hrZone');
+        const userAge = document.getElementById('userAge');
+        const restingHR = document.getElementById('restingHR');
+        const challengeTimer = document.getElementById('challengeTimer');
+        const challengeStatus = document.getElementById('challengeStatus');
+        const challengeDescription = document.getElementById('challengeDescription');
+        const clearLogBtn = document.getElementById('clearLogBtn');
+        
+        // Stats
+        const avgHREl = document.getElementById('avgHR');
+        const peakHREl = document.getElementById('peakHR');
+        const workoutTimeEl = document.getElementById('workoutTime');
+        const zonePointsEl = document.getElementById('zonePoints');
+        
+        let monitoring = false;
+        let challengeActive = false;
+        let currentExercise = null;
+        let targetZone = null;
+        let challengeStartTime = null;
+        let workoutStartTime = null;
+        let timerInterval = null;
+        
+        let heartRateZones = {
+            maxHR: 195,
+            rest: { min: 40, max: 60 },
+            fatburn: { min: 117, max: 136 },
+            cardio: { min: 136, max: 156 },
+            peak: { min: 156, max: 175 },
+            max: { min: 175, max: 195 }
+        };
+        
+        let stats = {
+            sum: 0,
+            count: 0,
+            peak: 0,
+            points: 0,
+            autoRestingHR: []
+        };
+        
+        // Setup logging
+        app.onLog(setupLogDisplay('logContainer'));
+        
+        // Calculate zones
+        calculateZonesBtn.addEventListener('click', () => {
+            calculateHeartRateZones();
+        });
+        
+        function calculateHeartRateZones() {
+            const age = parseInt(userAge.value);
+            const maxHR = 220 - age;
+            const restHR = parseInt(restingHR.value) || 70;
+            
+            heartRateZones.maxHR = maxHR;
+            heartRateZones.rest = { min: restHR - 10, max: restHR + 10 };
+            heartRateZones.fatburn = { 
+                min: Math.round(restHR + 0.6 * (maxHR - restHR)), 
+                max: Math.round(restHR + 0.7 * (maxHR - restHR)) 
+            };
+            heartRateZones.cardio = { 
+                min: Math.round(restHR + 0.7 * (maxHR - restHR)), 
+                max: Math.round(restHR + 0.8 * (maxHR - restHR)) 
+            };
+            heartRateZones.peak = { 
+                min: Math.round(restHR + 0.8 * (maxHR - restHR)), 
+                max: Math.round(restHR + 0.9 * (maxHR - restHR)) 
+            };
+            heartRateZones.max = { 
+                min: Math.round(restHR + 0.9 * (maxHR - restHR)), 
+                max: maxHR 
+            };
+            
+            updateZoneDisplay();
+            app.log(`Heart rate zones calculated for age ${age}`, 'success');
+        }
+        
+        function updateZoneDisplay() {
+            document.getElementById('restRange').textContent = 
+                `${heartRateZones.rest.min}-${heartRateZones.rest.max} BPM`;
+            document.getElementById('fatburnRange').textContent = 
+                `${heartRateZones.fatburn.min}-${heartRateZones.fatburn.max} BPM`;
+            document.getElementById('cardioRange').textContent = 
+                `${heartRateZones.cardio.min}-${heartRateZones.cardio.max} BPM`;
+            document.getElementById('peakRange').textContent = 
+                `${heartRateZones.peak.min}-${heartRateZones.peak.max} BPM`;
+            document.getElementById('maxRange').textContent = 
+                `${heartRateZones.max.min}+ BPM`;
+        }
+        
+        // Initialize zones
+        calculateHeartRateZones();
+        
+        // Connect button
+        connectBtn.addEventListener('click', async () => {
+            try {
+                connectBtn.disabled = true;
+                await app.connectITiles();
+                await app.connectKiwrious();
+                
+                // Enable touch sensors on all tiles
+                await app.iTilesManager.toggleTouchSensor(TOGGLE_SENSOR.ON, SELECT_ITILE.ALL);
+                
+                // Setup tile touch handlers for exercise selection
+                app.iTilesManager.onTouch((response) => {
+                    if (!challengeActive) {
+                        const tileId = response.tileId;
+                        selectExerciseFromTile(tileId);
+                    }
+                });
+                
+                disconnectBtn.disabled = false;
+                startChallengeBtn.disabled = false;
+                
+                app.log('Heart Rate Challenge ready!', 'success');
+            } catch (error) {
+                app.log(`Connection failed: ${error.message}`, 'error');
+                connectBtn.disabled = false;
+            }
+        });
+        
+        // Disconnect button
+        disconnectBtn.addEventListener('click', async () => {
+            monitoring = false;
+            challengeActive = false;
+            if (timerInterval) clearInterval(timerInterval);
+            await app.disconnect();
+            disconnectBtn.disabled = true;
+            startChallengeBtn.disabled = true;
+            stopChallengeBtn.disabled = true;
+        });
+        
+        // Exercise selection
+        document.querySelectorAll('.exercise-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                selectExercise(
+                    btn.dataset.exercise,
+                    btn.dataset.target,
+                    btn.textContent.split('\n')[0]
+                );
+                
+                // Visual feedback
+                document.querySelectorAll('.exercise-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+        
+        function selectExercise(exercise, zone, name) {
+            currentExercise = exercise;
+            targetZone = zone;
+            challengeDescription.textContent = `Exercise: ${name} | Target: ${zone.toUpperCase()} zone`;
+            challengeStatus.textContent = 'Ready to Start';
+            app.log(`Selected: ${name} (${zone} zone)`, 'info');
+        }
+        
+        function selectExerciseFromTile(tileId) {
+            const exercises = [
+                { name: '🤸 Jumping Jacks', ex: 'jumping-jacks', zone: 'cardio' },
+                { name: '🦵 High Knees', ex: 'high-knees', zone: 'peak' },
+                { name: '💪 Burpees', ex: 'burpees', zone: 'peak' },
+                { name: '🏋️ Squats', ex: 'squats', zone: 'cardio' },
+                { name: '🚶 Walking', ex: 'walking', zone: 'fatburn' },
+                { name: '😌 Rest', ex: 'rest', zone: 'rest' }
+            ];
+            
+            const idx = (tileId - 1) % exercises.length;
+            const selected = exercises[idx];
+            selectExercise(selected.ex, selected.zone, selected.name);
+        }
+        
+        // Start challenge
+        startChallengeBtn.addEventListener('click', () => {
+            if (!currentExercise) {
+                app.log('Please select an exercise first!', 'warning');
+                return;
+            }
+            
+            challengeActive = true;
+            monitoring = true;
+            startChallengeBtn.disabled = true;
+            stopChallengeBtn.disabled = false;
+            challengeStatus.textContent = 'In Progress';
+            
+            challengeStartTime = Date.now();
+            if (!workoutStartTime) workoutStartTime = Date.now();
+            
+            timerInterval = setInterval(updateTimer, 1000);
+            
+            app.log('Challenge started! Begin your exercise!', 'success');
+        });
+        
+        // Stop challenge
+        stopChallengeBtn.addEventListener('click', () => {
+            challengeActive = false;
+            monitoring = false;
+            startChallengeBtn.disabled = false;
+            stopChallengeBtn.disabled = true;
+            challengeStatus.textContent = 'Stopped';
+            
+            if (timerInterval) clearInterval(timerInterval);
+            
+            app.log('Challenge stopped', 'warning');
+        });
+        
+        // Update timer
+        function updateTimer() {
+            if (!challengeStartTime) return;
+            
+            const elapsed = Math.floor((Date.now() - challengeStartTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            challengeTimer.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Update workout time
+            if (workoutStartTime) {
+                const totalElapsed = Math.floor((Date.now() - workoutStartTime) / 1000);
+                const totalMins = Math.floor(totalElapsed / 60);
+                const totalSecs = totalElapsed % 60;
+                workoutTimeEl.textContent = `${totalMins}:${totalSecs.toString().padStart(2, '0')}`;
+            }
+        }
+        
+        // Clear log
+        clearLogBtn.addEventListener('click', () => {
+            document.getElementById('logContainer').innerHTML = '';
+        });
+        
+        // Handle sensor data
+        app.onSensorData((sensorData) => {
+            const values = sensorData.decodedValues;
+            
+            // Find heart rate value
+            const hrData = values.find(v => 
+                v.label.toLowerCase().includes('heart') || 
+                v.label.toLowerCase().includes('pulse') ||
+                v.label.toLowerCase().includes('bpm')
+            );
+            
+            if (!hrData) {
+                app.log('No heart rate data found', 'warning');
+                return;
+            }
+            
+            const hr = parseInt(hrData.value);
+            updateHeartRate(hr);
+        });
+        
+        // Update heart rate display and iTiles
+        async function updateHeartRate(hr) {
+            hrValue.textContent = hr;
+            
+            // Update stats
+            stats.count++;
+            stats.sum += hr;
+            stats.peak = Math.max(stats.peak, hr);
+            
+            avgHREl.textContent = Math.round(stats.sum / stats.count);
+            peakHREl.textContent = stats.peak;
+            
+            // Determine current zone
+            const zone = getHeartRateZone(hr);
+            hrZone.textContent = zone.name;
+            hrZone.className = `badge ${zone.class}`;
+            
+            // Update zone visualization
+            document.querySelectorAll('.zone-box').forEach(box => {
+                box.classList.remove('active');
+            });
+            const activeZone = document.querySelector(`.zone-box[data-zone="${zone.id}"]`);
+            if (activeZone) activeZone.classList.add('active');
+            
+            // Award points if in target zone
+            if (challengeActive && zone.id === targetZone) {
+                stats.points += 1;
+                zonePointsEl.textContent = stats.points;
+            }
+            
+            // Update iTiles
+            if (monitoring && app.iTilesManager) {
+                await updateITiles(hr, zone);
+            }
+        }
+        
+        // Get heart rate zone
+        function getHeartRateZone(hr) {
+            if (hr < heartRateZones.rest.max) {
+                return { id: 'rest', name: 'Rest', class: 'success', color: { r: 0, g: 102, b: 255 } };
+            } else if (hr < heartRateZones.fatburn.max) {
+                return { id: 'fatburn', name: 'Fat Burn', class: 'success', color: { r: 0, g: 204, b: 102 } };
+            } else if (hr < heartRateZones.cardio.max) {
+                return { id: 'cardio', name: 'Cardio', class: 'warning', color: { r: 255, g: 204, b: 0 } };
+            } else if (hr < heartRateZones.peak.max) {
+                return { id: 'peak', name: 'Peak', class: 'warning', color: { r: 255, g: 102, b: 0 } };
+            } else {
+                return { id: 'max', name: 'Maximum', class: 'danger', color: { r: 255, g: 0, b: 0 } };
+            }
+        }
+        
+        // Update iTiles
+        async function updateITiles(hr, zone) {
+            try {
+                const color = new TileColor(zone.color.r, zone.color.g, zone.color.b);
+                
+                // Check if in target zone
+                const inTargetZone = challengeActive && zone.id === targetZone;
+                
+                if (inTargetZone) {
+                    // Success feedback - light + sound
+                    await app.iTilesManager.triggerLightSoundVibration(
+                        color,
+                        TIMEOUT_DELAY.SEC_2,
+                        SOUND_TRACK.DEFAULT,
+                        VIBRATION_PATTERN.I,
+                        REPEAT_COUNT.I,
+                        LOG_REACTION_TIME.NONE,
+                        TIMEOUT_RESPONSE.IMMEDIATE,
+                        SELECT_ITILE.ALL
+                    );
+                } else {
+                    // Just update color
+                    await app.iTilesManager.triggerLight(
+                        color,
+                        TIMEOUT_DELAY.SEC_2,
+                        LOG_REACTION_TIME.NONE,
+                        TIMEOUT_RESPONSE.IMMEDIATE,
+                        SELECT_ITILE.ALL
+                    );
+                }
+            } catch (error) {
+                app.log(`Error updating tiles: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

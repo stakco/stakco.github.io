@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Air Quality Monitor - Kiwrious + iTiles</title>
+    <link rel="stylesheet" href="../styles/shared.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-button">← Back to Apps</a>
+        
+        <div class="app-header">
+            <h1>💨 Air Quality Monitor</h1>
+            <p>Track VOC levels with real-time air quality warnings</p>
+        </div>
+
+        <div class="card">
+            <h2>Connection Status</h2>
+            <div class="status-bar">
+                <div class="status-indicator">
+                    <div class="status-dot" id="kiwriousStatus"></div>
+                    <span>Kiwrious Air Sensor (VOC)</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot" id="itilesStatus"></div>
+                    <span>iTiles Alert System</span>
+                </div>
+            </div>
+            <div class="button-group">
+                <button id="connectBtn">🔌 Connect All Devices</button>
+                <button id="disconnectBtn" disabled>❌ Disconnect</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Current Air Quality</h2>
+            <div class="sensor-display">
+                <div class="sensor-label">VOC Level</div>
+                <div class="sensor-value">
+                    <span id="vocValue">--</span>
+                    <span class="sensor-unit">PPM</span>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <span id="qualityLabel" class="badge" style="font-size: 1.2rem;">Waiting...</span>
+                </div>
+            </div>
+            
+            <div class="visual-display">
+                <div class="visual-indicator" id="qualityIndicator"></div>
+            </div>
+
+            <div class="info-box">
+                <strong>Air Quality Levels:</strong>
+                <ul>
+                    <li><span style="color: #00ff00;">🟢 Excellent</span> - VOC < 50 PPM</li>
+                    <li><span style="color: #99ff00;">🟡 Good</span> - VOC 50-150 PPM</li>
+                    <li><span style="color: #ffcc00;">🟠 Fair</span> - VOC 150-300 PPM</li>
+                    <li><span style="color: #ff6600;">🟠 Poor</span> - VOC 300-500 PPM</li>
+                    <li><span style="color: #ff0000;">🔴 Hazardous</span> - VOC > 500 PPM</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Monitoring Controls</h2>
+            <div class="control-group">
+                <label>Alert Threshold (PPM)</label>
+                <input type="number" id="alertThreshold" value="300" min="100" max="1000" step="50">
+            </div>
+            <div class="button-group">
+                <button id="startBtn" disabled class="success">▶️ Start Monitoring</button>
+                <button id="stopBtn" disabled class="danger">⏹️ Stop</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="currentVOC">--</div>
+                    <div class="stat-label">Current (PPM)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="avgVOC">--</div>
+                    <div class="stat-label">Average (PPM)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="peakVOC">--</div>
+                    <div class="stat-label">Peak (PPM)</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="alertCount">0</div>
+                    <div class="stat-label">Alerts</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Event Log</h2>
+            <div class="log-container" id="logContainer"></div>
+            <button id="clearLogBtn" style="margin-top: 10px;">🗑️ Clear Log</button>
+        </div>
+    </div>
+
+    <script src="../js/shared-utils.js"></script>
+    <script type="module">
+        const app = new AppController();
+        
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const vocValue = document.getElementById('vocValue');
+        const qualityLabel = document.getElementById('qualityLabel');
+        const qualityIndicator = document.getElementById('qualityIndicator');
+        const alertThreshold = document.getElementById('alertThreshold');
+        const clearLogBtn = document.getElementById('clearLogBtn');
+        
+        const currentVOCEl = document.getElementById('currentVOC');
+        const avgVOCEl = document.getElementById('avgVOC');
+        const peakVOCEl = document.getElementById('peakVOC');
+        const alertCountEl = document.getElementById('alertCount');
+        
+        let monitoring = false;
+        let stats = { sum: 0, count: 0, peak: 0, alerts: 0 };
+        
+        app.onLog(setupLogDisplay('logContainer'));
+        
+        connectBtn.addEventListener('click', async () => {
+            try {
+                connectBtn.disabled = true;
+                await app.connectITiles();
+                await app.connectKiwrious();
+                disconnectBtn.disabled = false;
+                startBtn.disabled = false;
+                app.log('Air quality monitoring ready!', 'success');
+            } catch (error) {
+                app.log(`Connection failed: ${error.message}`, 'error');
+                connectBtn.disabled = false;
+            }
+        });
+        
+        disconnectBtn.addEventListener('click', async () => {
+            monitoring = false;
+            await app.disconnect();
+            disconnectBtn.disabled = true;
+            startBtn.disabled = true;
+            stopBtn.disabled = true;
+        });
+        
+        startBtn.addEventListener('click', () => {
+            monitoring = true;
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            app.log('Monitoring started', 'info');
+        });
+        
+        stopBtn.addEventListener('click', () => {
+            monitoring = false;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            app.log('Monitoring stopped', 'warning');
+        });
+        
+        clearLogBtn.addEventListener('click', () => {
+            document.getElementById('logContainer').innerHTML = '';
+        });
+        
+        app.onSensorData((sensorData) => {
+            const values = sensorData.decodedValues;
+            const vocData = values.find(v => v.label.toLowerCase().includes('voc'));
+            
+            if (!vocData) {
+                app.log('No VOC data found', 'warning');
+                return;
+            }
+            
+            const voc = parseFloat(vocData.value);
+            vocValue.textContent = voc.toFixed(0);
+            
+            stats.count++;
+            stats.sum += voc;
+            stats.peak = Math.max(stats.peak, voc);
+            
+            currentVOCEl.textContent = voc.toFixed(0);
+            avgVOCEl.textContent = (stats.sum / stats.count).toFixed(0);
+            peakVOCEl.textContent = stats.peak.toFixed(0);
+            
+            const quality = getAirQuality(voc);
+            qualityLabel.textContent = quality.name;
+            qualityLabel.className = `badge ${quality.class}`;
+            
+            const color = quality.color;
+            qualityIndicator.style.background = `rgb(${color.r}, ${color.g}, ${color.b})`;
+            qualityIndicator.style.boxShadow = `0 0 50px rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`;
+            
+            if (monitoring && app.iTilesManager) {
+                updateITiles(voc, quality);
+            }
+        });
+        
+        function getAirQuality(voc) {
+            if (voc < 50) return { 
+                name: 'Excellent', class: 'success', 
+                color: { r: 0, g: 255, b: 0 } 
+            };
+            if (voc < 150) return { 
+                name: 'Good', class: 'success', 
+                color: { r: 153, g: 255, b: 0 } 
+            };
+            if (voc < 300) return { 
+                name: 'Fair', class: 'warning', 
+                color: { r: 255, g: 204, b: 0 } 
+            };
+            if (voc < 500) return { 
+                name: 'Poor', class: 'warning', 
+                color: { r: 255, g: 102, b: 0 } 
+            };
+            return { 
+                name: 'Hazardous', class: 'danger', 
+                color: { r: 255, g: 0, b: 0 } 
+            };
+        }
+        
+        async function updateITiles(voc, quality) {
+            try {
+                const color = new TileColor(quality.color.r, quality.color.g, quality.color.b);
+                const threshold = parseInt(alertThreshold.value);
+                
+                if (voc >= threshold) {
+                    await app.iTilesManager.triggerLightSoundVibration(
+                        color,
+                        TIMEOUT_DELAY.SEC_3,
+                        SOUND_TRACK.DEFAULT,
+                        VIBRATION_PATTERN.II,
+                        REPEAT_COUNT.I,
+                        LOG_REACTION_TIME.NONE,
+                        TIMEOUT_RESPONSE.IMMEDIATE,
+                        SELECT_ITILE.ALL
+                    );
+                    stats.alerts++;
+                    alertCountEl.textContent = stats.alerts;
+                    app.log(`⚠️ AIR QUALITY ALERT! VOC: ${voc.toFixed(0)} PPM`, 'warning');
+                } else {
+                    await app.iTilesManager.triggerLight(
+                        color,
+                        TIMEOUT_DELAY.SEC_2,
+                        LOG_REACTION_TIME.NONE,
+                        TIMEOUT_RESPONSE.IMMEDIATE,
+                        SELECT_ITILE.ALL
+                    );
+                }
+            } catch (error) {
+                app.log(`Error: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>

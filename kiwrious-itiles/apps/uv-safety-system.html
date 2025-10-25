@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UV Safety System - Kiwrious + iTiles</title>
+    <link rel="stylesheet" href="../styles/shared.css">
+</head>
+<body>
+    <div class="container">
+        <a href="../index.html" class="back-button">← Back to Apps</a>
+        
+        <div class="app-header">
+            <h1>☀️ UV Safety System</h1>
+            <p>Real-time UV monitoring with color-coded warnings and alerts</p>
+        </div>
+
+        <!-- Connection Card -->
+        <div class="card">
+            <h2>Connection Status</h2>
+            <div class="status-bar">
+                <div class="status-indicator">
+                    <div class="status-dot" id="kiwriousStatus"></div>
+                    <span>Kiwrious Light Sensor (UV)</span>
+                </div>
+                <div class="status-indicator">
+                    <div class="status-dot" id="itilesStatus"></div>
+                    <span>iTiles Alert System</span>
+                </div>
+            </div>
+            <div class="button-group">
+                <button id="connectBtn">🔌 Connect All Devices</button>
+                <button id="disconnectBtn" disabled>❌ Disconnect</button>
+            </div>
+        </div>
+
+        <!-- UV Display -->
+        <div class="card">
+            <h2>UV Index Monitor</h2>
+            <div class="sensor-display">
+                <div class="sensor-label">Current UV Index</div>
+                <div class="sensor-value">
+                    <span id="uvValue">--</span>
+                    <span class="sensor-unit" style="font-size: 1rem;">UV Index</span>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <span id="uvCategory" class="badge" style="font-size: 1.2rem;">Waiting for data...</span>
+                </div>
+            </div>
+            
+            <!-- Visual indicator -->
+            <div class="visual-display">
+                <div class="visual-indicator" id="uvIndicator"></div>
+            </div>
+
+            <!-- UV Index scale -->
+            <div class="info-box">
+                <strong>UV Index Scale & Protection:</strong>
+                <ul>
+                    <li><span style="color: #00ff00;">🟢 Low (0-2)</span> - No protection needed</li>
+                    <li><span style="color: #ffff00;">🟡 Moderate (3-5)</span> - Seek shade, wear sunscreen</li>
+                    <li><span style="color: #ff9900;">🟠 High (6-7)</span> - Protection essential</li>
+                    <li><span style="color: #ff0000;">🔴 Very High (8-10)</span> - Extra protection required</li>
+                    <li><span style="color: #ff00ff;">🟣 Extreme (11+)</span> - Avoid sun exposure!</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Alert Settings -->
+        <div class="card">
+            <h2>Alert Configuration</h2>
+            <div class="control-group">
+                <label>Sound Alerts (UV ≥ 6)</label>
+                <input type="checkbox" id="soundAlerts" checked>
+            </div>
+            <div class="control-group">
+                <label>Vibration Alerts (UV ≥ 8)</label>
+                <input type="checkbox" id="vibrationAlerts" checked>
+            </div>
+            <div class="control-group">
+                <label>Alert All Tiles</label>
+                <input type="checkbox" id="allTiles" checked>
+            </div>
+            <div class="button-group">
+                <button id="startBtn" disabled class="success">▶️ Start Monitoring</button>
+                <button id="stopBtn" disabled class="danger">⏹️ Stop</button>
+                <button id="testAlertBtn" disabled class="secondary">🔔 Test Alert</button>
+            </div>
+        </div>
+
+        <!-- Protection Recommendations -->
+        <div class="card">
+            <h2>Current Recommendations</h2>
+            <div id="recommendations" class="alert alert-info">
+                <strong>Waiting for UV data...</strong>
+                <p>Connect sensors to receive personalized sun protection advice.</p>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="card">
+            <h2>UV Exposure Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value" id="currentUV">--</div>
+                    <div class="stat-label">Current UV</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="peakUV">--</div>
+                    <div class="stat-label">Peak UV</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="avgUV">--</div>
+                    <div class="stat-label">Average UV</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="alertCount">0</div>
+                    <div class="stat-label">Alerts Triggered</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Log -->
+        <div class="card">
+            <h2>Event Log</h2>
+            <div class="log-container" id="logContainer"></div>
+            <button id="clearLogBtn" style="margin-top: 10px;">🗑️ Clear Log</button>
+        </div>
+    </div>
+
+    <script src="../js/shared-utils.js"></script>
+    <script type="module">
+        const app = new AppController();
+        
+        // UI Elements
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const testAlertBtn = document.getElementById('testAlertBtn');
+        const uvValue = document.getElementById('uvValue');
+        const uvCategory = document.getElementById('uvCategory');
+        const uvIndicator = document.getElementById('uvIndicator');
+        const recommendations = document.getElementById('recommendations');
+        const soundAlerts = document.getElementById('soundAlerts');
+        const vibrationAlerts = document.getElementById('vibrationAlerts');
+        const allTiles = document.getElementById('allTiles');
+        const clearLogBtn = document.getElementById('clearLogBtn');
+        
+        // Stats
+        const currentUVEl = document.getElementById('currentUV');
+        const peakUVEl = document.getElementById('peakUV');
+        const avgUVEl = document.getElementById('avgUV');
+        const alertCountEl = document.getElementById('alertCount');
+        
+        let monitoring = false;
+        let lastAlertLevel = 0;
+        let stats = {
+            peak: 0,
+            sum: 0,
+            count: 0,
+            alerts: 0
+        };
+        
+        // Setup logging
+        app.onLog(setupLogDisplay('logContainer'));
+        
+        // Connect button
+        connectBtn.addEventListener('click', async () => {
+            try {
+                connectBtn.disabled = true;
+                await app.connectITiles();
+                await app.connectKiwrious();
+                
+                disconnectBtn.disabled = false;
+                startBtn.disabled = false;
+                testAlertBtn.disabled = false;
+                
+                app.log('UV monitoring system ready!', 'success');
+            } catch (error) {
+                app.log(`Connection failed: ${error.message}`, 'error');
+                connectBtn.disabled = false;
+            }
+        });
+        
+        // Disconnect button
+        disconnectBtn.addEventListener('click', async () => {
+            monitoring = false;
+            await app.disconnect();
+            disconnectBtn.disabled = true;
+            startBtn.disabled = true;
+            stopBtn.disabled = true;
+            testAlertBtn.disabled = true;
+        });
+        
+        // Start monitoring
+        startBtn.addEventListener('click', () => {
+            monitoring = true;
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            app.log('UV monitoring started', 'info');
+        });
+        
+        // Stop monitoring
+        stopBtn.addEventListener('click', () => {
+            monitoring = false;
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            app.log('UV monitoring stopped', 'warning');
+        });
+        
+        // Test alert
+        testAlertBtn.addEventListener('click', async () => {
+            app.log('Testing alert system with HIGH UV level...', 'info');
+            await triggerAlert(8, true);
+        });
+        
+        // Clear log
+        clearLogBtn.addEventListener('click', () => {
+            document.getElementById('logContainer').innerHTML = '';
+        });
+        
+        // Handle sensor data
+        app.onSensorData((sensorData) => {
+            const values = sensorData.decodedValues;
+            
+            // Find UV value
+            const uvData = values.find(v => v.label.toLowerCase().includes('uv'));
+            
+            if (!uvData) {
+                app.log('No UV data found in sensor reading', 'warning');
+                return;
+            }
+            
+            const uv = parseFloat(uvData.value);
+            updateUVDisplay(uv);
+            
+            // Update stats
+            stats.count++;
+            stats.sum += uv;
+            stats.peak = Math.max(stats.peak, uv);
+            
+            currentUVEl.textContent = uv.toFixed(1);
+            peakUVEl.textContent = stats.peak.toFixed(1);
+            avgUVEl.textContent = (stats.sum / stats.count).toFixed(1);
+            
+            // Trigger alerts if monitoring
+            if (monitoring && app.iTilesManager) {
+                updateITiles(uv);
+            }
+        });
+        
+        // Update UV display
+        function updateUVDisplay(uv) {
+            uvValue.textContent = uv.toFixed(1);
+            
+            const category = getUVCategory(uv);
+            uvCategory.textContent = category.name;
+            uvCategory.className = `badge ${category.class}`;
+            
+            // Update visual indicator
+            const color = category.color;
+            uvIndicator.style.background = `rgb(${color.r}, ${color.g}, ${color.b})`;
+            uvIndicator.style.boxShadow = `0 0 50px rgba(${color.r}, ${color.g}, ${color.b}, 0.5)`;
+            
+            // Update recommendations
+            updateRecommendations(uv, category);
+        }
+        
+        // Get UV category
+        function getUVCategory(uv) {
+            if (uv < 3) return {
+                name: 'Low', 
+                class: 'success',
+                color: { r: 0, g: 153, b: 0 },
+                level: 1
+            };
+            if (uv < 6) return {
+                name: 'Moderate', 
+                class: 'warning',
+                color: { r: 153, g: 153, b: 0 },
+                level: 2
+            };
+            if (uv < 8) return {
+                name: 'High', 
+                class: 'warning',
+                color: { r: 153, g: 77, b: 0 },
+                level: 3
+            };
+            if (uv < 11) return {
+                name: 'Very High', 
+                class: 'danger',
+                color: { r: 153, g: 0, b: 0 },
+                level: 4
+            };
+            return {
+                name: 'Extreme', 
+                class: 'danger',
+                color: { r: 153, g: 0, b: 153 },
+                level: 5
+            };
+        }
+        
+        // Update recommendations
+        function updateRecommendations(uv, category) {
+            let advice = '';
+            let alertClass = 'alert-info';
+            
+            if (uv < 3) {
+                advice = '<strong>Low UV - Minimal Protection Needed</strong><p>You can safely stay outside. Wear sunglasses on bright days.</p>';
+                alertClass = 'alert-success';
+            } else if (uv < 6) {
+                advice = '<strong>Moderate UV - Take Precautions</strong><p>Seek shade during midday hours. Wear sunscreen, a hat, and sunglasses.</p>';
+                alertClass = 'alert-warning';
+            } else if (uv < 8) {
+                advice = '<strong>High UV - Protection Essential</strong><p>Reduce sun exposure 10am-4pm. Use SPF 30+ sunscreen, protective clothing, hat, and sunglasses.</p>';
+                alertClass = 'alert-warning';
+            } else if (uv < 11) {
+                advice = '<strong>Very High UV - Extra Protection Required</strong><p>Minimize sun exposure 10am-4pm. Seek shade, wear protective clothing, SPF 30+ sunscreen, hat, and sunglasses.</p>';
+                alertClass = 'alert-danger';
+            } else {
+                advice = '<strong>⚠️ EXTREME UV - AVOID SUN EXPOSURE</strong><p>Try to stay indoors 10am-4pm. If outside, seek shade and use maximum protection: SPF 50+ sunscreen, long sleeves, hat, and sunglasses.</p>';
+                alertClass = 'alert-danger';
+            }
+            
+            recommendations.className = `alert ${alertClass}`;
+            recommendations.innerHTML = advice;
+        }
+        
+        // Update iTiles with UV warnings
+        async function updateITiles(uv) {
+            const category = getUVCategory(uv);
+            
+            // Only trigger new alert if level changed significantly
+            if (category.level === lastAlertLevel) return;
+            
+            lastAlertLevel = category.level;
+            await triggerAlert(uv, category.level >= 3);
+        }
+        
+        // Trigger alert on iTiles
+        async function triggerAlert(uv, isWarning) {
+            try {
+                const category = getUVCategory(uv);
+                const color = new TileColor(category.color.r, category.color.g, category.color.b);
+                const tileId = allTiles.checked ? SELECT_ITILE.ALL : SELECT_ITILE.I;
+                
+                // Determine if we need sound/vibration
+                const needsSound = soundAlerts.checked && uv >= 6;
+                const needsVibration = vibrationAlerts.checked && uv >= 8;
+                
+                if (needsSound || needsVibration) {
+                    // Combined alert
+                    const soundTrack = needsSound ? SOUND_TRACK.DEFAULT : SOUND_TRACK.NONE;
+                    const vibPattern = needsVibration ? VIBRATION_PATTERN.I : VIBRATION_PATTERN.NONE;
+                    
+                    await app.iTilesManager.triggerLightSoundVibration(
+                        color,
+                        TIMEOUT_DELAY.SEC_5,
+                        soundTrack,
+                        vibPattern,
+                        REPEAT_COUNT.II,
+                        LOG_REACTION_TIME.NONE,
+                        TIMEOUT_RESPONSE.IMMEDIATE,
+                        tileId
+                    );
+                    
+                    stats.alerts++;
+                    alertCountEl.textContent = stats.alerts;
+                    app.log(`⚠️ ${category.name} UV Alert! UV Index: ${uv.toFixed(1)}`, 'warning');
+                } else {
+                    // Just light update
+                    await app.iTilesManager.triggerLight(
+                        color,
+                        TIMEOUT_DELAY.SEC_3,
+                        LOG_REACTION_TIME.NONE,
+                        TIMEOUT_RESPONSE.IMMEDIATE,
+                        tileId
+                    );
+                    
+                    app.log(`UV Level: ${uv.toFixed(1)} - ${category.name}`, 'info');
+                }
+            } catch (error) {
+                app.log(`Error updating tiles: ${error.message}`, 'error');
+            }
+        }
+    </script>
+</body>
+</html>
