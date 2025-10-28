@@ -447,11 +447,11 @@
             const values = result.decodedValues;
             
             // Check if this is a VOC sensor
-            if (result.sensorName && result.sensorName.toLowerCase().includes('voc')) {
+            if (result.sensorType && result.sensorType.toLowerCase().includes('voc')) {
                 isVOCSensor = true;
             }
             
-            let dataText = `Sensor Type: ${result.sensorName || 'Unknown'}\n`;
+            let dataText = `Sensor Type: ${result.sensorType || 'Unknown'}\n`;
             dataText += `Timestamp: ${new Date().toLocaleTimeString()}\n`;
             dataText += `─────────────────────────────────────────\n`;
             dataText += `Values:\n\n`;
@@ -461,22 +461,15 @@
             values.forEach((value, index) => {
                 // Format value based on type
                 let displayValue;
-                if (typeof value.value === 'number') {
-                    // Number value - format with 2 decimal places
-                    displayValue = value.value.toFixed(2);
-                } else if (typeof value.value === 'string') {
-                    // String value (status like "READY", "PROCESSING", etc.)
-                    displayValue = value.value;
-                    
-                    // Check for warming up status
-                    if (value.value === 'PROCESSING' || value.value === 'TOO_LOW' || value.value === 'TOO_HIGH') {
-                        hasWarmingUpStatus = true;
-                    }
-                } else {
+                if (value.type === 'object') {
+                    displayValue = `Status: ${value.value.status} Value: ${value.value.value}`;
+                }
+                // TODO: add other sensor value types as needed
+                else {
                     // Fallback for other types
                     displayValue = String(value.value);
                 }
-                
+                // TODO: add unit to main library code
                 dataText += `  ${index + 1}. ${value.label}: ${displayValue} ${value.unit || ''}\n`;
             });
             

@@ -181,7 +181,7 @@ export class NewSensorDecoder extends SerialDecoder {
         };
 
         return {
-            sensorName: "New Sensor",
+            sensorType: "New Sensor",
             decodedValues: [decodedValue]
         };
     }

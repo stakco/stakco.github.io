@@ -22,8 +22,9 @@ Copy `kiwrious-webserial.esm.min.js` to your project folder.
         // Display sensor data
         serialService.onSerialData = (data) => {
             const values = data.decodedValues;
+
             const output = values.map(v => 
-                `${v.label}: ${v.value.toFixed(2)} ${v.unit}`
+                `label: ${v.label}: ${v.value.value.toFixed(2)}`
             ).join('<br>');
             
             document.getElementById('output').innerHTML = output;
