@@ -78,15 +78,15 @@ class AppController {
     async connectKiwrious() {
         try {
             this.log('Loading Kiwrious WebSerial library from CDN...', 'info');
-            
-            // Dynamically import Kiwrious modules from CDN
-            const SerialServiceModule = await import('https://stakcos.com/kiwrious/service/SerialService.js');
-            const serialService = SerialServiceModule.default;
-            
+
+            // Dynamically import the new ESM Kiwrious library
+            const SerialServiceModule = await import('https://stakcos.com/kiwrious/sdk/kiwrious-webserial.esm.min.js');
+            const serialService = SerialServiceModule.default || SerialServiceModule;
+
             this.serialService = serialService;
-            
+
             this.log('Requesting Kiwrious sensor...', 'info');
-            
+
             // Setup connection status listener
             serialService.onSerialConnection = (connected) => {
                 this.kiwriousConnected = connected;
@@ -97,14 +97,14 @@ class AppController {
                 }
                 this.updateConnectionStatus();
             };
-            
+
             // Setup firmware update listener
             serialService.onFirmwareUpdateAvailable = (available) => {
                 if (available) {
                     this.log('⚠️ Firmware update available for Kiwrious sensor', 'warning');
                 }
             };
-            
+
             // Setup data listener
             serialService.onSerialData = (decodedData) => {
                 this.currentSensorData = decodedData;
@@ -112,20 +112,21 @@ class AppController {
                     this.onSensorDataCallback(decodedData);
                 }
             };
-            
+
             // Connect and start reading
             await serialService.connectAndReadAsync();
-            
+
             this.kiwriousConnected = true;
             this.log('✅ Kiwrious sensor connected and reading!', 'success');
             this.updateConnectionStatus();
-            
+
             return serialService;
         } catch (error) {
             this.log(`Kiwrious connection error: ${error.message}`, 'error');
             throw error;
         }
     }
+
 
     // Set sensor data callback
     onSensorData(callback) {

@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="styles/shared.css">
     
     <!-- Kiwrious Decoder Dependencies (loaded from CDN) -->
-    <script type="text/javascript" src="https://stakcos.com/kiwrious/decoder/libunicorn.out.js"></script>
-    <script type="text/javascript" src="https://stakcos.com/kiwrious/decoder/libelf-integers.js"></script>
-    <script type="text/javascript" src="https://stakcos.com/kiwrious/decoder/unicorn-wrapper.js"></script>
-    <script type="text/javascript" src="https://stakcos.com/kiwrious/decoder/unicorn-constants.js"></script>
-    <script type="text/javascript" src="https://stakcos.com/kiwrious/decoder/heartrate.js"></script>
+    <script type="text/javascript" src="https://stakcos.com/kiwrious/sdk/js/libunicorn_out.js"></script>
+    <script type="text/javascript" src="https://stakcos.com/kiwrious/sdk/js/libelf-integers.js"></script>
+    <script type="text/javascript" src="https://stakcos.com/kiwrious/sdk/js/unicorn-wrapper.js"></script>
+    <script type="text/javascript" src="https://stakcos.com/kiwrious/sdk/js/unicorn-constants.js"></script>
+    <script type="text/javascript" src="https://stakcos.com/kiwrious/sdk/js/heartrate.js"></script>
     
     <style>
         .app-grid {
@@ -156,7 +156,7 @@
         <strong>🚀 Using CDN Libraries</strong>
         <p>This application uses CDN-hosted libraries for both Kiwrious sensors and iTiles:</p>
         <ul style="margin: 10px 0 0 20px;">
-            <li><strong>Kiwrious:</strong> https://stakcos.com/kiwrious/</li>
+            <li><strong>Kiwrious:</strong> https://stakcos.com/kiwrious/sdk/kiwrious-webserial.esm.js</li>
             <li><strong>iTiles:</strong> https://stakcos.com/itiles/itiles.esm.js</li>
         </ul>
         <p style="margin-top: 10px;"><em>No npm installation required! Everything loads from CDN.</em></p>
@@ -217,7 +217,7 @@
             Requires Chrome/Edge browser with Web Bluetooth & WebSerial support
         </p>
         <p style="font-size: 0.85rem; margin-top: 15px; color: #999;">
-            📚 Using CDN: Kiwrious (stakcos.com/kiwrious) | iTiles (stakcos.com/itiles)
+            📚 Using CDN: Kiwrious (stakcos.com/kiwrious/sdk) | iTiles (stakcos.com/itiles)
         </p>
     </footer>
 
@@ -229,7 +229,7 @@
 
         // Log CDN info
         console.log('🔬 Kiwrious + iTiles Application Hub');
-        console.log('📦 Kiwrious CDN: https://stakcos.com/kiwrious/');
+        console.log('📦 Kiwrious CDN: https://stakcos.com/kiwrious/sdk/kiwrious-webserial.esm.js');
         console.log('📦 iTiles CDN: https://stakcos.com/itiles/itiles.esm.js');
         console.log('✅ Decoder scripts loaded from CDN');
     </script>
