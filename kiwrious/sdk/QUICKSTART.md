@@ -17,7 +17,7 @@ Copy `kiwrious-webserial.esm.min.js` to your project folder.
     <div id="output">Waiting for data...</div>
 
     <script type="module">
-        import serialService from './kiwrious-webserial.esm.min.js';
+        import serialService from 'https://stakcos.com/kiwrious/sdk/kiwrious-webserial.esm.min.js';
         
         // Display sensor data
         serialService.onSerialData = (data) => {
