@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiwrious WebSerial - ESM Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            background: #f0f0f0;
+        }
+        .data {
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            min-height: 100px;
+        }
+        .connected { background: #90EE90; }
+        .disconnected { background: #FFB6C1; }
+        .warming-up { background: #FFE4B5; }
+        .info-box {
+            padding: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #2196F3;
+            background: #E3F2FD;
+        }
+        .docs-section {
+            margin-top: 30px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+        .docs-section h3 {
+            margin-top: 0;
+        }
+        .docs-section ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .docs-section li {
+            margin: 8px 0;
+        }
+        .docs-section a {
+            color: #2196F3;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .docs-section a:hover {
+            text-decoration: underline;
+        }
+        .docs-section a::before {
+            content: "📄 ";
+        }
+    </style>
+</head>
+<body>
+    <h1>🔬 Kiwrious WebSerial Library - ESM Demo</h1>
+    
+    <div class="status" id="connectionStatus">
+        Status: Disconnected
+    </div>
+
+    <div>
+        <button class="button" id="connectBtn">Connect Sensor</button>
+        <button class="button" id="disconnectBtn" disabled>Disconnect</button>
+    </div>
+
+    <div class="info-box" id="infoBox" style="display: none;">
+        ℹ️ <span id="infoText"></span>
+    </div>
+
+    <h3>Sensor Data:</h3>
+    <div class="data" id="sensorData">No data yet. Connect a sensor to begin...</div>
+
+    <h3>Notes:</h3>
+    <ul>
+        <li>This demo works with <strong>Chromium-based browsers</strong> (Chrome, Edge, Brave)</li>
+        <li>Requires <strong>Web Serial API</strong> support</li>
+        <li><strong>VOC sensors</strong> need 20 seconds warm-up time</li>
+        <li>For heart rate sensors, load external dependencies first (see README)</li>
+    </ul>
+
+    <div class="docs-section">
+        <h3>📚 Documentation</h3>
+        <ul>
+            <li><a href="QUICKSTART.md" target="_blank" rel="noopener noreferrer">Quick Start Guide</a></li>
+            <li><a href="MIGRATION.md" target="_blank" rel="noopener noreferrer">Migration Guide (CommonJS to ESM)</a></li>
+            <li><a href="COMPARISON.md" target="_blank" rel="noopener noreferrer">CommonJS vs ESM Comparison</a></li>
+            <li><a href="SENSOR_BEHAVIOURS.md" target="_blank" rel="noopener noreferrer">Sensor Behaviors Reference</a></li>
+        </ul>
+    </div>
+
+    <!-- Load external dependencies for heart rate sensor (optional) -->
+    <!-- Uncomment these if you're using heart rate sensors -->
+    <!--
+    <script src="js/libunicorn.out.js"></script>
+    <script src="js/libelf-integers.js"></script>
+    <script src="js/unicorn-wrapper.js"></script>
+    <script src="js/unicorn-constants.js"></script>
+    <script src="js/heartrate.js"></script>
+    -->
+
+    <!-- Load the Kiwrious library as ES module -->
+    <script type="module">
+        // Import the library
+        import serialService from './kiwrious-webserial.esm.min.js';
+
+        // Get UI elements
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const statusDiv = document.getElementById('connectionStatus');
+        const dataDiv = document.getElementById('sensorData');
+        const infoBox = document.getElementById('infoBox');
+        const infoText = document.getElementById('infoText');
+
+        let isVOCSensor = false;
+
+        // Show info message
+        function showInfo(message) {
+            infoText.textContent = message;
+            infoBox.style.display = 'block';
+            setTimeout(() => {
+                infoBox.style.display = 'none';
+            }, 5000);
+        }
+
+        // Connection status callback
+        serialService.onSerialConnection = (connected) => {
+            if (connected) {
+                statusDiv.textContent = 'Status: Connected ✅';
+                statusDiv.className = 'status connected';
+                connectBtn.disabled = true;
+                disconnectBtn.disabled = false;
+            } else {
+                statusDiv.textContent = 'Status: Disconnected ❌';
+                statusDiv.className = 'status disconnected';
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+                dataDiv.textContent = 'Disconnected. Connect a sensor to begin...';
+            }
+        };
+
+        // Firmware update callback
+        serialService.onFirmwareUpdateAvailable = (available) => {
+            if (available) {
+                showInfo('⚠️ Firmware update available for your sensor!');
+            }
+        };
+
+        // Data callback
+        serialService.onSerialData = (result) => {
+            const values = result.decodedValues;
+            
+            // Check if this is a VOC sensor
+            if (result.sensorName && result.sensorName.toLowerCase().includes('voc')) {
+                isVOCSensor = true;
+            }
+            
+            let dataText = `Sensor Type: ${result.sensorName || 'Unknown'}\n`;
+            dataText += `Timestamp: ${new Date().toLocaleTimeString()}\n`;
+            dataText += `Values:\n`;
+            
+            let hasWarmingUpStatus = false;
+            
+            values.forEach((value, index) => {
+                // Format value based on type
+                let displayValue;
+                if (typeof value.value === 'number') {
+                    // Number value - format with 2 decimal places
+                    displayValue = value.value.toFixed(2);
+                } else if (typeof value.value === 'string') {
+                    // String value (status like "READY", "PROCESSING", etc.)
+                    displayValue = value.value;
+                    
+                    // Check for warming up status
+                    if (value.value === 'PROCESSING' || value.value === 'TOO_LOW' || value.value === 'TOO_HIGH') {
+                        hasWarmingUpStatus = true;
+                    }
+                } else {
+                    // Fallback for other types
+                    displayValue = String(value.value);
+                }
+                
+                dataText += `  ${index + 1}. ${value.label}: ${displayValue} ${value.unit || ''}\n`;
+            });
+            
+            // Update status indicator for VOC warming up
+            if (hasWarmingUpStatus && isVOCSensor) {
+                statusDiv.textContent = 'Status: Connected - Sensor Warming Up... ⏳';
+                statusDiv.className = 'status warming-up';
+            } else if (isVOCSensor) {
+                statusDiv.textContent = 'Status: Connected - Sensor Ready ✅';
+                statusDiv.className = 'status connected';
+            }
+            
+            dataDiv.textContent = dataText;
+        };
+
+        // Connect button
+        connectBtn.addEventListener('click', async () => {
+            try {
+                dataDiv.textContent = 'Connecting to sensor...';
+                await serialService.connectAndReadAsync();
+            } catch (error) {
+                console.error('Connection error:', error);
+                dataDiv.textContent = `Failed to connect: ${error.message}`;
+                alert('Failed to connect: ' + error.message);
+            }
+        });
+
+        // Disconnect button
+        disconnectBtn.addEventListener('click', async () => {
+            try {
+                await serialService.disconnectAsync();
+                isVOCSensor = false;
+            } catch (error) {
+                console.error('Disconnect error:', error);
+                alert('Failed to disconnect: ' + error.message);
+            }
+        });
+
+        console.log('✅ Kiwrious WebSerial library loaded successfully!');
+        console.log('📚 Library API:', serialService);
+    </script>
+</body>
+</html>
