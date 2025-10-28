@@ -1,4 +1,4 @@
-# Kiwrious WebSerial Library - Source Project
+# Kiwrious WebSerial SDK - Source Project
 
 Complete source code with TypeScript files and build system for the Kiwrious WebSerial ESM library.
 

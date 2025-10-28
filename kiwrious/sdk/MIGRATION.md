@@ -2,7 +2,7 @@
 
 ## Overview
 
-This guide helps you migrate from the CommonJS version (v1.x) to the new ESM version (v2.0) of the Kiwrious WebSerial library.
+This guide helps you migrate from the CommonJS version (v1.x) to the new ESM version (v2.0) of the Kiwrious WebSerial SDK.
 
 ## Key Differences
 
