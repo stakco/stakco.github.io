@@ -4,7 +4,224 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UV Safety System - Kiwrious + iTiles</title>
+    <!-- Kiwrious Theme CSS -->
+    <link rel="stylesheet" href="https://stakcos.com/kiwrious/cdn/css/theme.css">
     <link rel="stylesheet" href="../styles/shared.css">
+    <style>
+        /* Theme Integration - Kiwrious Colors */
+        body {
+            font-family: var(--font-family-primary);
+            background: var(--gradient-primary);
+        }
+
+        .app-header h1,
+        .app-header p {
+            font-family: var(--font-family-primary);
+        }
+
+        .back-button {
+            background: var(--color-primary);
+            color: var(--color-text-white);
+            font-family: var(--font-family-secondary);
+            font-weight: var(--font-weight-bold);
+            transition: var(--transition-default) var(--transition-ease);
+        }
+
+        .back-button:hover {
+            background: var(--color-accent);
+            transform: translateX(-5px);
+        }
+
+        .card {
+            box-shadow: var(--shadow-card);
+            border-radius: var(--border-radius-large);
+        }
+
+        .card h2 {
+            color: var(--color-primary-dark);
+            font-family: var(--font-family-primary);
+            font-weight: var(--font-weight-bold);
+            border-bottom-color: var(--color-primary);
+        }
+
+        button {
+            font-family: var(--font-family-secondary);
+            font-weight: var(--font-weight-bold);
+            border-radius: var(--border-radius-medium);
+            transition: var(--transition-default) var(--transition-ease-in-out);
+        }
+
+        button:not(.secondary):not(.danger):not(.success) {
+            background: var(--color-primary);
+        }
+
+        button:not(.secondary):not(.danger):not(.success):hover:not(:disabled) {
+            background: var(--color-accent);
+        }
+
+        button.secondary {
+            background: var(--color-secondary);
+        }
+
+        button.secondary:hover:not(:disabled) {
+            background: var(--color-accent);
+        }
+
+        button.success {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-accent) 100%);
+        }
+
+        .sensor-display {
+            background: var(--color-bg-dark);
+            border-radius: var(--border-radius-large);
+        }
+
+        .sensor-value {
+            color: var(--color-secondary);
+            font-family: var(--font-family-primary);
+        }
+
+        .sensor-label {
+            color: var(--color-text-white);
+            font-family: var(--font-family-secondary);
+            opacity: var(--opacity-medium-high);
+        }
+
+        .badge {
+            border-radius: var(--border-radius-round);
+            font-family: var(--font-family-secondary);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .badge.success {
+            background: var(--color-secondary);
+        }
+
+        .badge.warning {
+            background: var(--color-primary);
+        }
+
+        .badge.danger {
+            background: #dc3545;
+        }
+
+        .info-box {
+            background: rgba(79, 215, 207, 0.1);
+            border: 2px solid var(--color-secondary);
+            border-radius: var(--border-radius-medium);
+        }
+
+        .info-box strong {
+            color: var(--color-primary-dark);
+            font-family: var(--font-family-primary);
+        }
+
+        .info-box ul {
+            color: var(--color-text-dark);
+            font-family: var(--font-family-secondary);
+        }
+
+        .control-group label {
+            color: var(--color-primary-dark);
+            font-family: var(--font-family-secondary);
+            font-weight: var(--font-weight-semibold);
+        }
+
+        .control-group input,
+        .control-group select {
+            border: 2px solid var(--color-secondary);
+            border-radius: var(--border-radius-medium);
+            font-family: var(--font-family-secondary);
+            transition: var(--transition-default) var(--transition-ease);
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(248, 87, 8, 0.1);
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, rgba(79, 215, 207, 0.1) 0%, rgba(0, 171, 161, 0.1) 100%);
+            border-radius: var(--border-radius-medium);
+            border: 1px solid var(--color-secondary);
+        }
+
+        .stat-value {
+            color: var(--color-primary);
+            font-family: var(--font-family-primary);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .stat-label {
+            color: var(--color-primary-dark);
+            font-family: var(--font-family-secondary);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .log-container {
+            background: var(--color-bg-dark);
+            border-radius: var(--border-radius-medium);
+            font-family: 'Courier New', monospace;
+        }
+
+        .log-entry {
+            font-family: var(--font-family-secondary);
+        }
+
+        .log-entry .timestamp {
+            color: var(--color-secondary);
+        }
+
+        .log-entry .type-info {
+            color: var(--color-secondary);
+        }
+
+        .log-entry .type-success {
+            color: #81c784;
+        }
+
+        .log-entry .type-error {
+            color: #e57373;
+        }
+
+        .log-entry .type-warning {
+            color: var(--color-primary);
+        }
+
+        .status-bar {
+            background: rgba(79, 215, 207, 0.1);
+            border-radius: var(--border-radius-medium);
+            border: 1px solid var(--color-secondary);
+        }
+
+        .status-dot {
+            transition: var(--transition-default) var(--transition-ease);
+        }
+
+        .status-dot.connected {
+            background: var(--color-secondary);
+            box-shadow: 0 0 10px var(--color-secondary);
+        }
+
+        .visual-display {
+            background: var(--color-bg-dark);
+            border-radius: var(--border-radius-large);
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .visual-indicator {
+            border-radius: var(--border-radius-round);
+            transition: var(--transition-slow) var(--transition-ease-out);
+        }
+
+        /* Status indicator labels */
+        .status-indicator span {
+            font-family: var(--font-family-secondary);
+            font-weight: var(--font-weight-medium);
+            color: var(--color-text-dark);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -29,8 +246,13 @@
                 </div>
             </div>
             <div class="button-group">
-                <button id="connectBtn">🔌 Connect All Devices</button>
-                <button id="disconnectBtn" disabled>❌ Disconnect</button>
+                <!-- <button id="connectBtn">🔌 Connect All Devices</button>
+                <button id="disconnectBtn" disabled>❌ Disconnect</button> -->
+
+                <button id="connectKiwriousBtn">Connect Kiwrious Sensor</button>
+                <button id="connectITilesBtn">Connect iTiles</button>
+                <button id="disconnectBtn" disabled>Disconnect All</button>
+                <button id="pairTilesBtn" disabled class="secondary">Pair Child Tiles</button>
             </div>
         </div>
 
@@ -133,8 +355,13 @@
         const app = new AppController();
         
         // UI Elements
-        const connectBtn = document.getElementById('connectBtn');
-        const disconnectBtn = document.getElementById('disconnectBtn');
+        //const connectBtn = document.getElementById('connectBtn');
+
+        const connectKiwriousBtn = document.getElementById('connectKiwriousBtn');
+        const connectITilesBtn = document.getElementById('connectITilesBtn');
+        const pairTilesBtn = document.getElementById('pairTilesBtn');
+
+        const disconnectBtn = document.getElementById('disconnectBtn');     
         const startBtn = document.getElementById('startBtn');
         const stopBtn = document.getElementById('stopBtn');
         const testAlertBtn = document.getElementById('testAlertBtn');
@@ -165,21 +392,59 @@
         // Setup logging
         app.onLog(setupLogDisplay('logContainer'));
         
-        // Connect button
-        connectBtn.addEventListener('click', async () => {
+        // Connect Kiwrious button
+        connectKiwriousBtn.addEventListener('click', async () => {
             try {
-                connectBtn.disabled = true;
-                await app.connectITiles();
+                connectKiwriousBtn.disabled = true;
                 await app.connectKiwrious();
+                app.log('Kiwrious sensor connected!', 'success');
                 
-                disconnectBtn.disabled = false;
-                startBtn.disabled = false;
-                testAlertBtn.disabled = false;
-                
-                app.log('UV monitoring system ready!', 'success');
+                // Enable start button if both are connected
+                if (app.kiwriousConnected && app.itilesConnected) {
+                    startBtn.disabled = false;
+                    disconnectBtn.disabled = false;
+                }
+            } catch (error) {
+                app.log(`Kiwrious connection failed: ${error.message}`, 'error');
+                connectKiwriousBtn.disabled = false;
+            }
+        });
+        
+        // Connect iTiles button
+        connectITilesBtn.addEventListener('click', async () => {
+            try {
+                connectITilesBtn.disabled = true;
+                await app.connectITiles();
+                pairTilesBtn.disabled = false;
             } catch (error) {
                 app.log(`Connection failed: ${error.message}`, 'error');
-                connectBtn.disabled = false;
+                connectITilesBtn.disabled = false;
+            }
+        });
+        
+        // Pair tiles button
+        pairTilesBtn.addEventListener('click', async () => {
+            try {
+                pairTilesBtn.disabled = true;
+                pairTilesBtn.textContent = 'Pairing in progress...';
+                
+                await app.pairChildTiles();
+                
+                pairTilesBtn.textContent = '✅ Tiles Paired!';
+                setTimeout(() => {
+                    pairTilesBtn.textContent = 'Pair Child Tiles';
+                    pairTilesBtn.disabled = false;
+                }, 3000);
+                
+                // Enable start button if both are connected
+                if (app.kiwriousConnected && app.itilesConnected) {
+                    startBtn.disabled = false;
+                    disconnectBtn.disabled = false;
+                }
+            } catch (error) {
+                app.log(`Pairing failed: ${error.message}`, 'error');
+                pairTilesBtn.textContent = 'Pair Child Tiles';
+                pairTilesBtn.disabled = false;
             }
         });
         
@@ -187,10 +452,12 @@
         disconnectBtn.addEventListener('click', async () => {
             monitoring = false;
             await app.disconnect();
+            connectKiwriousBtn.disabled = false;
+            connectITilesBtn.disabled = false;
+            pairTilesBtn.disabled = true;
             disconnectBtn.disabled = true;
             startBtn.disabled = true;
             stopBtn.disabled = true;
-            testAlertBtn.disabled = true;
         });
         
         // Start monitoring

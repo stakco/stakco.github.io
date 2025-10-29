@@ -78,15 +78,15 @@ class AppController {
     async connectKiwrious() {
         try {
             this.log('Loading Kiwrious WebSerial library from CDN...', 'info');
-
+            
             // Dynamically import the new ESM Kiwrious library
             const SerialServiceModule = await import('https://stakcos.com/kiwrious/sdk/kiwrious-webserial.esm.min.js');
             const serialService = SerialServiceModule.default || SerialServiceModule;
-
+            
             this.serialService = serialService;
-
+            
             this.log('Requesting Kiwrious sensor...', 'info');
-
+            
             // Setup connection status listener
             serialService.onSerialConnection = (connected) => {
                 this.kiwriousConnected = connected;
@@ -97,14 +97,14 @@ class AppController {
                 }
                 this.updateConnectionStatus();
             };
-
+            
             // Setup firmware update listener
             serialService.onFirmwareUpdateAvailable = (available) => {
                 if (available) {
                     this.log('⚠️ Firmware update available for Kiwrious sensor', 'warning');
                 }
             };
-
+            
             // Setup data listener
             serialService.onSerialData = (decodedData) => {
                 this.currentSensorData = decodedData;
@@ -112,14 +112,14 @@ class AppController {
                     this.onSensorDataCallback(decodedData);
                 }
             };
-
+            
             // Connect and start reading
             await serialService.connectAndReadAsync();
-
+            
             this.kiwriousConnected = true;
             this.log('✅ Kiwrious sensor connected and reading!', 'success');
             this.updateConnectionStatus();
-
+            
             return serialService;
         } catch (error) {
             this.log(`Kiwrious connection error: ${error.message}`, 'error');
@@ -127,6 +127,63 @@ class AppController {
         }
     }
 
+    // Pair child tiles to the master tile (automatic discovery and pairing)
+    async pairChildTiles() {
+        try {
+            if (!this.iTilesManager) {
+                throw new Error('iTiles manager not initialized. Connect to master tile first.');
+            }
+            
+            if (!this.itilesConnected) {
+                throw new Error('Master tile not connected. Connect to iTiles first.');
+            }
+            
+            this.log('📡 Starting automatic tile discovery and pairing...', 'info');
+            this.log('⏳ This will take approximately 20-25 seconds', 'warning');
+            this.log('🔴 Make sure all standard tiles are powered on and nearby!', 'warning');
+            
+            // Step 1: Query online tiles (this triggers auto-pairing!)
+            this.log('Step 1: Discovering online tiles...', 'info');
+            await this.iTilesManager.queryOnlineTiles(SELECT_ITILE.ALL);
+            
+            // Step 2: Wait for tiles to pair (20 seconds as per Unity code)
+            this.log('Step 2: Waiting for tiles to pair (20 seconds)...', 'info');
+            let countdown = 20;
+            const countdownInterval = setInterval(() => {
+                this.log(`⏱️  ${countdown} seconds remaining...`, 'info');
+                countdown--;
+                if (countdown < 0) clearInterval(countdownInterval);
+            }, 1000);
+            
+            await new Promise(r => setTimeout(r, 20000));
+            clearInterval(countdownInterval);
+            
+            // Step 3: Confirm assignment
+            this.log('Step 3: Confirming tile assignments...', 'info');
+            await this.iTilesManager.confirmAssignment(SELECT_ITILE.ALL);
+            await new Promise(r => setTimeout(r, 500));
+            
+            // Step 4: Set game in progress for all discovered tiles
+            this.log('Step 4: Activating tiles...', 'info');
+            for (let i = 1; i <= 6; i++) {
+                await this.iTilesManager.gameInProgress(GAME_STATUS.IN_GAME, i);
+                await new Promise(r => setTimeout(r, 500));
+            }
+            
+            // Step 5: Query paired tiles to confirm
+            this.log('Step 5: Verifying paired tiles...', 'info');
+            await new Promise(r => setTimeout(r, 1000));
+            await this.iTilesManager.queryPairedTiles();
+            
+            this.log('✅ Pairing sequence complete!', 'success');
+            this.log('💡 Check above for the list of paired tiles.', 'info');
+            
+            return true;
+        } catch (error) {
+            this.log(`Child tile pairing error: ${error.message}`, 'error');
+            throw error;
+        }
+    }
 
     // Set sensor data callback
     onSensorData(callback) {
