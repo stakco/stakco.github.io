@@ -23,7 +23,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 30px 20px;
         }
@@ -175,20 +175,105 @@
             border-bottom: 2px solid var(--color-secondary);
         }
 
-        /* Data Display */
-        .data-display {
-            padding: 20px;
+        /* Sensor Table */
+        #sensorTableContainer {
             margin: 15px 0;
-            border: 2px solid #e0e0e0;
+            overflow-x: auto;
             border-radius: var(--border-radius-medium);
-            font-family: 'Courier New', Courier, monospace;
-            white-space: pre-wrap;
-            min-height: 150px;
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            color: var(--color-text-dark);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sensor-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--color-bg-white);
             font-size: 0.95em;
-            line-height: 1.6;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .sensor-table thead {
+            background: var(--gradient-primary);
+            color: var(--color-text-white);
+        }
+
+        .sensor-table th {
+            padding: 15px 20px;
+            text-align: left;
+            font-family: var(--font-family-primary);
+            font-weight: var(--font-weight-bold);
+            font-size: 1em;
+            letter-spacing: 0.3px;
+            border-bottom: 3px solid var(--color-secondary);
+        }
+
+        .sensor-table tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+            transition: all var(--transition-default) var(--transition-ease-in-out);
+        }
+
+        .sensor-table tbody tr:hover:not(.empty-state) {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            transform: scale(1.005);
+        }
+
+        .sensor-table tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        .sensor-table td {
+            padding: 15px 20px;
+            color: var(--color-text-dark);
+            font-family: var(--font-family-secondary);
+        }
+
+        .sensor-table td:first-child {
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary-dark);
+        }
+
+        .sensor-table td:nth-child(3) {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-primary);
+            font-size: 1.05em;
+        }
+
+        .sensor-table .empty-state td {
+            text-align: center;
+            padding: 40px 20px;
+            color: #999;
+            font-style: italic;
+        }
+
+        .sensor-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: var(--border-radius-round);
+            font-size: 0.85em;
+            font-weight: var(--font-weight-bold);
+        }
+
+        .sensor-status.active {
+            background: linear-gradient(135deg, #90EE90 0%, #7ED97E 100%);
+            color: #006400;
+        }
+
+        .sensor-status.warming {
+            background: linear-gradient(135deg, #FFE4B5 0%, #FFD89B 100%);
+            color: #8B4513;
+        }
+
+        .sensor-status.inactive {
+            background: linear-gradient(135deg, #FFB6C1 0%, #FF8BA0 100%);
+            color: #8B0000;
+        }
+
+        /* Sensor row grouping visual */
+        .sensor-table tbody tr[data-sensor-id]:first-of-type {
+            border-top: 3px solid var(--color-secondary);
+        }
+
+        .sensor-table tbody tr.same-sensor {
+            border-top: none;
         }
 
         /* Notes Section */
@@ -308,6 +393,12 @@
             .docs-section ul {
                 grid-template-columns: 1fr;
             }
+
+            .sensor-table th,
+            .sensor-table td {
+                padding: 10px;
+                font-size: 0.9em;
+            }
         }
 
         /* Loading Animation */
@@ -330,7 +421,7 @@
         <!-- Header -->
         <div class="header">
             <h1>🔬 Kiwrious WebSerial SDK</h1>
-            <div class="subtitle">ESM Demo & Testing Interface <span class="badge">v2.0</span></div>
+            <div class="subtitle">ESM Demo & Testing Interface <span class="badge">v2.1</span></div>
         </div>
 
         <!-- Main Card -->
@@ -345,7 +436,7 @@
             <!-- Button Section -->
             <div class="button-section">
                 <button class="button primary" id="connectBtn">Connect Sensor</button>
-                <button class="button secondary" id="disconnectBtn" disabled>Disconnect</button>
+                <button class="button secondary" id="disconnectBtn" disabled>Disconnect All</button>
             </div>
 
             <!-- Info Box -->
@@ -354,8 +445,24 @@
             </div>
 
             <!-- Sensor Data Section -->
-            <h3 class="section-header">Sensor Data</h3>
-            <div class="data-display" id="sensorData">No data yet. Connect a sensor to begin...</div>
+            <h3 class="section-header">Sensor Data <span class="badge" id="sensorCount">0 sensors</span></h3>
+            <div id="sensorTableContainer">
+                <table class="sensor-table" id="sensorTable">
+                    <thead>
+                        <tr>
+                            <th>Sensor Type</th>
+                            <th>Observable</th>
+                            <th>Value</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sensorTableBody">
+                        <tr class="empty-state">
+                            <td colspan="4">No sensors connected. Click "Connect Sensor" to begin...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Notes Card -->
@@ -364,6 +471,7 @@
             <ul>
                 <li>This demo works with <strong>Chromium-based browsers</strong> (Chrome, Edge, Brave)</li>
                 <li>Requires <strong>Web Serial API</strong> support</li>
+                <li>Click <strong>"Connect Sensor"</strong> multiple times to connect multiple sensors</li>
                 <li><strong>VOC sensors</strong> need 20 seconds warm-up time</li>
                 <li>For heart rate sensors, load external dependencies first (see README)</li>
             </ul>
@@ -404,11 +512,15 @@
         const connectBtn = document.getElementById('connectBtn');
         const disconnectBtn = document.getElementById('disconnectBtn');
         const statusDiv = document.getElementById('connectionStatus');
-        const dataDiv = document.getElementById('sensorData');
+        const sensorTableBody = document.getElementById('sensorTableBody');
+        const sensorCount = document.getElementById('sensorCount');
         const infoBox = document.getElementById('infoBox');
         const infoText = document.getElementById('infoText');
 
-        let isVOCSensor = false;
+        // Store connected sensors and their data
+        const connectedSensors = new Map(); // key: sensor ID, value: sensor info
+        let activeSensorCount = 0;
+        let sensorIdCounter = 0;
 
         // Show info message
         function showInfo(message) {
@@ -419,20 +531,124 @@
             }, 5000);
         }
 
-        // Connection status callback
-        serialService.onSerialConnection = (connected) => {
-            if (connected) {
-                statusDiv.textContent = 'Status: Connected ✅';
+        // Update sensor count badge
+        function updateSensorCount() {
+            sensorCount.textContent = `${activeSensorCount} sensor${activeSensorCount !== 1 ? 's' : ''}`;
+        }
+
+        // Update connection status
+        function updateConnectionStatus() {
+            if (activeSensorCount > 0) {
+                statusDiv.textContent = `Status: ${activeSensorCount} Sensor${activeSensorCount !== 1 ? 's' : ''} Connected ✅`;
                 statusDiv.className = 'status connected';
-                connectBtn.disabled = true;
                 disconnectBtn.disabled = false;
             } else {
                 statusDiv.textContent = 'Status: Disconnected ❌';
                 statusDiv.className = 'status disconnected';
-                connectBtn.disabled = false;
                 disconnectBtn.disabled = true;
-                dataDiv.textContent = 'Disconnected. Connect a sensor to begin...';
             }
+        }
+
+        // Generate unique sensor ID
+        function generateSensorId(sensorType) {
+            sensorIdCounter++;
+            return `${sensorType}-${sensorIdCounter}-${Date.now()}`;
+        }
+
+        // Update table with sensor data
+        function updateSensorTable() {
+            // Clear table except header
+            sensorTableBody.innerHTML = '';
+
+            if (connectedSensors.size === 0) {
+                // Show empty state
+                const emptyRow = document.createElement('tr');
+                emptyRow.className = 'empty-state';
+                emptyRow.innerHTML = '<td colspan="4">No sensors connected. Click "Connect Sensor" to begin...</td>';
+                sensorTableBody.appendChild(emptyRow);
+                return;
+            }
+
+            // Sort sensors by connection order
+            const sortedSensors = Array.from(connectedSensors.entries()).sort((a, b) => {
+                // Extract counter from sensor ID for sorting
+                const getCounter = (id) => parseInt(id.split('-')[1]) || 0;
+                return getCounter(a[0]) - getCounter(b[0]);
+            });
+
+            // Add rows for each sensor and its observables
+            sortedSensors.forEach(([sensorId, sensorInfo]) => {
+                const { sensorType, observables, isWarming } = sensorInfo;
+                
+                observables.forEach((observable, obsIndex) => {
+                    const row = document.createElement('tr');
+                    row.setAttribute('data-sensor-id', sensorId);
+                    
+                    // Add class to indicate same sensor group
+                    if (obsIndex > 0) {
+                        row.className = 'same-sensor';
+                    }
+
+                    // Sensor Type (show for all rows but merge visually with rowspan)
+                    const typeCell = document.createElement('td');
+                    typeCell.textContent = sensorType;
+                    if (obsIndex === 0) {
+                        typeCell.setAttribute('rowspan', observables.length);
+                    } else {
+                        typeCell.style.display = 'none';
+                    }
+                    row.appendChild(typeCell);
+
+                    // Observable Label
+                    const labelCell = document.createElement('td');
+                    labelCell.textContent = observable.label;
+                    row.appendChild(labelCell);
+
+                    // Observable Value
+                    const valueCell = document.createElement('td');
+                    let displayValue = '';
+                    
+                    if (observable.type === 'object' && observable.value && observable.value.value !== undefined) {
+                        displayValue = `${observable.value.value} ${observable.unit || ''}`;
+                    } else {
+                        displayValue = `${observable.value} ${observable.unit || ''}`;
+                    }
+                    
+                    valueCell.textContent = displayValue.trim();
+                    row.appendChild(valueCell);
+
+                    // Status (show for all rows but merge visually with rowspan)
+                    const statusCell = document.createElement('td');
+                    if (obsIndex === 0) {
+                        let statusClass = 'active';
+                        let statusText = 'Active';
+                        
+                        if (isWarming) {
+                            statusClass = 'warming';
+                            statusText = 'Warming up...';
+                        }
+                        
+                        statusCell.innerHTML = `<span class="sensor-status ${statusClass}">${statusText}</span>`;
+                        statusCell.setAttribute('rowspan', observables.length);
+                    } else {
+                        statusCell.style.display = 'none';
+                    }
+                    row.appendChild(statusCell);
+
+                    sensorTableBody.appendChild(row);
+                });
+            });
+        }
+
+        // Connection status callback
+        serialService.onSerialConnection = (connected) => {
+            console.log('Connection status changed:', connected);
+            
+            if (!connected && activeSensorCount > 0) {
+                showInfo('⚠️ A sensor has been disconnected');
+            }
+            
+            updateConnectionStatus();
         };
 
         // Firmware update callback
@@ -442,77 +658,105 @@
             }
         };
 
-        // Data callback
+        // Data callback - handles multiple sensors
         serialService.onSerialData = (result) => {
             const values = result.decodedValues;
+            const sensorType = result.sensorType || 'Unknown';
             
-            // Check if this is a VOC sensor
-            if (result.sensorType && result.sensorType.toLowerCase().includes('voc')) {
-                isVOCSensor = true;
+            // Create or update sensor entry
+            // We'll identify sensors by type + instance count
+            // For better tracking, you might want to modify the library to provide a unique port ID
+            
+            let sensorId = null;
+            
+            // Try to find existing sensor of this type that was recently updated (within 2 seconds)
+            const now = Date.now();
+            for (const [id, info] of connectedSensors.entries()) {
+                if (info.sensorType === sensorType && (now - info.lastUpdate) < 2000) {
+                    // Found matching sensor type updated recently - update it
+                    sensorId = id;
+                    break;
+                }
             }
             
-            let dataText = `Sensor Type: ${result.sensorType || 'Unknown'}\n`;
-            dataText += `Timestamp: ${new Date().toLocaleTimeString()}\n`;
-            dataText += `─────────────────────────────────────────\n`;
-            dataText += `Values:\n\n`;
+            // If no existing sensor found, create new entry
+            if (!sensorId) {
+                sensorId = generateSensorId(sensorType);
+                activeSensorCount++;
+                updateSensorCount();
+                updateConnectionStatus();
+                console.log(`New sensor connected: ${sensorId}`);
+            }
             
-            let hasWarmingUpStatus = false;
+            // Check if this is a VOC sensor and if it's warming up
+            const isVOCSensor = sensorType.toLowerCase().includes('voc') || sensorType.toLowerCase().includes('air');
+            let isWarming = false;
             
-            values.forEach((value, index) => {
-                // Format value based on type
-                let displayValue;
-                if (value.type === 'object') {
-                    displayValue = `Status: ${value.value.status} Value: ${value.value.value}`;
+            // Check for warming up status in values
+            values.forEach(value => {
+                if (value.type === 'object' && value.value && value.value.status === 'warming_up') {
+                    isWarming = true;
                 }
-                // TODO: add other sensor value types as needed
-                else {
-                    // Fallback for other types
-                    displayValue = String(value.value);
-                }
-                // TODO: add unit to main library code
-                dataText += `  ${index + 1}. ${value.label}: ${displayValue} ${value.unit || ''}\n`;
             });
             
-            // Update status indicator for VOC warming up
-            if (hasWarmingUpStatus && isVOCSensor) {
-                statusDiv.textContent = 'Status: Connected - Sensor Warming Up... ⏳';
-                statusDiv.className = 'status warming-up';
-            } else if (isVOCSensor) {
-                statusDiv.textContent = 'Status: Connected - Sensor Ready ✅';
-                statusDiv.className = 'status connected';
-            }
+            // Store sensor information
+            connectedSensors.set(sensorId, {
+                sensorType: sensorType,
+                observables: values,
+                isWarming: isWarming && isVOCSensor,
+                lastUpdate: now
+            });
             
-            dataDiv.textContent = dataText;
+            // Update the table
+            updateSensorTable();
         };
 
-        // Connect button
+        // Connect button - allows connecting multiple sensors
         connectBtn.addEventListener('click', async () => {
             try {
-                dataDiv.textContent = 'Connecting to sensor...';
-                dataDiv.classList.add('loading');
+                showInfo('🔌 Opening sensor selection dialog...');
                 await serialService.connectAndReadAsync();
-                dataDiv.classList.remove('loading');
+                showInfo('✅ Sensor connected successfully!');
             } catch (error) {
                 console.error('Connection error:', error);
-                dataDiv.classList.remove('loading');
-                dataDiv.textContent = `Failed to connect: ${error.message}`;
-                alert('Failed to connect: ' + error.message);
+                
+                if (error.message.includes('No port selected')) {
+                    showInfo('❌ Connection cancelled - no sensor selected');
+                } else {
+                    showInfo('❌ Failed to connect: ' + error.message);
+                    alert('Failed to connect: ' + error.message);
+                }
             }
         });
 
-        // Disconnect button
+        // Disconnect button - disconnects all sensors
         disconnectBtn.addEventListener('click', async () => {
             try {
                 await serialService.disconnectAsync();
-                isVOCSensor = false;
+                
+                // Clear all sensor data
+                connectedSensors.clear();
+                activeSensorCount = 0;
+                sensorIdCounter = 0;
+                
+                // Update UI
+                updateSensorCount();
+                updateConnectionStatus();
+                updateSensorTable();
+                
+                showInfo('🔌 All sensors disconnected');
             } catch (error) {
                 console.error('Disconnect error:', error);
                 alert('Failed to disconnect: ' + error.message);
             }
         });
 
+        // Initialize
         console.log('✅ Kiwrious WebSerial SDK loaded successfully!');
         console.log('📚 Library API:', serialService);
+        console.log('💡 Click "Connect Sensor" multiple times to connect multiple sensors');
+        updateSensorCount();
+        updateConnectionStatus();
     </script>
 </body>
 </html>
