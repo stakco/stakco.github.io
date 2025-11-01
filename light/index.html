@@ -91,6 +91,10 @@
             cursor: grabbing;
         }
 
+        #canvas.panning {
+            cursor: move;
+        }
+
         .controls {
             position: absolute;
             bottom: 20px;
@@ -207,43 +211,189 @@
 
         .angle-display {
             position: absolute;
-            top: 100px;
-            right: 20px;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
-            padding: 15px;
+            padding: 12px 20px;
             border-radius: 15px;
             text-align: center;
-            width: 220px;
             box-shadow: var(--shadow-soft);
             z-index: 800;
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
         @media (max-width: 768px) {
             .angle-display {
-                top: 120px;
-                right: 10px;
-                padding: 12px;
-                width: 200px;
+                bottom: 10px;
+                padding: 10px 15px;
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
             }
+        }
+
+        .angle-display .angle-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
         }
 
         .angle-display .angle-value {
             font-size: 16px;
             font-weight: 700;
             color: var(--primary-color);
-            margin-bottom: 8px;
-            line-height: 1.5;
             font-family: 'Courier New', monospace;
-            white-space: pre-line;
         }
 
         .angle-display .angle-label {
-            font-size: 10px;
+            font-size: 9px;
             color: var(--text-secondary);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 1px;
             font-weight: 600;
+        }
+
+        .angle-display .angle-separator {
+            font-size: 20px;
+            color: var(--text-secondary);
+            opacity: 0.3;
+        }
+
+        @media (max-width: 768px) {
+            .angle-display .angle-separator {
+                display: none;
+            }
+        }
+
+        .hide-controls-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: var(--shadow-soft);
+            z-index: 900;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hide-controls-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.4);
+        }
+
+        .hide-controls-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .hide-controls-btn {
+                bottom: 10px;
+                left: 10px;
+                width: 45px;
+                height: 45px;
+                padding: 10px;
+            }
+        }
+
+        .controls-hidden .zoom-controls,
+        .controls-hidden .controls,
+        .controls-hidden .instructions,
+        .controls-hidden .angle-display {
+            display: none;
+        }
+
+        .zoom-controls {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 15px;
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 220px;
+        }
+
+        @media (max-width: 768px) {
+            .zoom-controls {
+                top: 10px;
+                left: 10px;
+                min-width: 200px;
+                padding: 12px;
+            }
+        }
+
+        .zoom-controls h2 {
+            margin-bottom: 8px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .zoom-button-group {
+            display: flex;
+            gap: 6px;
+        }
+
+        .zoom-button {
+            flex: 1;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
+        }
+
+        .zoom-button:active {
+            transform: translateY(0);
+        }
+
+        .zoom-button.reset {
+            background: var(--text-secondary);
+        }
+
+        .zoom-level-display {
+            text-align: center;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-color);
+            font-family: 'Courier New', monospace;
         }
 
         .marker-info {
@@ -324,13 +474,30 @@
 
 <body>
     <stakco-info-panel icon="fa-cube">
-        <p>Projection-based ArUco marker testing simulator</p>
+        <p>Projection-based ArUco marker testing simulator with zoom</p>
     </stakco-info-panel>
 
     <stakco-products-panel></stakco-products-panel>
 
     <div class="container">
         <canvas id="canvas"></canvas>
+
+        <div class="zoom-controls">
+            <h2>🔍 Zoom</h2>
+            <div class="zoom-button-group">
+                <button class="zoom-button" id="zoomOut" title="Zoom Out (- or Scroll)">
+                    <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="zoom-button reset" id="zoomReset" title="Reset Zoom (R)">
+                    <i class="fas fa-compress"></i>
+                </button>
+                <button class="zoom-button" id="zoomIn" title="Zoom In (+ or Scroll)">
+                    <i class="fas fa-search-plus"></i>
+                </button>
+            </div>
+            <div class="zoom-level-display" id="zoomLevel">100%</div>
+            <button id="resetView">Reset View (R)</button>
+        </div>
 
         <div class="controls">
             <h2>⚙️ Controls</h2>
@@ -359,19 +526,40 @@
         </div>
 
         <div class="angle-display">
-            <div class="angle-value" id="angleDisplayValue">0.0°</div>
-            <div class="angle-label">Rotation Angle</div>
+            <div class="angle-item">
+                <div class="angle-value" id="ring1Angle">0°</div>
+                <div class="angle-label">Ring 1</div>
+            </div>
+            <div class="angle-separator">|</div>
+            <div class="angle-item">
+                <div class="angle-value" id="ring2Angle">0°</div>
+                <div class="angle-label">Ring 2</div>
+            </div>
+            <div class="angle-separator">|</div>
+            <div class="angle-item">
+                <div class="angle-value" id="ring3Angle">0°</div>
+                <div class="angle-label">Ring 3</div>
+            </div>
         </div>
+
+        <button class="hide-controls-btn" id="toggleControls" title="Toggle Controls (H)">
+            <i class="fas fa-eye-slash"></i>
+        </button>
 
         <div class="instructions">
             <h3>🎮 Controls</h3>
             <ul>
                 <li><strong>← →:</strong> Rotate</li>
+                <li><strong>Shift+Arrows:</strong> Pan view</li>
                 <li><strong>0-3:</strong> Select ring</li>
                 <li><strong>Space:</strong> Auto-rotate</li>
                 <li><strong>[ ]:</strong> Marker size</li>
-                <li><strong>Scroll:</strong> Rotate</li>
-                <li><strong>Drag:</strong> Manual rotate</li>
+                <li><strong>+ -:</strong> Zoom in/out</li>
+                <li><strong>R:</strong> Reset view</li>
+                <li><strong>H:</strong> Hide/Show UI</li>
+                <li><strong>Scroll:</strong> Zoom</li>
+                <li><strong>Shift+Drag:</strong> Pan view</li>
+                <li><strong>Drag:</strong> Rotate</li>
             </ul>
         </div>
 
@@ -432,7 +620,17 @@
         autoRotate: false,
         autoRotateSpeed: 30, // degrees per second
         smoothing: 0.1, // for smooth rotation animation
-        activeRing: 0 // Which ring is controlled (0, 1, 2, or -1 for all)
+        activeRing: 0, // Which ring is controlled (0, 1, 2, or -1 for all)
+        zoom: 1.0, // Zoom level (1.0 = 100%, default view)
+        targetZoom: 1.0,
+        minZoom: 0.5, // Minimum zoom (50%)
+        maxZoom: 8.0, // Maximum zoom (800%)
+        zoomStep: 0.2, // Zoom increment per step
+        panX: 0, // Pan offset X
+        panY: 0, // Pan offset Y
+        targetPanX: 0,
+        targetPanY: 0,
+        panStep: 50 // Pan step in pixels when using arrow keys while zoomed
     };
 
     // ArUco marker images cache
@@ -498,7 +696,10 @@
     // Animation variables
     let lastTime = Date.now();
     let isDragging = false;
+    let isPanning = false;
     let lastMouseAngle = 0;
+    let lastMouseX = 0;
+    let lastMouseY = 0;
 
     // Draw the simulation
     function draw() {
@@ -526,9 +727,19 @@
             return;
         }
 
+        // Save context for zoom and pan
+        ctx.save();
+
+        // Apply zoom and pan transformations
         // Calculate canvas center
         const centerX = canvas.width / 2;
         const centerY = canvas.height / 2;
+
+        // Translate to center, apply zoom, translate back, then apply pan
+        ctx.translate(centerX + config.panX, centerY + config.panY);
+        ctx.scale(config.zoom, config.zoom);
+        ctx.translate(-centerX, -centerY);
+
         const maxSize = Math.min(canvas.width, canvas.height) * 0.7;
 
         // Draw all three rings
@@ -537,8 +748,8 @@
 
             // Draw circle outline
             ctx.strokeStyle = ring.strokeColor;
-            ctx.lineWidth = 2;
-            ctx.setLineDash([10, 10]);
+            ctx.lineWidth = 2 / config.zoom; // Adjust line width for zoom
+            ctx.setLineDash([10 / config.zoom, 10 / config.zoom]);
             ctx.beginPath();
             ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
             ctx.stroke();
@@ -579,6 +790,9 @@
         ctx.beginPath();
         ctx.arc(centerX, centerY, 8, 0, Math.PI * 2);
         ctx.fill();
+
+        // Restore context
+        ctx.restore();
     }
 
     // Update simulation
@@ -614,6 +828,16 @@
             ring.rotation += diff * config.smoothing;
         });
 
+        // Smooth zoom
+        const zoomDiff = config.targetZoom - config.zoom;
+        config.zoom += zoomDiff * config.smoothing;
+
+        // Smooth pan
+        const panXDiff = config.targetPanX - config.panX;
+        const panYDiff = config.targetPanY - config.panY;
+        config.panX += panXDiff * config.smoothing;
+        config.panY += panYDiff * config.smoothing;
+
         // Update UI with normalized values
         updateUI();
     }
@@ -625,8 +849,9 @@
         const ring2Angle = ((config.rings[1].rotation % 360) + 360) % 360;
         const ring3Angle = ((config.rings[2].rotation % 360) + 360) % 360;
 
-        document.getElementById('angleDisplayValue').textContent =
-            `R1: ${ring1Angle.toFixed(0)}°\nR2: ${ring2Angle.toFixed(0)}°\nR3: ${ring3Angle.toFixed(0)}°`;
+        document.getElementById('ring1Angle').textContent = ring1Angle.toFixed(0) + '°';
+        document.getElementById('ring2Angle').textContent = ring2Angle.toFixed(0) + '°';
+        document.getElementById('ring3Angle').textContent = ring3Angle.toFixed(0) + '°';
 
         document.getElementById('rotationSpeed').textContent =
             (config.autoRotate ? config.autoRotateSpeed.toFixed(1) : '0.0') + '°/s';
@@ -636,6 +861,24 @@
         // Update active ring status
         const activeRingText = config.activeRing === -1 ? 'All Rings' : `Ring ${config.activeRing + 1}`;
         document.getElementById('activeRingStatus').textContent = activeRingText;
+
+        // Update zoom level display
+        document.getElementById('zoomLevel').textContent = Math.round(config.zoom * 100) + '%';
+    }
+
+    // Zoom functions
+    function zoomIn() {
+        config.targetZoom = Math.min(config.targetZoom + config.zoomStep, config.maxZoom);
+    }
+
+    function zoomOut() {
+        config.targetZoom = Math.max(config.targetZoom - config.zoomStep, config.minZoom);
+    }
+
+    function resetZoom() {
+        config.targetZoom = 1.0;
+        config.targetPanX = 0;
+        config.targetPanY = 0;
     }
 
     // Animation loop
@@ -649,28 +892,56 @@
     document.addEventListener('keydown', (e) => {
         switch(e.key) {
             case 'ArrowLeft':
-                if (config.activeRing === -1) {
+                if (config.zoom > 1.0 && e.shiftKey) {
+                    // Pan left when zoomed in
+                    config.targetPanX += config.panStep;
+                    e.preventDefault();
+                } else if (config.activeRing === -1) {
                     // Rotate all rings
                     config.rings.forEach(ring => {
                         ring.targetRotation -= config.rotationStep;
                     });
+                    e.preventDefault();
                 } else {
                     // Rotate only active ring
                     config.rings[config.activeRing].targetRotation -= config.rotationStep;
+                    e.preventDefault();
                 }
-                e.preventDefault();
                 break;
             case 'ArrowRight':
-                if (config.activeRing === -1) {
+                if (config.zoom > 1.0 && e.shiftKey) {
+                    // Pan right when zoomed in
+                    config.targetPanX -= config.panStep;
+                    e.preventDefault();
+                } else if (config.activeRing === -1) {
                     // Rotate all rings
                     config.rings.forEach(ring => {
                         ring.targetRotation += config.rotationStep;
                     });
+                    e.preventDefault();
                 } else {
                     // Rotate only active ring
                     config.rings[config.activeRing].targetRotation += config.rotationStep;
+                    e.preventDefault();
                 }
-                e.preventDefault();
+                break;
+            case 'ArrowUp':
+                if (config.zoom > 1.0 && e.shiftKey) {
+                    // Pan up when zoomed in
+                    config.targetPanY += config.panStep;
+                    e.preventDefault();
+                } else {
+                    e.preventDefault();
+                }
+                break;
+            case 'ArrowDown':
+                if (config.zoom > 1.0 && e.shiftKey) {
+                    // Pan down when zoomed in
+                    config.targetPanY -= config.panStep;
+                    e.preventDefault();
+                } else {
+                    e.preventDefault();
+                }
                 break;
             case ' ':
                 config.autoRotate = !config.autoRotate;
@@ -694,13 +965,27 @@
                 break;
             case '+':
             case '=':
-                config.rotationStep = Math.min(config.rotationStep + 1, 30);
-                document.getElementById('stepSize').value = config.rotationStep;
+                if (e.shiftKey || e.key === '+') {
+                    // Zoom in
+                    zoomIn();
+                    e.preventDefault();
+                } else {
+                    // Rotation step
+                    config.rotationStep = Math.min(config.rotationStep + 1, 30);
+                    document.getElementById('stepSize').value = config.rotationStep;
+                }
                 break;
             case '-':
             case '_':
-                config.rotationStep = Math.max(config.rotationStep - 1, 1);
-                document.getElementById('stepSize').value = config.rotationStep;
+                if (e.shiftKey || e.key === '_') {
+                    // Zoom out
+                    zoomOut();
+                    e.preventDefault();
+                } else {
+                    // Rotation step
+                    config.rotationStep = Math.max(config.rotationStep - 1, 1);
+                    document.getElementById('stepSize').value = config.rotationStep;
+                }
                 break;
             case '[':
                 config.markerSize = Math.max(config.markerSize - 1, 10);
@@ -710,24 +995,72 @@
                 config.markerSize = Math.min(config.markerSize + 1, 40);
                 document.getElementById('markerSizeSlider').value = config.markerSize;
                 break;
+            case 'r':
+            case 'R':
+                resetZoom();
+                e.preventDefault();
+                break;
+            case 'h':
+            case 'H':
+                toggleControlsVisibility();
+                e.preventDefault();
+                break;
         }
     });
 
-    // Mouse drag rotation
+    // Toggle controls visibility
+    function toggleControlsVisibility() {
+        const container = document.querySelector('.container');
+        const button = document.getElementById('toggleControls');
+        const icon = button.querySelector('i');
+        
+        container.classList.toggle('controls-hidden');
+        
+        if (container.classList.contains('controls-hidden')) {
+            icon.className = 'fas fa-eye';
+            button.title = 'Show Controls (H)';
+        } else {
+            icon.className = 'fas fa-eye-slash';
+            button.title = 'Hide Controls (H)';
+        }
+    }
+
+    // Mouse drag rotation and panning
     canvas.addEventListener('mousedown', (e) => {
-        isDragging = true;
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left - canvas.width / 2;
         const y = e.clientY - rect.top - canvas.height / 2;
-        lastMouseAngle = Math.atan2(y, x) * 180 / Math.PI;
+        
+        if (e.shiftKey) {
+            // Pan mode
+            isPanning = true;
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+            canvas.classList.add('panning');
+        } else {
+            // Rotation mode
+            isDragging = true;
+            lastMouseAngle = Math.atan2(y - config.panY, x - config.panX) * 180 / Math.PI;
+        }
     });
 
     canvas.addEventListener('mousemove', (e) => {
-        if (isDragging) {
+        if (isPanning) {
+            // Pan the view
+            const deltaX = e.clientX - lastMouseX;
+            const deltaY = e.clientY - lastMouseY;
+            
+            config.targetPanX += deltaX;
+            config.targetPanY += deltaY;
+            
+            lastMouseX = e.clientX;
+            lastMouseY = e.clientY;
+        } else if (isDragging) {
+            // Rotate
             const rect = canvas.getBoundingClientRect();
             const x = e.clientX - rect.left - canvas.width / 2;
             const y = e.clientY - rect.top - canvas.height / 2;
-            const currentMouseAngle = Math.atan2(y, x) * 180 / Math.PI;
+            const currentMouseAngle = Math.atan2(y - config.panY, x - config.panX) * 180 / Math.PI;
             const angleDiff = currentMouseAngle - lastMouseAngle;
 
             if (config.activeRing === -1) {
@@ -746,30 +1079,28 @@
 
     canvas.addEventListener('mouseup', () => {
         isDragging = false;
+        isPanning = false;
+        canvas.classList.remove('panning');
     });
 
     canvas.addEventListener('mouseleave', () => {
         isDragging = false;
+        isPanning = false;
+        canvas.classList.remove('panning');
     });
 
-    // Mouse wheel/scroll control for rotation
+    // Mouse wheel/scroll control for zoom
     canvas.addEventListener('wheel', (e) => {
         e.preventDefault();
 
         // Normalize scroll delta (different browsers/devices report different values)
         const delta = Math.sign(e.deltaY);
 
-        // Rotate by a fraction of step size for smoother control (30% of step size)
-        const rotationAmount = delta * config.rotationStep * 0.3;
-
-        if (config.activeRing === -1) {
-            // Rotate all rings
-            config.rings.forEach(ring => {
-                ring.targetRotation += rotationAmount;
-            });
+        // Zoom with scroll
+        if (delta < 0) {
+            zoomIn();
         } else {
-            // Rotate only active ring
-            config.rings[config.activeRing].targetRotation += rotationAmount;
+            zoomOut();
         }
     }, { passive: false });
 
@@ -787,6 +1118,15 @@
         config.markerSize = parseInt(e.target.value);
     });
 
+    // Zoom button controls
+    document.getElementById('zoomIn').addEventListener('click', zoomIn);
+    document.getElementById('zoomOut').addEventListener('click', zoomOut);
+    document.getElementById('zoomReset').addEventListener('click', resetZoom);
+    document.getElementById('resetView').addEventListener('click', resetZoom);
+
+    // Toggle controls button
+    document.getElementById('toggleControls').addEventListener('click', toggleControlsVisibility);
+
     // Window resize
     window.addEventListener('resize', () => {
         canvas.width = window.innerWidth;
@@ -801,10 +1141,11 @@
     updateUI();
 
     // Initial message
-    console.log('ArUco Marker Simulator Started - Multi-Ring Mode');
+    console.log('ArUco Marker Simulator Started - Multi-Ring Mode with Zoom (50%-800%)');
     console.log('Loading marker images: 4x4_1000-0.svg to 4x4_1000-35.svg');
     console.log('Ring 1 (Outer): IDs 0-11, Ring 2 (Middle): IDs 12-23, Ring 3 (Inner): IDs 24-35');
     console.log('Use arrow keys to rotate, space to auto-rotate, 0-3 to select ring');
+    console.log('Use +/- or scroll to zoom (up to 800%), Shift+Arrows or Shift+Drag to pan, R to reset view');
     console.log('Configuration:', config);
 </script>
 </body>
