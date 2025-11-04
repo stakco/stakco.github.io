@@ -16,6 +16,7 @@ class StakcoInfoPanel extends HTMLElement {
 
   render() {
     const icon = this.getAttribute('icon') || 'fa-compass';
+    const iconSize = this.getAttribute('icon-size') || '44px';
     const buttonStyle = this.getAttribute('button-style') || '';
     
 
@@ -54,7 +55,7 @@ class StakcoInfoPanel extends HTMLElement {
           width: auto;
           height: auto;
           display: block;
-          font-size: 44px;
+          font-size: ${iconSize};
           color: white;
         }
         .panel {
