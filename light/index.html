@@ -97,14 +97,13 @@
 
         .controls {
             position: absolute;
-            bottom: 20px;
+            bottom: 100px;
             right: 20px;
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
             padding: 15px;
             border-radius: 15px;
             border: none;
-            min-width: 220px;
             box-shadow: var(--shadow-soft);
             z-index: 800;
         }
@@ -157,7 +156,7 @@
 
         .instructions {
             position: absolute;
-            bottom: 20px;
+            bottom: 100px;
             left: 20px;
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
@@ -216,14 +215,14 @@
             transform: translateX(-50%);
             background: var(--glass-bg);
             backdrop-filter: blur(10px);
-            padding: 12px 20px;
+            padding: 6px 10px;
             border-radius: 15px;
             text-align: center;
             box-shadow: var(--shadow-soft);
             z-index: 800;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 10px;
         }
 
         @media (max-width: 768px) {
@@ -238,9 +237,9 @@
 
         .angle-display .angle-item {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            gap: 4px;
+            gap: 6px;
         }
 
         .angle-display .angle-value {
@@ -262,6 +261,22 @@
             font-size: 20px;
             color: var(--text-secondary);
             opacity: 0.3;
+        }
+
+        .angle-display .eye-toggle {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--primary-color);
+            font-size: 14px;
+        }
+
+        .angle-display .eye-toggle:hover {
+            transform: scale(1.2);
+        }
+
+        .angle-display .eye-toggle.hidden {
+            color: var(--text-secondary);
+            opacity: 0.4;
         }
 
         @media (max-width: 768px) {
@@ -310,45 +325,10 @@
             }
         }
 
-        .controls-hidden .zoom-controls,
         .controls-hidden .controls,
         .controls-hidden .instructions,
         .controls-hidden .angle-display {
             display: none;
-        }
-
-        .zoom-controls {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            padding: 15px;
-            border-radius: 15px;
-            box-shadow: var(--shadow-soft);
-            z-index: 800;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 220px;
-        }
-
-        @media (max-width: 768px) {
-            .zoom-controls {
-                top: 10px;
-                left: 10px;
-                min-width: 200px;
-                padding: 12px;
-            }
-        }
-
-        .zoom-controls h2 {
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .zoom-button-group {
@@ -482,23 +462,6 @@
     <div class="container">
         <canvas id="canvas"></canvas>
 
-        <div class="zoom-controls">
-            <h2>🔍 Zoom</h2>
-            <div class="zoom-button-group">
-                <button class="zoom-button" id="zoomOut" title="Zoom Out (- or Scroll)">
-                    <i class="fas fa-search-minus"></i>
-                </button>
-                <button class="zoom-button reset" id="zoomReset" title="Reset Zoom (R)">
-                    <i class="fas fa-compress"></i>
-                </button>
-                <button class="zoom-button" id="zoomIn" title="Zoom In (+ or Scroll)">
-                    <i class="fas fa-search-plus"></i>
-                </button>
-            </div>
-            <div class="zoom-level-display" id="zoomLevel">100%</div>
-            <button id="resetView">Reset View (R)</button>
-        </div>
-
         <div class="controls">
             <h2>⚙️ Controls</h2>
             <div class="control-row">
@@ -527,18 +490,21 @@
 
         <div class="angle-display">
             <div class="angle-item">
+                <div class="angle-label">R1:</div>
                 <div class="angle-value" id="ring1Angle">0°</div>
-                <div class="angle-label">Ring 1</div>
+                <i class="fas fa-eye eye-toggle" id="eyeToggle1" data-ring="0" title="Toggle Ring 1 visibility"></i>
             </div>
             <div class="angle-separator">|</div>
             <div class="angle-item">
+                <div class="angle-label">R2:</div>
                 <div class="angle-value" id="ring2Angle">0°</div>
-                <div class="angle-label">Ring 2</div>
+                <i class="fas fa-eye eye-toggle" id="eyeToggle2" data-ring="1" title="Toggle Ring 2 visibility"></i>
             </div>
             <div class="angle-separator">|</div>
             <div class="angle-item">
+                <div class="angle-label">R3:</div>
                 <div class="angle-value" id="ring3Angle">0°</div>
-                <div class="angle-label">Ring 3</div>
+                <i class="fas fa-eye eye-toggle" id="eyeToggle3" data-ring="2" title="Toggle Ring 3 visibility"></i>
             </div>
         </div>
 
@@ -557,9 +523,11 @@
                 <li><strong>+ -:</strong> Zoom in/out</li>
                 <li><strong>R:</strong> Reset view</li>
                 <li><strong>H:</strong> Hide/Show UI</li>
+                <li><strong>C:</strong> Toggle center lines</li>
                 <li><strong>Scroll:</strong> Zoom</li>
                 <li><strong>Shift+Drag:</strong> Pan view</li>
                 <li><strong>Drag:</strong> Rotate</li>
+                <li><strong>Eye icons:</strong> Toggle rings</li>
             </ul>
         </div>
 
@@ -592,7 +560,8 @@
                 color: 'rgba(155, 89, 182, 0.3)',
                 strokeColor: '#9b59b6',
                 rotation: 0,
-                targetRotation: 0
+                targetRotation: 0,
+                visible: true
             },
             {
                 name: 'Ring 2 (Middle)',
@@ -602,7 +571,8 @@
                 color: 'rgba(231, 76, 60, 0.3)',
                 strokeColor: '#e74c3c',
                 rotation: 0,
-                targetRotation: 0
+                targetRotation: 0,
+                visible: true
             },
             {
                 name: 'Ring 3 (Inner)',
@@ -612,7 +582,8 @@
                 color: 'rgba(243, 156, 18, 0.3)',
                 strokeColor: '#f39c12',
                 rotation: 0,
-                targetRotation: 0
+                targetRotation: 0,
+                visible: true
             }
         ],
         markerSize: 25, // pixels
@@ -630,7 +601,8 @@
         panY: 0, // Pan offset Y
         targetPanX: 0,
         targetPanY: 0,
-        panStep: 50 // Pan step in pixels when using arrow keys while zoomed
+        panStep: 50, // Pan step in pixels when using arrow keys while zoomed
+        showCenterLines: false // Toggle for showing lines from marker centers to circle center
     };
 
     // ArUco marker images cache
@@ -742,8 +714,10 @@
 
         const maxSize = Math.min(canvas.width, canvas.height) * 0.7;
 
-        // Draw all three rings
+        // Draw all three rings (only if visible)
         config.rings.forEach((ring, ringIndex) => {
+            if (!ring.visible) return; // Skip if ring is hidden
+
             const radius = Math.min(ring.diameter / 2, maxSize / 2 * (ring.diameter / config.rings[0].diameter));
 
             // Draw circle outline
@@ -761,6 +735,30 @@
             // Draw markers for this ring
             const markerRadius = radius; // Markers are on the edge of the circle
 
+            // FIRST: Draw center lines (if enabled) - lower z-index
+            if (config.showCenterLines) {
+                ctx.strokeStyle = '#f39c12'; // Orange color matching Ring 3
+                ctx.lineWidth = 2 / config.zoom;
+                ctx.setLineDash([]);
+
+                for (let i = 0; i < ring.markerCount; i++) {
+                    // Calculate marker position
+                    const markerAngle = (i * 360 / ring.markerCount);
+                    const totalAngle = markerAngle + drawRotation;
+                    const angleRad = (totalAngle - 90) * Math.PI / 180;
+
+                    const markerX = centerX + markerRadius * Math.cos(angleRad);
+                    const markerY = centerY + markerRadius * Math.sin(angleRad);
+
+                    // Draw line from center to marker
+                    ctx.beginPath();
+                    ctx.moveTo(centerX, centerY);
+                    ctx.lineTo(markerX, markerY);
+                    ctx.stroke();
+                }
+            }
+
+            // SECOND: Draw markers on top of lines
             for (let i = 0; i < ring.markerCount; i++) {
                 // Calculate marker position
                 // Marker 0 is at 0° (top), markers go clockwise
@@ -862,8 +860,30 @@
         const activeRingText = config.activeRing === -1 ? 'All Rings' : `Ring ${config.activeRing + 1}`;
         document.getElementById('activeRingStatus').textContent = activeRingText;
 
-        // Update zoom level display
-        document.getElementById('zoomLevel').textContent = Math.round(config.zoom * 100) + '%';
+        // Update eye icon states
+        updateEyeIcons();
+    }
+
+    // Update eye icon states based on visibility
+    function updateEyeIcons() {
+        config.rings.forEach((ring, index) => {
+            const eyeIcon = document.getElementById(`eyeToggle${index + 1}`);
+            if (ring.visible) {
+                eyeIcon.classList.remove('hidden');
+                eyeIcon.classList.remove('fa-eye-slash');
+                eyeIcon.classList.add('fa-eye');
+            } else {
+                eyeIcon.classList.add('hidden');
+                eyeIcon.classList.remove('fa-eye');
+                eyeIcon.classList.add('fa-eye-slash');
+            }
+        });
+    }
+
+    // Toggle ring visibility
+    function toggleRingVisibility(ringIndex) {
+        config.rings[ringIndex].visible = !config.rings[ringIndex].visible;
+        updateEyeIcons();
     }
 
     // Zoom functions
@@ -1005,6 +1025,11 @@
                 toggleControlsVisibility();
                 e.preventDefault();
                 break;
+            case 'c':
+            case 'C':
+                config.showCenterLines = !config.showCenterLines;
+                e.preventDefault();
+                break;
         }
     });
 
@@ -1118,14 +1143,13 @@
         config.markerSize = parseInt(e.target.value);
     });
 
-    // Zoom button controls
-    document.getElementById('zoomIn').addEventListener('click', zoomIn);
-    document.getElementById('zoomOut').addEventListener('click', zoomOut);
-    document.getElementById('zoomReset').addEventListener('click', resetZoom);
-    document.getElementById('resetView').addEventListener('click', resetZoom);
-
     // Toggle controls button
     document.getElementById('toggleControls').addEventListener('click', toggleControlsVisibility);
+
+    // Eye icon toggle event listeners
+    document.getElementById('eyeToggle1').addEventListener('click', () => toggleRingVisibility(0));
+    document.getElementById('eyeToggle2').addEventListener('click', () => toggleRingVisibility(1));
+    document.getElementById('eyeToggle3').addEventListener('click', () => toggleRingVisibility(2));
 
     // Window resize
     window.addEventListener('resize', () => {
@@ -1146,6 +1170,7 @@
     console.log('Ring 1 (Outer): IDs 0-11, Ring 2 (Middle): IDs 12-23, Ring 3 (Inner): IDs 24-35');
     console.log('Use arrow keys to rotate, space to auto-rotate, 0-3 to select ring');
     console.log('Use +/- or scroll to zoom (up to 800%), Shift+Arrows or Shift+Drag to pan, R to reset view');
+    console.log('Click eye icons to toggle ring visibility, press C to toggle center lines');
     console.log('Configuration:', config);
 </script>
 </body>
