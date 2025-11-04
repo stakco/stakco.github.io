@@ -453,7 +453,7 @@
 </head>
 
 <body>
-    <stakco-info-panel icon="fa-cube">
+    <stakco-info-panel icon="fa-cube" icon-size="32px">
         <p>Projection-based ArUco marker testing simulator with zoom</p>
     </stakco-info-panel>
 
@@ -522,6 +522,7 @@
                 <li><strong>[ ]:</strong> Marker size</li>
                 <li><strong>+ -:</strong> Zoom in/out</li>
                 <li><strong>R:</strong> Reset view</li>
+                <li><strong>P:</strong> Preset view</li>
                 <li><strong>H:</strong> Hide/Show UI</li>
                 <li><strong>C:</strong> Toggle center lines</li>
                 <li><strong>Scroll:</strong> Zoom</li>
@@ -589,7 +590,7 @@
         markerSize: 25, // pixels
         rotationStep: 5, // degrees per keypress
         autoRotate: false,
-        autoRotateSpeed: 30, // degrees per second
+        autoRotateSpeed: 10, // degrees per second
         smoothing: 0.1, // for smooth rotation animation
         activeRing: 0, // Which ring is controlled (0, 1, 2, or -1 for all)
         zoom: 1.0, // Zoom level (1.0 = 100%, default view)
@@ -899,6 +900,53 @@
         config.targetZoom = 1.0;
         config.targetPanX = 0;
         config.targetPanY = 0;
+        
+        // Rotate all rings to zero
+        config.rings.forEach(ring => {
+            ring.targetRotation = 0;
+        });
+    }
+
+    // Apply preset view (zoom 12x and pan up 12x)
+    function applyPresetView() {
+        // Zoom in 12 times
+        const presetZoom = Math.min(1.0 + (config.zoomStep * 14), config.maxZoom);
+        config.targetZoom = presetZoom;
+        
+        // Pan up 12 times (positive panY moves view up)
+        const presetPanY = config.panStep * 18;
+        config.targetPanX = 0; // Reset horizontal pan
+        config.targetPanY = presetPanY;
+        
+        // Rotate all rings to zero
+        config.rings.forEach(ring => {
+            ring.targetRotation = 0;
+        });
+        
+        // Hide UI controls
+        const container = document.querySelector('.container');
+        const button = document.getElementById('toggleControls');
+        const icon = button.querySelector('i');
+        
+        if (!container.classList.contains('controls-hidden')) {
+            container.classList.add('controls-hidden');
+            icon.className = 'fas fa-eye';
+            button.title = 'Show Controls (H)';
+        }
+        
+        // Request fullscreen
+        const elem = document.documentElement;
+        if (elem.requestFullscreen) {
+            elem.requestFullscreen().catch(err => {
+                console.log(`Error attempting to enable fullscreen: ${err.message}`);
+            });
+        } else if (elem.webkitRequestFullscreen) { // Safari
+            elem.webkitRequestFullscreen();
+        } else if (elem.msRequestFullscreen) { // IE11
+            elem.msRequestFullscreen();
+        }
+        
+        console.log(`Preset view applied: Zoom=${presetZoom.toFixed(1)}x, Pan Y=${presetPanY}px, All rings at 0°, UI hidden, Fullscreen requested`);
     }
 
     // Animation loop
@@ -1028,6 +1076,11 @@
             case 'c':
             case 'C':
                 config.showCenterLines = !config.showCenterLines;
+                e.preventDefault();
+                break;
+            case 'p':
+            case 'P':
+                applyPresetView();
                 e.preventDefault();
                 break;
         }
@@ -1170,6 +1223,7 @@
     console.log('Ring 1 (Outer): IDs 0-11, Ring 2 (Middle): IDs 12-23, Ring 3 (Inner): IDs 24-35');
     console.log('Use arrow keys to rotate, space to auto-rotate, 0-3 to select ring');
     console.log('Use +/- or scroll to zoom (up to 800%), Shift+Arrows or Shift+Drag to pan, R to reset view');
+    console.log('Press P for preset view (zoom 12x + pan up 12x)');
     console.log('Click eye icons to toggle ring visibility, press C to toggle center lines');
     console.log('Configuration:', config);
 </script>
