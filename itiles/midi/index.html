@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI-to-iTiles Visualizer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .status-box {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dc3545;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected {
+            background: #28a745;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.active {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            box-shadow: 0 0 20px rgba(40, 167, 69, 0.5);
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .mode-btn {
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .mode-btn:hover:not(:disabled) {
+            border-color: #667eea;
+        }
+
+        .mode-btn.active {
+            border-color: #28a745;
+        }
+
+        .log-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 8px;
+            height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .log-entry {
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-entry .timestamp {
+            color: #858585;
+            margin-right: 8px;
+        }
+
+        .log-entry .type-info { color: #4fc3f7; }
+        .log-entry .type-success { color: #81c784; }
+        .log-entry .type-error { color: #e57373; }
+        .log-entry .type-midi { color: #ffa726; }
+
+        .note-display {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .note-tile {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .note-tile.active {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px currentColor;
+        }
+
+        .note-tile .tile-label {
+            font-size: 0.7rem;
+            opacity: 0.6;
+            margin-bottom: 5px;
+        }
+
+        .note-tile .note-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: rgba(255, 193, 7, 0.1);
+            border: 1px solid rgba(255, 193, 7, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .info-box strong {
+            color: #ffc107;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .info-box ul {
+            margin-left: 20px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .status-grid {
+                grid-template-columns: 1fr;
+            }
+            .mode-grid {
+                grid-template-columns: 1fr;
+            }
+            .note-display {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎹 MIDI-to-iTiles Visualizer</h1>
+            <p>Musical instrument visualization with interactive floor tiles</p>
+        </div>
+
+        <!-- Connection Status -->
+        <div class="card">
+            <h2>🔌 Connection Status</h2>
+            <div class="status-grid">
+                <div class="status-box">
+                    <div class="status-dot" id="midiStatus"></div>
+                    <div>
+                        <div style="font-size: 0.8rem; opacity: 0.7;">MIDI</div>
+                        <div id="midiStatusText">Disconnected</div>
+                    </div>
+                </div>
+                <div class="status-box">
+                    <div class="status-dot" id="iTilesStatus"></div>
+                    <div>
+                        <div style="font-size: 0.8rem; opacity: 0.7;">iTiles</div>
+                        <div id="iTilesStatusText">Disconnected</div>
+                    </div>
+                </div>
+            </div>
+            <div class="button-group">
+                <button id="connectMidiBtn">🎹 Connect MIDI</button>
+                <button id="connectITilesBtn">🎮 Connect iTiles</button>
+                <button id="pairTilesBtn" disabled>🔗 Pair Tiles (20s)</button>
+            </div>
+        </div>
+
+        <!-- Visualization Modes -->
+        <div class="card">
+            <h2>🎨 Visualization Mode</h2>
+            <div class="info-box">
+                <strong>ℹ️ How it works:</strong>
+                <ul>
+                    <li>Play notes on your MIDI instrument</li>
+                    <li>iTiles light up based on the selected mode</li>
+                    <li>Different modes offer unique visual experiences</li>
+                </ul>
+            </div>
+            <div class="mode-grid">
+                <button class="mode-btn active" data-mode="rainbow">
+                    🌈 <strong>Rainbow Roll</strong><br>
+                    <small>Notes cascade across tiles in rainbow colors</small>
+                </button>
+                <button class="mode-btn" data-mode="octave">
+                    🎼 <strong>Octave Mapper</strong><br>
+                    <small>Each tile = one octave range</small>
+                </button>
+                <button class="mode-btn" data-mode="velocity">
+                    💥 <strong>Velocity Heat</strong><br>
+                    <small>Brightness matches key press intensity</small>
+                </button>
+                <button class="mode-btn" data-mode="chord">
+                    🎵 <strong>Chord Bloom</strong><br>
+                    <small>Multiple tiles for harmony visualization</small>
+                </button>
+                <button class="mode-btn" data-mode="pulse">
+                    💓 <strong>Rhythm Pulse</strong><br>
+                    <small>All tiles pulse with tempo</small>
+                </button>
+                <button class="mode-btn" data-mode="chromatic">
+                    🎨 <strong>Chromatic Wheel</strong><br>
+                    <small>Each note = unique color around color wheel</small>
+                </button>
+            </div>
+        </div>
+
+        <!-- Note Display -->
+        <div class="card">
+            <h2>🎵 Live Note Display</h2>
+            <div class="note-display">
+                <div class="note-tile" data-tile="1">
+                    <div class="tile-label">Tile I</div>
+                    <div class="note-name">-</div>
+                </div>
+                <div class="note-tile" data-tile="2">
+                    <div class="tile-label">Tile II</div>
+                    <div class="note-name">-</div>
+                </div>
+                <div class="note-tile" data-tile="3">
+                    <div class="tile-label">Tile III</div>
+                    <div class="note-name">-</div>
+                </div>
+                <div class="note-tile" data-tile="4">
+                    <div class="tile-label">Tile IV</div>
+                    <div class="note-name">-</div>
+                </div>
+                <div class="note-tile" data-tile="5">
+                    <div class="tile-label">Tile V</div>
+                    <div class="note-name">-</div>
+                </div>
+                <div class="note-tile" data-tile="6">
+                    <div class="tile-label">Tile VI</div>
+                    <div class="note-name">-</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Log -->
+        <div class="card">
+            <h2>📊 Event Log</h2>
+            <div class="log-container" id="logContainer"></div>
+            <button id="clearLogBtn" style="margin-top: 10px;">🗑️ Clear Log</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { 
+            ITilesBLEManager,
+            TileColor,
+            SELECT_ITILE,
+            TIMEOUT_DELAY,
+            CONNECTION_STATE,
+            GAME_STATUS
+        } from 'https://stakcos.com/itiles/itiles.esm.js';
+
+        // ===========================
+        // INITIALIZATION
+        // ===========================
+        const bleManager = new ITilesBLEManager();
+        let midiAccess = null;
+        let midiOutput = null;
+        let currentMode = 'rainbow';
+        const activeNotes = new Map(); // Track currently playing notes
+
+        // UI Elements
+        const midiStatus = document.getElementById('midiStatus');
+        const midiStatusText = document.getElementById('midiStatusText');
+        const iTilesStatus = document.getElementById('iTilesStatus');
+        const iTilesStatusText = document.getElementById('iTilesStatusText');
+        const connectMidiBtn = document.getElementById('connectMidiBtn');
+        const connectITilesBtn = document.getElementById('connectITilesBtn');
+        const pairTilesBtn = document.getElementById('pairTilesBtn');
+        const logContainer = document.getElementById('logContainer');
+        const clearLogBtn = document.getElementById('clearLogBtn');
+        const modeButtons = document.querySelectorAll('.mode-btn');
+        const noteTiles = document.querySelectorAll('.note-tile');
+
+        // ===========================
+        // LOGGING
+        // ===========================
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span class="timestamp">${timestamp}</span>
+                <span class="type-${type}">${message}</span>
+            `;
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // ===========================
+        // MIDI UTILITIES
+        // ===========================
+        const noteNames = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+        
+        function getNoteInfo(midiNote) {
+            const noteName = noteNames[midiNote % 12];
+            const octave = Math.floor(midiNote / 12) - 1;
+            const noteIndex = midiNote % 12;
+            return { noteName, octave, noteIndex, fullName: `${noteName}${octave}` };
+        }
+
+        // ===========================
+        // VISUALIZATION MODES
+        // ===========================
+        const visualizationModes = {
+            // Mode 1: Rainbow Roll - Notes cascade through tiles with rainbow colors
+            rainbow: {
+                name: 'Rainbow Roll',
+                onNoteOn: async (note, velocity) => {
+                    const colors = [
+                        TileColor.RED, TileColor.YELLOW, TileColor.GREEN,
+                        TileColor.CYAN, TileColor.BLUE, TileColor.MAGENTA
+                    ];
+                    const colorIndex = note % colors.length;
+                    const tileIndex = (note % 6) + 1;
+                    
+                    await bleManager.triggerLight(
+                        colors[colorIndex],
+                        TIMEOUT_DELAY.SEC_1,
+                        0, 0,
+                        tileIndex
+                    );
+                    
+                    updateTileDisplay(tileIndex, getNoteInfo(note).fullName, colors[colorIndex]);
+                }
+            },
+
+            // Mode 2: Octave Mapper - Each tile represents an octave
+            octave: {
+                name: 'Octave Mapper',
+                onNoteOn: async (note, velocity) => {
+                    const noteInfo = getNoteInfo(note);
+                    // Map octaves -1 to 10 to tiles 1-6
+                    const tileIndex = Math.min(Math.max(noteInfo.octave + 2, 1), 6);
+                    
+                    // Color based on note within octave
+                    const hue = (noteInfo.noteIndex / 12) * 360;
+                    const color = hslToTileColor(hue, 100, 50);
+                    
+                    await bleManager.triggerLight(
+                        color,
+                        TIMEOUT_DELAY.SEC_1,
+                        0, 0,
+                        tileIndex
+                    );
+                    
+                    updateTileDisplay(tileIndex, noteInfo.fullName, color);
+                }
+            },
+
+            // Mode 3: Velocity Heat - Brightness matches velocity
+            velocity: {
+                name: 'Velocity Heat',
+                onNoteOn: async (note, velocity) => {
+                    const tileIndex = (note % 6) + 1;
+                    // Scale velocity (0-127) to brightness (0-255)
+                    const brightness = Math.floor((velocity / 127) * 255);
+                    
+                    // Heat map: low velocity = blue, high = red
+                    let color;
+                    if (velocity < 42) {
+                        color = new TileColor(0, 0, brightness);
+                    } else if (velocity < 85) {
+                        color = new TileColor(brightness, brightness, 0);
+                    } else {
+                        color = new TileColor(brightness, 0, 0);
+                    }
+                    
+                    await bleManager.triggerLight(
+                        color,
+                        TIMEOUT_DELAY.SEC_1,
+                        0, 0,
+                        tileIndex
+                    );
+                    
+                    updateTileDisplay(tileIndex, `${getNoteInfo(note).fullName} [${velocity}]`, color);
+                }
+            },
+
+            // Mode 4: Chord Bloom - Multiple tiles light for harmony
+            chord: {
+                name: 'Chord Bloom',
+                onNoteOn: async (note, velocity) => {
+                    const noteInfo = getNoteInfo(note);
+                    
+                    // Light up primary tile
+                    const primaryTile = (note % 6) + 1;
+                    const primaryColor = new TileColor(153, 0, 153); // Magenta
+                    
+                    await bleManager.triggerLight(
+                        primaryColor,
+                        TIMEOUT_DELAY.SEC_5,
+                        0, 0,
+                        primaryTile
+                    );
+                    
+                    // If multiple notes active, light adjacent tiles
+                    if (activeNotes.size > 1) {
+                        const secondaryTile = ((note + 1) % 6) + 1;
+                        await bleManager.triggerLight(
+                            new TileColor(0, 153, 153), // Cyan
+                            TIMEOUT_DELAY.SEC_5,
+                            0, 0,
+                            secondaryTile
+                        );
+                    }
+                    
+                    updateTileDisplay(primaryTile, noteInfo.fullName, primaryColor);
+                }
+            },
+
+            // Mode 5: Rhythm Pulse - All tiles pulse together
+            pulse: {
+                name: 'Rhythm Pulse',
+                onNoteOn: async (note, velocity) => {
+                    // Pulse all tiles with same color based on note
+                    const hue = (note % 12) * 30;
+                    const color = hslToTileColor(hue, 100, 50);
+                    
+                    await bleManager.triggerLight(
+                        color,
+                        TIMEOUT_DELAY.SEC_1,
+                        0, 0,
+                        SELECT_ITILE.ALL
+                    );
+                    
+                    // Update all displays
+                    for (let i = 1; i <= 6; i++) {
+                        updateTileDisplay(i, getNoteInfo(note).fullName, color);
+                    }
+                }
+            },
+
+            // Mode 6: Chromatic Wheel - Each note = unique color
+            chromatic: {
+                name: 'Chromatic Wheel',
+                onNoteOn: async (note, velocity) => {
+                    const noteInfo = getNoteInfo(note);
+                    const tileIndex = (note % 6) + 1;
+                    
+                    // Map 12 chromatic notes to color wheel
+                    const hue = (noteInfo.noteIndex / 12) * 360;
+                    const color = hslToTileColor(hue, 100, 50);
+                    
+                    await bleManager.triggerLight(
+                        color,
+                        TIMEOUT_DELAY.SEC_1,
+                        0, 0,
+                        tileIndex
+                    );
+                    
+                    updateTileDisplay(tileIndex, noteInfo.fullName, color);
+                }
+            }
+        };
+
+        // ===========================
+        // COLOR UTILITIES
+        // ===========================
+        function hslToTileColor(h, s, l) {
+            s /= 100;
+            l /= 100;
+            const k = n => (n + h / 30) % 12;
+            const a = s * Math.min(l, 1 - l);
+            const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+            
+            const r = Math.round(255 * f(0) * 0.6); // Scale down for iTiles
+            const g = Math.round(255 * f(8) * 0.6);
+            const b = Math.round(255 * f(4) * 0.6);
+            
+            return new TileColor(r, g, b);
+        }
+
+        function tileColorToRgb(tileColor) {
+            return `rgb(${tileColor.r}, ${tileColor.g}, ${tileColor.b})`;
+        }
+
+        // ===========================
+        // UI UPDATES
+        // ===========================
+        function updateTileDisplay(tileIndex, noteName, color) {
+            const tile = document.querySelector(`.note-tile[data-tile="${tileIndex}"]`);
+            if (tile) {
+                const noteNameEl = tile.querySelector('.note-name');
+                noteNameEl.textContent = noteName;
+                tile.style.borderColor = tileColorToRgb(color);
+                tile.style.color = tileColorToRgb(color);
+                tile.classList.add('active');
+                
+                setTimeout(() => {
+                    tile.classList.remove('active');
+                    setTimeout(() => {
+                        if (noteNameEl.textContent === noteName) {
+                            noteNameEl.textContent = '-';
+                            tile.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                            tile.style.color = 'white';
+                        }
+                    }, 500);
+                }, 500);
+            }
+        }
+
+        // ===========================
+        // MIDI HANDLING
+        // ===========================
+        function handleMIDIMessage(message) {
+            const [status, note, velocity] = message.data;
+            
+            // Note ON
+            if ((status & 0xF0) === 0x90 && velocity > 0) {
+                const noteInfo = getNoteInfo(note);
+                log(`🎹 Note ON: ${noteInfo.fullName} (vel: ${velocity})`, 'midi');
+                
+                activeNotes.set(note, velocity);
+                
+                // Execute current visualization mode
+                if (visualizationModes[currentMode]) {
+                    visualizationModes[currentMode].onNoteOn(note, velocity);
+                }
+            }
+            
+            // Note OFF
+            if ((status & 0xF0) === 0x80 || ((status & 0xF0) === 0x90 && velocity === 0)) {
+                activeNotes.delete(note);
+            }
+        }
+
+        async function connectMIDI() {
+            try {
+                if (!navigator.requestMIDIAccess) {
+                    throw new Error('Web MIDI API not supported in this browser');
+                }
+                
+                log('Requesting MIDI access...', 'info');
+                midiAccess = await navigator.requestMIDIAccess();
+                
+                // Setup inputs
+                for (let input of midiAccess.inputs.values()) {
+                    input.onmidimessage = handleMIDIMessage;
+                    log(`MIDI input connected: ${input.name}`, 'success');
+                }
+                
+                // Setup outputs
+                for (let output of midiAccess.outputs.values()) {
+                    midiOutput = output;
+                    log(`MIDI output connected: ${output.name}`, 'success');
+                    break;
+                }
+                
+                // State change listener
+                midiAccess.onstatechange = (event) => {
+                    if (event.port.type === 'input' && event.port.state === 'connected') {
+                        event.port.onmidimessage = handleMIDIMessage;
+                        log(`MIDI device connected: ${event.port.name}`, 'success');
+                    }
+                };
+                
+                midiStatus.classList.add('connected');
+                midiStatusText.textContent = 'Connected';
+                connectMidiBtn.disabled = true;
+                log('✅ MIDI ready!', 'success');
+                
+            } catch (error) {
+                log(`MIDI error: ${error.message}`, 'error');
+            }
+        }
+
+        // ===========================
+        // iTILES HANDLING
+        // ===========================
+        bleManager.onConnectionStateChanged((state) => {
+            const connected = state === CONNECTION_STATE.CONNECTED;
+            iTilesStatus.classList.toggle('connected', connected);
+            iTilesStatusText.textContent = connected ? 'Connected' : 'Disconnected';
+            
+            if (connected) {
+                connectITilesBtn.disabled = true;
+                pairTilesBtn.disabled = false;
+                log('✅ iTiles master connected! Now pair child tiles.', 'success');
+            }
+        });
+
+        bleManager.onPairedTileListReceived((response) => {
+            const tiles = response.pairedTileIds.join(', ') || 'None';
+            log(`📋 Paired tiles (${response.pairedTileTotal}): ${tiles}`, 'success');
+            
+            if (response.pairedTileTotal > 0) {
+                log('✅ Visualization ready!', 'success');
+            }
+        });
+
+        async function connectITiles() {
+            try {
+                log('Opening iTiles device picker...', 'info');
+                const device = await bleManager.requestDevice();
+                log(`Device selected: ${device.name}`, 'success');
+                
+                await bleManager.connect();
+                
+            } catch (error) {
+                log(`iTiles error: ${error.message}`, 'error');
+            }
+        }
+
+        async function pairITiles() {
+            try {
+                log('🔗 Starting auto-pairing (20 seconds)...', 'info');
+                log('⚠️ Ensure all tiles are powered on!', 'info');
+                
+                pairTilesBtn.disabled = true;
+                pairTilesBtn.textContent = 'Pairing...';
+                
+                await bleManager.queryOnlineTiles(SELECT_ITILE.ALL);
+                
+                let countdown = 20;
+                const interval = setInterval(() => {
+                    pairTilesBtn.textContent = `Pairing... ${countdown}s`;
+                    countdown--;
+                }, 1000);
+                
+                await new Promise(r => setTimeout(r, 20000));
+                clearInterval(interval);
+                
+                await bleManager.confirmAssignment(SELECT_ITILE.ALL);
+                await new Promise(r => setTimeout(r, 500));
+                
+                for (let i = 1; i <= 6; i++) {
+                    await bleManager.gameInProgress(GAME_STATUS.IN_GAME, i);
+                    await new Promise(r => setTimeout(r, 500));
+                }
+                
+                await bleManager.queryPairedTiles();
+                
+                pairTilesBtn.textContent = '🔗 Pair Tiles (20s)';
+                pairTilesBtn.disabled = false;
+                
+            } catch (error) {
+                log(`Pairing error: ${error.message}`, 'error');
+                pairTilesBtn.disabled = false;
+                pairTilesBtn.textContent = '🔗 Pair Tiles (20s)';
+            }
+        }
+
+        // ===========================
+        // MODE SWITCHING
+        // ===========================
+        modeButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const mode = btn.dataset.mode;
+                currentMode = mode;
+                
+                modeButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                log(`Mode changed: ${visualizationModes[mode].name}`, 'info');
+                
+                // Turn off all tiles when switching modes
+                bleManager.turnOffLight(SELECT_ITILE.ALL);
+            });
+        });
+
+        // ===========================
+        // EVENT LISTENERS
+        // ===========================
+        connectMidiBtn.addEventListener('click', connectMIDI);
+        connectITilesBtn.addEventListener('click', connectITiles);
+        pairTilesBtn.addEventListener('click', pairITiles);
+        clearLogBtn.addEventListener('click', () => {
+            logContainer.innerHTML = '';
+            log('Log cleared', 'info');
+        });
+
+        // ===========================
+        // INITIALIZATION
+        // ===========================
+        log('🎹 MIDI-to-iTiles Visualizer Ready', 'success');
+        log('Step 1: Connect your MIDI instrument', 'info');
+        log('Step 2: Connect iTiles and pair tiles', 'info');
+        log('Step 3: Play your instrument and enjoy!', 'info');
+    </script>
+</body>
+</html>
