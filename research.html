@@ -1,750 +1,54 @@
-<!DOCTYPE html>
-
-<!--
- // WEBSITE: https://themefisher.com
- // TWITTER: https://twitter.com/themefisher
- // FACEBOOK: https://www.facebook.com/themefisher
- // GITHUB: https://github.com/themefisher/
--->
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Research - Stakco Interactive Puzzles</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        :root {
-            --primary-color: #f9a743;
-            --primary-gradient: linear-gradient(135deg, #f9a743 0%, #ffc947 100%);
-            --glass-bg: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow-soft: 0 8px 32px rgba(31, 38, 135, 0.37);
-            --shadow-glow: 0 0 40px rgba(249, 167, 68, 0.4);
-            --text-primary: #3c2f38;
-            --text-secondary: #7f8c8d;
-
-            --stakco-light-golden-sunrise: linear-gradient(135deg, #F9EA59 0%, #DFAC6D 100%);
-            --stakco-light-warm-rose-glow: linear-gradient(135deg, #F9EA59 0%, #B83267 100%);
-            --stakco-light-champagne-horizon: linear-gradient(135deg, #DFAC6D 0%, #D4984F 100%);
-            --stakco-light-golden-berry: linear-gradient(135deg, #F9EA59 0%, #D4984F 50%, #B83267 100%);
-
-            --stakco-dark-velvet-night: linear-gradient(135deg, #3C2F38 0%, #B83267 100%);
-            --stakco-dark-deep-rosewood: linear-gradient(135deg, #3C2F38 0%, #D4984F 100%);
-            --stakco-dark-royal-twilight: linear-gradient(135deg, #3C2F38 0%, #DFAC6D 100%);
-            --stakco-dark-wine-gold: linear-gradient(135deg, #3C2F38 0%, #B83267 40%, #DFAC6D 100%);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--text-primary);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-        
-        /* Custom Cursor */
-        body {
-            cursor: none;
-        }
-        
-        .cursor {
-            width: 20px;
-            height: 20px;
-            background: var(--primary-gradient);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease;
-            opacity: 0.8;
-        }
-        
-        .cursor-follower {
-            width: 40px;
-            height: 40px;
-            border: 2px solid var(--primary-color);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-            transition: all 0.3s ease;
-            opacity: 0.3;
-        }
-
-        /* Hide cursor on touch devices */
-        @media (pointer: coarse) {
-            body { cursor: auto; }
-            .cursor, .cursor-follower { display: none; }
-        }
-        
-        /* Navigation */
-        .navbar {
-            transition: all 0.3s ease;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        
-        .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.95) !important;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Page Header */
-        .page-header {
-            min-height: 60vh;
-            background: var(--stakco-dark-velvet-night);
-            position: relative;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            z-index: 1;
-            margin-top: 76px;
-        }
-        
-        .page-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
-            pointer-events: none;
-        }
-
-        .floating-element {
-            position: absolute;
-            opacity: 0.3;
-            animation: float 6s ease-in-out infinite;
-            z-index: 2;
-        }
-        
-        .floating-element:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-        .floating-element:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
-        .floating-element:nth-child(3) { top: 30%; right: 15%; animation-delay: 4s; }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-
-        /* Research Sections */
-        .research-section {
-            padding: 80px 0;
-            position: relative;
-            z-index: 10;
-        }
-
-        .research-section:nth-child(even) {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-        }
-
-        .research-section:nth-child(odd) {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-        }
-
-        /* Research Item Cards */
-        .research-item {
-            margin-bottom: 4rem;
-            transition: all 0.3s ease;
-        }
-
-        .research-item:hover {
-            transform: translateY(-5px);
-        }
-
-        .research-image-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s ease;
-            height: 300px;
-        }
-
-        .research-item:hover .research-image-container {
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-            transform: scale(1.02);
-        }
-
-        .research-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .research-item:hover .research-image {
-            transform: scale(1.05);
-        }
-
-        .research-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(249, 167, 67, 0.9) 0%, rgba(184, 50, 103, 0.9) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .research-item:hover .research-overlay {
-            opacity: 1;
-        }
-
-        .overlay-content {
-            text-align: center;
-            color: white;
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
-        }
-
-        .research-item:hover .overlay-content {
-            transform: translateY(0);
-        }
-
-        .overlay-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.5rem;
-        }
-
-        .research-content {
-            padding: 2rem 0;
-        }
-
-        .research-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        .research-description {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-        }
-
-        .research-description strong {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        /* Research Categories */
-        .research-category {
-            display: inline-block;
-            background: linear-gradient(135deg, rgba(249, 167, 68, 0.1), rgba(255, 201, 71, 0.1));
-            border: 1px solid rgba(249, 167, 68, 0.3);
-            color: var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .research-category:hover {
-            background: var(--primary-gradient);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(249, 167, 68, 0.4);
-        }
-
-        /* Special Research Items */
-        .research-featured {
-            background: white;
-            border-radius: 25px;
-            padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .research-featured::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background: var(--primary-gradient);
-            z-index: 3;
-        }
-
-        .research-featured:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Action Buttons */
-        .btn-modern {
-            background: var(--primary-gradient);
-            border: none;
-            border-radius: 50px;
-            padding: 12px 30px;
-            color: white;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            margin: 0.25rem 0.5rem 0.25rem 0;
-        }
-        
-        .btn-modern::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn-modern:hover::before {
-            left: 100%;
-        }
-        
-        .btn-modern:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
-            color: white;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-outline:hover {
-            background: var(--primary-gradient);
-            color: white;
-            border-color: transparent;
-        }
-
-        /* Divider */
-        .research-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--primary-color), transparent);
-            margin: 3rem 0;
-            opacity: 0.3;
-        }
-
-        /* Stats Section */
-        .research-stats {
-            background: var(--stakco-dark-deep-rosewood);
-            color: white;
-            padding: 4rem 0;
-            margin: 4rem 0;
-            border-radius: 0;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-top: 0.5rem;
-        }
-
-        /* Footer */
-        .footer-block {
-            background: var(--stakco-light-champagne-horizon);
-            padding: 3rem 0 2rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .page-header {
-                min-height: 50vh;
-                margin-top: 70px;
-            }
-            
-            .research-section {
-                padding: 60px 0;
-            }
-
-            .research-image-container {
-                height: 250px;
-                margin-bottom: 1.5rem;
-            }
-
-            .research-title {
-                font-size: 1.5rem;
-            }
-
-            .research-content {
-                padding: 1rem 0;
-            }
-
-            .research-featured {
-                padding: 1.5rem;
-                margin: 1rem 0;
-            }
-
-            .stat-number {
-                font-size: 2rem;
-            }
-        }
-
-        /* Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-        
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Loading Animation */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--text-primary);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease;
-        }
-        
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(249, 167, 68, 0.3);
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .footer-modern {
-    background: var(--stakco-dark-wine-gold);
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.footer-modern::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="footer-grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.05"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.05"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23footer-grain)"/></svg>') repeat;
-    pointer-events: none;
-}
-
-.footer-content {
-    position: relative;
-    z-index: 2;
-    padding: 4rem 0 2rem;
-}
-
-.footer-main {
-    padding-bottom: 3rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 2rem;
-}
-
-.footer-logo {
-    margin-bottom: 2rem;
-}
-
-.footer-logo img {
-    filter: brightness(0) invert(1);
-    transition: all 0.3s ease;
-}
-
-.footer-logo:hover img {
-    filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(249, 167, 67, 0.5));
-    transform: scale(1.05);
-}
-
-.footer-description {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    opacity: 0.9;
-    margin-bottom: 2rem;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-}
-
-.footer-link-group h5 {
-    color: var(--primary-color);
-    font-weight: 600;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-}
-
-.footer-link-group ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-link-group li {
-    margin-bottom: 0.5rem;
-}
-
-.footer-link-group a {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.footer-link-group a:hover {
-    color: var(--primary-color);
-    transform: translateX(5px);
-}
-
-.footer-link-group a i {
-    font-size: 0.8rem;
-    opacity: 0.7;
-}
-
-.footer-social {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.social-link {
-    width: 45px;
-    height: 45px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 1.1rem;
-}
-
-.social-link:hover {
-    background: var(--primary-gradient);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(249, 167, 67, 0.4);
-}
-
-.footer-bottom {
-    text-align: center;
-}
-
-.footer-bottom-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.footer-legal {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.footer-legal a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-}
-
-.footer-legal a:hover {
-    color: var(--primary-color);
-}
-
-.footer-legal .separator {
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 0.8rem;
-}
-
-.footer-copyright {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.85rem;
-    margin: 0;
-}
-
-.footer-patent {
-    background: rgba(249, 167, 67, 0.1);
-    border: 1px solid rgba(249, 167, 67, 0.2);
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-    color: var(--primary-color);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-/* Responsive Design for Footer */
-@media (max-width: 768px) {
-    .footer-content {
-        padding: 3rem 0 1.5rem;
-    }
+<!DOCTYPE html><html lang=en><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Research - Stakco Interactive Puzzles</title><link href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css rel=stylesheet><link href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css rel=stylesheet><style>@import "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap";:root{--primary-color:#f9a743;--primary-gradient:linear-gradient(135deg,#f9a743 0%,#ffc947 100%);--glass-bg:#ffffff40;--glass-border:#ffffff2e;--shadow-soft:0 8px 32px #1f26875e;--shadow-glow:0 0 40px #f9a74466;--text-primary:#3c2f38;--text-secondary:#7f8c8d;--stakco-light-golden-sunrise:linear-gradient(135deg,#f9ea59 0%,#dfac6d 100%);--stakco-light-warm-rose-glow:linear-gradient(135deg,#f9ea59 0%,#b83267 100%);--stakco-light-champagne-horizon:linear-gradient(135deg,#dfac6d 0%,#d4984f 100%);--stakco-light-golden-berry:linear-gradient(135deg,#f9ea59 0%,#d4984f 50%,#b83267 100%);--stakco-dark-velvet-night:linear-gradient(135deg,#3c2f38 0%,#b83267 100%);--stakco-dark-deep-rosewood:linear-gradient(135deg,#3c2f38 0%,#d4984f 100%);--stakco-dark-royal-twilight:linear-gradient(135deg,#3c2f38 0%,#dfac6d 100%);--stakco-dark-wine-gold:linear-gradient(135deg,#3c2f38 0%,#b83267 40%,#dfac6d 100%)}*{box-sizing:border-box;margin:0;padding:0}body{color:var(--text-primary);scroll-behavior:smooth;cursor:none;font-family:Inter,sans-serif;line-height:1.6;overflow-x:hidden}.cursor{background:var(--primary-gradient);pointer-events:none;z-index:9999;opacity:.8;border-radius:50%;width:20px;height:20px;transition:transform .1s;position:fixed}.cursor-follower{border:2px solid var(--primary-color);pointer-events:none;z-index:9998;opacity:.3;border-radius:50%;width:40px;height:40px;transition:all .3s;position:fixed}@media (pointer:coarse){body{cursor:auto}.cursor,.cursor-follower{display:none}}.navbar{-webkit-backdrop-filter:blur(20px);transition:all .3s}.navbar.scrolled{box-shadow:0 5px 30px #0000001a;background:#fffffff2!important}.page-header{background:var(--stakco-dark-velvet-night);z-index:1;align-items:center;min-height:60vh;margin-top:76px;display:flex;position:relative;overflow:hidden}.page-header:before{content:"";pointer-events:none;background:url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"white\" opacity=\"0.1\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"white\" opacity=\"0.1\"/><circle cx=\"50\" cy=\"10\" r=\"0.5\" fill=\"white\" opacity=\"0.1\"/><circle cx=\"10\" cy=\"60\" r=\"0.5\" fill=\"white\" opacity=\"0.1\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grain)\"/></svg>");position:absolute;inset:0}.floating-element{opacity:.3;z-index:2;animation:6s ease-in-out infinite float;position:absolute}.floating-element:first-child{animation-delay:0s;top:20%;left:10%}.floating-element:nth-child(2){animation-delay:2s;top:60%;left:80%}.floating-element:nth-child(3){animation-delay:4s;top:30%;right:15%}@keyframes float{0%,to{transform:translateY(0)rotate(0)}50%{transform:translateY(-20px)rotate(5deg)}}.research-section{z-index:10;padding:80px 0;position:relative}.research-section:nth-child(2n){background:linear-gradient(135deg,#f8f9fa 0%,#fff 100%)}.research-section:nth-child(odd){background:linear-gradient(135deg,#fff 0%,#f8f9fa 100%)}.research-item{margin-bottom:4rem;transition:all .3s}.research-item:hover{transform:translateY(-5px)}.research-image-container{border-radius:20px;height:300px;transition:all .4s;position:relative;overflow:hidden;box-shadow:0 15px 35px #0000001a}.research-item:hover .research-image-container{transform:scale(1.02);box-shadow:0 25px 50px #0003}.research-image{object-fit:cover;width:100%;height:100%;transition:transform .4s}.research-item:hover .research-image{transform:scale(1.05)}.research-overlay{opacity:0;background:linear-gradient(135deg,#f9a743e6 0%,#b83267e6 100%);justify-content:center;align-items:center;width:100%;height:100%;transition:all .3s;display:flex;position:absolute;top:0;left:0}.research-item:hover .research-overlay{opacity:1}.overlay-content{text-align:center;color:#fff;transition:transform .3s;transform:translateY(20px)}.research-item:hover .overlay-content{transform:translateY(0)}.overlay-icon{background:#fff3;border-radius:50%;justify-content:center;align-items:center;width:60px;height:60px;margin:0 auto 1rem;font-size:1.5rem;display:flex}.research-content{padding:2rem 0}.research-title{color:var(--text-primary);margin-bottom:1rem;font-size:1.8rem;font-weight:700}.research-description{color:var(--text-secondary);margin-bottom:1.5rem;font-size:1.1rem;line-height:1.7}.research-description strong{color:var(--text-primary);font-weight:600}.research-category{color:var(--primary-color);background:linear-gradient(135deg,#f9a7441a,#ffc9471a);border:1px solid #f9a7444d;border-radius:20px;margin-bottom:1rem;padding:.5rem 1rem;font-size:.85rem;font-weight:600;transition:all .3s;display:inline-block}.research-category:hover{background:var(--primary-gradient);color:#fff;transform:translateY(-2px);box-shadow:0 5px 15px #f9a74466}.research-featured{background:#fff;border:1px solid #0000000d;border-radius:25px;padding:2rem;position:relative;overflow:hidden;box-shadow:0 20px 40px #0000001a}.research-featured:before{content:"";background:var(--primary-gradient);z-index:3;width:100%;height:6px;position:absolute;top:0;left:0}.research-featured:hover{transform:translateY(-10px);box-shadow:0 30px 60px #00000026}.btn-modern{background:var(--primary-gradient);color:#fff;border:none;border-radius:50px;align-items:center;gap:.5rem;margin:.25rem .5rem .25rem 0;padding:12px 30px;font-weight:600;text-decoration:none;transition:all .3s;display:inline-flex;position:relative;overflow:hidden}.btn-modern:before{content:"";background:linear-gradient(90deg,#0000,#ffffff4d,#0000);width:100%;height:100%;transition:left .5s;position:absolute;top:0;left:-100%}.btn-modern:hover:before{left:100%}.btn-modern:hover{color:#fff;transform:translateY(-2px);box-shadow:0 10px 25px #f9a74466}.btn-outline{border:2px solid var(--primary-color);color:var(--primary-color);background:0 0}.btn-outline:hover{background:var(--primary-gradient);color:#fff;border-color:#0000}.research-divider{background:linear-gradient(90deg,transparent,var(--primary-color),transparent);opacity:.3;height:1px;margin:3rem 0}.research-stats{background:var(--stakco-dark-deep-rosewood);color:#fff;border-radius:0;margin:4rem 0;padding:4rem 0}.stat-item{text-align:center;padding:1rem}.stat-number{color:var(--primary-color);font-size:3rem;font-weight:800;display:block}.stat-label{opacity:.9;margin-top:.5rem;font-size:1.1rem}.footer-block{background:var(--stakco-light-champagne-horizon);padding:3rem 0 2rem}@media (width<=768px){.page-header{min-height:50vh;margin-top:70px}.research-section{padding:60px 0}.research-image-container{height:250px;margin-bottom:1.5rem}.research-title{font-size:1.5rem}.research-content{padding:1rem 0}.research-featured{margin:1rem 0;padding:1.5rem}.stat-number{font-size:2rem}}.fade-in{opacity:0;transition:all .8s;transform:translateY(30px)}.fade-in.visible{opacity:1;transform:translateY(0)}.loading-overlay{background:var(--text-primary);z-index:10000;justify-content:center;align-items:center;width:100%;height:100%;transition:opacity .5s;display:flex;position:fixed;top:0;left:0}.loading-spinner{border:4px solid #f9a7444d;border-top:4px solid var(--primary-color);border-radius:50%;width:60px;height:60px;animation:1s linear infinite spin}@keyframes spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.footer-modern{background:var(--stakco-dark-wine-gold);color:#fff;position:relative;overflow:hidden}.footer-modern:before{content:"";pointer-events:none;background:url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"footer-grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"white\" opacity=\"0.05\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"white\" opacity=\"0.05\"/><circle cx=\"50\" cy=\"10\" r=\"0.5\" fill=\"white\" opacity=\"0.05\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23footer-grain)\"/></svg>");position:absolute;inset:0}.footer-content{z-index:2;padding:4rem 0 2rem;position:relative}.footer-main{border-bottom:1px solid #ffffff1a;margin-bottom:2rem;padding-bottom:3rem}.footer-logo{margin-bottom:2rem}.footer-logo img{filter:brightness(0)invert();transition:all .3s}.footer-logo:hover img{filter:brightness(0)invert()drop-shadow(0 0 10px #f9a74380);transform:scale(1.05)}.footer-description{opacity:.9;max-width:600px;margin-bottom:2rem;margin-left:auto;margin-right:auto;font-size:1.1rem;line-height:1.6}.footer-links{flex-wrap:wrap;justify-content:center;gap:3rem;margin-bottom:2rem;display:flex}.footer-link-group h5{color:var(--primary-color);margin-bottom:1rem;font-size:1rem;font-weight:600}.footer-link-group ul{margin:0;padding:0;list-style:none}.footer-link-group li{margin-bottom:.5rem}.footer-link-group a{color:#fffc;align-items:center;gap:.5rem;font-size:.95rem;text-decoration:none;transition:all .3s;display:inline-flex}.footer-link-group a:hover{color:var(--primary-color);transform:translate(5px)}.footer-link-group a i{opacity:.7;font-size:.8rem}.footer-social{justify-content:center;gap:1rem;margin-bottom:2rem;display:flex}.social-link{backdrop-filter:blur(10px);color:#fff;background:#ffffff1a;border-radius:50%;justify-content:center;align-items:center;width:45px;height:45px;font-size:1.1rem;text-decoration:none;transition:all .3s;display:flex}.social-link:hover{background:var(--primary-gradient);color:#fff;transform:translateY(-3px);box-shadow:0 5px 15px #f9a74366}.footer-bottom{text-align:center}.footer-bottom-content{flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;display:flex}.footer-legal{flex-wrap:wrap;align-items:center;gap:2rem;display:flex}.footer-legal a{color:#ffffffb3;font-size:.9rem;text-decoration:none;transition:all .3s}.footer-legal a:hover{color:var(--primary-color)}.footer-legal .separator{color:#ffffff4d;font-size:.8rem}.footer-copyright{color:#fff9;margin:0;font-size:.85rem}.footer-patent{color:var(--primary-color);background:#f9a7431a;border:1px solid #f9a74333;border-radius:20px;align-items:center;gap:.5rem;margin-top:1rem;padding:.5rem 1rem;font-size:.8rem;display:inline-flex}@media (width<=768px){.footer-content{padding:3rem 0 1.5rem}.footer-links{text-align:center;flex-direction:column;gap:2rem}.footer-bottom-content{text-align:center;flex-direction:column}.footer-legal{order:2;justify-content:center}.footer-copyright{order:1;margin-bottom:1rem}}@media (width<=576px){.footer-links{gap:1.5rem}.footer-legal{flex-direction:column;gap:1rem}.footer-legal .separator{display:none}}</style><body>
     
-    .footer-links {
-        flex-direction: column;
-        gap: 2rem;
-        text-align: center;
-    }
+    <div class=cursor></div>
+    <div class=cursor-follower></div>
     
-    .footer-bottom-content {
-        flex-direction: column;
-        text-align: center;
-    }
     
-    .footer-legal {
-        justify-content: center;
-        order: 2;
-    }
-    
-    .footer-copyright {
-        order: 1;
-        margin-bottom: 1rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .footer-links {
-        gap: 1.5rem;
-    }
-    
-    .footer-legal {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .footer-legal .separator {
-        display: none;
-    }
-}
-
-    </style>
-</head>
-<body>
-    <!-- Custom Cursor -->
-    <div class="cursor"></div>
-    <div class="cursor-follower"></div>
-    
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+    <div class=loading-overlay id=loadingOverlay>
+        <div class=loading-spinner></div>
     </div>
     
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top" id="mainNavbar">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="index.html" style="color: var(--primary-color);">
-                <img src="images/logo2.png" alt="Stakco" width="150px">
+    
+    <nav class="bg-white fixed-top navbar navbar-expand-lg navbar-light shadow-sm" id=mainNavbar>
+        <div class=container>
+            <a class="fs-3 fw-bold navbar-brand" href=index.html style=color:var(--primary-color)>
+                <img src=logo2.15a2db9d.png alt=Stakco width=150px>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class=navbar-toggler type=button data-bs-toggle=collapse data-bs-target=#navbarNav>
+                <span class=navbar-toggler-icon></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
-                    <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="research.html">Research</a></li>
-                    <li class="nav-item"><a class="nav-link" href="impact.html">Impact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+            <div class="collapse navbar-collapse" id=navbarNav>
+                <ul class="ms-auto navbar-nav">
+                    <li class=nav-item><a class=nav-link href=products.html>Products</a></li>
+                    <li class=nav-item><a class=nav-link href=projects.html>Projects</a></li>
+                    <li class=nav-item><a class="active nav-link" href=research.html>Research</a></li>
+                    <li class=nav-item><a class=nav-link href=impact.html>Impact</a></li>
+                    <li class=nav-item><a class=nav-link href=index.html#contact>Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <!-- Floating Elements -->
-        <div class="floating-element">
-            <i class="fas fa-flask fa-3x text-white"></i>
+    
+    <section class=page-header>
+        
+        <div class=floating-element>
+            <i class="fa-3x fa-flask fas text-white"></i>
         </div>
-        <div class="floating-element">
-            <i class="fas fa-atom fa-2x text-white"></i>
+        <div class=floating-element>
+            <i class="fa-2x fa-atom fas text-white"></i>
         </div>
-        <div class="floating-element">
-            <i class="fas fa-brain fa-3x text-white"></i>
+        <div class=floating-element>
+            <i class="fa-3x fa-brain fas text-white"></i>
         </div>
         
-        <div class="container">
-            <div class="row align-items-center">
+        <div class=container>
+            <div class="align-items-center row">
                 <div class="col-12 text-center">
-                    <h1 class="display-2 fw-bold mb-4 text-white fade-in">
+                    <h1 class="display-2 fade-in fw-bold mb-4 text-white">
                         Our Research
                     </h1>
-                    <p class="lead text-white mb-4 fade-in">
+                    <p class="fade-in lead mb-4 text-white">
                         Pioneering the future of interactive puzzles through innovative research and development
                     </p>
                 </div>
@@ -752,178 +56,178 @@
         </div>
     </section>
 
-    <!-- Research Stats -->
-    <section class="research-stats" style="margin-top: 0;">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-6">
-                    <div class="stat-item fade-in">
-                        <span class="stat-number">10+</span>
-                        <div class="stat-label">Research Areas</div>
+    
+    <section class=research-stats style=margin-top:0>
+        <div class=container>
+            <div class=row>
+                <div class="col-6 col-md-3">
+                    <div class="fade-in stat-item">
+                        <span class=stat-number>10+</span>
+                        <div class=stat-label>Research Areas</div>
                     </div>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-item fade-in">
-                        <span class="stat-number">5</span>
-                        <div class="stat-label">Platforms</div>
+                <div class="col-6 col-md-3">
+                    <div class="fade-in stat-item">
+                        <span class=stat-number>5</span>
+                        <div class=stat-label>Platforms</div>
                     </div>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-item fade-in">
-                        <span class="stat-number">3</span>
-                        <div class="stat-label">Media Types</div>
+                <div class="col-6 col-md-3">
+                    <div class="fade-in stat-item">
+                        <span class=stat-number>3</span>
+                        <div class=stat-label>Media Types</div>
                     </div>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="stat-item fade-in">
-                        <span class="stat-number">∞</span>
-                        <div class="stat-label">Possibilities</div>
+                <div class="col-6 col-md-3">
+                    <div class="fade-in stat-item">
+                        <span class=stat-number>âˆž</span>
+                        <div class=stat-label>Possibilities</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Core Research Areas -->
-    <section class="research-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-3 fade-in" style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+    
+    <section class=research-section>
+        <div class=container>
+            <div class=row>
+                <div class="col-12 mb-5 text-center">
+                    <h2 class="display-5 fade-in fw-bold mb-3" style=background:var(--primary-gradient);-webkit-text-fill-color:transparent;-webkit-background-clip:text>
                         Core Research Areas
                     </h2>
-                    <p class="lead text-muted fade-in">Exploring the boundaries of interactive puzzle technology</p>
+                    <p class="fade-in lead text-muted">Exploring the boundaries of interactive puzzle technology</p>
                 </div>
             </div>
 
-            <!-- Dynamic Puzzles with Segmented Multimedia -->
-            <div class="research-item fade-in">
-                <div class="row align-items-center">
+            
+            <div class="fade-in research-item">
+                <div class="align-items-center row">
                     <div class="col-lg-6 mb-4 mb-lg-0">
-                        <div class="research-image-container">
-                            <img src="images/research/research-1.jpg" alt="Dynamic Puzzles with Segmented Multimedia" class="research-image">
-                            <div class="research-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-layer-group"></i>
+                        <div class=research-image-container>
+                            <img src=research-1.6a5e41b5.jpg alt="Dynamic Puzzles with Segmented Multimedia" class=research-image>
+                            <div class=research-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-layer-group fas"></i>
                                     </div>
                                     <h5>Multimedia Innovation</h5>
-                                    <p class="mb-0">Segmented content interaction</p>
+                                    <p class=mb-0>Segmented content interaction</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="research-content">
-                            <div class="research-category">Multimedia Research</div>
-                            <h3 class="research-title">Dynamic Puzzles with Segmented Multimedia</h3>
-                            <p class="research-description">
+                    <div class=col-lg-6>
+                        <div class=research-content>
+                            <div class=research-category>Multimedia Research</div>
+                            <h3 class=research-title>Dynamic Puzzles with Segmented Multimedia</h3>
+                            <p class=research-description>
                                 Exploring novel methods to create dynamic puzzles using segmented multimedia content, enhancing user interaction through layered manipulations. This research investigates how different media types can be decomposed and reconstructed through puzzle mechanics.
                             </p>
-                            <a href="#" class="btn btn-modern">
-                                <i class="fas fa-book-open"></i>Read Research
+                            <a href=# class="btn btn-modern">
+                                <i class="fa-book-open fas"></i>Read Research
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="research-divider"></div>
+            <div class=research-divider></div>
 
-            <!-- Interface Innovation -->
-            <div class="research-item fade-in">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-                        <div class="research-image-container">
-                            <img src="images/research/research-2.jpg" alt="Interface Innovation in Puzzle Play" class="research-image">
-                            <div class="research-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-hand-pointer"></i>
+            
+            <div class="fade-in research-item">
+                <div class="align-items-center row">
+                    <div class="col-lg-6 mb-4 mb-lg-0 order-lg-2">
+                        <div class=research-image-container>
+                            <img src=research-2.845ea960.jpg alt="Interface Innovation in Puzzle Play" class=research-image>
+                            <div class=research-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-hand-pointer fas"></i>
                                     </div>
                                     <h5>Interface Innovation</h5>
-                                    <p class="mb-0">Next-gen control systems</p>
+                                    <p class=mb-0>Next-gen control systems</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 order-lg-1">
-                        <div class="research-content">
-                            <div class="research-category">Interface Design</div>
-                            <h3 class="research-title">Interface Innovation in Puzzle Play</h3>
-                            <p class="research-description">
+                        <div class=research-content>
+                            <div class=research-category>Interface Design</div>
+                            <h3 class=research-title>Interface Innovation in Puzzle Play</h3>
+                            <p class=research-description>
                                 Investigating various interface modalities to enhance digital puzzle experiences, including unconventional and cutting-edge control systems. Our research explores how different input methods can create more intuitive and engaging puzzle interactions.
                             </p>
-                            <a href="#" class="btn btn-modern">
-                                <i class="fas fa-microscope"></i>View Studies
+                            <a href=# class="btn btn-modern">
+                                <i class="fa-microscope fas"></i>View Studies
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="research-divider"></div>
+            <div class=research-divider></div>
 
-            <!-- Immersive Environments -->
-            <div class="research-item fade-in">
-                <div class="row align-items-center">
+            
+            <div class="fade-in research-item">
+                <div class="align-items-center row">
                     <div class="col-lg-6 mb-4 mb-lg-0">
-                        <div class="research-image-container">
-                            <img src="images/research/research-3.jpg" alt="Expanding into Immersive Environments" class="research-image">
-                            <div class="research-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-cube"></i>
+                        <div class=research-image-container>
+                            <img src=research-3.b7fb6036.jpg alt="Expanding into Immersive Environments" class=research-image>
+                            <div class=research-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-cube fas"></i>
                                     </div>
                                     <h5>Immersive Tech</h5>
-                                    <p class="mb-0">Multi-dimensional puzzles</p>
+                                    <p class=mb-0>Multi-dimensional puzzles</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="research-content">
-                            <div class="research-category">Immersive Technology</div>
-                            <h3 class="research-title">Expanding into Immersive Environments</h3>
-                            <p class="research-description">
+                    <div class=col-lg-6>
+                        <div class=research-content>
+                            <div class=research-category>Immersive Technology</div>
+                            <h3 class=research-title>Expanding into Immersive Environments</h3>
+                            <p class=research-description>
                                 Pushing the boundaries of traditional puzzle formats by expanding into multi-dimensional and immersive environments, offering a new layer of complexity. This research explores VR, AR, and spatial computing applications for puzzle experiences.
                             </p>
-                            <a href="#" class="btn btn-modern">
-                                <i class="fas fa-vr-cardboard"></i>Explore VR
+                            <a href=# class="btn btn-modern">
+                                <i class="fa-vr-cardboard fas"></i>Explore VR
                             </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="research-divider"></div>
+            <div class=research-divider></div>
 
-            <!-- Inclusive Design -->
-            <div class="research-item fade-in">
-                <div class="row align-items-center">
-                    <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-                        <div class="research-image-container">
-                            <img src="images/research/research-4.jpg" alt="Inclusive & Accessible Puzzle Design" class="research-image">
-                            <div class="research-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-universal-access"></i>
+            
+            <div class="fade-in research-item">
+                <div class="align-items-center row">
+                    <div class="col-lg-6 mb-4 mb-lg-0 order-lg-2">
+                        <div class=research-image-container>
+                            <img src=research-4.9963955a.jpg alt="Inclusive &amp; Accessible Puzzle Design" class=research-image>
+                            <div class=research-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-universal-access fas"></i>
                                     </div>
                                     <h5>Accessibility Focus</h5>
-                                    <p class="mb-0">Inclusive design research</p>
+                                    <p class=mb-0>Inclusive design research</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 order-lg-1">
-                        <div class="research-content">
-                            <div class="research-category">Accessibility Research</div>
-                            <h3 class="research-title">Inclusive & Accessible Puzzle Design</h3>
-                            <p class="research-description">
+                        <div class=research-content>
+                            <div class=research-category>Accessibility Research</div>
+                            <h3 class=research-title>Inclusive &amp; Accessible Puzzle Design</h3>
+                            <p class=research-description>
                                 Developing inclusive puzzle formats that utilize alternative sensory inputs to engage users, broadening accessibility and interaction possibilities. Our research focuses on making puzzles accessible to users with diverse abilities and needs.
                             </p>
-                            <a href="#" class="btn btn-modern">
-                                <i class="fas fa-heart"></i>Learn More
+                            <a href=# class="btn btn-modern">
+                                <i class="fa-heart fas"></i>Learn More
                             </a>
                         </div>
                     </div>
@@ -932,52 +236,52 @@
         </div>
     </section>
 
-    <!-- Innovative Research Projects -->
-    <section class="research-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-3 fade-in" style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+    
+    <section class=research-section>
+        <div class=container>
+            <div class=row>
+                <div class="col-12 mb-5 text-center">
+                    <h2 class="display-5 fade-in fw-bold mb-3" style=background:var(--primary-gradient);-webkit-text-fill-color:transparent;-webkit-background-clip:text>
                         Breakthrough Innovations
                     </h2>
-                    <p class="lead text-muted fade-in">Revolutionary puzzle formats that expand beyond traditional boundaries</p>
+                    <p class="fade-in lead text-muted">Revolutionary puzzle formats that expand beyond traditional boundaries</p>
                 </div>
             </div>
 
-            <!-- Video Stakco -->
-            <div class="research-item fade-in">
-                <div class="research-featured">
-                    <div class="row align-items-center">
+            
+            <div class="fade-in research-item">
+                <div class=research-featured>
+                    <div class="align-items-center row">
                         <div class="col-lg-6 mb-4 mb-lg-0">
-                            <div class="research-image-container">
-                                <img src="images/research/video-puzzle.png" alt="Video Stakco" class="research-image">
-                                <div class="research-overlay">
-                                    <div class="overlay-content">
-                                        <div class="overlay-icon">
-                                            <i class="fas fa-video"></i>
+                            <div class=research-image-container>
+                                <img src=video-puzzle.3c064885.png alt="Video Stakco" class=research-image>
+                                <div class=research-overlay>
+                                    <div class=overlay-content>
+                                        <div class=overlay-icon>
+                                            <i class="fa-video fas"></i>
                                         </div>
                                         <h5>Dynamic Video Puzzles</h5>
-                                        <p class="mb-0">Real-time complexity</p>
+                                        <p class=mb-0>Real-time complexity</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="research-content">
-                                <div class="research-category">Video Innovation</div>
-                                <h3 class="research-title">Video Stakco: A New Puzzle Format</h3>
-                                <p class="research-description">
+                        <div class=col-lg-6>
+                            <div class=research-content>
+                                <div class=research-category>Video Innovation</div>
+                                <h3 class=research-title>Video Stakco: A New Puzzle Format</h3>
+                                <p class=research-description>
                                     With <strong>Video Stakcos</strong>, we extended our puzzle concept from static 2D images to dynamic video content. This introduces a new layer of complexity, where the puzzle is constantly evolving—requiring continuous visual tracking, temporal alignment, and active attention from the user.
                                 </p>
-                                <p class="research-description">
+                                <p class=research-description>
                                     From a research perspective, this format opens up new directions in studying cognitive load, attention span, and pattern recognition in dynamic environments. Early feedback suggests that video puzzles demand significantly higher mental engagement, making them a promising tool for exploring real-time problem-solving and perceptual learning.
                                 </p>
-                                <div class="mt-4">
-                                    <a href="https://stakcos.com/player/?username=bsc2fast&puzzle=638554242059093107_3_video&stencil=jigsaw_medium" target="_blank" class="btn btn-modern">
-                                        <i class="fas fa-play"></i>Try Video Stakcos
+                                <div class=mt-4>
+                                    <a href="https://stakcos.com/player/?username=bsc2fast&amp;puzzle=638554242059093107_3_video&amp;stencil=jigsaw_medium" target=_blank class="btn btn-modern">
+                                        <i class="fa-play fas"></i>Try Video Stakcos
                                     </a>
-                                    <a href="#" class="btn btn-modern btn-outline">
-                                        <i class="fas fa-file-alt"></i>Read Research
+                                    <a href=# class="btn btn-modern btn-outline">
+                                        <i class="fa-file-alt fas"></i>Read Research
                                     </a>
                                 </div>
                             </div>
@@ -986,42 +290,42 @@
                 </div>
             </div>
 
-            <div class="research-divider"></div>
+            <div class=research-divider></div>
 
-            <!-- Audio Puzzles -->
-            <div class="research-item fade-in">
-                <div class="research-featured">
-                    <div class="row align-items-center">
-                        <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-                            <div class="research-image-container">
-                                <img src="images/research/audio_puzzle.png" alt="Audio Puzzles for BLV people" class="research-image">
-                                <div class="research-overlay">
-                                    <div class="overlay-content">
-                                        <div class="overlay-icon">
-                                            <i class="fas fa-volume-up"></i>
+            
+            <div class="fade-in research-item">
+                <div class=research-featured>
+                    <div class="align-items-center row">
+                        <div class="col-lg-6 mb-4 mb-lg-0 order-lg-2">
+                            <div class=research-image-container>
+                                <img src=audio_puzzle.7c4b1c2f.png alt="Audio Puzzles for BLV people" class=research-image>
+                                <div class=research-overlay>
+                                    <div class=overlay-content>
+                                        <div class=overlay-icon>
+                                            <i class="fa-volume-up fas"></i>
                                         </div>
                                         <h5>Audio-Based Puzzles</h5>
-                                        <p class="mb-0">Sound interaction design</p>
+                                        <p class=mb-0>Sound interaction design</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6 order-lg-1">
-                            <div class="research-content">
-                                <div class="research-category">Accessibility Innovation</div>
-                                <h3 class="research-title">Audio Puzzles for BLV People</h3>
-                                <p class="research-description">
+                            <div class=research-content>
+                                <div class=research-category>Accessibility Innovation</div>
+                                <h3 class=research-title>Audio Puzzles for BLV People</h3>
+                                <p class=research-description>
                                     We are developing <strong>Audio Stakcos</strong> by adapting the original Stakco concept to the auditory domain. Instead of visuals, segmented audio waveforms are used to create an interactive, multi-track puzzle experience. This research explores new ways of engaging users through sound-based interaction.
                                 </p>
-                                <p class="research-description">
+                                <p class=research-description>
                                     This groundbreaking approach opens puzzles to blind and low-vision users, creating inclusive experiences that rely on spatial audio, rhythm recognition, and auditory pattern matching.
                                 </p>
-                                <div class="mt-4">
-                                    <a href="https://stakcos.com/player/?username=bsc2fast&puzzle=638554242059093107_3_audio&stencil=orchid_small" target="_blank" class="btn btn-modern">
-                                        <i class="fas fa-headphones"></i>Try Audio Stakcos
+                                <div class=mt-4>
+                                    <a href="https://stakcos.com/player/?username=bsc2fast&amp;puzzle=638554242059093107_3_audio&amp;stencil=orchid_small" target=_blank class="btn btn-modern">
+                                        <i class="fa-headphones fas"></i>Try Audio Stakcos
                                     </a>
-                                    <a href="#" class="btn btn-modern btn-outline">
-                                        <i class="fas fa-universal-access"></i>Accessibility Guide
+                                    <a href=# class="btn btn-modern btn-outline">
+                                        <i class="fa-universal-access fas"></i>Accessibility Guide
                                     </a>
                                 </div>
                             </div>
@@ -1032,70 +336,70 @@
         </div>
     </section>
 
-    <!-- Platform Research -->
-    <section class="research-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-3 fade-in" style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+    
+    <section class=research-section>
+        <div class=container>
+            <div class=row>
+                <div class="col-12 mb-5 text-center">
+                    <h2 class="display-5 fade-in fw-bold mb-3" style=background:var(--primary-gradient);-webkit-text-fill-color:transparent;-webkit-background-clip:text>
                         Platform Innovation
                     </h2>
-                    <p class="lead text-muted fade-in">Expanding Stakco across devices and environments</p>
+                    <p class="fade-in lead text-muted">Expanding Stakco across devices and environments</p>
                 </div>
             </div>
 
-            <div class="row g-4">
-                <!-- Galaxy Watch -->
-                <div class="col-lg-6">
-                    <div class="research-item fade-in">
-                        <div class="research-image-container">
-                            <img src="images/research/stakco_watch.png" alt="Stakco on Galaxy Watch" class="research-image">
-                            <div class="research-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-clock"></i>
+            <div class="g-4 row">
+                
+                <div class=col-lg-6>
+                    <div class="fade-in research-item">
+                        <div class=research-image-container>
+                            <img src=stakco_watch.378564f1.png alt="Stakco on Galaxy Watch" class=research-image>
+                            <div class=research-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-clock fas"></i>
                                     </div>
                                     <h5>Wearable Puzzles</h5>
-                                    <p class="mb-0">Micro-interaction design</p>
+                                    <p class=mb-0>Micro-interaction design</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="research-content">
-                            <div class="research-category">Wearable Technology</div>
-                            <h3 class="research-title">Now Runs on Galaxy Watch</h3>
-                            <p class="research-description">
+                        <div class=research-content>
+                            <div class=research-category>Wearable Technology</div>
+                            <h3 class=research-title>Now Runs on Galaxy Watch</h3>
+                            <p class=research-description>
                                 Experimental Stakco apps deployed on Galaxy Watch. Digital Stakcos are robust enough to deploy on many platforms and always provide a unique experience which can be curated in many domains and contexts. This research explores micro-interactions and gesture-based puzzle solving.
                             </p>
-                            <a href="#" class="btn btn-modern">
-                                <i class="fas fa-download"></i>Watch App
+                            <a href=# class="btn btn-modern">
+                                <i class="fa-download fas"></i>Watch App
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- Android TV -->
-                <div class="col-lg-6">
-                    <div class="research-item fade-in">
-                        <div class="research-image-container">
-                            <img src="images/research/research-4.jpg" alt="Stakco on Android TV" class="research-image">
-                            <div class="research-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-tv"></i>
+                
+                <div class=col-lg-6>
+                    <div class="fade-in research-item">
+                        <div class=research-image-container>
+                            <img src=research-4.9963955a.jpg alt="Stakco on Android TV" class=research-image>
+                            <div class=research-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-tv fas"></i>
                                     </div>
                                     <h5>Large Screen Experience</h5>
-                                    <p class="mb-0">Multi-modal control</p>
+                                    <p class=mb-0>Multi-modal control</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="research-content">
-                            <div class="research-category">Smart TV Platform</div>
-                            <h3 class="research-title">Now Runs on Android TV</h3>
-                            <p class="research-description">
+                        <div class=research-content>
+                            <div class=research-category>Smart TV Platform</div>
+                            <h3 class=research-title>Now Runs on Android TV</h3>
+                            <p class=research-description>
                                 Similar to Galaxy Watch, we successfully run Stakco digital puzzle experience on Android TV and control puzzles using multiple input modalities. This research investigates how large screens and remote controls can create collaborative puzzle experiences.
                             </p>
-                            <a href="#" class="btn btn-modern">
-                                <i class="fas fa-tv"></i>TV Experience
+                            <a href=# class="btn btn-modern">
+                                <i class="fa-tv fas"></i>TV Experience
                             </a>
                         </div>
                     </div>
@@ -1104,70 +408,70 @@
         </div>
     </section>
 
-    <!-- Applied Research -->
-    <section class="research-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-3 fade-in" style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+    
+    <section class=research-section>
+        <div class=container>
+            <div class=row>
+                <div class="col-12 mb-5 text-center">
+                    <h2 class="display-5 fade-in fw-bold mb-3" style=background:var(--primary-gradient);-webkit-text-fill-color:transparent;-webkit-background-clip:text>
                         Applied Research
                     </h2>
-                    <p class="lead text-muted fade-in">Real-world applications and community engagement</p>
+                    <p class="fade-in lead text-muted">Real-world applications and community engagement</p>
                 </div>
             </div>
 
-            <div class="row g-4">
-                <!-- Supporting Artists -->
-                <div class="col-lg-6">
-                    <div class="research-item fade-in">
-                        <div class="research-image-container">
-                            <img src="images/research/research-4.jpg" alt="Supporting Emerging Artists" class="research-image">
-                            <div class="research-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-palette"></i>
+            <div class="g-4 row">
+                
+                <div class=col-lg-6>
+                    <div class="fade-in research-item">
+                        <div class=research-image-container>
+                            <img src=research-4.9963955a.jpg alt="Supporting Emerging Artists" class=research-image>
+                            <div class=research-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-palette fas"></i>
                                     </div>
                                     <h5>Artist Collaboration</h5>
-                                    <p class="mb-0">Creative partnerships</p>
+                                    <p class=mb-0>Creative partnerships</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="research-content">
-                            <div class="research-category">Creative Collaboration</div>
-                            <h3 class="research-title">Supporting Emerging Artists</h3>
-                            <p class="research-description">
+                        <div class=research-content>
+                            <div class=research-category>Creative Collaboration</div>
+                            <h3 class=research-title>Supporting Emerging Artists</h3>
+                            <p class=research-description>
                                 Stakco produces puzzles with images crafted by emerging artists. We add value to their art pieces and their artworks add value to Stakcos. This research explores how interactive puzzles can serve as a new medium for artistic expression and artist promotion.
                             </p>
-                            <a href="#" class="btn btn-modern">
-                                <i class="fas fa-handshake"></i>Artist Program
+                            <a href=# class="btn btn-modern">
+                                <i class="fa-handshake fas"></i>Artist Program
                             </a>
                         </div>
                     </div>
                 </div>
 
-                <!-- User Engagement Tool -->
-                <div class="col-lg-6">
-                    <div class="research-item fade-in">
-                        <div class="research-image-container">
-                            <img src="images/research/vivo_event.png" alt="User Engagement Tool" class="research-image">
-                            <div class="research-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-users"></i>
+                
+                <div class=col-lg-6>
+                    <div class="fade-in research-item">
+                        <div class=research-image-container>
+                            <img src=vivo_event.2d578ba4.png alt="User Engagement Tool" class=research-image>
+                            <div class=research-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-users fas"></i>
                                     </div>
                                     <h5>Engagement Research</h5>
-                                    <p class="mb-0">Community interaction</p>
+                                    <p class=mb-0>Community interaction</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="research-content">
-                            <div class="research-category">Engagement Studies</div>
-                            <h3 class="research-title">A Powerful User Engagement Tool</h3>
-                            <p class="research-description">
+                        <div class=research-content>
+                            <div class=research-category>Engagement Studies</div>
+                            <h3 class=research-title>A Powerful User Engagement Tool</h3>
+                            <p class=research-description>
                                 We conducted experiments deploying printed puzzles during community and business activities. We observed they are really good ice breakers and entertainment art pieces. Not only just a puzzle, but it can also carry a message, a story, or a brand. We are working on products for business and community events.
                             </p>
-                            <a href="#" class="btn btn-modern">
-                                <i class="fas fa-chart-line"></i>View Results
+                            <a href=# class="btn btn-modern">
+                                <i class="fa-chart-line fas"></i>View Results
                             </a>
                         </div>
                     </div>
@@ -1176,19 +480,19 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="research-section" style="background: var(--stakco-dark-wine-gold); color: white;">
-        <div class="container">
-            <div class="row align-items-center text-center">
-                <div class="col-12">
-                    <h2 class="display-5 fw-bold mb-3 fade-in text-white">Collaborate with Our Research</h2>
-                    <p class="lead fade-in mb-4">Join us in pushing the boundaries of interactive puzzle technology. Whether you're a researcher, educator, or innovator, let's explore the future together.</p>
-                    <div class="d-flex gap-3 flex-wrap justify-content-center fade-in">
-                        <a href="index.html#contact" class="btn btn-modern">
-                            <i class="fas fa-flask me-2"></i>Research Partnership
+    
+    <section class=research-section style=background:var(--stakco-dark-wine-gold);color:#fff>
+        <div class=container>
+            <div class="align-items-center row text-center">
+                <div class=col-12>
+                    <h2 class="display-5 fade-in fw-bold mb-3 text-white">Collaborate with Our Research</h2>
+                    <p class="fade-in lead mb-4">Join us in pushing the boundaries of interactive puzzle technology. Whether you're a researcher, educator, or innovator, let's explore the future together.</p>
+                    <div class="d-flex fade-in flex-wrap gap-3 justify-content-center">
+                        <a href=index.html#contact class="btn btn-modern">
+                            <i class="fa-flask fas me-2"></i>Research Partnership
                         </a>
-                        <a href="products.html" class="btn btn-modern btn-outline">
-                            <i class="fas fa-rocket me-2"></i>Try Our Products
+                        <a href=products.html class="btn btn-modern btn-outline">
+                            <i class="fa-rocket fas me-2"></i>Try Our Products
                         </a>
                     </div>
                 </div>
@@ -1196,93 +500,93 @@
         </div>
     </section>
 
-    <!-- Modern Footer -->
-    <footer class="footer-modern">
-        <div class="footer-content">
-            <div class="container">
-                <!-- Main Footer Content -->
-                <div class="footer-main">
-                    <!-- Logo -->
+    
+    <footer class=footer-modern>
+        <div class=footer-content>
+            <div class=container>
+                
+                <div class=footer-main>
+                    
                     <div class="footer-logo text-center">
-                        <a href="index.html">
-                            <img src="images/logo2.png" alt="Stakco" width="160px">
+                        <a href=index.html>
+                            <img src=logo2.15a2db9d.png alt=Stakco width=160px>
                         </a>
                     </div>
                     
-                    <!-- Description -->
+                    
                     <div class="footer-description text-center">
                         Creating magical interactions through innovative puzzle experiences that engage, educate, and inspire communities worldwide.
                     </div>
                     
-                    <!-- Footer Links -->
-                    <div class="footer-links">
-                        <div class="footer-link-group">
+                    
+                    <div class=footer-links>
+                        <div class=footer-link-group>
                             <h5>Products</h5>
                             <ul>
-                                <li><a href="products.html"><i class="fas fa-play"></i>Stakco Play</a></li>
-                                <li><a href="products.html"><i class="fas fa-file-alt"></i>Stakco Paper</a></li>
-                                <li><a href="products.html"><i class="fas fa-lightbulb"></i>Stakco Light</a></li>
+                                <li><a href=products.html><i class="fa-play fas"></i>Stakco Play</a></li>
+                                <li><a href=products.html><i class="fa-file-alt fas"></i>Stakco Paper</a></li>
+                                <li><a href=products.html><i class="fa-lightbulb fas"></i>Stakco Light</a></li>
                             </ul>
                         </div>
                         
-                        <div class="footer-link-group">
+                        <div class=footer-link-group>
                             <h5>Company</h5>
                             <ul>
-                                <li><a href="projects.html"><i class="fas fa-project-diagram"></i>Projects</a></li>
-                                <li><a href="research.html"><i class="fas fa-flask"></i>Research</a></li>
-                                <li><a href="impact.html"><i class="fas fa-heart"></i>Impact</a></li>
+                                <li><a href=projects.html><i class="fa-project-diagram fas"></i>Projects</a></li>
+                                <li><a href=research.html><i class="fa-flask fas"></i>Research</a></li>
+                                <li><a href=impact.html><i class="fa-heart fas"></i>Impact</a></li>
                             </ul>
                         </div>
                         
-                        <div class="footer-link-group">
+                        <div class=footer-link-group>
                             <h5>Support</h5>
                             <ul>
-                                <li><a href="index.html#contact"><i class="fas fa-envelope"></i>Contact Us</a></li>
-                                <li><a href="mailto:hello@stakcos.com"><i class="fas fa-question-circle"></i>Help Center</a></li>
-                                <li><a href="mailto:hello@stakcos.com"><i class="fas fa-comments"></i>Feedback</a></li>
+                                <li><a href=index.html#contact><i class="fa-envelope fas"></i>Contact Us</a></li>
+                                <li><a href=mailto:hello@stakcos.com><i class="fa-question-circle fas"></i>Help Center</a></li>
+                                <li><a href=mailto:hello@stakcos.com><i class="fa-comments fas"></i>Feedback</a></li>
                             </ul>
                         </div>
                     </div>
                     
-                    <!-- Social Links -->
-                    <div class="footer-social">
-                        <a href="#" class="social-link" title="LinkedIn">
-                            <i class="fab fa-linkedin-in"></i>
+                    
+                    <div class=footer-social>
+                        <a href=# class=social-link title=LinkedIn>
+                            <i class="fa-linkedin-in fab"></i>
                         </a>
-                        <a href="#" class="social-link" title="Twitter">
-                            <i class="fab fa-twitter"></i>
+                        <a href=# class=social-link title=Twitter>
+                            <i class="fa-twitter fab"></i>
                         </a>
-                        <a href="#" class="social-link" title="YouTube">
-                            <i class="fab fa-youtube"></i>
+                        <a href=# class=social-link title=YouTube>
+                            <i class="fa-youtube fab"></i>
                         </a>
-                        <a href="#" class="social-link" title="Instagram">
-                            <i class="fab fa-instagram"></i>
+                        <a href=# class=social-link title=Instagram>
+                            <i class="fa-instagram fab"></i>
                         </a>
-                        <a href="mailto:hello@stakcos.com" class="social-link" title="Email">
-                            <i class="fas fa-envelope"></i>
+                        <a href=mailto:hello@stakcos.com class=social-link title=Email>
+                            <i class="fa-envelope fas"></i>
                         </a>
                     </div>
                 </div>
                 
-                <!-- Footer Bottom -->
-                <div class="footer-bottom">
-                    <div class="footer-bottom-content">
-                        <div class="footer-legal">
-                            <a href="terms-conditions.html">Terms & Conditions</a>
-                            <span class="separator">•</span>
-                            <a href="privacy-policy.html">Privacy Policy</a>
-                            <span class="separator">•</span>
-                            <a href="index.html#contact">Contact</a>
+                
+                <div class=footer-bottom>
+                    <div class=footer-bottom-content>
+                        <div class=footer-legal>
+                            <a href=terms.html>Terms &amp; Conditions</a>
+                            <span class=separator></span>
+                            <a href=privacy.html>Privacy Policy</a>
+                            <span class=separator></span>
+                            <a href=index.html#contact>Contact</a>
                         </div>
-                        <p class="footer-copyright">
+                        <p class=footer-copyright>
                             © 2025 Stakco. All rights reserved.
                         </p>
                     </div>
                     
-                    <!-- Patent Information -->
-                    <div class="text-center">
-                        <div class="footer-patent">
-                            <i class="fas fa-shield-alt"></i>
+                    
+                    <div class=text-center>
+                        <div class=footer-patent>
+                            <i class="fa-shield-alt fas"></i>
                             Patent — Singapore Application No. 10202302289U
                         </div>
                     </div>
@@ -1291,168 +595,8 @@
         </div>
     </footer>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Custom Cursor
-        const cursor = document.querySelector('.cursor');
-        const cursorFollower = document.querySelector('.cursor-follower');
-        
-        // Only initialize cursor on non-touch devices
-        if (!('ontouchstart' in window)) {
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-                
-                setTimeout(() => {
-                    cursorFollower.style.left = e.clientX - 20 + 'px';
-                    cursorFollower.style.top = e.clientY - 20 + 'px';
-                }, 100);
-            });
-            
-            // Hover effects for interactive elements
-            const interactiveElements = document.querySelectorAll('a, button, .research-item, .research-category');
-            
-            interactiveElements.forEach(element => {
-                element.addEventListener('mouseenter', () => {
-                    cursor.style.transform = 'scale(1.5)';
-                    cursorFollower.style.transform = 'scale(1.5)';
-                });
-                
-                element.addEventListener('mouseleave', () => {
-                    cursor.style.transform = 'scale(1)';
-                    cursorFollower.style.transform = 'scale(1)';
-                });
-            });
-        }
-        
-        // Loading animation
-        window.addEventListener('load', () => {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            setTimeout(() => {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none';
-                }, 500);
-            }, 1000);
-        });
-        
-        // Enhanced navbar scroll effect
-        const navbar = document.getElementById('mainNavbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-        
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const offsetTop = target.offsetTop - 100;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Floating elements parallax
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const floatingElements = document.querySelectorAll('.floating-element');
-            
-            floatingElements.forEach((element, index) => {
-                if (scrolled < window.innerHeight) {
-                    const speed = 0.2 + (index * 0.1);
-                    element.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
-                }
-            });
-        });
-        
-        // Enhanced Intersection Observer for fade-in animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 100);
-                }
-            });
-        }, observerOptions);
-        
-        // Observe all fade-in elements
-        document.querySelectorAll('.fade-in').forEach(element => {
-            observer.observe(element);
-        });
-        
-        // Animated counting for stat numbers
-        function animateValue(element, start, end, duration) {
-            const startTimestamp = performance.now();
-            
-            const step = (timestamp) => {
-                const elapsed = timestamp - startTimestamp;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                const current = Math.floor(progress * (end - start) + start);
-                element.textContent = current === parseInt(end) ? end : current;
-                
-                if (progress < 1) {
-                    requestAnimationFrame(step);
-                }
-            };
-            
-            requestAnimationFrame(step);
-        }
-        
-        // Trigger stat animations when they come into view
-        const statObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !entry.target.dataset.animated) {
-                    const number = entry.target.querySelector('.stat-number');
-                    const value = number.textContent.trim();
-                    
-                    if (value === '∞') {
-                        // Special animation for infinity symbol
-                        number.style.animation = 'pulse 2s ease-in-out infinite';
-                    } else {
-                        const endValue = parseInt(value) || 10;
-                        animateValue(number, 0, endValue, 2000);
-                    }
-                    entry.target.dataset.animated = 'true';
-                }
-            });
-        }, { threshold: 0.5 });
-        
-        document.querySelectorAll('.stat-item').forEach(item => {
-            statObserver.observe(item);
-        });
-        
-        // Research category hover effects
-        document.querySelectorAll('.research-category').forEach(category => {
-            category.addEventListener('mouseenter', () => {
-                category.style.transform = 'translateY(-2px) scale(1.05)';
-            });
-            
-            category.addEventListener('mouseleave', () => {
-                category.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-        
-        // Performance optimization for lower-end devices
-        if (navigator.hardwareConcurrency < 4) {
-            document.body.classList.add('low-performance');
-            const style = document.createElement('style');
-            style.textContent = `
+    <script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js></script>
+    <script>const cursor=document.querySelector(".cursor"),cursorFollower=document.querySelector(".cursor-follower");"ontouchstart"in window||(document.addEventListener("mousemove",e=>{cursor.style.left=e.clientX+"px",cursor.style.top=e.clientY+"px",setTimeout(()=>{cursorFollower.style.left=e.clientX-20+"px",cursorFollower.style.top=e.clientY-20+"px"},100)}),document.querySelectorAll("a, button, .research-item, .research-category").forEach(e=>{e.addEventListener("mouseenter",()=>{cursor.style.transform="scale(1.5)",cursorFollower.style.transform="scale(1.5)"}),e.addEventListener("mouseleave",()=>{cursor.style.transform="scale(1)",cursorFollower.style.transform="scale(1)"})})),window.addEventListener("load",()=>{let e=document.getElementById("loadingOverlay");setTimeout(()=>{e.style.opacity="0",setTimeout(()=>{e.style.display="none"},500)},1e3)});const navbar=document.getElementById("mainNavbar");window.addEventListener("scroll",()=>{window.scrollY>100?navbar.classList.add("scrolled"):navbar.classList.remove("scrolled")}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();let t=document.querySelector(this.getAttribute("href"));if(t){let e=t.offsetTop-100;window.scrollTo({top:e,behavior:"smooth"})}})}),window.addEventListener("scroll",()=>{let e=window.pageYOffset;document.querySelectorAll(".floating-element").forEach((t,r)=>{e<window.innerHeight&&(t.style.transform=`translateY(${e*(.2+.1*r)}px) rotate(${.1*e}deg)`)})});const observerOptions={threshold:.1,rootMargin:"0px 0px -50px 0px"},observer=new IntersectionObserver(e=>{e.forEach((e,t)=>{e.isIntersecting&&setTimeout(()=>{e.target.classList.add("visible")},100*t)})},observerOptions);function animateValue(e,t,r,o){let s=performance.now(),n=a=>{let l=Math.min((a-s)/o,1),c=Math.floor(l*(r-t)+t);e.textContent=c===parseInt(r)?r:c,l<1&&requestAnimationFrame(n)};requestAnimationFrame(n)}document.querySelectorAll(".fade-in").forEach(e=>{observer.observe(e)});const statObserver=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting&&!e.target.dataset.animated){let t=e.target.querySelector(".stat-number"),r=t.textContent.trim();"âˆž"===r?t.style.animation="pulse 2s ease-in-out infinite":animateValue(t,0,parseInt(r)||10,2e3),e.target.dataset.animated="true"}})},{threshold:.5});if(document.querySelectorAll(".stat-item").forEach(e=>{statObserver.observe(e)}),document.querySelectorAll(".research-category").forEach(e=>{e.addEventListener("mouseenter",()=>{e.style.transform="translateY(-2px) scale(1.05)"}),e.addEventListener("mouseleave",()=>{e.style.transform="translateY(0) scale(1)"})}),navigator.hardwareConcurrency<4){document.body.classList.add("low-performance");const e=document.createElement("style");e.textContent=`
                 .low-performance .floating-element { animation: none; }
                 .low-performance .research-item { transition-duration: 0.2s; }
                 .low-performance .research-category { transition-duration: 0.2s; }
@@ -1460,35 +604,5 @@
                     0%, 100% { opacity: 1; transform: scale(1); }
                     50% { opacity: 0.7; transform: scale(1.1); }
                 }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        // Add subtle scroll-triggered animations for research content
-        const researchContentObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const titles = entry.target.querySelectorAll('.research-title');
-                    titles.forEach((title, index) => {
-                        setTimeout(() => {
-                            title.style.opacity = '1';
-                            title.style.transform = 'translateY(0)';
-                        }, index * 200);
-                    });
-                }
-            });
-        }, { threshold: 0.3 });
-        
-        document.querySelectorAll('.research-content').forEach(content => {
-            // Initialize title styles
-            content.querySelectorAll('.research-title').forEach(title => {
-                title.style.opacity = '0';
-                title.style.transform = 'translateY(20px)';
-                title.style.transition = 'all 0.6s ease';
-            });
-            
-            researchContentObserver.observe(content);
-        });
-    </script>
-</body>
-</html>
+            `,document.head.appendChild(e)}const researchContentObserver=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&e.target.querySelectorAll(".research-title").forEach((e,t)=>{setTimeout(()=>{e.style.opacity="1",e.style.transform="translateY(0)"},200*t)})})},{threshold:.3});document.querySelectorAll(".research-content").forEach(e=>{e.querySelectorAll(".research-title").forEach(e=>{e.style.opacity="0",e.style.transform="translateY(20px)",e.style.transition="all 0.6s ease"}),researchContentObserver.observe(e)});</script>
+

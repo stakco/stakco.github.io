@@ -1,813 +1,54 @@
-<!DOCTYPE html>
-
-<!--
- // WEBSITE: https://themefisher.com
- // TWITTER: https://twitter.com/themefisher
- // FACEBOOK: https://www.facebook.com/themefisher
- // GITHUB: https://github.com/themefisher/
--->
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Impact - Stakco Interactive Puzzles</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        :root {
-            --primary-color: #f9a743;
-            --primary-gradient: linear-gradient(135deg, #f9a743 0%, #ffc947 100%);
-            --glass-bg: rgba(255, 255, 255, 0.25);
-            --glass-border: rgba(255, 255, 255, 0.18);
-            --shadow-soft: 0 8px 32px rgba(31, 38, 135, 0.37);
-            --shadow-glow: 0 0 40px rgba(249, 167, 68, 0.4);
-            --text-primary: #3c2f38;
-            --text-secondary: #7f8c8d;
-
-            --stakco-light-golden-sunrise: linear-gradient(135deg, #F9EA59 0%, #DFAC6D 100%);
-            --stakco-light-warm-rose-glow: linear-gradient(135deg, #F9EA59 0%, #B83267 100%);
-            --stakco-light-champagne-horizon: linear-gradient(135deg, #DFAC6D 0%, #D4984F 100%);
-            --stakco-light-golden-berry: linear-gradient(135deg, #F9EA59 0%, #D4984F 50%, #B83267 100%);
-
-            --stakco-dark-velvet-night: linear-gradient(135deg, #3C2F38 0%, #B83267 100%);
-            --stakco-dark-deep-rosewood: linear-gradient(135deg, #3C2F38 0%, #D4984F 100%);
-            --stakco-dark-royal-twilight: linear-gradient(135deg, #3C2F38 0%, #DFAC6D 100%);
-            --stakco-dark-wine-gold: linear-gradient(135deg, #3C2F38 0%, #B83267 40%, #DFAC6D 100%);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.6;
-            color: var(--text-primary);
-            overflow-x: hidden;
-            scroll-behavior: smooth;
-        }
-        
-        /* Custom Cursor */
-        body {
-            cursor: none;
-        }
-        
-        .cursor {
-            width: 20px;
-            height: 20px;
-            background: var(--primary-gradient);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.1s ease;
-            opacity: 0.8;
-        }
-        
-        .cursor-follower {
-            width: 40px;
-            height: 40px;
-            border: 2px solid var(--primary-color);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9998;
-            transition: all 0.3s ease;
-            opacity: 0.3;
-        }
-
-        /* Hide cursor on touch devices */
-        @media (pointer: coarse) {
-            body { cursor: auto; }
-            .cursor, .cursor-follower { display: none; }
-        }
-        
-        /* Navigation */
-        .navbar {
-            transition: all 0.3s ease;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        
-        .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.95) !important;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Page Header */
-        .page-header {
-            min-height: 60vh;
-            background: var(--stakco-light-warm-rose-glow);
-            position: relative;
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            z-index: 1;
-            margin-top: 76px;
-        }
-        
-        .page-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="10" cy="60" r="0.5" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
-            pointer-events: none;
-        }
-
-        .floating-element {
-            position: absolute;
-            opacity: 0.3;
-            animation: float 6s ease-in-out infinite;
-            z-index: 2;
-        }
-        
-        .floating-element:nth-child(1) { top: 20%; left: 10%; animation-delay: 0s; }
-        .floating-element:nth-child(2) { top: 60%; left: 80%; animation-delay: 2s; }
-        .floating-element:nth-child(3) { top: 30%; right: 15%; animation-delay: 4s; }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-        }
-
-        /* Impact Sections */
-        .impact-section {
-            padding: 100px 0;
-            position: relative;
-            z-index: 10;
-        }
-
-        .impact-section:nth-child(even) {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-        }
-
-        .impact-section:nth-child(odd) {
-            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-        }
-
-        /* Impact Cards */
-        .impact-card {
-            background: white;
-            border-radius: 25px;
-            padding: 0;
-            height: 100%;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
-            margin-bottom: 3rem;
-        }
-
-        .impact-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background: var(--primary-gradient);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-            z-index: 3;
-        }
-
-        .impact-card:hover::before {
-            transform: scaleX(1);
-        }
-        
-        .impact-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
-        }
-
-        .impact-image-container {
-            position: relative;
-            overflow: hidden;
-            border-radius: 25px 25px 0 0;
-            height: 300px;
-        }
-
-        .impact-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.4s ease;
-        }
-
-        .impact-card:hover .impact-image {
-            transform: scale(1.05);
-        }
-
-        .impact-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(249, 167, 67, 0.9) 0%, rgba(184, 50, 103, 0.9) 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-
-        .impact-card:hover .impact-overlay {
-            opacity: 1;
-        }
-
-        .overlay-content {
-            text-align: center;
-            color: white;
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
-        }
-
-        .impact-card:hover .overlay-content {
-            transform: translateY(0);
-        }
-
-        .overlay-icon {
-            width: 60px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 1.5rem;
-        }
-
-        .impact-content {
-            padding: 2.5rem;
-            position: relative;
-        }
-
-        .impact-title {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        .impact-description {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-        }
-
-        .impact-description strong {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        /* Impact Badge */
-        .impact-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, rgba(249, 167, 68, 0.1), rgba(255, 201, 71, 0.1));
-            border: 1px solid rgba(249, 167, 68, 0.3);
-            color: var(--primary-color);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .impact-badge:hover {
-            background: var(--primary-gradient);
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(249, 167, 68, 0.4);
-        }
-
-        /* Impact Stats */
-        .impact-stats {
-            background: var(--stakco-dark-deep-rosewood);
-            color: white;
-            padding: 5rem 0;
-            margin: 4rem 0 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .impact-stats::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="impact-grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.05"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23impact-grain)"/></svg>') repeat;
-            pointer-events: none;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 2rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .stat-icon {
-            width: 80px;
-            height: 80px;
-            background: var(--primary-gradient);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-            font-size: 2rem;
-            color: white;
-            transition: all 0.3s ease;
-        }
-
-        .stat-item:hover .stat-icon {
-            transform: scale(1.1) rotate(360deg);
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--primary-color);
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        /* Quote Section */
-        .impact-quote {
-            background: linear-gradient(135deg, var(--stakco-dark-velvet-night));
-            color: white;
-            padding: 4rem;
-            border-radius: 25px;
-            margin: 3rem 0;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .impact-quote::before {
-            content: '"';
-            font-size: 8rem;
-            font-weight: 800;
-            position: absolute;
-            top: -1rem;
-            left: 2rem;
-            opacity: 0.1;
-            color: white;
-            line-height: 1;
-        }
-
-        .quote-text {
-            font-size: 1.4rem;
-            font-style: italic;
-            line-height: 1.6;
-            position: relative;
-            z-index: 2;
-            margin-bottom: 2rem;
-        }
-
-        .quote-author {
-            font-size: 1.1rem;
-            font-weight: 600;
-            position: relative;
-            z-index: 2;
-            opacity: 0.9;
-        }
-
-        /* Action Buttons */
-        .btn-modern {
-            background: var(--primary-gradient);
-            border: none;
-            border-radius: 50px;
-            padding: 15px 35px;
-            color: white;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            margin: 0.5rem 0.5rem 0.5rem 0;
-        }
-        
-        .btn-modern::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-        
-        .btn-modern:hover::before {
-            left: 100%;
-        }
-        
-        .btn-modern:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
-            color: white;
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-        }
-
-        .btn-outline:hover {
-            background: var(--primary-gradient);
-            color: white;
-            border-color: transparent;
-        }
-
-        /* Footer */
-        .footer-block {
-            background: var(--stakco-light-champagne-horizon);
-            padding: 3rem 0 2rem;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .page-header {
-                min-height: 50vh;
-                margin-top: 70px;
-            }
-            
-            .impact-section {
-                padding: 80px 0;
-            }
-
-            .impact-image-container {
-                height: 250px;
-            }
-
-            .impact-title {
-                font-size: 1.5rem;
-            }
-
-            .impact-content {
-                padding: 2rem 1.5rem;
-            }
-
-            .impact-quote {
-                padding: 2.5rem 2rem;
-            }
-
-            .quote-text {
-                font-size: 1.2rem;
-            }
-
-            .stat-number {
-                font-size: 2rem;
-            }
-
-            .impact-stats {
-                padding: 3rem 0;
-            }
-        }
-
-        /* Animations */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s ease;
-        }
-        
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Loading Animation */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--text-primary);
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.5s ease;
-        }
-        
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid rgba(249, 167, 68, 0.3);
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .footer-modern {
-    background: var(--stakco-dark-wine-gold);
-    color: white;
-    position: relative;
-    overflow: hidden;
-}
-
-.footer-modern::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="footer-grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.05"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.05"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23footer-grain)"/></svg>') repeat;
-    pointer-events: none;
-}
-
-.footer-content {
-    position: relative;
-    z-index: 2;
-    padding: 4rem 0 2rem;
-}
-
-.footer-main {
-    padding-bottom: 3rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 2rem;
-}
-
-.footer-logo {
-    margin-bottom: 2rem;
-}
-
-.footer-logo img {
-    filter: brightness(0) invert(1);
-    transition: all 0.3s ease;
-}
-
-.footer-logo:hover img {
-    filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(249, 167, 67, 0.5));
-    transform: scale(1.05);
-}
-
-.footer-description {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    opacity: 0.9;
-    margin-bottom: 2rem;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-}
-
-.footer-link-group h5 {
-    color: var(--primary-color);
-    font-weight: 600;
-    margin-bottom: 1rem;
-    font-size: 1rem;
-}
-
-.footer-link-group ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.footer-link-group li {
-    margin-bottom: 0.5rem;
-}
-
-.footer-link-group a {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-
-.footer-link-group a:hover {
-    color: var(--primary-color);
-    transform: translateX(5px);
-}
-
-.footer-link-group a i {
-    font-size: 0.8rem;
-    opacity: 0.7;
-}
-
-.footer-social {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.social-link {
-    width: 45px;
-    height: 45px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 1.1rem;
-}
-
-.social-link:hover {
-    background: var(--primary-gradient);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(249, 167, 67, 0.4);
-}
-
-.footer-bottom {
-    text-align: center;
-}
-
-.footer-bottom-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-}
-
-.footer-legal {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.footer-legal a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
-}
-
-.footer-legal a:hover {
-    color: var(--primary-color);
-}
-
-.footer-legal .separator {
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 0.8rem;
-}
-
-.footer-copyright {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.85rem;
-    margin: 0;
-}
-
-.footer-patent {
-    background: rgba(249, 167, 67, 0.1);
-    border: 1px solid rgba(249, 167, 67, 0.2);
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-    color: var(--primary-color);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
-}
-
-/* Responsive Design for Footer */
-@media (max-width: 768px) {
-    .footer-content {
-        padding: 3rem 0 1.5rem;
-    }
+<!DOCTYPE html><html lang=en><meta charset=UTF-8><meta name=viewport content="width=device-width, initial-scale=1.0"><title>Impact - Stakco Interactive Puzzles</title><link href=https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css rel=stylesheet><link href=https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css rel=stylesheet><style>@import "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap";:root{--primary-color:#f9a743;--primary-gradient:linear-gradient(135deg,#f9a743 0%,#ffc947 100%);--glass-bg:#ffffff40;--glass-border:#ffffff2e;--shadow-soft:0 8px 32px #1f26875e;--shadow-glow:0 0 40px #f9a74466;--text-primary:#3c2f38;--text-secondary:#7f8c8d;--stakco-light-golden-sunrise:linear-gradient(135deg,#f9ea59 0%,#dfac6d 100%);--stakco-light-warm-rose-glow:linear-gradient(135deg,#f9ea59 0%,#b83267 100%);--stakco-light-champagne-horizon:linear-gradient(135deg,#dfac6d 0%,#d4984f 100%);--stakco-light-golden-berry:linear-gradient(135deg,#f9ea59 0%,#d4984f 50%,#b83267 100%);--stakco-dark-velvet-night:linear-gradient(135deg,#3c2f38 0%,#b83267 100%);--stakco-dark-deep-rosewood:linear-gradient(135deg,#3c2f38 0%,#d4984f 100%);--stakco-dark-royal-twilight:linear-gradient(135deg,#3c2f38 0%,#dfac6d 100%);--stakco-dark-wine-gold:linear-gradient(135deg,#3c2f38 0%,#b83267 40%,#dfac6d 100%)}*{box-sizing:border-box;margin:0;padding:0}body{color:var(--text-primary);scroll-behavior:smooth;cursor:none;font-family:Inter,sans-serif;line-height:1.6;overflow-x:hidden}.cursor{background:var(--primary-gradient);pointer-events:none;z-index:9999;opacity:.8;border-radius:50%;width:20px;height:20px;transition:transform .1s;position:fixed}.cursor-follower{border:2px solid var(--primary-color);pointer-events:none;z-index:9998;opacity:.3;border-radius:50%;width:40px;height:40px;transition:all .3s;position:fixed}@media (pointer:coarse){body{cursor:auto}.cursor,.cursor-follower{display:none}}.navbar{-webkit-backdrop-filter:blur(20px);transition:all .3s}.navbar.scrolled{box-shadow:0 5px 30px #0000001a;background:#fffffff2!important}.page-header{background:var(--stakco-light-warm-rose-glow);z-index:1;align-items:center;min-height:60vh;margin-top:76px;display:flex;position:relative;overflow:hidden}.page-header:before{content:"";pointer-events:none;background:url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"white\" opacity=\"0.1\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"white\" opacity=\"0.1\"/><circle cx=\"50\" cy=\"10\" r=\"0.5\" fill=\"white\" opacity=\"0.1\"/><circle cx=\"10\" cy=\"60\" r=\"0.5\" fill=\"white\" opacity=\"0.1\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grain)\"/></svg>");position:absolute;inset:0}.floating-element{opacity:.3;z-index:2;animation:6s ease-in-out infinite float;position:absolute}.floating-element:first-child{animation-delay:0s;top:20%;left:10%}.floating-element:nth-child(2){animation-delay:2s;top:60%;left:80%}.floating-element:nth-child(3){animation-delay:4s;top:30%;right:15%}@keyframes float{0%,to{transform:translateY(0)rotate(0)}50%{transform:translateY(-20px)rotate(5deg)}}.impact-section{z-index:10;padding:100px 0;position:relative}.impact-section:nth-child(2n){background:linear-gradient(135deg,#f8f9fa 0%,#fff 100%)}.impact-section:nth-child(odd){background:linear-gradient(135deg,#fff 0%,#f8f9fa 100%)}.impact-card{background:#fff;border:1px solid #0000000d;border-radius:25px;height:100%;margin-bottom:3rem;padding:0;transition:all .4s cubic-bezier(.4,0,.2,1);position:relative;overflow:hidden;box-shadow:0 15px 35px #00000014}.impact-card:before{content:"";background:var(--primary-gradient);z-index:3;width:100%;height:6px;transition:transform .3s;position:absolute;top:0;left:0;transform:scaleX(0)}.impact-card:hover:before{transform:scaleX(1)}.impact-card:hover{transform:translateY(-10px);box-shadow:0 25px 50px #00000026}.impact-image-container{border-radius:25px 25px 0 0;height:300px;position:relative;overflow:hidden}.impact-image{object-fit:cover;width:100%;height:100%;transition:transform .4s}.impact-card:hover .impact-image{transform:scale(1.05)}.impact-overlay{opacity:0;background:linear-gradient(135deg,#f9a743e6 0%,#b83267e6 100%);justify-content:center;align-items:center;width:100%;height:100%;transition:all .3s;display:flex;position:absolute;top:0;left:0}.impact-card:hover .impact-overlay{opacity:1}.overlay-content{text-align:center;color:#fff;transition:transform .3s;transform:translateY(20px)}.impact-card:hover .overlay-content{transform:translateY(0)}.overlay-icon{background:#fff3;border-radius:50%;justify-content:center;align-items:center;width:60px;height:60px;margin:0 auto 1rem;font-size:1.5rem;display:flex}.impact-content{padding:2.5rem;position:relative}.impact-title{color:var(--text-primary);margin-bottom:1rem;font-size:1.8rem;font-weight:700}.impact-description{color:var(--text-secondary);margin-bottom:1.5rem;font-size:1.1rem;line-height:1.7}.impact-description strong{color:var(--text-primary);font-weight:600}.impact-badge{color:var(--primary-color);background:linear-gradient(135deg,#f9a7441a,#ffc9471a);border:1px solid #f9a7444d;border-radius:20px;margin-bottom:1rem;padding:.5rem 1rem;font-size:.85rem;font-weight:600;transition:all .3s;display:inline-block}.impact-badge:hover{background:var(--primary-gradient);color:#fff;transform:translateY(-2px);box-shadow:0 5px 15px #f9a74466}.impact-stats{background:var(--stakco-dark-deep-rosewood);color:#fff;margin:4rem 0 0;padding:5rem 0;position:relative;overflow:hidden}.impact-stats:before{content:"";pointer-events:none;background:url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"impact-grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"white\" opacity=\"0.05\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"white\" opacity=\"0.05\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23impact-grain)\"/></svg>");position:absolute;inset:0}.stat-item{text-align:center;z-index:2;padding:2rem;position:relative}.stat-icon{background:var(--primary-gradient);color:#fff;border-radius:50%;justify-content:center;align-items:center;width:80px;height:80px;margin:0 auto 1.5rem;font-size:2rem;transition:all .3s;display:flex}.stat-item:hover .stat-icon{transform:scale(1.1)rotate(360deg)}.stat-number{color:var(--primary-color);margin-bottom:.5rem;font-size:3rem;font-weight:800;display:block}.stat-label{opacity:.9;font-size:1.1rem}.impact-quote{background:linear-gradient(135deg,var(--stakco-dark-velvet-night));color:#fff;border-radius:25px;margin:3rem 0;padding:4rem;position:relative;overflow:hidden}.impact-quote:before{content:"\"";opacity:.1;color:#fff;font-size:8rem;font-weight:800;line-height:1;position:absolute;top:-1rem;left:2rem}.quote-text{z-index:2;margin-bottom:2rem;font-size:1.4rem;font-style:italic;line-height:1.6;position:relative}.quote-author{z-index:2;opacity:.9;font-size:1.1rem;font-weight:600;position:relative}.btn-modern{background:var(--primary-gradient);color:#fff;border:none;border-radius:50px;align-items:center;gap:.5rem;margin:.5rem .5rem .5rem 0;padding:15px 35px;font-weight:600;text-decoration:none;transition:all .3s;display:inline-flex;position:relative;overflow:hidden}.btn-modern:before{content:"";background:linear-gradient(90deg,#0000,#ffffff4d,#0000);width:100%;height:100%;transition:left .5s;position:absolute;top:0;left:-100%}.btn-modern:hover:before{left:100%}.btn-modern:hover{color:#fff;transform:translateY(-2px);box-shadow:0 10px 25px #f9a74466}.btn-outline{border:2px solid var(--primary-color);color:var(--primary-color);background:0 0}.btn-outline:hover{background:var(--primary-gradient);color:#fff;border-color:#0000}.footer-block{background:var(--stakco-light-champagne-horizon);padding:3rem 0 2rem}@media (width<=768px){.page-header{min-height:50vh;margin-top:70px}.impact-section{padding:80px 0}.impact-image-container{height:250px}.impact-title{font-size:1.5rem}.impact-content{padding:2rem 1.5rem}.impact-quote{padding:2.5rem 2rem}.quote-text{font-size:1.2rem}.stat-number{font-size:2rem}.impact-stats{padding:3rem 0}}.fade-in{opacity:0;transition:all .8s;transform:translateY(30px)}.fade-in.visible{opacity:1;transform:translateY(0)}.loading-overlay{background:var(--text-primary);z-index:10000;justify-content:center;align-items:center;width:100%;height:100%;transition:opacity .5s;display:flex;position:fixed;top:0;left:0}.loading-spinner{border:4px solid #f9a7444d;border-top:4px solid var(--primary-color);border-radius:50%;width:60px;height:60px;animation:1s linear infinite spin}@keyframes spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.footer-modern{background:var(--stakco-dark-wine-gold);color:#fff;position:relative;overflow:hidden}.footer-modern:before{content:"";pointer-events:none;background:url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"footer-grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"white\" opacity=\"0.05\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"white\" opacity=\"0.05\"/><circle cx=\"50\" cy=\"10\" r=\"0.5\" fill=\"white\" opacity=\"0.05\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23footer-grain)\"/></svg>");position:absolute;inset:0}.footer-content{z-index:2;padding:4rem 0 2rem;position:relative}.footer-main{border-bottom:1px solid #ffffff1a;margin-bottom:2rem;padding-bottom:3rem}.footer-logo{margin-bottom:2rem}.footer-logo img{filter:brightness(0)invert();transition:all .3s}.footer-logo:hover img{filter:brightness(0)invert()drop-shadow(0 0 10px #f9a74380);transform:scale(1.05)}.footer-description{opacity:.9;max-width:600px;margin-bottom:2rem;margin-left:auto;margin-right:auto;font-size:1.1rem;line-height:1.6}.footer-links{flex-wrap:wrap;justify-content:center;gap:3rem;margin-bottom:2rem;display:flex}.footer-link-group h5{color:var(--primary-color);margin-bottom:1rem;font-size:1rem;font-weight:600}.footer-link-group ul{margin:0;padding:0;list-style:none}.footer-link-group li{margin-bottom:.5rem}.footer-link-group a{color:#fffc;align-items:center;gap:.5rem;font-size:.95rem;text-decoration:none;transition:all .3s;display:inline-flex}.footer-link-group a:hover{color:var(--primary-color);transform:translate(5px)}.footer-link-group a i{opacity:.7;font-size:.8rem}.footer-social{justify-content:center;gap:1rem;margin-bottom:2rem;display:flex}.social-link{backdrop-filter:blur(10px);color:#fff;background:#ffffff1a;border-radius:50%;justify-content:center;align-items:center;width:45px;height:45px;font-size:1.1rem;text-decoration:none;transition:all .3s;display:flex}.social-link:hover{background:var(--primary-gradient);color:#fff;transform:translateY(-3px);box-shadow:0 5px 15px #f9a74366}.footer-bottom{text-align:center}.footer-bottom-content{flex-wrap:wrap;justify-content:space-between;align-items:center;gap:1rem;display:flex}.footer-legal{flex-wrap:wrap;align-items:center;gap:2rem;display:flex}.footer-legal a{color:#ffffffb3;font-size:.9rem;text-decoration:none;transition:all .3s}.footer-legal a:hover{color:var(--primary-color)}.footer-legal .separator{color:#ffffff4d;font-size:.8rem}.footer-copyright{color:#fff9;margin:0;font-size:.85rem}.footer-patent{color:var(--primary-color);background:#f9a7431a;border:1px solid #f9a74333;border-radius:20px;align-items:center;gap:.5rem;margin-top:1rem;padding:.5rem 1rem;font-size:.8rem;display:inline-flex}@media (width<=768px){.footer-content{padding:3rem 0 1.5rem}.footer-links{text-align:center;flex-direction:column;gap:2rem}.footer-bottom-content{text-align:center;flex-direction:column}.footer-legal{order:2;justify-content:center}.footer-copyright{order:1;margin-bottom:1rem}}@media (width<=576px){.footer-links{gap:1.5rem}.footer-legal{flex-direction:column;gap:1rem}.footer-legal .separator{display:none}}</style><body>
     
-    .footer-links {
-        flex-direction: column;
-        gap: 2rem;
-        text-align: center;
-    }
+    <div class=cursor></div>
+    <div class=cursor-follower></div>
     
-    .footer-bottom-content {
-        flex-direction: column;
-        text-align: center;
-    }
     
-    .footer-legal {
-        justify-content: center;
-        order: 2;
-    }
-    
-    .footer-copyright {
-        order: 1;
-        margin-bottom: 1rem;
-    }
-}
-
-@media (max-width: 576px) {
-    .footer-links {
-        gap: 1.5rem;
-    }
-    
-    .footer-legal {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .footer-legal .separator {
-        display: none;
-    }
-}
-
-    </style>
-</head>
-<body>
-    <!-- Custom Cursor -->
-    <div class="cursor"></div>
-    <div class="cursor-follower"></div>
-    
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
+    <div class=loading-overlay id=loadingOverlay>
+        <div class=loading-spinner></div>
     </div>
     
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top" id="mainNavbar">
-        <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="index.html" style="color: var(--primary-color);">
-                <img src="images/logo2.png" alt="Stakco" width="150px">
+    
+    <nav class="bg-white fixed-top navbar navbar-expand-lg navbar-light shadow-sm" id=mainNavbar>
+        <div class=container>
+            <a class="fs-3 fw-bold navbar-brand" href=index.html style=color:var(--primary-color)>
+                <img src=logo2.15a2db9d.png alt=Stakco width=150px>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
+            <button class=navbar-toggler type=button data-bs-toggle=collapse data-bs-target=#navbarNav>
+                <span class=navbar-toggler-icon></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
-                    <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link" href="research.html">Research</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="impact.html">Impact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+            <div class="collapse navbar-collapse" id=navbarNav>
+                <ul class="ms-auto navbar-nav">
+                    <li class=nav-item><a class=nav-link href=products.html>Products</a></li>
+                    <li class=nav-item><a class=nav-link href=projects.html>Projects</a></li>
+                    <li class=nav-item><a class=nav-link href=research.html>Research</a></li>
+                    <li class=nav-item><a class="active nav-link" href=impact.html>Impact</a></li>
+                    <li class=nav-item><a class=nav-link href=index.html#contact>Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Page Header -->
-    <section class="page-header">
-        <!-- Floating Elements -->
-        <div class="floating-element">
-            <i class="fas fa-heart fa-3x text-white"></i>
+    
+    <section class=page-header>
+        
+        <div class=floating-element>
+            <i class="fa-3x fa-heart fas text-white"></i>
         </div>
-        <div class="floating-element">
-            <i class="fas fa-hands-helping fa-2x text-white"></i>
+        <div class=floating-element>
+            <i class="fa-2x fa-hands-helping fas text-white"></i>
         </div>
-        <div class="floating-element">
-            <i class="fas fa-lightbulb fa-3x text-white"></i>
+        <div class=floating-element>
+            <i class="fa-3x fa-lightbulb fas text-white"></i>
         </div>
         
-        <div class="container">
-            <div class="row align-items-center">
+        <div class=container>
+            <div class="align-items-center row">
                 <div class="col-12 text-center">
-                    <h1 class="display-2 fw-bold mb-4 text-white fade-in">
+                    <h1 class="display-2 fade-in fw-bold mb-4 text-white">
                         Our Impact
                     </h1>
-                    <p class="lead text-white mb-4 fade-in">
+                    <p class="fade-in lead mb-4 text-white">
                         Transforming lives through innovative puzzle experiences that engage, educate, and inspire
                     </p>
                 </div>
@@ -815,101 +56,101 @@
         </div>
     </section>
 
-    <!-- Impact Stats -->
-    <section class="impact-stats" style="margin-top: 0;">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-4">
-                    <h2 class="display-5 fw-bold mb-3 fade-in text-white">Making a Difference</h2>
-                    <p class="lead fade-in opacity-75">Measurable impact across communities and individuals</p>
+    
+    <section class=impact-stats style=margin-top:0>
+        <div class=container>
+            <div class=row>
+                <div class="col-12 mb-4 text-center">
+                    <h2 class="display-5 fade-in fw-bold mb-3 text-white">Making a Difference</h2>
+                    <p class="fade-in lead opacity-75">Measurable impact across communities and individuals</p>
                 </div>
             </div>
-            <div class="row">
+            <div class=row>
                 <div class="col-lg-3 col-md-6">
-                    <div class="stat-item fade-in">
-                        <div class="stat-icon">
-                            <i class="fas fa-universal-access"></i>
+                    <div class="fade-in stat-item">
+                        <div class=stat-icon>
+                            <i class="fa-universal-access fas"></i>
                         </div>
-                        <span class="stat-number">100%</span>
-                        <div class="stat-label">Accessible Design Focus</div>
+                        <span class=stat-number>100%</span>
+                        <div class=stat-label>Accessible Design Focus</div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="stat-item fade-in">
-                        <div class="stat-icon">
-                            <i class="fas fa-brain"></i>
+                    <div class="fade-in stat-item">
+                        <div class=stat-icon>
+                            <i class="fa-brain fas"></i>
                         </div>
-                        <span class="stat-number">∞</span>
-                        <div class="stat-label">Cognitive Benefits</div>
+                        <span class=stat-number>∞</span>
+                        <div class=stat-label>Cognitive Benefits</div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="stat-item fade-in">
-                        <div class="stat-icon">
-                            <i class="fas fa-users"></i>
+                    <div class="fade-in stat-item">
+                        <div class=stat-icon>
+                            <i class="fa-users fas"></i>
                         </div>
-                        <span class="stat-number">5+</span>
-                        <div class="stat-label">Community Partnerships</div>
+                        <span class=stat-number>5+</span>
+                        <div class=stat-label>Community Partnerships</div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
-                    <div class="stat-item fade-in">
-                        <div class="stat-icon">
-                            <i class="fas fa-palette"></i>
+                    <div class="fade-in stat-item">
+                        <div class=stat-icon>
+                            <i class="fa-palette fas"></i>
                         </div>
-                        <span class="stat-number">25+</span>
-                        <div class="stat-label">Artists Supported</div>
+                        <span class=stat-number>25+</span>
+                        <div class=stat-label>Artists Supported</div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Accessibility Impact -->
-    <section class="impact-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-3 fade-in" style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+    
+    <section class=impact-section>
+        <div class=container>
+            <div class=row>
+                <div class="col-12 mb-5 text-center">
+                    <h2 class="display-5 fade-in fw-bold mb-3" style=background:var(--primary-gradient);-webkit-text-fill-color:transparent;-webkit-background-clip:text>
                         Breaking Barriers Through Innovation
                     </h2>
-                    <p class="lead text-muted fade-in">Creating inclusive experiences for everyone</p>
+                    <p class="fade-in lead text-muted">Creating inclusive experiences for everyone</p>
                 </div>
             </div>
 
-            <!-- Audio Puzzles Impact -->
-            <div class="impact-card fade-in">
-                <div class="row g-0">
-                    <div class="col-lg-6">
-                        <div class="impact-image-container">
-                            <img src="images/research/audio_puzzle.png" alt="Audio Puzzles for BLV people" class="impact-image">
-                            <div class="impact-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-volume-up"></i>
+            
+            <div class="fade-in impact-card">
+                <div class="g-0 row">
+                    <div class=col-lg-6>
+                        <div class=impact-image-container>
+                            <img src=audio_puzzle.7c4b1c2f.png alt="Audio Puzzles for BLV people" class=impact-image>
+                            <div class=impact-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-volume-up fas"></i>
                                     </div>
                                     <h5>Empowering Through Sound</h5>
-                                    <p class="mb-0">Breaking visual barriers</p>
+                                    <p class=mb-0>Breaking visual barriers</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="impact-content">
-                            <div class="impact-badge">Accessibility Innovation</div>
-                            <h3 class="impact-title">Audio Puzzles for BLV People</h3>
-                            <p class="impact-description">
+                    <div class=col-lg-6>
+                        <div class=impact-content>
+                            <div class=impact-badge>Accessibility Innovation</div>
+                            <h3 class=impact-title>Audio Puzzles for BLV People</h3>
+                            <p class=impact-description>
                                 Audio Stakcos offers a new way to engage blind and low-vision individuals through playful sound-based puzzles. It shows potential as both an accessible experience and a tool to strengthen auditory processing—similar to how visual puzzles enhance cognitive and spatial abilities.
                             </p>
-                            <p class="impact-description">
+                            <p class=impact-description>
                                 This breakthrough technology opens up entirely new possibilities for <strong>inclusive puzzle experiences</strong>, ensuring that visual impairment doesn't limit access to engaging, challenging entertainment.
                             </p>
-                            <div class="mt-4">
-                                <a href="https://stakcos.com/player/?username=bsc2fast&puzzle=638554242059093107_3_audio&stencil=orchid_small" target="_blank" class="btn btn-modern">
-                                    <i class="fas fa-headphones"></i>Experience Audio Stakcos
+                            <div class=mt-4>
+                                <a href="https://stakcos.com/player/?username=bsc2fast&amp;puzzle=638554242059093107_3_audio&amp;stencil=orchid_small" target=_blank class="btn btn-modern">
+                                    <i class="fa-headphones fas"></i>Experience Audio Stakcos
                                 </a>
-                                <a href="research.html#audio-puzzles" class="btn btn-modern btn-outline">
-                                    <i class="fas fa-flask"></i>Learn About Research
+                                <a href=research.html#audio-puzzles class="btn btn-modern btn-outline">
+                                    <i class="fa-flask fas"></i>Learn About Research
                                 </a>
                             </div>
                         </div>
@@ -917,36 +158,36 @@
                 </div>
             </div>
 
-            <!-- Inclusive Design Impact -->
-            <div class="impact-card fade-in">
-                <div class="row g-0">
+            
+            <div class="fade-in impact-card">
+                <div class="g-0 row">
                     <div class="col-lg-6 order-lg-2">
-                        <div class="impact-image-container">
-                            <img src="images/research/research-4.jpg" alt="Inclusive & Accessible Puzzle Design" class="impact-image">
-                            <div class="impact-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-universal-access"></i>
+                        <div class=impact-image-container>
+                            <img src=research-4.9963955a.jpg alt="Inclusive &amp; Accessible Puzzle Design" class=impact-image>
+                            <div class=impact-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-universal-access fas"></i>
                                     </div>
                                     <h5>Universal Design</h5>
-                                    <p class="mb-0">Accessible to everyone</p>
+                                    <p class=mb-0>Accessible to everyone</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-6 order-lg-1">
-                        <div class="impact-content">
-                            <div class="impact-badge">Universal Access</div>
-                            <h3 class="impact-title">Inclusive & Accessible Puzzle Design</h3>
-                            <p class="impact-description">
+                        <div class=impact-content>
+                            <div class=impact-badge>Universal Access</div>
+                            <h3 class=impact-title>Inclusive &amp; Accessible Puzzle Design</h3>
+                            <p class=impact-description>
                                 Developing inclusive puzzle formats that utilize alternative sensory inputs to engage users, broadening accessibility and interaction possibilities. Our commitment to universal design ensures that Stakco puzzles can be enjoyed by people of all abilities.
                             </p>
-                            <p class="impact-description">
+                            <p class=impact-description>
                                 By prioritizing <strong>accessibility from the ground up</strong>, we're creating experiences that don't just accommodate differences—they celebrate them and create richer interactions for everyone.
                             </p>
-                            <div class="mt-4">
-                                <a href="products.html" class="btn btn-modern">
-                                    <i class="fas fa-eye"></i>Explore Accessible Products
+                            <div class=mt-4>
+                                <a href=products.html class="btn btn-modern">
+                                    <i class="fa-eye fas"></i>Explore Accessible Products
                                 </a>
                             </div>
                         </div>
@@ -956,51 +197,51 @@
         </div>
     </section>
 
-    <!-- Cognitive & Educational Impact -->
-    <section class="impact-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-3 fade-in" style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                        Empowering Minds & Education
+    
+    <section class=impact-section>
+        <div class=container>
+            <div class=row>
+                <div class="col-12 mb-5 text-center">
+                    <h2 class="display-5 fade-in fw-bold mb-3" style=background:var(--primary-gradient);-webkit-text-fill-color:transparent;-webkit-background-clip:text>
+                        Empowering Minds &amp; Education
                     </h2>
-                    <p class="lead text-muted fade-in">Cognitive enhancement through innovative play</p>
+                    <p class="fade-in lead text-muted">Cognitive enhancement through innovative play</p>
                 </div>
             </div>
 
-            <!-- Video Stakco Cognitive Impact -->
-            <div class="impact-card fade-in">
-                <div class="row g-0">
-                    <div class="col-lg-6">
-                        <div class="impact-image-container">
-                            <img src="images/research/video-puzzle.png" alt="Empowering Minds with Video Stakco" class="impact-image">
-                            <div class="impact-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-brain"></i>
+            
+            <div class="fade-in impact-card">
+                <div class="g-0 row">
+                    <div class=col-lg-6>
+                        <div class=impact-image-container>
+                            <img src=video-puzzle.3c064885.png alt="Empowering Minds with Video Stakco" class=impact-image>
+                            <div class=impact-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-brain fas"></i>
                                     </div>
                                     <h5>Cognitive Enhancement</h5>
-                                    <p class="mb-0">Real-time brain training</p>
+                                    <p class=mb-0>Real-time brain training</p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="impact-content">
-                            <div class="impact-badge">Cognitive Training</div>
-                            <h3 class="impact-title">Empowering Minds with Video Stakco</h3>
-                            <p class="impact-description">
+                    <div class=col-lg-6>
+                        <div class=impact-content>
+                            <div class=impact-badge>Cognitive Training</div>
+                            <h3 class=impact-title>Empowering Minds with Video Stakco</h3>
+                            <p class=impact-description>
                                 <strong>Video Stakcos</strong> offers a novel way to boost cognitive skills through interactive play. Because the puzzle content changes every second, users must stay focused, anticipate motion, and adapt quickly—exercising memory, attention, and coordination in real time.
                             </p>
-                            <p class="impact-description">
+                            <p class=impact-description>
                                 This dynamic format holds potential for <strong>cognitive training</strong>, especially for individuals with attention difficulties or those undergoing neuro-rehabilitation. It transforms a playful activity into an opportunity to challenge and sharpen the mind.
                             </p>
-                            <div class="mt-4">
-                                <a href="https://stakcos.com/player/?username=bsc2fast&puzzle=638554242059093107_3_video&stencil=jigsaw_medium" target="_blank" class="btn btn-modern">
-                                    <i class="fas fa-play"></i>Try Video Stakco
+                            <div class=mt-4>
+                                <a href="https://stakcos.com/player/?username=bsc2fast&amp;puzzle=638554242059093107_3_video&amp;stencil=jigsaw_medium" target=_blank class="btn btn-modern">
+                                    <i class="fa-play fas"></i>Try Video Stakco
                                 </a>
-                                <a href="research.html#video-stakcos" class="btn btn-modern btn-outline">
-                                    <i class="fas fa-microscope"></i>Research Details
+                                <a href=research.html#video-stakcos class="btn btn-modern btn-outline">
+                                    <i class="fa-microscope fas"></i>Research Details
                                 </a>
                             </div>
                         </div>
@@ -1008,91 +249,91 @@
                 </div>
             </div>
 
-            <!-- Educational Quote -->
-            <div class="impact-quote fade-in">
-                <p class="quote-text">
+            
+            <div class="fade-in impact-quote">
+                <p class=quote-text>
                     "Appreciate your work, and we were quite excited as we believe it is an opportunity for our students to work on their upper body while engaged in this puzzle play."
                 </p>
-                <div class="quote-author">
+                <div class=quote-author>
                     — Gunalan Nalini, Physiotherapist, AWWA School, Singapore
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Community & Creative Impact -->
-    <section class="impact-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-3 fade-in" style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
-                        Building Communities & Supporting Artists
+    
+    <section class=impact-section>
+        <div class=container>
+            <div class=row>
+                <div class="col-12 mb-5 text-center">
+                    <h2 class="display-5 fade-in fw-bold mb-3" style=background:var(--primary-gradient);-webkit-text-fill-color:transparent;-webkit-background-clip:text>
+                        Building Communities &amp; Supporting Artists
                     </h2>
-                    <p class="lead text-muted fade-in">Creating connections and opportunities</p>
+                    <p class="fade-in lead text-muted">Creating connections and opportunities</p>
                 </div>
             </div>
 
-            <div class="row g-4">
-                <!-- Supporting Artists -->
-                <div class="col-lg-6">
-                    <div class="impact-card fade-in">
-                        <div class="impact-image-container">
-                            <img src="images/research/research-4.jpg" alt="Supporting Emerging Artists" class="impact-image">
-                            <div class="impact-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-palette"></i>
+            <div class="g-4 row">
+                
+                <div class=col-lg-6>
+                    <div class="fade-in impact-card">
+                        <div class=impact-image-container>
+                            <img src=research-4.9963955a.jpg alt="Supporting Emerging Artists" class=impact-image>
+                            <div class=impact-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-palette fas"></i>
                                     </div>
                                     <h5>Artist Empowerment</h5>
-                                    <p class="mb-0">Creating new opportunities</p>
+                                    <p class=mb-0>Creating new opportunities</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="impact-content">
-                            <div class="impact-badge">Creative Support</div>
-                            <h3 class="impact-title">Supporting Emerging Artists</h3>
-                            <p class="impact-description">
+                        <div class=impact-content>
+                            <div class=impact-badge>Creative Support</div>
+                            <h3 class=impact-title>Supporting Emerging Artists</h3>
+                            <p class=impact-description>
                                 Stakco produces puzzles with images crafted by emerging artists. We add value to their art pieces and their artworks add value to Stakcos. This symbiotic relationship creates new revenue streams for artists while enriching our puzzle library with diverse, original artwork.
                             </p>
-                            <p class="impact-description">
+                            <p class=impact-description>
                                 By partnering with emerging artists, we're helping to <strong>democratize art distribution</strong> and create sustainable income opportunities in the creative economy.
                             </p>
-                            <div class="mt-4">
-                                <a href="index.html#contact" class="btn btn-modern">
-                                    <i class="fas fa-handshake"></i>Join Artist Program
+                            <div class=mt-4>
+                                <a href=index.html#contact class="btn btn-modern">
+                                    <i class="fa-handshake fas"></i>Join Artist Program
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Community Engagement -->
-                <div class="col-lg-6">
-                    <div class="impact-card fade-in">
-                        <div class="impact-image-container">
-                            <img src="images/research/vivo_event.png" alt="Community Engagement Tool" class="impact-image">
-                            <div class="impact-overlay">
-                                <div class="overlay-content">
-                                    <div class="overlay-icon">
-                                        <i class="fas fa-users"></i>
+                
+                <div class=col-lg-6>
+                    <div class="fade-in impact-card">
+                        <div class=impact-image-container>
+                            <img src=vivo_event.2d578ba4.png alt="Community Engagement Tool" class=impact-image>
+                            <div class=impact-overlay>
+                                <div class=overlay-content>
+                                    <div class=overlay-icon>
+                                        <i class="fa-users fas"></i>
                                     </div>
                                     <h5>Community Building</h5>
-                                    <p class="mb-0">Bringing people together</p>
+                                    <p class=mb-0>Bringing people together</p>
                                 </div>
                             </div>
                         </div>
-                        <div class="impact-content">
-                            <div class="impact-badge">Social Impact</div>
-                            <h3 class="impact-title">A Powerful User Engagement Tool</h3>
-                            <p class="impact-description">
+                        <div class=impact-content>
+                            <div class=impact-badge>Social Impact</div>
+                            <h3 class=impact-title>A Powerful User Engagement Tool</h3>
+                            <p class=impact-description>
                                 We conducted experiments deploying printed puzzles during community and business activities. We observed they are really good ice breakers and entertainment art pieces. Not only just a puzzle, but it can also carry a message, a story, or a brand.
                             </p>
-                            <p class="impact-description">
+                            <p class=impact-description>
                                 These versatile tools are being developed for <strong>business and community events</strong>, creating meaningful connections and memorable experiences that transcend traditional entertainment formats.
                             </p>
-                            <div class="mt-4">
-                                <a href="products.html" class="btn btn-modern">
-                                    <i class="fas fa-calendar"></i>Event Solutions
+                            <div class=mt-4>
+                                <a href=products.html class="btn btn-modern">
+                                    <i class="fa-calendar fas"></i>Event Solutions
                                 </a>
                             </div>
                         </div>
@@ -1102,49 +343,49 @@
         </div>
     </section>
 
-    <!-- Partner Testimonials -->
-    <section class="impact-section" style="background: var(--stakco-dark-velvet-night); color: white;">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mb-5">
-                    <h2 class="display-5 fw-bold mb-3 fade-in text-white">What Our Partners Say</h2>
-                    <p class="lead fade-in opacity-75">Real feedback from our collaborators and users</p>
+    
+    <section class=impact-section style=background:var(--stakco-dark-velvet-night);color:#fff>
+        <div class=container>
+            <div class=row>
+                <div class="col-12 mb-5 text-center">
+                    <h2 class="display-5 fade-in fw-bold mb-3 text-white">What Our Partners Say</h2>
+                    <p class="fade-in lead opacity-75">Real feedback from our collaborators and users</p>
                 </div>
             </div>
             
-            <div class="row g-4">
-                <div class="col-lg-4">
-                    <div class="impact-quote fade-in" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px);">
-                        <p class="quote-text" style="font-size: 1.1rem;">
+            <div class="g-4 row">
+                <div class=col-lg-4>
+                    <div class="fade-in impact-quote" style=backdrop-filter:blur(20px);background:#ffffff1a>
+                        <p class=quote-text style=font-size:1.1rem>
                             "Being able to convert a memory into an actual physical gift while also being a fun and intuitive activity for friends and family of all ages - Stakcos were a perfect fit!"
                         </p>
-                        <div class="quote-author">
+                        <div class=quote-author>
                             — Soundarya Ramesh<br>
-                            <small class="opacity-75">Research Engineer, National University</small>
+                            <small class=opacity-75>Research Engineer, National University</small>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-lg-4">
-                    <div class="impact-quote fade-in" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px);">
-                        <p class="quote-text" style="font-size: 1.1rem;">
+                <div class=col-lg-4>
+                    <div class="fade-in impact-quote" style=backdrop-filter:blur(20px);background:#ffffff1a>
+                        <p class=quote-text style=font-size:1.1rem>
                             "It is exciting to explore Stakco's multi-layered design. It certainly provides visual-spatial challenges that have the potential to support discovery in play."
                         </p>
-                        <div class="quote-author">
+                        <div class=quote-author>
                             — Jochen Huber<br>
-                            <small class="opacity-75">Professor, Furtwangen University, Germany</small>
+                            <small class=opacity-75>Professor, Furtwangen University, Germany</small>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-lg-4">
-                    <div class="impact-quote fade-in" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px);">
-                        <p class="quote-text" style="font-size: 1.1rem;">
+                <div class=col-lg-4>
+                    <div class="fade-in impact-quote" style=backdrop-filter:blur(20px);background:#ffffff1a>
+                        <p class=quote-text style=font-size:1.1rem>
                             "Appreciate your work, and we were quite excited as we believe it is an opportunity for our students to work on their upper body while engaged in this puzzle play."
                         </p>
-                        <div class="quote-author">
+                        <div class=quote-author>
                             — Gunalan Nalini<br>
-                            <small class="opacity-75">Physiotherapist, AWWA School, Singapore</small>
+                            <small class=opacity-75>Physiotherapist, AWWA School, Singapore</small>
                         </div>
                     </div>
                 </div>
@@ -1152,57 +393,57 @@
         </div>
     </section>
 
-    <!-- Future Impact -->
-    <section class="impact-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-8">
-                    <h2 class="display-5 fw-bold mb-3 fade-in" style="background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+    
+    <section class=impact-section>
+        <div class=container>
+            <div class="align-items-center row">
+                <div class=col-lg-8>
+                    <h2 class="display-5 fade-in fw-bold mb-3" style=background:var(--primary-gradient);-webkit-text-fill-color:transparent;-webkit-background-clip:text>
                         The Future of Impact
                     </h2>
-                    <p class="lead fade-in mb-4">
+                    <p class="fade-in lead mb-4">
                         We're just getting started. Our vision extends beyond puzzles to create a world where interactive technology breaks down barriers, enhances cognitive abilities, and brings communities together through innovative play experiences.
                     </p>
-                    <div class="fade-in">
+                    <div class=fade-in>
                         <h4 class="fw-bold mb-3">Our Ongoing Commitments:</h4>
-                        <ul class="list-unstyled">
-                            <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i> Continued accessibility innovation for all users</li>
-                            <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i> Supporting emerging artists and creators</li>
-                            <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i> Advancing cognitive research and therapeutic applications</li>
-                            <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i> Building stronger, more connected communities</li>
-                            <li class="mb-2"><i class="fas fa-check-circle text-warning me-2"></i> Exploring new platforms and technologies</li>
+                        <ul class=list-unstyled>
+                            <li class=mb-2><i class="fa-check-circle fas me-2 text-warning"></i> Continued accessibility innovation for all users</li>
+                            <li class=mb-2><i class="fa-check-circle fas me-2 text-warning"></i> Supporting emerging artists and creators</li>
+                            <li class=mb-2><i class="fa-check-circle fas me-2 text-warning"></i> Advancing cognitive research and therapeutic applications</li>
+                            <li class=mb-2><i class="fa-check-circle fas me-2 text-warning"></i> Building stronger, more connected communities</li>
+                            <li class=mb-2><i class="fa-check-circle fas me-2 text-warning"></i> Exploring new platforms and technologies</li>
                         </ul>
                     </div>
                 </div>
                 <div class="col-lg-4 text-center">
-                    <div class="fade-in">
-                        <div class="stat-icon" style="width: 120px; height: 120px; margin: 0 auto 2rem; font-size: 3rem;">
-                            <i class="fas fa-infinity"></i>
+                    <div class=fade-in>
+                        <div class=stat-icon style="width:120px;height:120px;margin:0 auto 2rem;font-size:3rem">
+                            <i class="fa-infinity fas"></i>
                         </div>
                         <h3 class="fw-bold mb-3">Infinite Possibilities</h3>
-                        <p class="text-muted">Every puzzle solved opens new doors to understanding, connection, and growth.</p>
+                        <p class=text-muted>Every puzzle solved opens new doors to understanding, connection, and growth.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="impact-section" style="background: var(--stakco-light-golden-berry); color: white;">
-        <div class="container">
-            <div class="row align-items-center text-center">
-                <div class="col-12">
-                    <h2 class="display-5 fw-bold mb-3 fade-in text-white">Be Part of Our Impact Story</h2>
-                    <p class="lead fade-in mb-4">Join us in creating a more inclusive, connected, and cognitively rich world through innovative puzzle experiences.</p>
-                    <div class="d-flex gap-3 flex-wrap justify-content-center fade-in">
-                        <a href="products.html" class="btn btn-modern" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);">
-                            <i class="fas fa-puzzle-piece me-2"></i>Try Our Products
+    
+    <section class=impact-section style=background:var(--stakco-light-golden-berry);color:#fff>
+        <div class=container>
+            <div class="align-items-center row text-center">
+                <div class=col-12>
+                    <h2 class="display-5 fade-in fw-bold mb-3 text-white">Be Part of Our Impact Story</h2>
+                    <p class="fade-in lead mb-4">Join us in creating a more inclusive, connected, and cognitively rich world through innovative puzzle experiences.</p>
+                    <div class="d-flex fade-in flex-wrap gap-3 justify-content-center">
+                        <a href=products.html class="btn btn-modern" style=backdrop-filter:blur(10px);background:#fff3>
+                            <i class="fa-puzzle-piece fas me-2"></i>Try Our Products
                         </a>
-                        <a href="index.html#contact" class="btn btn-modern" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);">
-                            <i class="fas fa-handshake me-2"></i>Partner With Us
+                        <a href=index.html#contact class="btn btn-modern" style=backdrop-filter:blur(10px);background:#fff3>
+                            <i class="fa-handshake fas me-2"></i>Partner With Us
                         </a>
-                        <a href="research.html" class="btn btn-modern" style="background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);">
-                            <i class="fas fa-flask me-2"></i>Explore Research
+                        <a href=research.html class="btn btn-modern" style=backdrop-filter:blur(10px);background:#fff3>
+                            <i class="fa-flask fas me-2"></i>Explore Research
                         </a>
                     </div>
                 </div>
@@ -1210,93 +451,93 @@
         </div>
     </section>
 
-   <!-- Modern Footer -->
-    <footer class="footer-modern">
-        <div class="footer-content">
-            <div class="container">
-                <!-- Main Footer Content -->
-                <div class="footer-main">
-                    <!-- Logo -->
+   
+    <footer class=footer-modern>
+        <div class=footer-content>
+            <div class=container>
+                
+                <div class=footer-main>
+                    
                     <div class="footer-logo text-center">
-                        <a href="index.html">
-                            <img src="images/logo2.png" alt="Stakco" width="160px">
+                        <a href=index.html>
+                            <img src=logo2.15a2db9d.png alt=Stakco width=160px>
                         </a>
                     </div>
                     
-                    <!-- Description -->
+                    
                     <div class="footer-description text-center">
                         Creating magical interactions through innovative puzzle experiences that engage, educate, and inspire communities worldwide.
                     </div>
                     
-                    <!-- Footer Links -->
-                    <div class="footer-links">
-                        <div class="footer-link-group">
+                    
+                    <div class=footer-links>
+                        <div class=footer-link-group>
                             <h5>Products</h5>
                             <ul>
-                                <li><a href="products.html"><i class="fas fa-play"></i>Stakco Play</a></li>
-                                <li><a href="products.html"><i class="fas fa-file-alt"></i>Stakco Paper</a></li>
-                                <li><a href="products.html"><i class="fas fa-lightbulb"></i>Stakco Light</a></li>
+                                <li><a href=products.html><i class="fa-play fas"></i>Stakco Play</a></li>
+                                <li><a href=products.html><i class="fa-file-alt fas"></i>Stakco Paper</a></li>
+                                <li><a href=products.html><i class="fa-lightbulb fas"></i>Stakco Light</a></li>
                             </ul>
                         </div>
                         
-                        <div class="footer-link-group">
+                        <div class=footer-link-group>
                             <h5>Company</h5>
                             <ul>
-                                <li><a href="projects.html"><i class="fas fa-project-diagram"></i>Projects</a></li>
-                                <li><a href="research.html"><i class="fas fa-flask"></i>Research</a></li>
-                                <li><a href="impact.html"><i class="fas fa-heart"></i>Impact</a></li>
+                                <li><a href=projects.html><i class="fa-project-diagram fas"></i>Projects</a></li>
+                                <li><a href=research.html><i class="fa-flask fas"></i>Research</a></li>
+                                <li><a href=impact.html><i class="fa-heart fas"></i>Impact</a></li>
                             </ul>
                         </div>
                         
-                        <div class="footer-link-group">
+                        <div class=footer-link-group>
                             <h5>Support</h5>
                             <ul>
-                                <li><a href="index.html#contact"><i class="fas fa-envelope"></i>Contact Us</a></li>
-                                <li><a href="mailto:hello@stakcos.com"><i class="fas fa-question-circle"></i>Help Center</a></li>
-                                <li><a href="mailto:hello@stakcos.com"><i class="fas fa-comments"></i>Feedback</a></li>
+                                <li><a href=index.html#contact><i class="fa-envelope fas"></i>Contact Us</a></li>
+                                <li><a href=mailto:hello@stakcos.com><i class="fa-question-circle fas"></i>Help Center</a></li>
+                                <li><a href=mailto:hello@stakcos.com><i class="fa-comments fas"></i>Feedback</a></li>
                             </ul>
                         </div>
                     </div>
                     
-                    <!-- Social Links -->
-                    <div class="footer-social">
-                        <a href="#" class="social-link" title="LinkedIn">
-                            <i class="fab fa-linkedin-in"></i>
+                    
+                    <div class=footer-social>
+                        <a href=# class=social-link title=LinkedIn>
+                            <i class="fa-linkedin-in fab"></i>
                         </a>
-                        <a href="#" class="social-link" title="Twitter">
-                            <i class="fab fa-twitter"></i>
+                        <a href=# class=social-link title=Twitter>
+                            <i class="fa-twitter fab"></i>
                         </a>
-                        <a href="#" class="social-link" title="YouTube">
-                            <i class="fab fa-youtube"></i>
+                        <a href=# class=social-link title=YouTube>
+                            <i class="fa-youtube fab"></i>
                         </a>
-                        <a href="#" class="social-link" title="Instagram">
-                            <i class="fab fa-instagram"></i>
+                        <a href=# class=social-link title=Instagram>
+                            <i class="fa-instagram fab"></i>
                         </a>
-                        <a href="mailto:hello@stakcos.com" class="social-link" title="Email">
-                            <i class="fas fa-envelope"></i>
+                        <a href=mailto:hello@stakcos.com class=social-link title=Email>
+                            <i class="fa-envelope fas"></i>
                         </a>
                     </div>
                 </div>
                 
-                <!-- Footer Bottom -->
-                <div class="footer-bottom">
-                    <div class="footer-bottom-content">
-                        <div class="footer-legal">
-                            <a href="terms-conditions.html">Terms & Conditions</a>
-                            <span class="separator">•</span>
-                            <a href="privacy-policy.html">Privacy Policy</a>
-                            <span class="separator">•</span>
-                            <a href="index.html#contact">Contact</a>
+                
+                <div class=footer-bottom>
+                    <div class=footer-bottom-content>
+                        <div class=footer-legal>
+                            <a href=terms.html>Terms &amp; Conditions</a>
+                            <span class=separator></span>
+                            <a href=privacy.html>Privacy Policy</a>
+                            <span class=separator></span>
+                            <a href=index.html#contact>Contact</a>
                         </div>
-                        <p class="footer-copyright">
+                        <p class=footer-copyright>
                             © 2025 Stakco. All rights reserved.
                         </p>
                     </div>
                     
-                    <!-- Patent Information -->
-                    <div class="text-center">
-                        <div class="footer-patent">
-                            <i class="fas fa-shield-alt"></i>
+                    
+                    <div class=text-center>
+                        <div class=footer-patent>
+                            <i class="fa-shield-alt fas"></i>
                             Patent — Singapore Application No. 10202302289U
                         </div>
                     </div>
@@ -1305,174 +546,8 @@
         </div>
     </footer>
     
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Custom Cursor
-        const cursor = document.querySelector('.cursor');
-        const cursorFollower = document.querySelector('.cursor-follower');
-        
-        // Only initialize cursor on non-touch devices
-        if (!('ontouchstart' in window)) {
-            document.addEventListener('mousemove', (e) => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-                
-                setTimeout(() => {
-                    cursorFollower.style.left = e.clientX - 20 + 'px';
-                    cursorFollower.style.top = e.clientY - 20 + 'px';
-                }, 100);
-            });
-            
-            // Hover effects for interactive elements
-            const interactiveElements = document.querySelectorAll('a, button, .impact-card, .impact-badge, .stat-item');
-            
-            interactiveElements.forEach(element => {
-                element.addEventListener('mouseenter', () => {
-                    cursor.style.transform = 'scale(1.5)';
-                    cursorFollower.style.transform = 'scale(1.5)';
-                });
-                
-                element.addEventListener('mouseleave', () => {
-                    cursor.style.transform = 'scale(1)';
-                    cursorFollower.style.transform = 'scale(1)';
-                });
-            });
-        }
-        
-        // Loading animation
-        window.addEventListener('load', () => {
-            const loadingOverlay = document.getElementById('loadingOverlay');
-            setTimeout(() => {
-                loadingOverlay.style.opacity = '0';
-                setTimeout(() => {
-                    loadingOverlay.style.display = 'none';
-                }, 500);
-            }, 1000);
-        });
-        
-        // Enhanced navbar scroll effect
-        const navbar = document.getElementById('mainNavbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                navbar.classList.add('scrolled');
-            } else {
-                navbar.classList.remove('scrolled');
-            }
-        });
-        
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const offsetTop = target.offsetTop - 100;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Floating elements parallax
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const floatingElements = document.querySelectorAll('.floating-element');
-            
-            floatingElements.forEach((element, index) => {
-                if (scrolled < window.innerHeight) {
-                    const speed = 0.2 + (index * 0.1);
-                    element.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.1}deg)`;
-                }
-            });
-        });
-        
-        // Enhanced Intersection Observer for fade-in animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
-        
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry, index) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, index * 100);
-                }
-            });
-        }, observerOptions);
-        
-        // Observe all fade-in elements
-        document.querySelectorAll('.fade-in').forEach(element => {
-            observer.observe(element);
-        });
-        
-        // Animated counting for stat numbers
-        function animateValue(element, start, end, duration) {
-            const startTimestamp = performance.now();
-            
-            const step = (timestamp) => {
-                const elapsed = timestamp - startTimestamp;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                const current = Math.floor(progress * (end - start) + start);
-                element.textContent = current === parseInt(end) ? end : current;
-                
-                if (progress < 1) {
-                    requestAnimationFrame(step);
-                }
-            };
-            
-            requestAnimationFrame(step);
-        }
-        
-        // Trigger stat animations when they come into view
-        const statObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting && !entry.target.dataset.animated) {
-                    const number = entry.target.querySelector('.stat-number');
-                    const value = number.textContent.trim();
-                    
-                    if (value === '∞') {
-                        // Special animation for infinity symbol
-                        number.style.animation = 'pulse 2s ease-in-out infinite';
-                    } else if (value === '100%') {
-                        // Animate percentage
-                        animateValue(number, 0, 100, 2000);
-                        setTimeout(() => {
-                            number.textContent = '100%';
-                        }, 2000);
-                    } else {
-                        const endValue = parseInt(value) || 25;
-                        animateValue(number, 0, endValue, 2000);
-                    }
-                    entry.target.dataset.animated = 'true';
-                }
-            });
-        }, { threshold: 0.5 });
-        
-        document.querySelectorAll('.stat-item').forEach(item => {
-            statObserver.observe(item);
-        });
-        
-        // Impact badge hover effects
-        document.querySelectorAll('.impact-badge').forEach(badge => {
-            badge.addEventListener('mouseenter', () => {
-                badge.style.transform = 'translateY(-2px) scale(1.05)';
-            });
-            
-            badge.addEventListener('mouseleave', () => {
-                badge.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-        
-        // Performance optimization for lower-end devices
-        if (navigator.hardwareConcurrency < 4) {
-            document.body.classList.add('low-performance');
-            const style = document.createElement('style');
-            style.textContent = `
+    <script src=https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js></script>
+    <script>const cursor=document.querySelector(".cursor"),cursorFollower=document.querySelector(".cursor-follower");"ontouchstart"in window||(document.addEventListener("mousemove",e=>{cursor.style.left=e.clientX+"px",cursor.style.top=e.clientY+"px",setTimeout(()=>{cursorFollower.style.left=e.clientX-20+"px",cursorFollower.style.top=e.clientY-20+"px"},100)}),document.querySelectorAll("a, button, .impact-card, .impact-badge, .stat-item").forEach(e=>{e.addEventListener("mouseenter",()=>{cursor.style.transform="scale(1.5)",cursorFollower.style.transform="scale(1.5)"}),e.addEventListener("mouseleave",()=>{cursor.style.transform="scale(1)",cursorFollower.style.transform="scale(1)"})})),window.addEventListener("load",()=>{let e=document.getElementById("loadingOverlay");setTimeout(()=>{e.style.opacity="0",setTimeout(()=>{e.style.display="none"},500)},1e3)});const navbar=document.getElementById("mainNavbar");window.addEventListener("scroll",()=>{window.scrollY>100?navbar.classList.add("scrolled"):navbar.classList.remove("scrolled")}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();let t=document.querySelector(this.getAttribute("href"));if(t){let e=t.offsetTop-100;window.scrollTo({top:e,behavior:"smooth"})}})}),window.addEventListener("scroll",()=>{let e=window.pageYOffset;document.querySelectorAll(".floating-element").forEach((t,r)=>{e<window.innerHeight&&(t.style.transform=`translateY(${e*(.2+.1*r)}px) rotate(${.1*e}deg)`)})});const observerOptions={threshold:.1,rootMargin:"0px 0px -50px 0px"},observer=new IntersectionObserver(e=>{e.forEach((e,t)=>{e.isIntersecting&&setTimeout(()=>{e.target.classList.add("visible")},100*t)})},observerOptions);function animateValue(e,t,r,o){let n=performance.now(),a=s=>{let l=Math.min((s-n)/o,1),c=Math.floor(l*(r-t)+t);e.textContent=c===parseInt(r)?r:c,l<1&&requestAnimationFrame(a)};requestAnimationFrame(a)}document.querySelectorAll(".fade-in").forEach(e=>{observer.observe(e)});const statObserver=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting&&!e.target.dataset.animated){let t=e.target.querySelector(".stat-number"),r=t.textContent.trim();"âˆž"===r?t.style.animation="pulse 2s ease-in-out infinite":"100%"===r?(animateValue(t,0,100,2e3),setTimeout(()=>{t.textContent="100%"},2e3)):animateValue(t,0,parseInt(r)||25,2e3),e.target.dataset.animated="true"}})},{threshold:.5});if(document.querySelectorAll(".stat-item").forEach(e=>{statObserver.observe(e)}),document.querySelectorAll(".impact-badge").forEach(e=>{e.addEventListener("mouseenter",()=>{e.style.transform="translateY(-2px) scale(1.05)"}),e.addEventListener("mouseleave",()=>{e.style.transform="translateY(0) scale(1)"})}),navigator.hardwareConcurrency<4){document.body.classList.add("low-performance");const e=document.createElement("style");e.textContent=`
                 .low-performance .floating-element { animation: none; }
                 .low-performance .impact-card { transition-duration: 0.2s; }
                 .low-performance .impact-badge { transition-duration: 0.2s; }
@@ -1480,35 +555,5 @@
                     0%, 100% { opacity: 1; transform: scale(1); }
                     50% { opacity: 0.7; transform: scale(1.1); }
                 }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        // Add subtle scroll-triggered animations for impact content
-        const impactContentObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const titles = entry.target.querySelectorAll('.impact-title');
-                    titles.forEach((title, index) => {
-                        setTimeout(() => {
-                            title.style.opacity = '1';
-                            title.style.transform = 'translateY(0)';
-                        }, index * 200);
-                    });
-                }
-            });
-        }, { threshold: 0.3 });
-        
-        document.querySelectorAll('.impact-content').forEach(content => {
-            // Initialize title styles
-            content.querySelectorAll('.impact-title').forEach(title => {
-                title.style.opacity = '0';
-                title.style.transform = 'translateY(20px)';
-                title.style.transition = 'all 0.6s ease';
-            });
-            
-            impactContentObserver.observe(content);
-        });
-    </script>
-</body>
-</html>
+            `,document.head.appendChild(e)}const impactContentObserver=new IntersectionObserver(e=>{e.forEach(e=>{e.isIntersecting&&e.target.querySelectorAll(".impact-title").forEach((e,t)=>{setTimeout(()=>{e.style.opacity="1",e.style.transform="translateY(0)"},200*t)})})},{threshold:.3});document.querySelectorAll(".impact-content").forEach(e=>{e.querySelectorAll(".impact-title").forEach(e=>{e.style.opacity="0",e.style.transform="translateY(20px)",e.style.transition="all 0.6s ease"}),impactContentObserver.observe(e)});</script>
+

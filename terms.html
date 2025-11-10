@@ -1,531 +1,499 @@
-<!DOCTYPE html>
-
-<!--
- // WEBSITE: https://themefisher.com
- // TWITTER: https://twitter.com/themefisher
- // FACEBOOK: https://www.facebook.com/themefisher
- // GITHUB: https://github.com/themefisher/
--->
-
-<html lang="en">
-<head>
+<!DOCTYPE html><html lang="en"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terms and Conditions - Stakco Interactive Puzzles</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-        
-        :root {
-            --primary-color: #f9a743;
-            --primary-gradient: linear-gradient(135deg, #f9a743 0%, #ffc947 100%);
-            --text-primary: #3c2f38;
-            --text-secondary: #7f8c8d;
-            --stakco-light-champagne-horizon: linear-gradient(135deg, #DFAC6D 0%, #D4984F 100%);
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            line-height: 1.7;
-            color: var(--text-primary);
-            background-color: #ffffff;
-        }
-        
-        /* Navigation */
-        .navbar {
-            transition: all 0.3s ease;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        /* Page Header */
-        .page-header {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            padding: 120px 0 60px;
-            margin-top: 76px;
-            border-bottom: 1px solid #e9ecef;
-        }
-        
-        .page-title {
-            font-size: 3rem;
-            font-weight: 800;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
-        
-        .page-subtitle {
-            font-size: 1.2rem;
-            color: var(--text-secondary);
-            margin-bottom: 2rem;
-        }
-        
-        .last-updated {
-            background: linear-gradient(135deg, rgba(249, 167, 68, 0.1), rgba(255, 201, 71, 0.1));
-            border: 1px solid rgba(249, 167, 68, 0.2);
-            border-radius: 10px;
-            padding: 1rem 1.5rem;
-            font-size: 0.95rem;
-            color: var(--primary-color);
-            font-weight: 600;
-            display: inline-block;
-        }
-        
-        /* Content Section */
-        .content-section {
-            padding: 80px 0;
-            background: #ffffff;
-        }
-        
-        .terms-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        
-        .terms-content h2 {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin: 3rem 0 1.5rem 0;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #f8f9fa;
-            position: relative;
-        }
-        
-        .terms-content h2::before {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 60px;
-            height: 2px;
-            background: var(--primary-gradient);
-        }
-        
-        .terms-content h2:first-of-type {
-            margin-top: 0;
-        }
-        
-        .terms-content h3 {
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin: 2rem 0 1rem 0;
-        }
-        
-        .terms-content p {
-            font-size: 1rem;
-            line-height: 1.8;
-            color: var(--text-secondary);
-            margin-bottom: 1.5rem;
-        }
-        
-        .terms-content ul,
-        .terms-content ol {
-            margin-bottom: 1.5rem;
-            padding-left: 2rem;
-        }
-        
-        .terms-content li {
-            font-size: 1rem;
-            line-height: 1.8;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-        
-        .terms-content a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-        }
-        
-        .terms-content a:hover {
-            color: var(--text-primary);
-            text-decoration: underline;
-        }
-        
-        .terms-content strong {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-        
-        /* Important Notice Box */
-        .notice-box {
-            background: linear-gradient(135deg, rgba(249, 167, 68, 0.1), rgba(255, 201, 71, 0.05));
-            border: 1px solid rgba(249, 167, 68, 0.2);
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-        }
-        
-        .notice-box h4 {
-            color: var(--primary-color);
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .notice-box p {
-            margin-bottom: 0.5rem;
-        }
-        
-        /* Contact Info Box */
-        .contact-box {
-            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
-            border: 1px solid #e9ecef;
-            border-radius: 15px;
-            padding: 2rem;
-            margin: 2rem 0;
-            text-align: center;
-        }
-        
-        .contact-box h4 {
-            color: var(--text-primary);
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        
-        .contact-box p {
-            margin-bottom: 0.5rem;
-        }
-        
-        /* Table of Contents */
-        .toc {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 3rem;
-        }
-        
-        .toc h4 {
-            color: var(--text-primary);
-            font-weight: 600;
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-        
-        .toc ul {
-            list-style: none;
-            padding-left: 0;
-            margin-bottom: 0;
-        }
-        
-        .toc li {
-            margin-bottom: 0.5rem;
-        }
-        
-        .toc a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: block;
-            padding: 0.25rem 0;
-        }
-        
-        .toc a:hover {
-            color: var(--primary-color);
-            padding-left: 0.5rem;
-        }
-        
-        /* Footer */
-        .footer-block {
-            background: var(--stakco-light-champagne-horizon);
-            padding: 3rem 0 2rem;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .page-header {
-                padding: 100px 0 40px;
-                margin-top: 70px;
-            }
-            
-            .page-title {
-                font-size: 2.2rem;
-            }
-            
-            .content-section {
-                padding: 60px 0;
-            }
-            
-            .terms-content h2 {
-                font-size: 1.5rem;
-            }
-            
-            .terms-content h3 {
-                font-size: 1.2rem;
-            }
-            
-            .toc,
-            .contact-box,
-            .notice-box {
-                padding: 1.5rem;
-            }
-        }
-        
-        /* Scroll behavior */
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        /* Focus styles for accessibility */
-        .toc a:focus,
-        .terms-content a:focus {
-            outline: 2px solid var(--primary-color);
-            outline-offset: 2px;
-        }
-
-        .footer-modern {
-    background: var(--stakco-dark-wine-gold);
-    color: white;
-    position: relative;
-    overflow: hidden;
+    <style>@import "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap";
+:root {
+  --primary-color: #f9a743;
+  --primary-gradient: linear-gradient(135deg, #f9a743 0%, #ffc947 100%);
+  --text-primary: #3c2f38;
+  --text-secondary: #7f8c8d;
+  --stakco-light-champagne-horizon: linear-gradient(135deg, #dfac6d 0%, #d4984f 100%);
 }
 
-.footer-modern::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="footer-grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.05"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.05"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23footer-grain)"/></svg>') repeat;
-    pointer-events: none;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: var(--text-primary);
+  background-color: #fff;
+  font-family: Inter, sans-serif;
+  line-height: 1.7;
+}
+
+.navbar {
+  -webkit-backdrop-filter: blur(20px);
+  transition: all .3s;
+  box-shadow: 0 2px 10px #0000001a;
+}
+
+.page-header {
+  background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+  border-bottom: 1px solid #e9ecef;
+  margin-top: 76px;
+  padding: 120px 0 60px;
+}
+
+.page-title {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-size: 3rem;
+  font-weight: 800;
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1.2rem;
+}
+
+.last-updated {
+  color: var(--primary-color);
+  background: linear-gradient(135deg, #f9a7441a, #ffc9471a);
+  border: 1px solid #f9a74433;
+  border-radius: 10px;
+  padding: 1rem 1.5rem;
+  font-size: .95rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.content-section {
+  background: #fff;
+  padding: 80px 0;
+}
+
+.terms-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.terms-content h2 {
+  color: var(--text-primary);
+  border-bottom: 2px solid #f8f9fa;
+  margin: 3rem 0 1.5rem;
+  padding-bottom: .5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  position: relative;
+}
+
+.terms-content h2:before {
+  content: "";
+  background: var(--primary-gradient);
+  width: 60px;
+  height: 2px;
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+}
+
+.terms-content h2:first-of-type {
+  margin-top: 0;
+}
+
+.terms-content h3 {
+  color: var(--text-primary);
+  margin: 2rem 0 1rem;
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.terms-content p {
+  color: var(--text-secondary);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.terms-content ul, .terms-content ol {
+  margin-bottom: 1.5rem;
+  padding-left: 2rem;
+}
+
+.terms-content li {
+  color: var(--text-secondary);
+  margin-bottom: .5rem;
+  font-size: 1rem;
+  line-height: 1.8;
+}
+
+.terms-content a {
+  color: var(--primary-color);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all .3s;
+}
+
+.terms-content a:hover {
+  color: var(--text-primary);
+  text-decoration: underline;
+}
+
+.terms-content strong {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.notice-box {
+  background: linear-gradient(135deg, #f9a7441a, #ffc9470d);
+  border: 1px solid #f9a74433;
+  border-radius: 15px;
+  margin: 2rem 0;
+  padding: 2rem;
+}
+
+.notice-box h4 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.notice-box p {
+  margin-bottom: .5rem;
+}
+
+.contact-box {
+  text-align: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #fff 100%);
+  border: 1px solid #e9ecef;
+  border-radius: 15px;
+  margin: 2rem 0;
+  padding: 2rem;
+}
+
+.contact-box h4 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.contact-box p {
+  margin-bottom: .5rem;
+}
+
+.toc {
+  background: #f8f9fa;
+  border-radius: 15px;
+  margin-bottom: 3rem;
+  padding: 2rem;
+}
+
+.toc h4 {
+  color: var(--text-primary);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.toc ul {
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.toc li {
+  margin-bottom: .5rem;
+}
+
+.toc a {
+  color: var(--text-secondary);
+  padding: .25rem 0;
+  text-decoration: none;
+  transition: all .3s;
+  display: block;
+}
+
+.toc a:hover {
+  color: var(--primary-color);
+  padding-left: .5rem;
+}
+
+.footer-block {
+  background: var(--stakco-light-champagne-horizon);
+  padding: 3rem 0 2rem;
+}
+
+@media (width <= 768px) {
+  .page-header {
+    margin-top: 70px;
+    padding: 100px 0 40px;
+  }
+
+  .page-title {
+    font-size: 2.2rem;
+  }
+
+  .content-section {
+    padding: 60px 0;
+  }
+
+  .terms-content h2 {
+    font-size: 1.5rem;
+  }
+
+  .terms-content h3 {
+    font-size: 1.2rem;
+  }
+
+  .toc, .contact-box, .notice-box {
+    padding: 1.5rem;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.toc a:focus, .terms-content a:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.footer-modern {
+  background: var(--stakco-dark-wine-gold);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-modern:before {
+  content: "";
+  pointer-events: none;
+  background: url("data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"footer-grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"white\" opacity=\"0.05\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"white\" opacity=\"0.05\"/><circle cx=\"50\" cy=\"10\" r=\"0.5\" fill=\"white\" opacity=\"0.05\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23footer-grain)\"/></svg>");
+  position: absolute;
+  inset: 0;
 }
 
 .footer-content {
-    position: relative;
-    z-index: 2;
-    padding: 4rem 0 2rem;
+  z-index: 2;
+  padding: 4rem 0 2rem;
+  position: relative;
 }
 
 .footer-main {
-    padding-bottom: 3rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 2rem;
+  border-bottom: 1px solid #ffffff1a;
+  margin-bottom: 2rem;
+  padding-bottom: 3rem;
 }
 
 .footer-logo {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .footer-logo img {
-    filter: brightness(0) invert(1);
-    transition: all 0.3s ease;
+  filter: brightness(0) invert();
+  transition: all .3s;
 }
 
 .footer-logo:hover img {
-    filter: brightness(0) invert(1) drop-shadow(0 0 10px rgba(249, 167, 67, 0.5));
-    transform: scale(1.05);
+  filter: brightness(0) invert() drop-shadow(0 0 10px #f9a74380);
+  transform: scale(1.05);
 }
 
 .footer-description {
-    font-size: 1.1rem;
-    line-height: 1.6;
-    opacity: 0.9;
-    margin-bottom: 2rem;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+  opacity: .9;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
 .footer-links {
-    display: flex;
-    justify-content: center;
-    gap: 3rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 3rem;
+  margin-bottom: 2rem;
+  display: flex;
 }
 
 .footer-link-group h5 {
-    color: var(--primary-color);
-    font-weight: 600;
-    margin-bottom: 1rem;
-    font-size: 1rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
 }
 
 .footer-link-group ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .footer-link-group li {
-    margin-bottom: 0.5rem;
+  margin-bottom: .5rem;
 }
 
 .footer-link-group a {
-    color: rgba(255, 255, 255, 0.8);
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 0.95rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
+  color: #fffc;
+  align-items: center;
+  gap: .5rem;
+  font-size: .95rem;
+  text-decoration: none;
+  transition: all .3s;
+  display: inline-flex;
 }
 
 .footer-link-group a:hover {
-    color: var(--primary-color);
-    transform: translateX(5px);
+  color: var(--primary-color);
+  transform: translateX(5px);
 }
 
 .footer-link-group a i {
-    font-size: 0.8rem;
-    opacity: 0.7;
+  opacity: .7;
+  font-size: .8rem;
 }
 
 .footer-social {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  display: flex;
 }
 
 .social-link {
-    width: 45px;
-    height: 45px;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    font-size: 1.1rem;
+  backdrop-filter: blur(10px);
+  color: #fff;
+  background: #ffffff1a;
+  border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 45px;
+  font-size: 1.1rem;
+  text-decoration: none;
+  transition: all .3s;
+  display: flex;
 }
 
 .social-link:hover {
-    background: var(--primary-gradient);
-    color: white;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(249, 167, 67, 0.4);
+  background: var(--primary-gradient);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px #f9a74366;
 }
 
 .footer-bottom {
-    text-align: center;
+  text-align: center;
 }
 
 .footer-bottom-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  display: flex;
 }
 
 .footer-legal {
-    display: flex;
-    gap: 2rem;
-    align-items: center;
-    flex-wrap: wrap;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+  display: flex;
 }
 
 .footer-legal a {
-    color: rgba(255, 255, 255, 0.7);
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: all 0.3s ease;
+  color: #ffffffb3;
+  font-size: .9rem;
+  text-decoration: none;
+  transition: all .3s;
 }
 
 .footer-legal a:hover {
-    color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .footer-legal .separator {
-    color: rgba(255, 255, 255, 0.3);
-    font-size: 0.8rem;
+  color: #ffffff4d;
+  font-size: .8rem;
 }
 
 .footer-copyright {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 0.85rem;
-    margin: 0;
+  color: #fff9;
+  margin: 0;
+  font-size: .85rem;
 }
 
 .footer-patent {
-    background: rgba(249, 167, 67, 0.1);
-    border: 1px solid rgba(249, 167, 67, 0.2);
-    border-radius: 20px;
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-    color: var(--primary-color);
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 1rem;
+  color: var(--primary-color);
+  background: #f9a7431a;
+  border: 1px solid #f9a74333;
+  border-radius: 20px;
+  align-items: center;
+  gap: .5rem;
+  margin-top: 1rem;
+  padding: .5rem 1rem;
+  font-size: .8rem;
+  display: inline-flex;
 }
 
-/* Responsive Design for Footer */
-@media (max-width: 768px) {
-    .footer-content {
-        padding: 3rem 0 1.5rem;
-    }
-    
-    .footer-links {
-        flex-direction: column;
-        gap: 2rem;
-        text-align: center;
-    }
-    
-    .footer-bottom-content {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .footer-legal {
-        justify-content: center;
-        order: 2;
-    }
-    
-    .footer-copyright {
-        order: 1;
-        margin-bottom: 1rem;
-    }
+@media (width <= 768px) {
+  .footer-content {
+    padding: 3rem 0 1.5rem;
+  }
+
+  .footer-links {
+    text-align: center;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .footer-bottom-content {
+    text-align: center;
+    flex-direction: column;
+  }
+
+  .footer-legal {
+    order: 2;
+    justify-content: center;
+  }
+
+  .footer-copyright {
+    order: 1;
+    margin-bottom: 1rem;
+  }
 }
 
-@media (max-width: 576px) {
-    .footer-links {
-        gap: 1.5rem;
-    }
-    
-    .footer-legal {
-        flex-direction: column;
-        gap: 1rem;
-    }
-    
-    .footer-legal .separator {
-        display: none;
-    }
-}
+@media (width <= 576px) {
+  .footer-links {
+    gap: 1.5rem;
+  }
 
-    </style>
+  .footer-legal {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .footer-legal .separator {
+    display: none;
+  }
+}
+</style>
 </head>
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top" id="mainNavbar">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-3" href="index.html" style="color: var(--primary-color);">
-                <img src="images/logo2.png" alt="Stakco" width="150px">
+            <a class="navbar-brand fw-bold fs-3" href="/index.html" style="color: var(--primary-color)">
+                <img src="/logo2.0b6375f9.png" alt="Stakco" width="150px">
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
-                    <li class="nav-item"><a class="nav-link" href="projects.html">Projects</a></li>
-                    <li class="nav-item"><a class="nav-link" href="research.html">Research</a></li>
-                    <li class="nav-item"><a class="nav-link" href="impact.html">Impact</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html#contact">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/products.html">Products</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/projects.html">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/research.html">Research</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/impact.html">Impact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/index.html#contact">Contact</a></li>
                 </ul>
             </div>
         </div>
@@ -695,7 +663,7 @@
 
                         <!-- Privacy -->
                         <h2 id="privacy">8. Privacy and Data Protection</h2>
-                        <p>Your privacy is important to us. Our collection, use, and protection of your personal information is governed by our <a href="privacy-policy.html">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
+                        <p>Your privacy is important to us. Our collection, use, and protection of your personal information is governed by our <a href="/privacy.html">Privacy Policy</a>, which is incorporated into these Terms by reference.</p>
                         <p>Key privacy commitments include:</p>
                         <ul>
                             <li>Transparent data collection and usage practices</li>
@@ -810,8 +778,8 @@
                 <div class="footer-main">
                     <!-- Logo -->
                     <div class="footer-logo text-center">
-                        <a href="index.html">
-                            <img src="images/logo2.png" alt="Stakco" width="160px">
+                        <a href="/index.html">
+                            <img src="/logo2.0b6375f9.png" alt="Stakco" width="160px">
                         </a>
                     </div>
                     
@@ -825,25 +793,25 @@
                         <div class="footer-link-group">
                             <h5>Products</h5>
                             <ul>
-                                <li><a href="products.html"><i class="fas fa-play"></i>Stakco Play</a></li>
-                                <li><a href="products.html"><i class="fas fa-file-alt"></i>Stakco Paper</a></li>
-                                <li><a href="products.html"><i class="fas fa-lightbulb"></i>Stakco Light</a></li>
+                                <li><a href="/products.html"><i class="fas fa-play"></i>Stakco Play</a></li>
+                                <li><a href="/products.html"><i class="fas fa-file-alt"></i>Stakco Paper</a></li>
+                                <li><a href="/products.html"><i class="fas fa-lightbulb"></i>Stakco Light</a></li>
                             </ul>
                         </div>
                         
                         <div class="footer-link-group">
                             <h5>Company</h5>
                             <ul>
-                                <li><a href="projects.html"><i class="fas fa-project-diagram"></i>Projects</a></li>
-                                <li><a href="research.html"><i class="fas fa-flask"></i>Research</a></li>
-                                <li><a href="impact.html"><i class="fas fa-heart"></i>Impact</a></li>
+                                <li><a href="/projects.html"><i class="fas fa-project-diagram"></i>Projects</a></li>
+                                <li><a href="/research.html"><i class="fas fa-flask"></i>Research</a></li>
+                                <li><a href="/impact.html"><i class="fas fa-heart"></i>Impact</a></li>
                             </ul>
                         </div>
                         
                         <div class="footer-link-group">
                             <h5>Support</h5>
                             <ul>
-                                <li><a href="index.html#contact"><i class="fas fa-envelope"></i>Contact Us</a></li>
+                                <li><a href="/index.html#contact"><i class="fas fa-envelope"></i>Contact Us</a></li>
                                 <li><a href="mailto:hello@stakcos.com"><i class="fas fa-question-circle"></i>Help Center</a></li>
                                 <li><a href="mailto:hello@stakcos.com"><i class="fas fa-comments"></i>Feedback</a></li>
                             </ul>
@@ -874,11 +842,11 @@
                 <div class="footer-bottom">
                     <div class="footer-bottom-content">
                         <div class="footer-legal">
-                            <a href="terms-conditions.html">Terms & Conditions</a>
+                            <a href="/terms.html">Terms &amp; Conditions</a>
                             <span class="separator">•</span>
-                            <a href="privacy-policy.html">Privacy Policy</a>
+                            <a href="/privacy.html">Privacy Policy</a>
                             <span class="separator">•</span>
-                            <a href="index.html#contact">Contact</a>
+                            <a href="/index.html#contact">Contact</a>
                         </div>
                         <p class="footer-copyright">
                             © 2025 Stakco. All rights reserved.
@@ -898,59 +866,52 @@
     </footer>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // Enhanced navbar scroll effect
-        const navbar = document.getElementById('mainNavbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 100) {
-                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
-                navbar.style.boxShadow = '0 5px 30px rgba(0, 0, 0, 0.1)';
-            } else {
-                navbar.style.background = 'rgba(255, 255, 255, 1)';
-                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
-            }
-        });
-        
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    const offsetTop = target.offsetTop - 100;
-                    window.scrollTo({
-                        top: offsetTop,
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-        
-        // Highlight current section in table of contents
-        const sections = document.querySelectorAll('h2[id]');
-        const tocLinks = document.querySelectorAll('.toc a');
-        
-        function highlightCurrentSection() {
-            let currentSection = '';
-            sections.forEach(section => {
-                const rect = section.getBoundingClientRect();
-                if (rect.top <= 150) {
-                    currentSection = section.getAttribute('id');
-                }
-            });
-            
-            tocLinks.forEach(link => {
-                link.style.color = '';
-                link.style.fontWeight = '';
-                if (link.getAttribute('href') === '#' + currentSection) {
-                    link.style.color = 'var(--primary-color)';
-                    link.style.fontWeight = '600';
-                }
+    <script>// Enhanced navbar scroll effect
+const navbar = document.getElementById('mainNavbar');
+window.addEventListener('scroll', ()=>{
+    if (window.scrollY > 100) {
+        navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+        navbar.style.boxShadow = '0 5px 30px rgba(0, 0, 0, 0.1)';
+    } else {
+        navbar.style.background = 'rgba(255, 255, 255, 1)';
+        navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+    }
+});
+// Smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach((anchor)=>{
+    anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            const offsetTop = target.offsetTop - 100;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
             });
         }
-        
-        window.addEventListener('scroll', highlightCurrentSection);
-        highlightCurrentSection(); // Initial call
-    </script>
-</body>
-</html>
+    });
+});
+// Highlight current section in table of contents
+const sections = document.querySelectorAll('h2[id]');
+const tocLinks = document.querySelectorAll('.toc a');
+function highlightCurrentSection() {
+    let currentSection = '';
+    sections.forEach((section)=>{
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 150) currentSection = section.getAttribute('id');
+    });
+    tocLinks.forEach((link)=>{
+        link.style.color = '';
+        link.style.fontWeight = '';
+        if (link.getAttribute('href') === '#' + currentSection) {
+            link.style.color = 'var(--primary-color)';
+            link.style.fontWeight = '600';
+        }
+    });
+}
+window.addEventListener('scroll', highlightCurrentSection);
+highlightCurrentSection(); // Initial call
+
+</script>
+
+<script src="/terms.f0c55da2.js"></script></body></html>
