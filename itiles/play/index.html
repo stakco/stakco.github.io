@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Basic Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="iTiles-driven Stakco puzzles with interactive floor tile controls.">
+    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, iTiles puzzle, music, educational games, therapy puzzles">
+    <meta name="author" content="Stakco Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3c2f38">
+
+    <title>Stakco iTiles</title>
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+     <!-- Open Graph -->
+    <meta property="og:title" content="Stakco iTiles">
+    <meta property="og:description" content="iTiles-driven Stakco puzzles with interactive floor tile controls.">
+    <meta property="og:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:url" content="https://stakcos.com/itiles/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco iTiles">
+    <meta name="twitter:description" content="iTiles-driven Stakco puzzles with interactive floor tile controls.">
+    <meta name="twitter:image"
+        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:url" content="https://stakcos.com/itiles/">
+    <meta name="twitter:site" content="@StakcoPuzzle">
+    <meta name="twitter:creator" content="@StakcoPuzzle">
+
+    <!-- Favicons / Android -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+    <!-- Apple Touch Icons (Squircles) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+    <!-- Apple Splash Screens (Portrait only) -->
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1536x2048.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2224.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-1668x2388.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)">
+    <link rel="apple-touch-startup-image" href="https://stakcos.com/assets/1.0.0/images/apple-splash-2048x2732.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)">
+
+    <!-- Microsoft Tiles -->
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+    <meta name="msapplication-TileImage" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square150x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-150x150.png">
+    <meta name="msapplication-square310x310logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x310.png">
+    <meta name="msapplication-wide310x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x150.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="/itiles/manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco iTiles">
+
+    <!-- Mobile App Meta Tags (iOS) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco iTiles">
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stakco iTiles",
+      "url": "https://stakcos.com/itiles/",
+      "description": "iTiles-driven Stakco puzzles with interactive floor tile controls.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stakco"
+      }
+    }
+    </script>
+    
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-permission-prompt.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+
+    <style>
+        body {
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        #itiles-info {
+            max-width: 75%;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 15px 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            z-index: 800;
+            display: flex;
+            gap: 20px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 600px) {
+            #itiles-info {
+                top: 80px;
+                max-width: 90%;
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        #itiles-info.hidden {
+            display: none;
+        }
+
+        .itiles-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .itiles-label {
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 1px;
+        }
+
+        .itiles-value {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+            white-space: nowrap;
+        }
+
+        .itiles-activity {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #333;
+            border: 2px solid #666;
+            transition: all 0.2s ease;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .itiles-activity.active {
+            background: var(--primary-color);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .connection-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 850;
+        }
+
+        .connection-buttons button {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 10px 20px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .connection-buttons button:hover:not(:disabled) {
+            background: var(--primary-gradient);
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .connection-buttons button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .connection-buttons button.success {
+            background: var(--success-gradient);
+            border-color: var(--success-color);
+        }
+
+        @media (max-width: 600px) {
+            .connection-buttons {
+                top: auto;
+                bottom: 120px;
+                right: 10px;
+                left: 10px;
+                justify-content: center;
+            }
+            
+            .connection-buttons button {
+                flex: 1;
+                font-size: 11px;
+                padding: 8px 12px;
+            }
+        }
+
+        .tile-visual {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 5px;
+            z-index: 800;
+        }
+
+        .tile-indicator {
+            width: 8px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            transition: all 0.1s ease;
+        }
+
+        .tile-indicator.active {
+            background: var(--primary-gradient);
+            box-shadow: var(--shadow-glow);
+        }
+
+        @media (max-width: 600px) {
+            .tile-visual {
+                bottom: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <stakco-info-panel icon="fa-gamepad">
+        <p>Connect iTiles to control puzzle layers</p>
+    </stakco-info-panel>
+
+    <stakco-branding 
+        title="Stakco iTiles" 
+        version="v2.0.0" 
+        subtitle="Touch Puzzle">
+    </stakco-branding>
+
+    <stakco-products-panel></stakco-products-panel>
+
+    <div class="connection-buttons">
+        <button id="connectBtn">🎮 Connect iTiles</button>
+        <button id="pairBtn" disabled class="success">🔗 Pair Tiles</button>
+    </div>
+
+    <div id="itiles-info" class="hidden">
+        <div class="itiles-row">
+            <span class="itiles-label">Tile:</span>
+            <span class="itiles-value" id="last-tile">-</span>
+            <span class="itiles-activity" id="itiles-indicator"></span>
+        </div>
+        <div class="itiles-row">
+            <span class="itiles-label">Layer:</span>
+            <span class="itiles-value" id="active-layer">1</span>
+        </div>
+        <div class="itiles-row">
+            <span class="itiles-label">Rotation:</span>
+            <span class="itiles-value" id="rotation-value">0°</span>
+        </div>
+    </div>
+
+    <stakco-puzzle-container
+        layers="3"
+        user-id="109949450257686494443"
+        puzzle-id="A2A3_3"
+        tolerance="2">
+    </stakco-puzzle-container>
+
+    <div class="tile-visual" id="tile-visual"></div>
+    
+    <stakco-layer-controls layers="3"></stakco-layer-controls>
+
+    <stakco-share-button label="Share Success!"></stakco-share-button>
+
+    <stakco-permission-prompt 
+        title="Enable iTiles Access"
+        message="This app needs access to your iTiles interactive floor tiles. Connect via Bluetooth, then pair tiles. Touch tiles to switch layers and rotate the puzzle!"
+        primary-label="Connect iTiles"
+        secondary-label="Skip">
+    </stakco-permission-prompt>
+
+    <stakco-share-window 
+        title="Stakco iTiles"
+        share-url="https://stakcos.com/itiles/">
+        <div slot="text">Solved with iTiles!</div>
+    </stakco-share-window>
+
+    <script type="module">
+        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+        import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
+        import { 
+            ITilesBLEManager,
+            TileColor,
+            SELECT_ITILE,
+            TIMEOUT_DELAY,
+            CONNECTION_STATE,
+            TOGGLE_SENSOR,
+            GAME_STATUS
+        } from 'https://stakcos.com/itiles/itiles.esm.js';
+
+        const CONFIG = StakcoConfig.getConfig('itiles');
+
+        // iTiles state
+        const bleManager = new ITilesBLEManager();
+        let touchCount = 0;
+        let puzzleSolved = false;
+
+        // Tile rotation mappings
+        const tileRotations = {
+            1: 0,
+            2: 60,
+            3: 120,
+            4: 180,
+            5: 240,
+            6: 300
+        };
+
+        const puzzleContainer = document.querySelector('stakco-puzzle-container');
+        const layerControls = document.querySelector('stakco-layer-controls');
+        const infoPanel = document.querySelector('stakco-info-panel');
+        const shareWindow = document.querySelector('stakco-share-window');
+        const permissionPrompt = document.querySelector('stakco-permission-prompt');
+        const branding = document.querySelector('stakco-branding');
+        const shareButton = document.querySelector('stakco-share-button');
+        
+        const iTilesInfo = document.getElementById('itiles-info');
+        const lastTileSpan = document.getElementById('last-tile');
+        const activeLayerSpan = document.getElementById('active-layer');
+        const rotationValueSpan = document.getElementById('rotation-value');
+        const iTilesIndicator = document.getElementById('itiles-indicator');
+        const tileVisual = document.getElementById('tile-visual');
+        
+        const connectBtn = document.getElementById('connectBtn');
+        const pairBtn = document.getElementById('pairBtn');
+
+        async function init() {
+            console.log('Initializing Stakco iTiles...');
+
+            StakcoUtils.preventZoom();
+            createTileVisual();
+            setupEventListeners();
+            setupITilesEventListeners();
+
+            // Wait for puzzle container to be ready
+            await new Promise(resolve => {
+                if (puzzleContainer.shadowRoot) {
+                    resolve();
+                } else {
+                    puzzleContainer.addEventListener('puzzle-ready', resolve, { once: true });
+                }
+            });
+
+            setTimeout(checkPermissionNeeded, 1000);
+            console.log('App initialized');
+        }
+
+        function setupEventListeners() {
+            puzzleContainer.addEventListener('puzzle-ready', () => {
+                console.log('Puzzle ready');
+            });
+
+            puzzleContainer.addEventListener('puzzle-solved', () => {
+                puzzleSolved = true;
+                handlePuzzleSolved();
+            });
+
+            layerControls.addEventListener('layerchange', (e) => {
+                puzzleContainer.switchLayer(e.detail.layer);
+                activeLayerSpan.textContent = e.detail.layer;
+                updateRotationDisplay();
+            });
+
+            permissionPrompt.addEventListener('primary-action', async () => {
+                await connectITiles();
+            });
+
+            permissionPrompt.addEventListener('secondary-action', () => {
+                initializeITiles();
+            });
+
+            shareButton.addEventListener('share-clicked', handleShare);
+            
+            connectBtn.addEventListener('click', connectITiles);
+            pairBtn.addEventListener('click', pairITiles);
+        }
+
+        function setupITilesEventListeners() {
+            bleManager.onConnectionStateChanged((state) => {
+                const connected = state === CONNECTION_STATE.CONNECTED;
+                
+                if (connected) {
+                    connectBtn.disabled = true;
+                    pairBtn.disabled = false;
+                    connectBtn.textContent = '✓ Connected';
+                    console.log('iTiles master connected');
+                } else {
+                    connectBtn.disabled = false;
+                    pairBtn.disabled = true;
+                    connectBtn.textContent = '🎮 Connect iTiles';
+                }
+            });
+
+            bleManager.onPairedTileListReceived((response) => {
+                const tiles = response.pairedTileIds.join(', ') || 'None';
+                console.log(`Paired tiles (${response.pairedTileTotal}): ${tiles}`);
+                
+                if (response.pairedTileTotal > 0) {
+                    initializeITiles();
+                }
+            });
+
+            // Touch event handler
+            bleManager.onTouch((response) => {
+                if (puzzleSolved) return;
+                
+                const tileId = response.tileId;
+                touchCount++;
+                
+                showITilesActivity();
+                updateTileVisual(tileId);
+                lastTileSpan.textContent = `#${tileId}`;
+                
+                // Tile 1-6: Rotate current layer to angle
+                if (tileId >= 1 && tileId <= 6) {
+                    const angle = tileRotations[tileId];
+                    rotateToAngle(angle);
+                    
+                    // Visual feedback on tile
+                    triggerTileFeedback(tileId);
+                    
+                    console.log(`Tile ${tileId} touched: rotating to ${angle}°`);
+                }
+                
+                // Check if puzzle solved
+                puzzleContainer.checkAlignment();
+            });
+        }
+
+        function createTileVisual() {
+            tileVisual.innerHTML = '';
+            for (let i = 0; i < 7; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'tile-indicator';
+                bar.dataset.tile = i;
+                tileVisual.appendChild(bar);
+            }
+        }
+
+        async function connectITiles() {
+            try {
+                console.log('Opening iTiles device picker...');
+                const device = await bleManager.requestDevice();
+                console.log(`Device selected: ${device.name}`);
+                
+                await bleManager.connect();
+                
+            } catch (error) {
+                console.error('iTiles connection error:', error);
+                infoPanel.setContent('<p>iTiles connection failed</p>');
+            }
+        }
+
+        async function pairITiles() {
+            try {
+                console.log('Starting auto-pairing (20 seconds)...');
+                infoPanel.setContent('<p>Pairing tiles... Please wait 20 seconds</p>');
+                
+                pairBtn.disabled = true;
+                pairBtn.textContent = 'Pairing...';
+                
+                await bleManager.queryOnlineTiles(SELECT_ITILE.ALL);
+                
+                let countdown = 20;
+                const interval = setInterval(() => {
+                    pairBtn.textContent = `Pairing... ${countdown}s`;
+                    countdown--;
+                }, 1000);
+                
+                await new Promise(r => setTimeout(r, 20000));
+                clearInterval(interval);
+                
+                await bleManager.confirmAssignment(SELECT_ITILE.ALL);
+                await new Promise(r => setTimeout(r, 500));
+                
+                for (let i = 1; i <= 6; i++) {
+                    await bleManager.gameInProgress(GAME_STATUS.IN_GAME, i);
+                    await new Promise(r => setTimeout(r, 500));
+                }
+                
+                // Enable touch sensors
+                await bleManager.toggleTouchSensor(TOGGLE_SENSOR.ON, SELECT_ITILE.ALL);
+                console.log('Touch sensors enabled');
+                
+                await bleManager.queryPairedTiles();
+                
+                pairBtn.textContent = '✓ Paired';
+                
+            } catch (error) {
+                console.error('Pairing error:', error);
+                pairBtn.disabled = false;
+                pairBtn.textContent = '🔗 Pair Tiles';
+            }
+        }
+
+        function initializeITiles() {
+            infoPanel.setContent('<p>iTiles active - Touch tiles to rotate layers</p>');
+            iTilesInfo.classList.remove('hidden');
+            branding.hide();
+        }
+
+        function showITilesActivity() {
+            iTilesIndicator.classList.add('active');
+            setTimeout(() => iTilesIndicator.classList.remove('active'), 200);
+        }
+
+        function updateTileVisual(tileId) {
+            document.querySelectorAll('.tile-indicator').forEach(bar => bar.classList.remove('active'));
+            const activeBar = document.querySelector(`[data-tile="${tileId}"]`);
+            if (activeBar) {
+                activeBar.classList.add('active');
+                setTimeout(() => activeBar.classList.remove('active'), 300);
+            }
+        }
+
+        function rotateToAngle(targetAngle) {
+            // Get current rotation
+            const currentRotation = puzzleContainer.getCurrentRotation();
+            
+            // Calculate shortest path to target angle
+            let normalizedCurrent = ((currentRotation % 360) + 360) % 360;
+            let diff = targetAngle - normalizedCurrent;
+            
+            // Normalize to shortest path (-180 to 180)
+            if (diff > 180) diff -= 360;
+            if (diff < -180) diff += 360;
+            
+            // Rotate by the difference
+            puzzleContainer.rotateCurrentLayer(diff);
+            
+            updateRotationDisplay();
+        }
+
+        async function triggerTileFeedback(tileId) {
+            // Light up the pressed tile
+            const colors = [
+                TileColor.RED, TileColor.YELLOW, TileColor.GREEN,
+                TileColor.CYAN, TileColor.BLUE, TileColor.MAGENTA
+            ];
+            const color = colors[(tileId - 1) % colors.length];
+            
+            await bleManager.triggerLight(
+                color,
+                TIMEOUT_DELAY.SEC_1,
+                0, 0,
+                tileId
+            );
+        }
+
+        function updateRotationDisplay() {
+            const rotation = puzzleContainer.getCurrentRotation();
+            let displayRotation = rotation % 360;
+            if (displayRotation < 0) displayRotation += 360;
+            rotationValueSpan.textContent = `${Math.round(displayRotation)}°`;
+        }
+
+        function handlePuzzleSolved() {
+            console.log(`Puzzle solved with ${touchCount} touches!`);
+
+            StakcoUtils.vibrate([200, 100, 300, 100, 200]);
+
+            // Celebration light show
+            playCelebrationLights();
+
+            infoPanel.setContent(`<p>Puzzle solved with ${touchCount} touches!</p>`);
+
+            setTimeout(() => {
+                layerControls.hide();
+                iTilesInfo.classList.add('hidden');
+                shareButton.show();
+            }, 2000);
+
+            // Animate all layers to zero
+            setTimeout(() => {
+                puzzleContainer.animateToSolution(2000);
+            }, 500);
+        }
+
+        async function playCelebrationLights() {
+            const celebrationSequence = [
+                { tiles: SELECT_ITILE.ALL, color: TileColor.RED, duration: 300 },
+                { tiles: SELECT_ITILE.ALL, color: TileColor.YELLOW, duration: 300 },
+                { tiles: SELECT_ITILE.ALL, color: TileColor.GREEN, duration: 300 },
+                { tiles: SELECT_ITILE.ALL, color: TileColor.CYAN, duration: 300 },
+                { tiles: SELECT_ITILE.ALL, color: TileColor.BLUE, duration: 300 },
+                { tiles: SELECT_ITILE.ALL, color: TileColor.MAGENTA, duration: 300 },
+            ];
+
+            for (let { tiles, color, duration } of celebrationSequence) {
+                await bleManager.triggerLight(color, TIMEOUT_DELAY.SEC_1, 0, 0, tiles);
+                await new Promise(resolve => setTimeout(resolve, duration));
+            }
+
+            // Final all-white flash
+            await bleManager.triggerLight(TileColor.WHITE, TIMEOUT_DELAY.SEC_2, 0, 0, SELECT_ITILE.ALL);
+        }
+
+        async function handleShare() {
+            const layerImages = puzzleContainer.getLayerImages();
+            const message = `Solved with ${touchCount} touches!`;
+            shareWindow.setAttribute('filename', `stakco-itiles-${touchCount}touches.png`);
+            await shareWindow.open(layerImages, message, true);
+        }
+
+        async function checkPermissionNeeded() {
+            if (navigator.bluetooth) {
+                permissionPrompt.show();
+            } else {
+                infoPanel.setContent('<p>Web Bluetooth not supported in this browser</p>');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
