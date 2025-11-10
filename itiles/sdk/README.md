@@ -49,6 +49,8 @@
 
 ### Complete Minimal Example
 
+This example shows the **complete initialization flow** including master tile connection and child tile pairing:
+
 ```html
 <!DOCTYPE html>
 <html>
@@ -56,8 +58,11 @@
     <title>iTiles Demo</title>
 </head>
 <body>
-    <button id="connectBtn">Connect</button>
-    <button id="lightBtn" disabled>Light Up!</button>
+    <h1>iTiles Quick Start</h1>
+    <button id="connectBtn">1. Connect Master Tile</button>
+    <button id="pairBtn" disabled>2. Pair Child Tiles (REQUIRED)</button>
+    <button id="lightBtn" disabled>3. Light Up!</button>
+    <div id="status"></div>
     
     <script type="module">
         import { 
@@ -65,45 +70,78 @@
             TileColor,
             SELECT_ITILE,
             TIMEOUT_DELAY,
-            CONNECTION_STATE
+            CONNECTION_STATE,
+            GAME_STATUS
         } from 'https://stakcos.com/itiles/itiles.esm.js';
 
         const manager = new ITilesBLEManager();
         const connectBtn = document.getElementById('connectBtn');
+        const pairBtn = document.getElementById('pairBtn');
         const lightBtn = document.getElementById('lightBtn');
+        const status = document.getElementById('status');
+
+        function log(msg) {
+            status.innerHTML += msg + '<br>';
+        }
 
         // Setup event listeners BEFORE connecting
         manager.onConnectionStateChanged((state) => {
             if (state === CONNECTION_STATE.CONNECTED) {
-                console.log('Connected!');
+                log('✅ Master tile connected');
                 connectBtn.disabled = true;
-                lightBtn.disabled = false;
-            } else if (state === CONNECTION_STATE.DISCONNECTED) {
-                connectBtn.disabled = false;
-                lightBtn.disabled = true;
+                pairBtn.disabled = false;
+                log('⚠️ Now pair child tiles to enable controls');
             }
         });
 
-        manager.onTouch((response) => {
-            console.log(`Tile ${response.tileId} touched! Reaction: ${response.reactionTime}s`);
+        manager.onPairedTileListReceived((response) => {
+            log(`📋 Paired tiles: ${response.pairedTileIds.join(', ')}`);
+            if (response.pairedTileTotal > 0) {
+                lightBtn.disabled = false;
+                log('✅ iTiles ready! You can now control tiles');
+            }
         });
 
-        // Connect button handler
+        // STEP 1: Connect to master tile
         connectBtn.addEventListener('click', async () => {
             try {
-                // Step 1: Open device picker
+                log('Opening device picker...');
                 const device = await manager.requestDevice();
-                console.log('Device selected:', device.name);
+                log(`Selected: ${device.name}`);
                 
-                // Step 2: Connect to selected device
                 await manager.connect();
-                console.log('Connected successfully!');
+                log('Connecting to master tile...');
             } catch (error) {
-                console.error('Connection failed:', error);
+                log(`❌ Error: ${error.message}`);
             }
         });
 
-        // Light button handler
+        // STEP 2: Pair child tiles (REQUIRED)
+        pairBtn.addEventListener('click', async () => {
+            try {
+                pairBtn.disabled = true;
+                log('🔍 Discovering child tiles...');
+                log('⏳ Please wait 20 seconds...');
+                
+                await manager.queryOnlineTiles(SELECT_ITILE.ALL);
+                await new Promise(r => setTimeout(r, 20000));
+                await manager.confirmAssignment(SELECT_ITILE.ALL);
+                await new Promise(r => setTimeout(r, 500));
+                
+                for (let i = 1; i <= 6; i++) {
+                    await manager.gameInProgress(GAME_STATUS.IN_GAME, i);
+                    await new Promise(r => setTimeout(r, 500));
+                }
+                
+                await manager.queryPairedTiles();
+                log('Pairing complete!');
+            } catch (error) {
+                log(`❌ Error: ${error.message}`);
+                pairBtn.disabled = false;
+            }
+        });
+
+        // STEP 3: Control tiles
         lightBtn.addEventListener('click', async () => {
             try {
                 await manager.triggerLight(
@@ -112,8 +150,9 @@
                     0, 0,
                     SELECT_ITILE.ALL
                 );
+                log('🔴 Red light triggered!');
             } catch (error) {
-                console.error('Light trigger failed:', error);
+                log(`❌ Error: ${error.message}`);
             }
         });
     </script>
@@ -123,45 +162,119 @@
 
 ## Connection Workflow
 
-### Important: Always Set Up Event Listeners First
+### Understanding iTiles Architecture
 
-Event listeners must be registered **before** connecting to ensure you don't miss any callbacks:
+iTiles uses a **master-child architecture**:
+- **Master Tile** - The main tile that connects via Bluetooth to your browser
+- **Child Tiles (Standard Tiles)** - Up to 6 additional tiles that connect to the master tile
+
+### Two-Step Connection Process
+
+#### Step 1: Connect to Master Tile
+
+This establishes the Bluetooth connection between your browser and the master tile:
 
 ```javascript
 import { ITilesBLEManager, CONNECTION_STATE } from 'https://stakcos.com/itiles/itiles.esm.js';
 
 const manager = new ITilesBLEManager();
 
-// 1. Setup ALL event listeners first
+// Setup event listeners FIRST (before connecting)
 manager.onConnectionStateChanged((state) => {
     const states = ['Disconnected', 'Connecting', 'Connected', 'Disconnecting'];
     console.log('State:', states[state]);
 });
 
-manager.onTouch((response) => {
-    console.log(`Touch on tile ${response.tileId}`);
-});
-
-manager.onShake((response) => {
-    console.log(`Shake on tile ${response.tileId}`);
-});
-
-// 2. Then connect (requires user gesture like button click)
+// Connect to master tile (requires user gesture like button click)
 document.getElementById('connectBtn').addEventListener('click', async () => {
     try {
         // Opens browser's device picker dialog
         const device = await manager.requestDevice();
         
-        // Connect to the selected device
+        // Connect to the master tile
         await manager.connect();
         
-        // Now you're connected and ready to control tiles
+        console.log('Master tile connected!');
+        // ⚠️ NOT READY YET - child tiles not paired
     } catch (error) {
         console.error('Connection error:', error);
     }
 });
+```
 
-// 3. Disconnect when done
+**At this point:** You're connected to the master tile, but **child tiles are NOT connected yet**. You cannot control any tiles until pairing is complete.
+
+#### Step 2: Pair Child Tiles (REQUIRED)
+
+⚠️ **CRITICAL:** After connecting to the master tile, you **MUST** run the auto-pairing workflow to discover and connect child tiles. Without this, **iTiles will not work** - lights, sounds, vibration, and sensors will not function.
+
+```javascript
+// REQUIRED: Pair child tiles before any tile control
+document.getElementById('pairBtn').addEventListener('click', async () => {
+    console.log('⚠️ Make sure all standard tiles are powered on!');
+    console.log('Starting auto-pairing (20 seconds)...');
+    
+    // Discover and pair all child tiles
+    await manager.queryOnlineTiles(SELECT_ITILE.ALL);
+    await new Promise(r => setTimeout(r, 20000));  // Wait 20 seconds
+    await manager.confirmAssignment(SELECT_ITILE.ALL);
+    await new Promise(r => setTimeout(r, 500));
+    
+    // Activate tiles
+    for (let i = 1; i <= 6; i++) {
+        await manager.gameInProgress(GAME_STATUS.IN_GAME, i);
+        await new Promise(r => setTimeout(r, 500));
+    }
+    
+    // Verify pairing
+    await manager.queryPairedTiles();
+    console.log('✅ iTiles is now ready to use!');
+});
+
+// Listen for pairing results
+manager.onPairedTileListReceived((response) => {
+    console.log(`Paired tiles: ${response.pairedTileIds.join(', ')}`);
+    if (response.pairedTileTotal === 0) {
+        console.log('⚠️ No tiles paired - run auto-pairing workflow');
+    }
+});
+```
+
+**Now you're ready!** After successful pairing, you can control lights, sounds, vibration, and receive sensor events.
+
+#### Complete Connection Flow
+
+```javascript
+async function initializeiTiles() {
+    // 1. Setup event listeners
+    manager.onConnectionStateChanged((state) => { /* ... */ });
+    manager.onTouch((response) => { /* ... */ });
+    manager.onPairedTileListReceived((response) => { /* ... */ });
+    
+    // 2. Connect to master tile
+    const device = await manager.requestDevice();
+    await manager.connect();
+    console.log('Master tile connected');
+    
+    // 3. Pair child tiles (REQUIRED)
+    await manager.queryOnlineTiles(SELECT_ITILE.ALL);
+    await new Promise(r => setTimeout(r, 20000));
+    await manager.confirmAssignment(SELECT_ITILE.ALL);
+    await new Promise(r => setTimeout(r, 500));
+    
+    for (let i = 1; i <= 6; i++) {
+        await manager.gameInProgress(GAME_STATUS.IN_GAME, i);
+        await new Promise(r => setTimeout(r, 500));
+    }
+    
+    await manager.queryPairedTiles();
+    console.log('✅ iTiles fully initialized and ready!');
+    
+    // 4. Now you can control tiles
+    await manager.triggerLight(TileColor.RED, TIMEOUT_DELAY.SEC_5, 0, 0, SELECT_ITILE.ALL);
+}
+
+// Disconnect when done
 document.getElementById('disconnectBtn').addEventListener('click', async () => {
     await manager.disconnect();
 });
@@ -346,6 +459,16 @@ manager.onConnectionStateChanged((state) => {
 ```
 
 ## Auto-Pairing Workflow
+
+### ⚠️ CRITICAL: Child Tiles Must Be Paired
+
+After connecting to the master tile, **you MUST complete the auto-pairing workflow** to discover and connect child tiles (standard tiles). Without this step:
+- ❌ Lights will not work
+- ❌ Sounds will not work  
+- ❌ Vibrations will not work
+- ❌ Sensors will not work
+
+**The master tile connection alone is NOT sufficient for any tile interactions.**
 
 ### Complete Pairing Process
 
@@ -674,7 +797,7 @@ manager.onDataReceived((data) => {
 
 ## Complete Working Example
 
-Here's a complete, minimal working example you can copy and run:
+Here's a complete, production-ready example demonstrating the **full initialization flow** (master connection + child pairing):
 
 ```html
 <!DOCTYPE html>
@@ -690,20 +813,31 @@ Here's a complete, minimal working example you can copy and run:
         .status { padding: 10px; margin: 10px 0; border-radius: 5px; }
         .connected { background: #d4edda; }
         .disconnected { background: #f8d7da; }
+        .warning { background: #fff3cd; padding: 15px; margin: 10px 0; border-left: 4px solid #ffc107; }
         #log { background: #f5f5f5; padding: 10px; height: 200px; overflow-y: auto; font-family: monospace; }
     </style>
 </head>
 <body>
     <h1>iTiles Web Bluetooth Demo</h1>
     
-    <div id="status" class="status disconnected">Disconnected</div>
+    <div class="warning">
+        <strong>⚠️ Important:</strong> After connecting to master tile, you MUST pair child tiles before any controls will work.
+    </div>
+    
+    <div id="status" class="status disconnected">Step 1: Click "Connect Master Tile"</div>
     
     <div>
-        <button id="connectBtn">Connect to iTiles</button>
+        <button id="connectBtn">1️⃣ Connect Master Tile</button>
         <button id="disconnectBtn" disabled>Disconnect</button>
     </div>
     
-    <h3>Controls</h3>
+    <div>
+        <button id="pairBtn" disabled>2️⃣ Pair Child Tiles (REQUIRED)</button>
+        <button id="queryPairedBtn" disabled>Query Paired</button>
+        <button id="queryOnlineBtn" disabled>Query Online</button>
+    </div>
+    
+    <h3>Controls (Available After Pairing)</h3>
     <div>
         <button id="redBtn" disabled>Red Light</button>
         <button id="greenBtn" disabled>Green Light</button>
@@ -720,13 +854,6 @@ Here's a complete, minimal working example you can copy and run:
     <div>
         <button id="enableTouchBtn" disabled>Enable Touch</button>
         <button id="disableTouchBtn" disabled>Disable Touch</button>
-    </div>
-    
-    <h3>Pairing</h3>
-    <div>
-        <button id="pairBtn" disabled>Auto-Pair Tiles</button>
-        <button id="queryPairedBtn" disabled>Query Paired</button>
-        <button id="queryOnlineBtn" disabled>Query Online</button>
     </div>
     
     <h3>Log</h3>
@@ -753,6 +880,9 @@ Here's a complete, minimal working example you can copy and run:
         const logDiv = document.getElementById('log');
         const connectBtn = document.getElementById('connectBtn');
         const disconnectBtn = document.getElementById('disconnectBtn');
+        const pairBtn = document.getElementById('pairBtn');
+        const queryPairedBtn = document.getElementById('queryPairedBtn');
+        const queryOnlineBtn = document.getElementById('queryOnlineBtn');
         const redBtn = document.getElementById('redBtn');
         const greenBtn = document.getElementById('greenBtn');
         const blueBtn = document.getElementById('blueBtn');
@@ -762,9 +892,10 @@ Here's a complete, minimal working example you can copy and run:
         const comboBtn = document.getElementById('comboBtn');
         const enableTouchBtn = document.getElementById('enableTouchBtn');
         const disableTouchBtn = document.getElementById('disableTouchBtn');
-        const pairBtn = document.getElementById('pairBtn');
-        const queryPairedBtn = document.getElementById('queryPairedBtn');
-        const queryOnlineBtn = document.getElementById('queryOnlineBtn');
+
+        const controlButtons = [redBtn, greenBtn, blueBtn, offBtn, soundBtn, 
+                              vibrateBtn, comboBtn, enableTouchBtn, disableTouchBtn];
+        const pairingButtons = [pairBtn, queryPairedBtn, queryOnlineBtn];
 
         function log(message) {
             const time = new Date().toLocaleTimeString();
@@ -772,54 +903,118 @@ Here's a complete, minimal working example you can copy and run:
             logDiv.scrollTop = logDiv.scrollHeight;
         }
 
-        function updateUI(connected) {
-            const buttons = [redBtn, greenBtn, blueBtn, offBtn, soundBtn, vibrateBtn, 
-                           comboBtn, enableTouchBtn, disableTouchBtn, pairBtn, 
-                           queryPairedBtn, queryOnlineBtn];
-            buttons.forEach(btn => btn.disabled = !connected);
-            connectBtn.disabled = connected;
-            disconnectBtn.disabled = !connected;
-            
-            statusDiv.className = connected ? 'status connected' : 'status disconnected';
-            statusDiv.textContent = connected ? 'Connected' : 'Disconnected';
+        function updateUI(state, paired = false) {
+            if (state === CONNECTION_STATE.CONNECTED) {
+                statusDiv.className = 'status connected';
+                statusDiv.textContent = paired 
+                    ? '✅ Connected & Paired - Ready to use!' 
+                    : 'Step 2: Click "Pair Child Tiles"';
+                connectBtn.disabled = true;
+                disconnectBtn.disabled = false;
+                pairingButtons.forEach(btn => btn.disabled = false);
+                controlButtons.forEach(btn => btn.disabled = !paired);
+            } else {
+                statusDiv.className = 'status disconnected';
+                statusDiv.textContent = 'Step 1: Click "Connect Master Tile"';
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+                pairingButtons.forEach(btn => btn.disabled = true);
+                controlButtons.forEach(btn => btn.disabled = true);
+            }
         }
 
         // Setup event listeners FIRST
         manager.onConnectionStateChanged((state) => {
             const states = ['Disconnected', 'Connecting', 'Connected', 'Disconnecting'];
             log(`Connection: ${states[state]}`);
-            updateUI(state === CONNECTION_STATE.CONNECTED);
+            if (state === CONNECTION_STATE.CONNECTED) {
+                log('⚠️ Master tile connected - now pair child tiles!');
+            }
+            updateUI(state, false);
         });
 
         manager.onTouch((response) => {
-            log(`Touch detected on Tile ${response.tileId} (${response.reactionTime.toFixed(3)}s)`);
+            log(`👆 Touch on Tile ${response.tileId} (${response.reactionTime.toFixed(3)}s)`);
         });
 
         manager.onPairedTileListReceived((response) => {
-            log(`Paired tiles (${response.pairedTileTotal}): ${response.pairedTileIds.join(', ')}`);
+            const tiles = response.pairedTileIds.join(', ') || 'None';
+            log(`📋 Paired tiles (${response.pairedTileTotal}): ${tiles}`);
+            if (response.pairedTileTotal > 0) {
+                updateUI(CONNECTION_STATE.CONNECTED, true);
+                log('✅ Child tiles paired - controls now enabled!');
+            }
         });
 
         manager.onOnlineTileStatusReceived((response) => {
-            log(`Tile ${response.tileId} online - Battery: ${response.batteryPercentage}%`);
+            log(`🟢 Tile ${response.tileId} online - Battery: ${response.batteryPercentage}%`);
         });
 
-        // Connection handlers
+        // STEP 1: Connect to master tile
         connectBtn.addEventListener('click', async () => {
             try {
                 log('Opening device picker...');
                 const device = await manager.requestDevice();
                 log(`Device selected: ${device.name}`);
                 
-                log('Connecting...');
+                log('Connecting to master tile...');
                 await manager.connect();
-                log('Connected successfully!');
             } catch (error) {
-                log(`Error: ${error.message}`);
+                log(`❌ Error: ${error.message}`);
             }
         });
 
         disconnectBtn.addEventListener('click', async () => {
             await manager.disconnect();
+            log('Disconnected');
+        });
+
+        // STEP 2: Pair child tiles (REQUIRED)
+        pairBtn.addEventListener('click', async () => {
+            try {
+                log('🔍 Starting auto-pairing...');
+                log('⚠️ Make sure all standard tiles are powered on!');
+                log('⏳ This will take 20 seconds...');
+                pairBtn.disabled = true;
+                pairBtn.textContent = 'Pairing in progress...';
+                
+                await manager.queryOnlineTiles(SELECT_ITILE.ALL);
+                
+                // Countdown timer
+                for (let i = 20; i > 0; i--) {
+                    await new Promise(r => setTimeout(r, 1000));
+                    if (i % 5 === 0) log(`⏱️  ${i} seconds remaining...`);
+                }
+                
+                await manager.confirmAssignment(SELECT_ITILE.ALL);
+                await new Promise(r => setTimeout(r, 500));
+                
+                log('Activating tiles...');
+                for (let i = 1; i <= 6; i++) {
+                    await manager.gameInProgress(GAME_STATUS.IN_GAME, i);
+                    await new Promise(r => setTimeout(r, 500));
+                }
+                
+                await manager.queryPairedTiles();
+                log('✅ Pairing complete!');
+                
+                pairBtn.disabled = false;
+                pairBtn.textContent = '2️⃣ Pair Child Tiles (REQUIRED)';
+            } catch (error) {
+                log(`❌ Pairing error: ${error.message}`);
+                pairBtn.disabled = false;
+                pairBtn.textContent = '2️⃣ Pair Child Tiles (REQUIRED)';
+            }
+        });
+
+        queryPairedBtn.addEventListener('click', () => {
+            manager.queryPairedTiles();
+            log('Querying paired tiles...');
+        });
+        
+        queryOnlineBtn.addEventListener('click', () => {
+            manager.queryOnlineTiles(SELECT_ITILE.ALL);
+            log('Querying online tiles...');
         });
 
         // Light controls
@@ -853,33 +1048,7 @@ Here's a complete, minimal working example you can copy and run:
         disableTouchBtn.addEventListener('click', () => 
             manager.toggleTouchSensor(TOGGLE_SENSOR.OFF, SELECT_ITILE.ALL));
 
-        // Pairing
-        pairBtn.addEventListener('click', async () => {
-            log('Starting auto-pairing (20 seconds)...');
-            pairBtn.disabled = true;
-            
-            await manager.queryOnlineTiles(SELECT_ITILE.ALL);
-            await new Promise(r => setTimeout(r, 20000));
-            await manager.confirmAssignment(SELECT_ITILE.ALL);
-            await new Promise(r => setTimeout(r, 500));
-            
-            for (let i = 1; i <= 6; i++) {
-                await manager.gameInProgress(GAME_STATUS.IN_GAME, i);
-                await new Promise(r => setTimeout(r, 500));
-            }
-            
-            await manager.queryPairedTiles();
-            log('Pairing complete!');
-            pairBtn.disabled = false;
-        });
-
-        queryPairedBtn.addEventListener('click', () => 
-            manager.queryPairedTiles());
-        
-        queryOnlineBtn.addEventListener('click', () => 
-            manager.queryOnlineTiles(SELECT_ITILE.ALL));
-
-        log('Ready. Click "Connect to iTiles" to begin.');
+        log('Ready. Click "1️⃣ Connect Master Tile" to begin.');
     </script>
 </body>
 </html>
@@ -908,9 +1077,3 @@ Here's a complete, minimal working example you can copy and run:
 - Ensure event listeners are set up **before** connecting
 - Verify sensors are enabled (toggleTouchSensor, toggleShakeSensor)
 - Check console for errors
-
-## Links
-
-- **GitHub Repository:** https://github.com/augmented-human-lab/itiles-lib-web
-- **Demo Application:** [Live Demo Link]
-- **Issues:** https://github.com/augmented-human-lab/itiles-lib-web/issues
