@@ -166,7 +166,7 @@ This example shows the **complete initialization flow** including master tile co
 
 iTiles uses a **master-child architecture**:
 - **Master Tile** - The main tile that connects via Bluetooth to your browser
-- **Child Tiles (Standard Tiles)** - Up to 6 additional tiles that connect to the master tile
+- **Child Tiles (Standard Tiles)** - All other tiles that connect to the master tile
 
 ### Two-Step Connection Process
 
