@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iTiles Web Bluetooth Test App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .status-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #dc3545;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.connected {
+            background: #28a745;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button.secondary {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        button.success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        button.danger {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .control-group input,
+        .control-group select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .control-group input:focus,
+        .control-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .color-picker-group {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .color-picker-group input[type="number"] {
+            text-align: center;
+        }
+
+        .log-container {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .log-entry {
+            padding: 5px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .log-entry:last-child {
+            border-bottom: none;
+        }
+
+        .log-entry .timestamp {
+            color: #858585;
+            margin-right: 10px;
+        }
+
+        .log-entry .type-info {
+            color: #4fc3f7;
+        }
+
+        .log-entry .type-success {
+            color: #81c784;
+        }
+
+        .log-entry .type-error {
+            color: #e57373;
+        }
+
+        .log-entry .type-warning {
+            color: #ffb74d;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .tile-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tile-button {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .quick-actions button {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            background: #667eea;
+            color: white;
+        }
+
+        .info-box {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .info-box strong {
+            display: block;
+            margin-bottom: 10px;
+            color: #856404;
+        }
+
+        .info-box ul {
+            margin: 10px 0 0 20px;
+            line-height: 1.6;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎮 iTiles Web Bluetooth Controller</h1>
+            <p>Control your iTiles interactive floor/wall tiles from the web</p>
+        </div>
+
+        <!-- Connection Card -->
+        <div class="card">
+            <h2>Connection</h2>
+            <div class="status-bar">
+                <div class="status-indicator">
+                    <div class="status-dot" id="statusDot"></div>
+                    <span id="statusText">Disconnected</span>
+                </div>
+                <span class="badge" id="deviceName">No Device</span>
+            </div>
+            <div class="button-group">
+                <button id="connectBtn">🔌 Connect to iTiles</button>
+                <button id="disconnectBtn" disabled>❌ Disconnect</button>
+                <button id="queryPairedBtn" disabled>📋 Query Paired Tiles</button>
+                <button id="queryOnlineBtn" disabled>🌐 Query Online Tiles</button>
+            </div>
+        </div>
+
+        <!-- Pairing Card -->
+        <div class="card">
+            <h2>🔗 Tile Pairing</h2>
+            <div class="info-box">
+                <strong>⚠️ Important Pairing Instructions:</strong>
+                <ul>
+                    <li>Make sure all standard tiles are powered on</li>
+                    <li>Keep tiles within 5 meters of master tile</li>
+                    <li>Pairing takes approximately 20-25 seconds</li>
+                    <li>Do not disconnect during the pairing process</li>
+                    <li>Pairing happens automatically - no MAC address needed!</li>
+                </ul>
+            </div>
+            <div class="button-group">
+                <button id="pairTilesBtn" disabled class="success">🔗 Pair Tiles (Auto-discover)</button>
+                <button id="clearMacListBtn" disabled class="danger">🗑️ Clear MAC List</button>
+            </div>
+        </div>
+
+        <div class="grid-2">
+            <!-- Light Control Card -->
+            <div class="card">
+                <h2>💡 Light Control</h2>
+                <div class="control-group">
+                    <label>Select Tile</label>
+                    <select id="tileSelect">
+                        <option value="255">All Tiles</option>
+                        <option value="1">Tile I</option>
+                        <option value="2">Tile II</option>
+                        <option value="3">Tile III</option>
+                        <option value="4">Tile IV</option>
+                        <option value="5">Tile V</option>
+                        <option value="6">Tile VI</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Color (RGB)</label>
+                    <div class="color-picker-group">
+                        <input type="number" id="colorR" min="0" max="255" value="153" placeholder="R">
+                        <input type="number" id="colorG" min="0" max="255" value="0" placeholder="G">
+                        <input type="number" id="colorB" min="0" max="255" value="0" placeholder="B">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label>Duration</label>
+                    <select id="duration">
+                        <option value="0">No timeout</option>
+                        <option value="1">1 second</option>
+                        <option value="5" selected>5 seconds</option>
+                        <option value="10">10 seconds</option>
+                        <option value="30">30 seconds</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button id="triggerLightBtn" disabled class="success">💡 Trigger Light</button>
+                    <button id="turnOffLightBtn" disabled class="danger">⚫ Turn Off</button>
+                </div>
+                <div class="quick-actions">
+                    <button id="redBtn" disabled style="background: #dc3545;">Red</button>
+                    <button id="greenBtn" disabled style="background: #28a745;">Green</button>
+                    <button id="blueBtn" disabled style="background: #007bff;">Blue</button>
+                    <button id="yellowBtn" disabled style="background: #ffc107; color: #333;">Yellow</button>
+                </div>
+            </div>
+
+            <!-- Sound & Vibration Card -->
+            <div class="card">
+                <h2>🔊 Sound & Vibration</h2>
+                <div class="control-group">
+                    <label>Vibration Pattern</label>
+                    <select id="vibrationPattern">
+                        <option value="0">None</option>
+                        <option value="1" selected>Pattern I</option>
+                        <option value="2">Pattern II</option>
+                        <option value="3">Pattern III</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Sound Track</label>
+                    <select id="soundTrack">
+                        <option value="0">None</option>
+                        <option value="1" selected>Default</option>
+                    </select>
+                </div>
+                <div class="control-group">
+                    <label>Repeat Count</label>
+                    <select id="repeatCount">
+                        <option value="1" selected>1 time</option>
+                        <option value="2">2 times</option>
+                        <option value="3">3 times</option>
+                    </select>
+                </div>
+                <div class="button-group">
+                    <button id="triggerVibrateBtn" disabled class="secondary">📳 Trigger Vibration</button>
+                    <button id="triggerSoundBtn" disabled class="secondary">🔊 Trigger Sound</button>
+                    <button id="triggerComboBtn" disabled class="success">🎭 Light + Sound + Vibe</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sensor Control Card -->
+        <div class="card">
+            <h2>🎯 Sensor Control</h2>
+            <div class="button-group">
+                <button id="enableTouchBtn" disabled>✋ Enable Touch Sensor</button>
+                <button id="disableTouchBtn" disabled>🚫 Disable Touch Sensor</button>
+                <button id="enableShakeBtn" disabled>📳 Enable Shake Sensor</button>
+                <button id="disableShakeBtn" disabled>🔇 Disable Shake Sensor</button>
+                <button id="getBatteryBtn" disabled>🔋 Get Battery Status</button>
+            </div>
+        </div>
+
+        <!-- Event Log Card -->
+        <div class="card">
+            <h2>📊 Event Log</h2>
+            <div class="log-container" id="logContainer">
+                <div class="log-entry">
+                    <span class="timestamp">--:--:--</span>
+                    <span class="type-info">System initialized. Ready to connect.</span>
+                </div>
+            </div>
+            <button id="clearLogBtn" style="margin-top: 10px;">🗑️ Clear Log</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { 
+            ITilesBLEManager, 
+            TileColor, 
+            CONNECTION_STATE,
+            SELECT_ITILE,
+            LOG_REACTION_TIME,
+            TIMEOUT_DELAY,
+            TIMEOUT_RESPONSE,
+            SOUND_TRACK,
+            VIBRATION_PATTERN,
+            REPEAT_COUNT,
+            TOGGLE_SENSOR,
+            GAME_STATUS
+        } from './itiles.esm.js';
+
+        // Initialize BLE Manager
+        const bleManager = new ITilesBLEManager();
+        
+        // UI Elements
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const queryPairedBtn = document.getElementById('queryPairedBtn');
+        const queryOnlineBtn = document.getElementById('queryOnlineBtn');
+        const triggerLightBtn = document.getElementById('triggerLightBtn');
+        const turnOffLightBtn = document.getElementById('turnOffLightBtn');
+        const triggerVibrateBtn = document.getElementById('triggerVibrateBtn');
+        const triggerSoundBtn = document.getElementById('triggerSoundBtn');
+        const triggerComboBtn = document.getElementById('triggerComboBtn');
+        const enableTouchBtn = document.getElementById('enableTouchBtn');
+        const disableTouchBtn = document.getElementById('disableTouchBtn');
+        const enableShakeBtn = document.getElementById('enableShakeBtn');
+        const disableShakeBtn = document.getElementById('disableShakeBtn');
+        const getBatteryBtn = document.getElementById('getBatteryBtn');
+        const clearLogBtn = document.getElementById('clearLogBtn');
+        const pairTilesBtn = document.getElementById('pairTilesBtn');
+        const clearMacListBtn = document.getElementById('clearMacListBtn');
+        
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+        const deviceName = document.getElementById('deviceName');
+        const logContainer = document.getElementById('logContainer');
+        
+        // Quick color buttons
+        const redBtn = document.getElementById('redBtn');
+        const greenBtn = document.getElementById('greenBtn');
+        const blueBtn = document.getElementById('blueBtn');
+        const yellowBtn = document.getElementById('yellowBtn');
+
+        // Logging function
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span class="timestamp">${timestamp}</span>
+                <span class="type-${type}">${message}</span>
+            `;
+            logContainer.appendChild(entry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+
+        // Update UI based on connection state
+        function updateConnectionUI(connected) {
+            const buttons = [
+                queryPairedBtn, queryOnlineBtn, triggerLightBtn, turnOffLightBtn,
+                triggerVibrateBtn, triggerSoundBtn, triggerComboBtn,
+                enableTouchBtn, disableTouchBtn, enableShakeBtn, disableShakeBtn,
+                getBatteryBtn, redBtn, greenBtn, blueBtn, yellowBtn,
+                pairTilesBtn, clearMacListBtn
+            ];
+            
+            buttons.forEach(btn => btn.disabled = !connected);
+            connectBtn.disabled = connected;
+            disconnectBtn.disabled = !connected;
+            
+            if (connected) {
+                statusDot.classList.add('connected');
+            } else {
+                statusDot.classList.remove('connected');
+            }
+        }
+
+        // Event Listeners Setup
+        bleManager.onConnectionStateChanged((state) => {
+            const stateNames = ['Disconnected', 'Connecting', 'Connected', 'Disconnecting'];
+            statusText.textContent = stateNames[state];
+            log(`Connection state: ${stateNames[state]}`, 
+                state === CONNECTION_STATE.CONNECTED ? 'success' : 'info');
+            updateConnectionUI(state === CONNECTION_STATE.CONNECTED);
+        });
+
+        bleManager.onTouch((response) => {
+            log(`Touch detected on Tile ${response.tileId} (Reaction: ${response.reactionTime.toFixed(3)}s)`, 'success');
+        });
+
+        bleManager.onShake((response) => {
+            log(`Shake detected on Tile ${response.tileId} (Reaction: ${response.reactionTime.toFixed(3)}s)`, 'success');
+        });
+
+        bleManager.onStepChanged((response) => {
+            const status = response.stepStatus === 0 ? 'ON' : 'OFF';
+            log(`Step ${status} Tile ${response.tileId}`, 'info');
+        });
+
+        bleManager.onPairedTileListReceived((response) => {
+            const tilesList = response.pairedTileIds.join(', ') || 'None';
+            log(`📋 Paired tiles (${response.pairedTileTotal}): ${tilesList}`, 'info');
+            
+            console.log('Full paired tiles response:', response);
+            console.log('Paired tile IDs array:', response.pairedTileIds);
+            console.log('Total count:', response.pairedTileTotal);
+            
+            if (response.pairedTileTotal === 0) {
+                log('💡 No tiles paired yet. Use the auto-discovery pairing button.', 'warning');
+            }
+        });
+
+        bleManager.onOnlineTileStatusReceived((response) => {
+            const macStr = response.macAddress.map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(':');
+            log(`Tile ${response.tileId} online - MAC: ${macStr}, Battery: ${response.batteryPercentage}%, Type: ${response.tileType}, HW: ${response.hardwareVersion}, FW: ${response.firmwareVersion}`, 'success');
+        });
+
+        bleManager.onBatteryStatusReceived((response) => {
+            log(`Battery level: ${response.batteryPercentage}%`, 'info');
+        });
+
+        bleManager.onDataReceived((data) => {
+            console.log('Raw BLE data received:', data);
+        });
+
+        // Button Handlers
+        connectBtn.addEventListener('click', async () => {
+            try {
+                log('Requesting device...', 'info');
+                const device = await bleManager.requestDevice();
+                deviceName.textContent = device.name || 'iTILES';
+                log(`Device selected: ${device.name}`, 'success');
+                
+                log('Connecting...', 'info');
+                await bleManager.connect();
+                log('Connected successfully!', 'success');
+            } catch (error) {
+                log(`Connection error: ${error.message}`, 'error');
+            }
+        });
+
+        disconnectBtn.addEventListener('click', async () => {
+            try {
+                await bleManager.disconnect();
+                deviceName.textContent = 'No Device';
+                log('Disconnected', 'warning');
+            } catch (error) {
+                log(`Disconnect error: ${error.message}`, 'error');
+            }
+        });
+
+        queryPairedBtn.addEventListener('click', async () => {
+            try {
+                await bleManager.queryPairedTiles();
+                log('Querying paired tiles...', 'info');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        queryOnlineBtn.addEventListener('click', async () => {
+            try {
+                await bleManager.queryOnlineTiles();
+                log('Querying online tiles...', 'info');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        // Pairing Button Handler - Auto-discovery workflow
+        pairTilesBtn.addEventListener('click', async () => {
+            try {
+                log('📡 Starting automatic tile discovery and pairing...', 'info');
+                log('⏳ This will take approximately 20-25 seconds', 'warning');
+                log('🔴 Make sure all standard tiles are powered on and nearby!', 'warning');
+                
+                // Disable button during process
+                pairTilesBtn.disabled = true;
+                pairTilesBtn.textContent = 'Pairing in progress...';
+                
+                // Step 1: Query online tiles (this triggers auto-pairing!)
+                log('Step 1: Discovering online tiles...', 'info');
+                await bleManager.queryOnlineTiles(SELECT_ITILE.ALL);
+                
+                // Step 2: Wait for tiles to pair (20 seconds as per Unity code)
+                log('Step 2: Waiting for tiles to pair (20 seconds)...', 'info');
+                let countdown = 20;
+                const countdownInterval = setInterval(() => {
+                    log(`⏱️  ${countdown} seconds remaining...`, 'info');
+                    countdown--;
+                    if (countdown < 0) clearInterval(countdownInterval);
+                }, 1000);
+                
+                await new Promise(r => setTimeout(r, 20000));
+                clearInterval(countdownInterval);
+                
+                // Step 3: Confirm assignment
+                log('Step 3: Confirming tile assignments...', 'info');
+                await bleManager.confirmAssignment(SELECT_ITILE.ALL);
+                await new Promise(r => setTimeout(r, 500));
+                
+                // Step 4: Set game in progress for all discovered tiles
+                log('Step 4: Activating tiles...', 'info');
+                for (let i = 1; i <= 6; i++) {
+                    await bleManager.gameInProgress(GAME_STATUS.IN_GAME, i);
+                    await new Promise(r => setTimeout(r, 500));
+                }
+                
+                // Step 5: Query paired tiles to confirm
+                log('Step 5: Verifying paired tiles...', 'info');
+                await new Promise(r => setTimeout(r, 1000));
+                await bleManager.queryPairedTiles();
+                
+                log('✅ Pairing sequence complete!', 'success');
+                log('💡 Check above for the list of paired tiles.', 'info');
+                
+                // Re-enable button
+                pairTilesBtn.disabled = false;
+                pairTilesBtn.textContent = '🔗 Pair Tiles (Auto-discover)';
+                
+            } catch (error) {
+                log(`Pairing error: ${error.message}`, 'error');
+                pairTilesBtn.disabled = false;
+                pairTilesBtn.textContent = '🔗 Pair Tiles (Auto-discover)';
+            }
+        });
+
+        // Clear MAC list button handler
+        clearMacListBtn.addEventListener('click', async () => {
+            try {
+                if (!confirm('Are you sure you want to clear the MAC list? This will unpair all tiles.')) {
+                    return;
+                }
+                
+                await bleManager.clearMacList();
+                log('🗑️ MAC list cleared. All tiles unpaired.', 'warning');
+            } catch (error) {
+                log(`Error clearing MAC list: ${error.message}`, 'error');
+            }
+        });
+
+        triggerLightBtn.addEventListener('click', async () => {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                const r = parseInt(document.getElementById('colorR').value);
+                const g = parseInt(document.getElementById('colorG').value);
+                const b = parseInt(document.getElementById('colorB').value);
+                const duration = parseInt(document.getElementById('duration').value);
+                
+                const color = new TileColor(r, g, b);
+                await bleManager.triggerLight(
+                    color,
+                    duration,
+                    LOG_REACTION_TIME.TOUCH_OR_STEP,
+                    TIMEOUT_RESPONSE.IMMEDIATE,
+                    tileId
+                );
+                log(`Light triggered (RGB: ${r},${g},${b})`, 'success');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        turnOffLightBtn.addEventListener('click', async () => {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                await bleManager.turnOffLight(tileId);
+                log('Light turned off', 'info');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        triggerVibrateBtn.addEventListener('click', async () => {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                const pattern = parseInt(document.getElementById('vibrationPattern').value);
+                const repeat = parseInt(document.getElementById('repeatCount').value);
+                
+                await bleManager.triggerVibration(
+                    pattern,
+                    repeat,
+                    LOG_REACTION_TIME.NONE,
+                    TIMEOUT_RESPONSE.IMMEDIATE,
+                    tileId
+                );
+                log('Vibration triggered', 'success');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        triggerSoundBtn.addEventListener('click', async () => {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                const sound = parseInt(document.getElementById('soundTrack').value);
+                const repeat = parseInt(document.getElementById('repeatCount').value);
+                
+                await bleManager.triggerSound(
+                    sound,
+                    repeat,
+                    LOG_REACTION_TIME.NONE,
+                    TIMEOUT_RESPONSE.IMMEDIATE,
+                    tileId
+                );
+                log('Sound triggered', 'success');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        triggerComboBtn.addEventListener('click', async () => {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                const r = parseInt(document.getElementById('colorR').value);
+                const g = parseInt(document.getElementById('colorG').value);
+                const b = parseInt(document.getElementById('colorB').value);
+                const duration = parseInt(document.getElementById('duration').value);
+                const sound = parseInt(document.getElementById('soundTrack').value);
+                const pattern = parseInt(document.getElementById('vibrationPattern').value);
+                const repeat = parseInt(document.getElementById('repeatCount').value);
+                
+                const color = new TileColor(r, g, b);
+                await bleManager.triggerLightSoundVibration(
+                    color,
+                    duration,
+                    sound,
+                    pattern,
+                    repeat,
+                    LOG_REACTION_TIME.TOUCH_OR_STEP,
+                    TIMEOUT_RESPONSE.IMMEDIATE,
+                    tileId
+                );
+                log('Combo effect triggered!', 'success');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        enableTouchBtn.addEventListener('click', async () => {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                await bleManager.toggleTouchSensor(TOGGLE_SENSOR.ON, tileId);
+                log('Touch sensor enabled', 'success');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        disableTouchBtn.addEventListener('click', async () => {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                await bleManager.toggleTouchSensor(TOGGLE_SENSOR.OFF, tileId);
+                log('Touch sensor disabled', 'warning');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        enableShakeBtn.addEventListener('click', async () => {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                await bleManager.toggleShakeSensor(TOGGLE_SENSOR.ON, tileId);
+                log('Shake sensor enabled', 'success');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        disableShakeBtn.addEventListener('click', async () => {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                await bleManager.toggleShakeSensor(TOGGLE_SENSOR.OFF, tileId);
+                log('Shake sensor disabled', 'warning');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        getBatteryBtn.addEventListener('click', async () => {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                await bleManager.getBattery(tileId);
+                log('Requesting battery status...', 'info');
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        });
+
+        clearLogBtn.addEventListener('click', () => {
+            logContainer.innerHTML = '';
+            log('Log cleared', 'info');
+        });
+
+        // Quick color buttons
+        async function triggerQuickColor(color) {
+            try {
+                const tileId = parseInt(document.getElementById('tileSelect').value);
+                await bleManager.triggerLight(
+                    color,
+                    TIMEOUT_DELAY.SEC_5,
+                    LOG_REACTION_TIME.TOUCH_OR_STEP,
+                    TIMEOUT_RESPONSE.IMMEDIATE,
+                    tileId
+                );
+            } catch (error) {
+                log(`Error: ${error.message}`, 'error');
+            }
+        }
+
+        redBtn.addEventListener('click', () => triggerQuickColor(TileColor.RED));
+        greenBtn.addEventListener('click', () => triggerQuickColor(TileColor.GREEN));
+        blueBtn.addEventListener('click', () => triggerQuickColor(TileColor.BLUE));
+        yellowBtn.addEventListener('click', () => triggerQuickColor(TileColor.YELLOW));
+
+        log('Application ready. Click "Connect to iTiles" to begin.', 'success');
+    </script>
+</body>
+</html>
