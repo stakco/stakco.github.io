@@ -287,7 +287,7 @@
 </head>
 
 <body>
-    <stakco-info-panel icon="fa-gamepad">
+    <stakco-info-panel icon-size="34px" icon="fa-gamepad">
         <p>Connect iTiles to control puzzle layers</p>
     </stakco-info-panel>
 
@@ -300,8 +300,8 @@
     <stakco-products-panel></stakco-products-panel>
 
     <div class="connection-buttons">
-        <button id="connectBtn">🎮 Connect iTiles</button>
-        <button id="pairBtn" disabled class="success">🔗 Pair Tiles</button>
+        <button id="connectBtn">Connect iTiles</button>
+        <button id="pairBtn" disabled class="success">ðŸ”— Pair Tiles</button>
     </div>
 
     <div id="itiles-info" class="hidden">
@@ -452,12 +452,12 @@
                 if (connected) {
                     connectBtn.disabled = true;
                     pairBtn.disabled = false;
-                    connectBtn.textContent = '✓ Connected';
+                    connectBtn.textContent = 'Connected';
                     console.log('iTiles master connected');
                 } else {
                     connectBtn.disabled = false;
                     pairBtn.disabled = true;
-                    connectBtn.textContent = '🎮 Connect iTiles';
+                    connectBtn.textContent = 'Connect iTiles';
                 }
             });
 
@@ -492,6 +492,22 @@
                     console.log(`Tile ${tileId} touched: rotating to ${angle}°`);
                 }
                 
+                // Tile 7 (center): Switch to next layer
+                if (tileId === 7) {
+                    const currentLayer = parseInt(activeLayerSpan.textContent);
+                    const nextLayer = (currentLayer % 3) + 1;
+                    
+                    puzzleContainer.switchLayer(nextLayer);
+                    activeLayerSpan.textContent = nextLayer;
+                    layerControls.setActiveLayer(nextLayer);
+                    updateRotationDisplay();
+                    
+                    // Visual feedback on center tile
+                    triggerTileFeedback(tileId);
+                    
+                    console.log(`Tile 7 (center) touched: switched to layer ${nextLayer}`);
+                }
+                
                 // Check if puzzle solved
                 puzzleContainer.checkAlignment();
             });
@@ -499,7 +515,8 @@
 
         function createTileVisual() {
             tileVisual.innerHTML = '';
-            for (let i = 0; i < 7; i++) {
+            // Create 7 tile indicators (6 outer + 1 center)
+            for (let i = 1; i <= 7; i++) {
                 const bar = document.createElement('div');
                 bar.className = 'tile-indicator';
                 bar.dataset.tile = i;
@@ -543,7 +560,8 @@
                 await bleManager.confirmAssignment(SELECT_ITILE.ALL);
                 await new Promise(r => setTimeout(r, 500));
                 
-                for (let i = 1; i <= 6; i++) {
+                // FIXED: Activate tiles 1-7 to pair all tiles including center tile
+                for (let i = 1; i <= 7; i++) {
                     await bleManager.gameInProgress(GAME_STATUS.IN_GAME, i);
                     await new Promise(r => setTimeout(r, 500));
                 }
@@ -554,17 +572,17 @@
                 
                 await bleManager.queryPairedTiles();
                 
-                pairBtn.textContent = '✓ Paired';
+                pairBtn.textContent = 'Paired';
                 
             } catch (error) {
                 console.error('Pairing error:', error);
                 pairBtn.disabled = false;
-                pairBtn.textContent = '🔗 Pair Tiles';
+                pairBtn.textContent = 'Pair Tiles';
             }
         }
 
         function initializeITiles() {
-            infoPanel.setContent('<p>iTiles active - Touch tiles to rotate layers</p>');
+            infoPanel.setContent('<p>iTiles active - Touch tiles 1-6 to rotate, tile 7 (center) to switch layers</p>');
             iTilesInfo.classList.remove('hidden');
             branding.hide();
         }
