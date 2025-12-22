@@ -1,6 +1,12 @@
 /**
  * Stakco Puzzle Container Component
  * Manages puzzle layers, rotations, and animations with Background and Top layer support
+ * 
+ * Structure per layer:
+ *   .puzzle-layer (parent - rotates via user interaction)
+ *     .layer-image (child - has random offset, rotates with parent)
+ *     .layer-label (child - has different random offset, counter-rotates to stay upright)
+ * 
  * Usage: <stakco-puzzle-container layers="3" user-id="..." puzzle-id="..." highlight-all="true"></stakco-puzzle-container>
  */
 
@@ -76,7 +82,7 @@ class StakcoPuzzleContainer extends HTMLElement {
                     z-index: 1;
                 }
 
-                /* Regular puzzle layers - medium z-index */
+                /* Parent puzzle layer - this rotates via user interaction */
                 .puzzle-layer {
                     position: absolute;
                     top: 50%;
@@ -84,12 +90,43 @@ class StakcoPuzzleContainer extends HTMLElement {
                     transform: translate(-50%, -50%);
                     width: 100%;
                     height: 100%;
-                    background-size: contain;
-                    background-repeat: no-repeat;
-                    background-position: center;
                     pointer-events: none;
                     transition: transform 0s;
                     z-index: 10;
+                }
+
+                /* Child: Image layer - has its own rotation offset */
+                .layer-image {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-size: contain;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                }
+
+                /* Child: Label - positioned at edge, stays upright */
+                .layer-label {
+                    position: absolute;
+                    top: -20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 20px;
+                    height: 20px;
+                    border-radius: 50%;
+                    background: var(--glass-bg);
+                    color: var(--text-secondary);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-family: 'Inter', sans-serif;
+                    font-size: 14px;
+                    font-weight: 600;
+                    box-shadow: var(--shadow-soft);
+                    pointer-events: none;
+                    z-index: 50000;
                 }
 
                 /* Top layer - highest z-index */
@@ -121,27 +158,6 @@ class StakcoPuzzleContainer extends HTMLElement {
                 #layer3 { z-index: 30; }
                 #layer4 { z-index: 40; }
                 #layer5 { z-index: 50; }
-
-                .layer-label {
-                    position: absolute;
-                    top: -20px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    width: 20px;
-                    height: 20px;
-                    border-radius: 50%;
-                    background: var(--glass-bg);
-                    color: var(--text-secondary);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-family: 'Inter', sans-serif;
-                    font-size: 14px;
-                    font-weight: 600;
-                    box-shadow: var(--shadow-soft);
-                    pointer-events: none;
-                    z-index: 50000;
-                }
 
                 /* Default: Only active layer is highlighted */
                 .puzzle-layer.active .layer-label {
@@ -188,9 +204,10 @@ class StakcoPuzzleContainer extends HTMLElement {
                 <!-- Background Layer (B) - z-index: 1 -->
                 <div id="background-layer" class="background-layer"></div>
                 
-                <!-- Puzzle Layers (rotating) - z-index: 10-50 -->
+                <!-- Puzzle Layers - z-index: 10-50 -->
                 ${Array.from({ length: layers }, (_, i) => `
                     <div id="layer${i + 1}" class="puzzle-layer ${i === 0 ? 'active' : ''}">
+                        <div class="layer-image"></div>
                         <div class="layer-label">${i + 1}</div>
                     </div>
                 `).join('')}
@@ -214,11 +231,16 @@ class StakcoPuzzleContainer extends HTMLElement {
             return;
         }
 
-        // Initialize puzzle layers with random rotations
+        // Initialize puzzle layers with:
+        // - rotation: parent container rotation (user controls this)
+        // - imageOffset: random offset for the image (same for all layers so they align when parent aligns)
+        // - labelOffset: random offset for the label (different per layer so labels don't reveal solution)
         this.puzzleLayers = {};
         for (let i = 1; i <= layers; i++) {
             this.puzzleLayers[`layer${i}`] = {
-                rotation: StakcoUtils.randomRotation(),
+                rotation: StakcoUtils.randomRotation(),      // Parent rotation (randomized start)
+                imageOffset: 0,                               // Image offset (0 = image aligned with parent)
+                labelOffset: StakcoUtils.randomRotation(),   // Label offset (random per layer)
                 url: null,
                 customImage: null
             };
@@ -249,7 +271,10 @@ class StakcoPuzzleContainer extends HTMLElement {
             
             const element = this.shadowRoot.getElementById(layerKey);
             if (element) {
-                element.style.backgroundImage = `url('${url}')`;
+                const imageEl = element.querySelector('.layer-image');
+                if (imageEl) {
+                    imageEl.style.backgroundImage = `url('${url}')`;
+                }
             }
         });
 
@@ -261,13 +286,24 @@ class StakcoPuzzleContainer extends HTMLElement {
             const element = this.shadowRoot.getElementById(layerKey);
             const layer = this.puzzleLayers[layerKey];
             if (element) {
-                // Apply rotation to the layer
+                // Parent rotates
                 element.style.transform = `translate(-50%, -50%) rotate(${layer.rotation}deg)`;
                 
-                // Counter-rotate label to keep it upright
+                // Image has its offset (currently 0, so it follows parent)
+                const imageEl = element.querySelector('.layer-image');
+                if (imageEl) {
+                    imageEl.style.transform = `rotate(${layer.imageOffset}deg)`;
+                }
+                
+                // Label: counter-rotate parent + add its own offset to position it randomly around edge
+                // Then counter-rotate again to keep text upright
                 const label = element.querySelector('.layer-label');
                 if (label) {
-                    label.style.transform = `translateX(-50%) rotate(${-layer.rotation}deg)`;
+                    // Position label at labelOffset degrees around the circle
+                    // Label sits at "top" (-20px) in CSS, so we rotate the label element to move it around
+                    // Then counter-rotate the content to keep text upright
+                    const totalRotation = layer.labelOffset - layer.rotation;
+                    label.style.transform = `translateX(-50%) rotate(${totalRotation}deg)`;
                 }
             }
         });
@@ -310,7 +346,10 @@ class StakcoPuzzleContainer extends HTMLElement {
         this.puzzleLayers[layerKey].customImage = imageUrl;
         const element = this.shadowRoot.getElementById(layerKey);
         if (element) {
-            element.style.backgroundImage = `url('${imageUrl}')`;
+            const imageEl = element.querySelector('.layer-image');
+            if (imageEl) {
+                imageEl.style.backgroundImage = `url('${imageUrl}')`;
+            }
         }
         
         this.dispatchEvent(new CustomEvent('layer-image-updated', {
@@ -351,12 +390,14 @@ class StakcoPuzzleContainer extends HTMLElement {
 
         const element = this.shadowRoot.getElementById(layerKey);
         if (element) {
+            // Rotate parent
             element.style.transform = `translate(-50%, -50%) rotate(${layer.rotation}deg)`;
             
-            // Counter-rotate label to keep it upright
+            // Update label: keep at its offset position, stay upright
             const label = element.querySelector('.layer-label');
             if (label) {
-                label.style.transform = `translateX(-50%) rotate(${-layer.rotation}deg)`;
+                const totalRotation = layer.labelOffset - layer.rotation;
+                label.style.transform = `translateX(-50%) rotate(${totalRotation}deg)`;
             }
         }
 
@@ -382,10 +423,10 @@ class StakcoPuzzleContainer extends HTMLElement {
         if (element) {
             element.style.transform = `translate(-50%, -50%) rotate(${layer.rotation}deg)`;
             
-            // Counter-rotate label to keep it upright
             const label = element.querySelector('.layer-label');
             if (label) {
-                label.style.transform = `translateX(-50%) rotate(${-layer.rotation}deg)`;
+                const totalRotation = layer.labelOffset - layer.rotation;
+                label.style.transform = `translateX(-50%) rotate(${totalRotation}deg)`;
             }
         }
     }
@@ -401,10 +442,10 @@ class StakcoPuzzleContainer extends HTMLElement {
         if (element) {
             element.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
             
-            // Counter-rotate label to keep it upright
             const label = element.querySelector('.layer-label');
             if (label) {
-                label.style.transform = `translateX(-50%) rotate(${-angle}deg)`;
+                const totalRotation = layer.labelOffset - layer.rotation;
+                label.style.transform = `translateX(-50%) rotate(${totalRotation}deg)`;
             }
         }
     }
@@ -445,10 +486,11 @@ class StakcoPuzzleContainer extends HTMLElement {
                 element.style.transform = `translate(-50%, -50%) rotate(${referenceRotation}deg)`;
                 layer.rotation = referenceRotation;
                 
-                // Counter-rotate label to keep it upright
+                // Update label
                 const label = element.querySelector('.layer-label');
                 if (label) {
-                    label.style.transform = `translateX(-50%) rotate(${-referenceRotation}deg)`;
+                    const totalRotation = layer.labelOffset - layer.rotation;
+                    label.style.transform = `translateX(-50%) rotate(${totalRotation}deg)`;
                 }
             }
         });
@@ -466,11 +508,11 @@ class StakcoPuzzleContainer extends HTMLElement {
                     element.style.transform = 'translate(-50%, -50%) rotate(0deg)';
                     layer.rotation = 0;
                     
-                    // Label stays upright (no rotation needed when layer is at 0)
+                    // Update label to final position (at its offset, upright)
                     const label = element.querySelector('.layer-label');
                     if (label) {
                         label.style.transition = `transform ${duration}ms ease-in-out`;
-                        label.style.transform = `translateX(-50%) rotate(0deg)`;
+                        label.style.transform = `translateX(-50%) rotate(${layer.labelOffset}deg)`;
                     }
                 }
             });
