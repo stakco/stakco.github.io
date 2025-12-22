@@ -295,7 +295,7 @@ class StakcoPuzzleContainer extends HTMLElement {
         
         const rect = container.getBoundingClientRect();
         const size = Math.min(rect.width, rect.height);
-        return (size / 2) - 20; // 20px inset from edge
+        return (size / 2) + 10; // Position at edge (+ 10px to sit just outside)
     }
 
     /**
