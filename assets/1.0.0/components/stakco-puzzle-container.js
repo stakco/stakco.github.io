@@ -218,8 +218,8 @@ class StakcoPuzzleContainer extends HTMLElement {
         this.puzzleLayers = {};
         for (let i = 1; i <= layers; i++) {
             this.puzzleLayers[`layer${i}`] = {
-                rotation: StakcoUtils.randomRotation(),
-                labelOffset: StakcoUtils.randomRotation(15, 60), // random label offset to prevent overlap
+                rotation: StakcoUtils.randomRotation(), // actual rotation for puzzle
+                labelOffset: StakcoUtils.randomRotation(15, 60), // cosmetic label offset
                 url: null,
                 customImage: null
             };
@@ -265,7 +265,7 @@ class StakcoPuzzleContainer extends HTMLElement {
                 // Apply rotation to the layer itself
                 element.style.transform = `translate(-50%, -50%) rotate(${layer.rotation}deg)`;
                 
-                // Keep label upright with a random offset
+                // Keep label upright with a random offset (cosmetic only)
                 const label = element.querySelector('.layer-label');
                 if (label) {
                     label.style.transform = `translateX(-50%) rotate(${-layer.rotation + layer.labelOffset}deg)`;
@@ -279,8 +279,6 @@ class StakcoPuzzleContainer extends HTMLElement {
             detail: { highlightAll: this.getHighlightAll() }
         }));
     }
-
-    // Public API methods for Background and Top layers
 
     setBackgroundImage(imageUrl) {
         this.backgroundLayer.customImage = imageUrl;
@@ -318,8 +316,6 @@ class StakcoPuzzleContainer extends HTMLElement {
             detail: { layer: layerNumber, imageUrl }
         }));
     }
-
-    // Existing public API methods
 
     switchLayer(layerNumber) {
         if (this.isSolved) return;
@@ -362,7 +358,7 @@ class StakcoPuzzleContainer extends HTMLElement {
             // Rotate layer
             element.style.transform = `translate(-50%, -50%) rotate(${layer.rotation}deg)`;
             
-            // Keep label upright with offset
+            // Keep label upright with cosmetic offset
             const label = element.querySelector('.layer-label');
             if (label) {
                 label.style.transform = `translateX(-50%) rotate(${-layer.rotation + layer.labelOffset}deg)`;
@@ -399,8 +395,8 @@ class StakcoPuzzleContainer extends HTMLElement {
         if (this.isSolved) return false;
 
         const tolerance = parseFloat(this.getAttribute('tolerance')) || 2;
-        const rotations = Object.values(this.puzzleLayers).map(layer => layer.rotation);
-
+        // USE ONLY layer rotation, ignore label offset completely
+        const rotations = Object.values(this.puzzleLayers).map(layer => layer.rotation % 360);
         const aligned = StakcoUtils.rotationsAligned(rotations, tolerance);
 
         if (aligned) {
