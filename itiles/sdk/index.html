@@ -3,905 +3,641 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iTiles Web Bluetooth Test App</title>
+    <title>iTiles Web Bluetooth Controller</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .app-bar {
+            background: rgba(0,0,0,0.3); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+            padding: 10px 20px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100; border-bottom: 1px solid rgba(255,255,255,0.1); gap: 12px;
         }
+        .app-bar-left { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+        .app-bar-title { color: white; font-size: 1.05rem; font-weight: 700; }
+        .docs-btn { padding: 3px 10px; font-size: 0.7rem; font-weight: 500; border: 1px solid rgba(255,255,255,0.25); border-radius: 4px; background: none; color: rgba(255,255,255,0.7); cursor: pointer; text-decoration: none; transition: all 0.2s; display: inline-block; line-height: 1.4; }
+        .docs-btn:hover { background: rgba(255,255,255,0.15); color: white; transform: none; box-shadow: none; }
+        .app-bar-center { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: center; }
+        .app-bar-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+        .app-bar-info { display: flex; align-items: center; gap: 6px; color: rgba(255,255,255,0.85); font-size: 0.8rem; font-weight: 500; }
+        .status-dot-sm { width: 8px; height: 8px; border-radius: 50%; background: #dc3545; flex-shrink: 0; }
+        .status-dot-sm.connected { background: #28a745; box-shadow: 0 0 6px rgba(40,167,69,0.6); }
+        .app-bar-divider { width: 1px; height: 18px; background: rgba(255,255,255,0.2); }
+        .app-btn { padding: 6px 14px; font-size: 0.8rem; font-weight: 600; border: 1px solid rgba(255,255,255,0.3); border-radius: 6px; cursor: pointer; background: rgba(255,255,255,0.1); color: white; transition: all 0.2s; white-space: nowrap; }
+        .app-btn:hover:not(:disabled) { background: rgba(255,255,255,0.25); }
+        .app-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+        .app-btn.connect-btn { background: rgba(40,167,69,0.3); border-color: rgba(40,167,69,0.5); }
+        .app-btn.connect-btn:hover:not(:disabled) { background: rgba(40,167,69,0.5); }
+        .app-btn.disconnect-btn { background: rgba(220,53,69,0.3); border-color: rgba(220,53,69,0.5); }
+        .app-btn.disconnect-btn:hover:not(:disabled) { background: rgba(220,53,69,0.5); }
+        .app-btn.pair-btn { background: rgba(79,172,254,0.3); border-color: rgba(79,172,254,0.5); }
+        .app-btn.pair-btn:hover:not(:disabled) { background: rgba(79,172,254,0.5); }
+        .container { max-width: 1400px; margin: 0 auto; padding: 16px 20px; }
+        .card { background: white; border-radius: 10px; padding: 18px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+        .card h2 { color: #333; margin-bottom: 14px; font-size: 1.15rem; border-bottom: 2px solid #667eea; padding-bottom: 8px; }
 
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
+        /* Tile Visualizer */
+        .tile-vis-card { background: white; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+        .tile-vis-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .tile-vis-label { font-weight: 700; color: #333; font-size: 0.95rem; }
+        .tile-vis-actions { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+        .tile-vis-btn { padding: 5px 12px; font-size: 0.75rem; font-weight: 600; border: 1px solid #ddd; border-radius: 5px; background: #f8f9fa; color: #666; cursor: pointer; transition: all 0.2s; }
+        .tile-vis-btn:hover:not(:disabled) { background: #e9ecef; color: #333; transform: none; box-shadow: none; }
+        .tile-vis-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+        .tile-vis-btn.active { background: #667eea; color: white; border-color: #667eea; }
+        .tile-vis-body { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; min-height: 44px; }
+        .tile-status-empty { color: #bbb; font-size: 0.85rem; font-style: italic; }
+        .tile-hex-container { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+        .tile-hex { position: relative; width: 64px; height: 72px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.15s; }
+        .tile-hex:hover { transform: scale(1.08); }
+        .tile-hex svg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .tile-hex-fill { fill: #f0f2ff; stroke: #667eea; stroke-width: 2; transition: fill 0.3s, stroke 0.3s; }
+        .tile-hex.selected .tile-hex-fill { fill: #667eea; stroke: #4a5bd4; }
+        .tile-hex-content { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 1px; pointer-events: none; }
+        .tile-hex-id { font-size: 0.75rem; font-weight: 700; color: #333; line-height: 1; }
+        .tile-hex.selected .tile-hex-id { color: white; }
+        .tile-hex-battery { font-size: 0.6rem; font-weight: 600; color: #666; line-height: 1; }
+        .tile-hex.selected .tile-hex-battery { color: rgba(255,255,255,0.85); }
+        .tile-hex-battery.loading { color: #999; }
+        .tile-hex-battery.low { color: #dc3545; }
+        .tile-hex.selected .tile-hex-battery.low { color: #ffb3b3; }
+        @keyframes hex-shake { 0%,100%{transform:translateX(0)} 10%{transform:translateX(-4px) rotate(-2deg)} 20%{transform:translateX(4px) rotate(2deg)} 30%{transform:translateX(-3px) rotate(-1deg)} 40%{transform:translateX(3px) rotate(1deg)} 50%{transform:translateX(-2px)} 60%{transform:translateX(2px)} 70%{transform:translateX(-1px)} 80%{transform:translateX(1px)} }
+        .tile-hex.anim-shake { animation: hex-shake 0.5s ease; }
+        @keyframes hex-touch-flash { 0%{opacity:1} 15%{opacity:0.3} 30%{opacity:1} 45%{opacity:0.5} 60%{opacity:1} }
+        .tile-hex.anim-touch .tile-hex-fill { fill: #4facfe !important; stroke: #00b4d8 !important; transition: none; }
+        .tile-hex.anim-touch .tile-hex-id, .tile-hex.anim-touch .tile-hex-battery { color: white !important; }
+        .tile-hex.anim-touch { animation: hex-touch-flash 0.45s ease; }
+        @keyframes hex-step-on { 0%{filter:brightness(1)} 50%{filter:brightness(1.6)} 100%{filter:brightness(1)} }
+        .tile-hex.anim-step .tile-hex-fill { fill: #81c784 !important; stroke: #4caf50 !important; transition: none; }
+        .tile-hex.anim-step .tile-hex-id, .tile-hex.anim-step .tile-hex-battery { color: white !important; }
+        .tile-hex.anim-step { animation: hex-step-on 0.6s ease; }
+        /* Side pair edge highlight */
+        .hex-side-line { stroke-width: 3; stroke-linecap: round; transition: stroke 0.3s; }
+        .hex-side-line.paired { stroke-width: 4; filter: drop-shadow(0 0 2px rgba(255,255,255,0.5)); }
+        @keyframes hex-side-flash { 0%{stroke-width:3} 50%{stroke-width:6} 100%{stroke-width:3} }
+        .hex-side-line.anim-pair { animation: hex-side-flash 0.6s ease; }
 
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+        /* Spatial Map */
+        .spatial-map-card { background: #1a1a2e; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); }
+        .spatial-map-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+        .spatial-map-label { font-weight: 700; color: #8888cc; font-size: 0.9rem; }
+        .spatial-map-hint { font-size: 0.7rem; color: #666; margin-left: auto; }
+        .spatial-map-container { position: relative; min-height: 140px; display: flex; align-items: center; justify-content: center; }
+        .spatial-map-empty { color: #555; font-size: 0.8rem; font-style: italic; }
+        .spatial-map-svg { width: 100%; max-height: 300px; }
+        .spatial-hex-fill { fill: rgba(102,126,234,0.15); stroke: rgba(102,126,234,0.5); stroke-width: 1.5; }
+        .spatial-hex-fill.selected { fill: rgba(102,126,234,0.4); stroke: rgba(102,126,234,0.9); }
+        .spatial-hex-label { fill: rgba(255,255,255,0.9); font-size: 11px; font-weight: 700; font-family: -apple-system, sans-serif; text-anchor: middle; dominant-baseline: central; }
+        .spatial-link { stroke: rgba(255,183,77,0.6); stroke-width: 2; stroke-dasharray: 4 2; }
 
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
+        /* Command Monitor */
+        .cmd-monitor { background: #1a1a2e; border-radius: 10px; padding: 14px 18px; margin-bottom: 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); font-family: 'Courier New', monospace; }
+        .cmd-monitor-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+        .cmd-monitor-label { font-weight: 600; color: #8888cc; font-size: 0.8rem; }
+        .cmd-monitor-dir { font-size: 0.65rem; font-weight: 600; padding: 2px 6px; border-radius: 3px; }
+        .cmd-monitor-dir.tx { background: rgba(79,195,247,0.2); color: #4fc3f7; }
+        .cmd-monitor-dir.rx { background: rgba(129,199,132,0.2); color: #81c784; }
+        .cmd-bytes { display: flex; gap: 4px; flex-wrap: wrap; align-items: center; }
+        .cmd-byte { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 24px; font-size: 0.7rem; font-weight: 700; border-radius: 3px; background: rgba(255,255,255,0.08); color: #ccc; }
+        .cmd-byte.start { background: rgba(102,126,234,0.3); color: #99aaff; }
+        .cmd-byte.end { background: rgba(102,126,234,0.3); color: #99aaff; }
+        .cmd-byte.tile-id { background: rgba(255,183,77,0.25); color: #ffb74d; }
+        .cmd-byte.command { background: rgba(79,195,247,0.25); color: #4fc3f7; }
+        .cmd-byte.length { background: rgba(186,104,200,0.25); color: #ce93d8; }
+        .cmd-byte.param { background: rgba(129,199,132,0.2); color: #81c784; }
+        .cmd-label-row { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 2px; }
+        .cmd-label { width: 30px; text-align: center; font-size: 0.5rem; color: #666; font-weight: 500; }
+        .cmd-empty { color: #555; font-size: 0.75rem; font-style: italic; }
+        .cmd-desc { color: #888; font-size: 0.7rem; margin-top: 4px; }
 
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
+        /* Controls */
+        .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+        .button-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
+        .button-row { display: flex; gap: 8px; }
+        .button-row button { flex: 1; }
+        button { padding: 10px 16px; font-size: 0.9rem; font-weight: 600; border: none; border-radius: 7px; cursor: pointer; transition: all 0.2s ease; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        button:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(102,126,234,0.4); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        button.secondary { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+        button.success { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+        button.danger { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+        .control-group { margin-bottom: 12px; }
+        .control-group label { display: block; margin-bottom: 5px; color: #333; font-weight: 600; font-size: 0.85rem; }
+        .control-group input, .control-group select { width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 6px; font-size: 0.9rem; transition: border-color 0.2s; }
+        .control-group input:focus, .control-group select:focus { outline: none; border-color: #667eea; }
+        .color-picker-group { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+        .color-picker-group input[type="number"] { text-align: center; }
+        .quick-actions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .quick-actions button { padding: 8px 4px; font-size: 0.8rem; min-width: 0; }
+        /* Side select buttons */
+        .side-select-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; margin-bottom: 8px; }
+        .side-btn { padding: 6px 2px; font-size: 0.75rem; font-weight: 700; border: 2px solid #ddd; border-radius: 5px; background: #f8f9fa; color: #666; cursor: pointer; transition: all 0.15s; text-align: center; }
+        .side-btn:hover { background: #e9ecef; transform: none; box-shadow: none; }
+        .side-btn.active { background: #667eea; color: white; border-color: #667eea; }
 
-        .card h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            border-bottom: 2px solid #667eea;
-            padding-bottom: 10px;
-        }
-
-        .status-bar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .status-indicator {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .status-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #dc3545;
-            animation: pulse 2s infinite;
-        }
-
-        .status-dot.connected {
-            background: #28a745;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .button-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        button {
-            padding: 12px 24px;
-            font-size: 1rem;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        button:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        button.secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        button.success {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        button.danger {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        }
-
-        .control-group {
-            margin-bottom: 20px;
-        }
-
-        .control-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 600;
-        }
-
-        .control-group input,
-        .control-group select {
-            width: 100%;
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-        }
-
-        .control-group input:focus,
-        .control-group select:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .color-picker-group {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-
-        .color-picker-group input[type="number"] {
-            text-align: center;
-        }
-
-        .log-container {
-            background: #1e1e1e;
-            color: #d4d4d4;
-            padding: 15px;
-            border-radius: 8px;
-            max-height: 300px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
-        }
-
-        .log-entry {
-            padding: 5px 0;
-            border-bottom: 1px solid #333;
-        }
-
-        .log-entry:last-child {
-            border-bottom: none;
-        }
-
-        .log-entry .timestamp {
-            color: #858585;
-            margin-right: 10px;
-        }
-
-        .log-entry .type-info {
-            color: #4fc3f7;
-        }
-
-        .log-entry .type-success {
-            color: #81c784;
-        }
-
-        .log-entry .type-error {
-            color: #e57373;
-        }
-
-        .log-entry .type-warning {
-            color: #ffb74d;
-        }
-
-        .grid-2 {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-        }
-
+        .log-container { background: #1e1e1e; color: #d4d4d4; padding: 12px; border-radius: 8px; max-height: 260px; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 0.85rem; }
+        .log-entry { padding: 3px 0; border-bottom: 1px solid #333; }
+        .log-entry:last-child { border-bottom: none; }
+        .log-entry .timestamp { color: #858585; margin-right: 8px; }
+        .log-entry .type-info { color: #4fc3f7; }
+        .log-entry .type-success { color: #81c784; }
+        .log-entry .type-error { color: #e57373; }
+        .log-entry .type-warning { color: #ffb74d; }
+        .log-actions { margin-top: 8px; display: flex; gap: 8px; align-items: center; }
+        .log-actions button { padding: 6px 12px; font-size: 0.8rem; }
+        .text-link { background: none; border: none; color: #999; font-size: 0.75rem; font-weight: 400; padding: 4px 0; cursor: pointer; text-decoration: underline; transition: color 0.2s; }
+        .text-link:hover:not(:disabled) { color: #dc3545; transform: none; box-shadow: none; }
+        .text-link:disabled { text-decoration: none; }
+        .disabled-controls { opacity: 0.4; pointer-events: none; user-select: none; }
+        @media (max-width: 960px) { .grid-3 { grid-template-columns: 1fr; } }
         @media (max-width: 768px) {
-            .grid-2 {
-                grid-template-columns: 1fr;
-            }
-            
-            .button-group {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .tile-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .tile-button {
-            aspect-ratio: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .quick-actions {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .quick-actions button {
-            flex: 1;
-            min-width: 150px;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            background: #667eea;
-            color: white;
-        }
-
-        .info-box {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .info-box strong {
-            display: block;
-            margin-bottom: 10px;
-            color: #856404;
-        }
-
-        .info-box ul {
-            margin: 10px 0 0 20px;
-            line-height: 1.6;
-            color: #856404;
-        }
-
-        /* Documentation Section Styles */
-        .docs-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .docs-card h2 {
-            color: white;
-            border-bottom-color: rgba(255, 255, 255, 0.3);
-        }
-
-        .docs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 12px;
-        }
-
-        .docs-link {
-            display: block;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            border: 2px solid transparent;
-        }
-
-        .docs-link:hover {
-            background: white;
-            color: #667eea;
-            border-color: rgba(255, 255, 255, 0.5);
-            transform: translateX(5px);
-        }
-
-        .docs-link::before {
-            margin-right: 8px;
+            .app-bar { flex-direction: column; align-items: stretch; }
+            .app-bar-center { justify-content: flex-start; }
+            .app-bar-right { justify-content: flex-start; }
+            .quick-actions { grid-template-columns: repeat(2, 1fr); }
+            .tile-hex { width: 52px; height: 58px; }
+            .tile-hex-id { font-size: 0.65rem; }
+            .tile-hex-battery { font-size: 0.55rem; }
+            .cmd-byte { width: 26px; height: 20px; font-size: 0.6rem; }
+            .cmd-label { width: 26px; font-size: 0.45rem; }
         }
     </style>
 </head>
 <body>
+    <div class="app-bar">
+        <div class="app-bar-left">
+            <span class="app-bar-title">iTiles Controller</span>
+            <a href="https://github.com/stakco/stakco.github.io/tree/gh-pages/itiles/sdk/README.md" target="_blank" rel="noopener noreferrer" class="docs-btn">Docs</a>
+        </div>
+        <div class="app-bar-center">
+            <button id="connectBtn" class="app-btn connect-btn">Connect</button>
+            <button id="disconnectBtn" class="app-btn disconnect-btn" disabled>Disconnect</button>
+            <button id="pairTilesBtn" class="app-btn pair-btn" disabled>Pair Tiles</button>
+        </div>
+        <div class="app-bar-right">
+            <div class="app-bar-info"><div class="status-dot-sm" id="appBarDot"></div><span id="appBarServerStatus">Disconnected</span></div>
+            <div class="app-bar-divider"></div>
+            <div class="app-bar-info"><span id="appBarTileCount">Tiles: --</span></div>
+        </div>
+    </div>
     <div class="container">
-        <div class="header">
-            <h1>🎮 iTiles Web Bluetooth Controller</h1>
-            <p>Control your iTiles interactive floor/wall tiles from the web</p>
-        </div>
-
-        <!-- Connection Card -->
-        <div class="card">
-            <h2>Connection</h2>
-            <div class="status-bar">
-                <div class="status-indicator">
-                    <div class="status-dot" id="statusDot"></div>
-                    <span id="statusText">Disconnected</span>
+        <!-- Tile Visualizer -->
+        <div class="tile-vis-card" id="tileVisCard">
+            <div class="tile-vis-header">
+                <span class="tile-vis-label">Tiles</span>
+                <div class="tile-vis-actions">
+                    <button class="tile-vis-btn active" id="selectAllBtn" disabled>Select All</button>
+                    <button class="tile-vis-btn" id="refreshBatteryBtn" disabled>Refresh Status</button>
                 </div>
-                <span class="badge" id="deviceName">No Device</span>
             </div>
-            <div class="button-group">
-                <button id="connectBtn">🔌 Connect to iTiles</button>
-                <button id="disconnectBtn" disabled>❌ Disconnect</button>
-                <button id="queryPairedBtn" disabled>📋 Query Paired Tiles</button>
-                <button id="queryOnlineBtn" disabled>🌐 Query Online Tiles</button>
+            <div class="tile-vis-body">
+                <span class="tile-status-empty" id="tileStatusEmpty">No tiles paired</span>
+                <div class="tile-hex-container" id="tileHexContainer"></div>
             </div>
         </div>
 
-        <!-- Pairing Card -->
-        <div class="card">
-            <h2>🔗 Tile Pairing</h2>
-            <div class="info-box">
-                <strong>⚠️ Important Pairing Instructions:</strong>
-                <ul>
-                    <li>Make sure all standard tiles are powered on</li>
-                    <li>Keep tiles within 5 meters of master tile</li>
-                    <li>Pairing takes approximately 20-25 seconds</li>
-                    <li>Do not disconnect during the pairing process</li>
-                    <li>Pairing happens automatically - no MAC address needed!</li>
-                </ul>
+        <!-- Spatial Map -->
+        <div class="spatial-map-card" id="spatialMapCard">
+            <div class="spatial-map-header">
+                <span class="spatial-map-label">Spatial Arrangement</span>
+                <span class="spatial-map-hint">Snap tiles together to build map</span>
             </div>
-            <div class="button-group">
-                <button id="pairTilesBtn" disabled class="success">🔗 Pair Tiles (Auto-discover)</button>
-                <button id="clearMacListBtn" disabled class="danger">🗑️ Clear MAC List</button>
+            <div class="spatial-map-container" id="spatialMapContainer">
+                <span class="spatial-map-empty" id="spatialMapEmpty">No side pairing data yet</span>
             </div>
         </div>
 
-        <div class="grid-2">
-            <!-- Light Control Card -->
+        <!-- Command Monitor -->
+        <div class="cmd-monitor" id="cmdMonitor">
+            <div class="cmd-monitor-header">
+                <span class="cmd-monitor-label">Command Monitor</span>
+                <span class="cmd-monitor-dir tx" id="cmdDir">TX</span>
+            </div>
+            <div id="cmdContent"><span class="cmd-empty">No commands sent yet</span></div>
+        </div>
+
+        <!-- Control Cards -->
+        <div class="grid-3 disabled-controls" id="controlsGrid">
             <div class="card">
-                <h2>💡 Light Control</h2>
-                <div class="control-group">
-                    <label>Select Tile</label>
-                    <select id="tileSelect">
-                        <option value="255">All Tiles</option>
-                        <option value="1">Tile I</option>
-                        <option value="2">Tile II</option>
-                        <option value="3">Tile III</option>
-                        <option value="4">Tile IV</option>
-                        <option value="5">Tile V</option>
-                        <option value="6">Tile VI</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label>Color (RGB)</label>
-                    <div class="color-picker-group">
-                        <input type="number" id="colorR" min="0" max="255" value="153" placeholder="R">
-                        <input type="number" id="colorG" min="0" max="255" value="0" placeholder="G">
-                        <input type="number" id="colorB" min="0" max="255" value="0" placeholder="B">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label>Duration</label>
-                    <select id="duration">
-                        <option value="0">No timeout</option>
-                        <option value="1">1 second</option>
-                        <option value="5" selected>5 seconds</option>
-                        <option value="10">10 seconds</option>
-                        <option value="30">30 seconds</option>
-                    </select>
-                </div>
-                <div class="button-group">
-                    <button id="triggerLightBtn" disabled class="success">💡 Trigger Light</button>
-                    <button id="turnOffLightBtn" disabled class="danger">⚫ Turn Off</button>
-                </div>
-                <div class="quick-actions">
-                    <button id="redBtn" disabled style="background: #dc3545;">Red</button>
-                    <button id="greenBtn" disabled style="background: #28a745;">Green</button>
-                    <button id="blueBtn" disabled style="background: #007bff;">Blue</button>
-                    <button id="yellowBtn" disabled style="background: #ffc107; color: #333;">Yellow</button>
-                </div>
+                <h2>Light Control</h2>
+                <div class="control-group"><label>Color (RGB)</label><div class="color-picker-group"><input type="number" id="colorR" min="0" max="255" value="153" placeholder="R"><input type="number" id="colorG" min="0" max="255" value="0" placeholder="G"><input type="number" id="colorB" min="0" max="255" value="0" placeholder="B"></div></div>
+                <div class="control-group"><label>Duration</label><select id="duration"><option value="0">No timeout</option><option value="1">1 second</option><option value="2">2 seconds</option><option value="3">3 seconds</option><option value="5" selected>5 seconds</option><option value="10">10 seconds</option><option value="15">15 seconds</option><option value="20">20 seconds</option><option value="30">30 seconds</option><option value="60">1 minute</option></select></div>
+                <div class="button-group"><div class="button-row"><button id="triggerLightBtn" disabled class="success">Trigger Light</button><button id="turnOffLightBtn" disabled class="danger">Turn Off</button></div></div>
+                <div class="quick-actions"><button id="redBtn" disabled style="background:#dc3545;">Red</button><button id="greenBtn" disabled style="background:#28a745;">Green</button><button id="blueBtn" disabled style="background:#007bff;">Blue</button><button id="yellowBtn" disabled style="background:#ffc107;color:#333;">Yellow</button></div>
             </div>
-
-            <!-- Sound & Vibration Card -->
             <div class="card">
-                <h2>🔊 Sound & Vibration</h2>
-                <div class="control-group">
-                    <label>Vibration Pattern</label>
-                    <select id="vibrationPattern">
-                        <option value="0">None</option>
-                        <option value="1" selected>Pattern I</option>
-                        <option value="2">Pattern II</option>
-                        <option value="3">Pattern III</option>
-                    </select>
+                <h2>Side Light</h2>
+                <div class="control-group"><label>Select Sides</label>
+                    <div class="side-select-grid"><button class="side-btn active" data-side="1">S1</button><button class="side-btn" data-side="2">S2</button><button class="side-btn" data-side="3">S3</button><button class="side-btn" data-side="4">S4</button><button class="side-btn" data-side="5">S5</button><button class="side-btn" data-side="6">S6</button></div>
                 </div>
-                <div class="control-group">
-                    <label>Sound Track</label>
-                    <select id="soundTrack">
-                        <option value="0">None</option>
-                        <option value="1" selected>Default</option>
-                    </select>
-                </div>
-                <div class="control-group">
-                    <label>Repeat Count</label>
-                    <select id="repeatCount">
-                        <option value="1" selected>1 time</option>
-                        <option value="2">2 times</option>
-                        <option value="3">3 times</option>
-                    </select>
-                </div>
-                <div class="button-group">
-                    <button id="triggerVibrateBtn" disabled class="secondary">📳 Trigger Vibration</button>
-                    <button id="triggerSoundBtn" disabled class="secondary">🔊 Trigger Sound</button>
-                    <button id="triggerComboBtn" disabled class="success">🎭 Light + Sound + Vibe</button>
-                </div>
+                <div class="control-group"><label>Side Color (RGB)</label><div class="color-picker-group"><input type="number" id="sideColorR" min="0" max="255" value="0" placeholder="R"><input type="number" id="sideColorG" min="0" max="255" value="153" placeholder="G"><input type="number" id="sideColorB" min="0" max="255" value="0" placeholder="B"></div></div>
+                <div class="button-group"><div class="button-row"><button id="triggerSideLightBtn" disabled class="success">Trigger Side Light</button><button id="turnOffSideLightBtn" disabled class="danger">All Sides Off</button></div></div>
+                <div class="quick-actions"><button class="side-quick-color" disabled data-r="153" data-g="0" data-b="0" style="background:#dc3545;">Red</button><button class="side-quick-color" disabled data-r="0" data-g="153" data-b="0" style="background:#28a745;">Green</button><button class="side-quick-color" disabled data-r="0" data-g="0" data-b="153" style="background:#007bff;">Blue</button><button class="side-quick-color" disabled data-r="153" data-g="153" data-b="0" style="background:#ffc107;color:#333;">Yellow</button></div>
+            </div>
+            <div class="card">
+                <h2>Sound, Vibration & Sensors</h2>
+                <div class="control-group"><label>Vibration Pattern</label><select id="vibrationPattern"><option value="0">None</option><option value="1" selected>Pattern 1</option><option value="2">Pattern 2</option><option value="3">Pattern 3</option><option value="4">Pattern 4</option><option value="5">Pattern 5</option><option value="6">Pattern 6</option><option value="7">Pattern 7</option><option value="8">Pattern 8</option><option value="9">Pattern 9</option></select></div>
+                <div class="control-group"><label>Sound / Repeat</label><div class="button-row"><select id="soundTrack" style="flex:1"><option value="0">None</option><option value="1" selected>Track 1</option><option value="2">Track 2</option><option value="3">Track 3</option></select><select id="repeatCount" style="flex:1"><option value="1" selected>x1</option><option value="2">x2</option><option value="3">x3</option></select></div></div>
+                <div class="button-group"><div class="button-row"><button id="triggerVibrateBtn" disabled class="secondary">Vibrate</button><button id="triggerSoundBtn" disabled class="secondary">Sound</button></div><button id="triggerComboBtn" disabled class="success">Light + Sound + Vibe</button></div>
+                <div class="button-group"><div class="button-row"><button id="enableTouchBtn" disabled>Touch ON</button><button id="disableTouchBtn" disabled>Touch OFF</button></div><div class="button-row"><button id="enableShakeBtn" disabled>Shake ON</button><button id="disableShakeBtn" disabled>Shake OFF</button></div></div>
             </div>
         </div>
-
-        <!-- Sensor Control Card -->
+        <!-- Event Log -->
         <div class="card">
-            <h2>🎯 Sensor Control</h2>
-            <div class="button-group">
-                <button id="enableTouchBtn" disabled>✋ Enable Touch Sensor</button>
-                <button id="disableTouchBtn" disabled>🚫 Disable Touch Sensor</button>
-                <button id="enableShakeBtn" disabled>📳 Enable Shake Sensor</button>
-                <button id="disableShakeBtn" disabled>🔇 Disable Shake Sensor</button>
-                <button id="getBatteryBtn" disabled>🔋 Get Battery Status</button>
-            </div>
-        </div>
-
-        <!-- Event Log Card -->
-        <div class="card">
-            <h2>📊 Event Log</h2>
-            <div class="log-container" id="logContainer">
-                <div class="log-entry">
-                    <span class="timestamp">--:--:--</span>
-                    <span class="type-info">System initialized. Ready to connect.</span>
-                </div>
-            </div>
-            <button id="clearLogBtn" style="margin-top: 10px;">🗑️ Clear Log</button>
-        </div>
-
-        <!-- Documentation Section -->
-        <div class="card docs-card">
-            <h2>📚 Documentation</h2>
-            <div class="docs-grid">
-                <a href="https://github.com/stakco/stakco.github.io/tree/gh-pages/itiles/sdk/README.md" target="_blank" rel="noopener noreferrer" class="docs-link">
-                    📄 Getting Started Guide
-                </a>
-            </div>
+            <h2>Event Log</h2>
+            <div class="log-container" id="logContainer"><div class="log-entry"><span class="timestamp">--:--:--</span><span class="type-info">System initialized. Ready to connect.</span></div></div>
+            <div class="log-actions"><button id="clearLogBtn">Clear Log</button><button id="copyLogBtn">Copy Logs</button><span style="flex:1"></span><button id="clearMacListBtn" disabled class="text-link">Reset all pairings</button></div>
         </div>
     </div>
 
     <script type="module">
-        import { 
-            ITilesBLEManager, 
-            TileColor, 
-            CONNECTION_STATE,
-            SELECT_ITILE,
-            LOG_REACTION_TIME,
-            TIMEOUT_DELAY,
-            TIMEOUT_RESPONSE,
-            SOUND_TRACK,
-            VIBRATION_PATTERN,
-            REPEAT_COUNT,
-            TOGGLE_SENSOR,
-            GAME_STATUS
+        import {
+            ITilesBLEManager, TileColor, SideColors, CONNECTION_STATE, SELECT_ITILE,
+            LOG_REACTION_TIME, TIMEOUT_DELAY, TIMEOUT_RESPONSE,
+            SOUND_TRACK, VIBRATION_PATTERN, REPEAT_COUNT, TOGGLE_SENSOR, GAME_STATUS
         } from './itiles.esm.js';
 
-        // Initialize BLE Manager
         const bleManager = new ITilesBLEManager();
-        
-        // UI Elements
-        const connectBtn = document.getElementById('connectBtn');
-        const disconnectBtn = document.getElementById('disconnectBtn');
-        const queryPairedBtn = document.getElementById('queryPairedBtn');
-        const queryOnlineBtn = document.getElementById('queryOnlineBtn');
-        const triggerLightBtn = document.getElementById('triggerLightBtn');
-        const turnOffLightBtn = document.getElementById('turnOffLightBtn');
-        const triggerVibrateBtn = document.getElementById('triggerVibrateBtn');
-        const triggerSoundBtn = document.getElementById('triggerSoundBtn');
-        const triggerComboBtn = document.getElementById('triggerComboBtn');
-        const enableTouchBtn = document.getElementById('enableTouchBtn');
-        const disableTouchBtn = document.getElementById('disableTouchBtn');
-        const enableShakeBtn = document.getElementById('enableShakeBtn');
-        const disableShakeBtn = document.getElementById('disableShakeBtn');
-        const getBatteryBtn = document.getElementById('getBatteryBtn');
-        const clearLogBtn = document.getElementById('clearLogBtn');
-        const pairTilesBtn = document.getElementById('pairTilesBtn');
-        const clearMacListBtn = document.getElementById('clearMacListBtn');
-        
-        const statusDot = document.getElementById('statusDot');
-        const statusText = document.getElementById('statusText');
-        const deviceName = document.getElementById('deviceName');
-        const logContainer = document.getElementById('logContainer');
-        
-        // Quick color buttons
-        const redBtn = document.getElementById('redBtn');
-        const greenBtn = document.getElementById('greenBtn');
-        const blueBtn = document.getElementById('blueBtn');
-        const yellowBtn = document.getElementById('yellowBtn');
+        const TILE_NAMES = ['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI'];
+        const TX_CMD_NAMES = {0x01:'BROADCAST',0x04:'UNPAIR',0x05:'QUERY_PAIRED',0x06:'QUERY_ONLINE',0x0B:'LIGHT',0x0C:'SOUND',0x0D:'VIBRATE',0x0E:'SIDE_LIGHT',0x0F:'EFFECT',0x10:'ADV_TRIGGER',0x16:'SUPER_TRIGGER',0x11:'OFF_LIGHT',0x1C:'STOP_EFFECT',0x18:'ACCEL_TOGGLE',0x19:'ACCEL_THRESH',0x1A:'TOUCH_TOGGLE',0x1B:'TIMEOUT',0x0A:'CLEAR_MAC',0x25:'GET_BATTERY',0x24:'ASSIGN_FB',0x23:'GAME_STATUS',0x09:'CONFIRM_ASSIGN'};
+        const RX_CMD_NAMES = {0x07:'PAIRED_TILES',0x08:'ONLINE_TILES',0x12:'TOUCH',0x13:'SIDE_UPDATE',0x14:'STEP_CHANGE',0x15:'SHAKE',0x17:'TILE_TIMEOUT',0x26:'BATTERY_LEVEL'};
 
-        // Logging function
-        function log(message, type = 'info') {
-            const timestamp = new Date().toLocaleTimeString();
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            entry.innerHTML = `
-                <span class="timestamp">${timestamp}</span>
-                <span class="type-${type}">${message}</span>
-            `;
-            logContainer.appendChild(entry);
-            logContainer.scrollTop = logContainer.scrollHeight;
+        // Pointy-top hex side angles: side 1 = top-right edge, going clockwise
+        // Side 1: top-right, Side 2: right, Side 3: bottom-right
+        // Side 4: bottom-left, Side 5: left, Side 6: top-left
+        const HEX_SIDE_VERTICES = [
+            [[48,9],[60,32]],   // S1: top-right
+            [[60,32],[48,55]],  // S2: bottom-right
+            [[48,55],[32,64]],  // S3: bottom (corrected for pointy-top)
+            [[32,64],[16,55]],  // S4: bottom-left
+            [[16,55],[4,32]],   // S5: left
+            [[4,32],[16,9]]     // S6: top-left
+        ];
+        // For 64x72 viewBox pointy-top hex: vertices at
+        // top: 32,2; top-right: 60,18; bottom-right: 60,54; bottom: 32,70; bottom-left: 4,54; top-left: 4,18
+        const HEX_PTS = [[32,2],[60,18],[60,54],[32,70],[4,54],[4,18]];
+        // Sides: edge between consecutive vertices. Side 1 = edge 0-1, Side 2 = edge 1-2, ...
+        const HEX_EDGES = [];
+        for (let i = 0; i < 6; i++) HEX_EDGES.push([HEX_PTS[i], HEX_PTS[(i+1)%6]]);
+
+        let tileRegistry = {}, nextDisplayIndex = 1, controlsEnabled = false;
+        let selectAllMode = true, selectedMacs = new Set();
+        let selectedSides = new Set([1]); // default: side 1 selected
+
+        // Side pairing adjacency: key = "tileId:side" -> { neighborTileId, neighborSide, status }
+        let sidePairGraph = {};
+
+        const connectBtn=document.getElementById('connectBtn'),disconnectBtn=document.getElementById('disconnectBtn'),pairTilesBtn=document.getElementById('pairTilesBtn');
+        const triggerLightBtn=document.getElementById('triggerLightBtn'),turnOffLightBtn=document.getElementById('turnOffLightBtn');
+        const triggerVibrateBtn=document.getElementById('triggerVibrateBtn'),triggerSoundBtn=document.getElementById('triggerSoundBtn'),triggerComboBtn=document.getElementById('triggerComboBtn');
+        const enableTouchBtn=document.getElementById('enableTouchBtn'),disableTouchBtn=document.getElementById('disableTouchBtn');
+        const enableShakeBtn=document.getElementById('enableShakeBtn'),disableShakeBtn=document.getElementById('disableShakeBtn');
+        const clearLogBtn=document.getElementById('clearLogBtn'),copyLogBtn=document.getElementById('copyLogBtn'),clearMacListBtn=document.getElementById('clearMacListBtn');
+        const appBarDot=document.getElementById('appBarDot'),appBarServerStatus=document.getElementById('appBarServerStatus'),appBarTileCount=document.getElementById('appBarTileCount');
+        const logContainer=document.getElementById('logContainer'),controlsGrid=document.getElementById('controlsGrid');
+        const tileHexContainer=document.getElementById('tileHexContainer'),tileStatusEmpty=document.getElementById('tileStatusEmpty');
+        const refreshBatteryBtn=document.getElementById('refreshBatteryBtn'),selectAllBtn=document.getElementById('selectAllBtn');
+        const cmdContent=document.getElementById('cmdContent'),cmdDir=document.getElementById('cmdDir');
+        const redBtn=document.getElementById('redBtn'),greenBtn=document.getElementById('greenBtn'),blueBtn=document.getElementById('blueBtn'),yellowBtn=document.getElementById('yellowBtn');
+        const triggerSideLightBtn=document.getElementById('triggerSideLightBtn'),turnOffSideLightBtn=document.getElementById('turnOffSideLightBtn');
+        const spatialMapContainer=document.getElementById('spatialMapContainer'),spatialMapEmpty=document.getElementById('spatialMapEmpty');
+
+        function log(msg,type='info'){const ts=new Date().toLocaleTimeString();const e=document.createElement('div');e.className='log-entry';e.innerHTML=`<span class="timestamp">${ts}</span><span class="type-${type}">${msg}</span>`;logContainer.appendChild(e);logContainer.scrollTop=logContainer.scrollHeight;}
+        function getRegisteredTiles(){return Object.values(tileRegistry).sort((a,b)=>a.displayIndex-b.displayIndex);}
+        function getSelectedTileIds(){if(selectAllMode)return[0xFF];const ids=[];for(const m of selectedMacs)if(tileRegistry[m])ids.push(tileRegistry[m].currentTileId);return ids.length>0?ids:[0xFF];}
+        async function sendToSelected(fn){const ids=getSelectedTileIds();if(ids.length===1){await fn(ids[0]);}else{for(const id of ids){await fn(id);await new Promise(r=>setTimeout(r,80));}}}
+        function updateAppBar(c,n){if(c){appBarDot.classList.add('connected');appBarServerStatus.textContent='Connected';}else{appBarDot.classList.remove('connected');appBarServerStatus.textContent='Disconnected';appBarTileCount.textContent='Tiles: --';return;}if(n!==undefined)appBarTileCount.textContent=n>0?`Tiles: ${n}`:'Tiles: 0';}
+        function registerTile(mac,tid,data){if(tileRegistry[mac]){tileRegistry[mac].prevTileId=tileRegistry[mac].currentTileId;tileRegistry[mac].currentTileId=tid;Object.assign(tileRegistry[mac],data);}else{tileRegistry[mac]={displayIndex:nextDisplayIndex++,currentTileId:tid,mac,...data};}}
+
+        // ---- Hex SVG with side lines ----
+        function createHexSVG(tileId) {
+            const SIDE_COLORS_MAP = ['#ff6b6b','#ffd93d','#6bcb77','#4fc3f7','#ce93d8','#ffb74d'];
+            let svg = `<svg viewBox="0 0 64 72" xmlns="http://www.w3.org/2000/svg">`;
+            svg += `<polygon class="tile-hex-fill" points="32,2 60,18 60,54 32,70 4,54 4,18"/>`;
+            // Draw side edge lines showing pair status
+            for (let s = 1; s <= 6; s++) {
+                const key = `${tileId}:${s}`;
+                const pair = sidePairGraph[key];
+                const edge = HEX_EDGES[s-1];
+                const paired = pair && pair.status === 1;
+                const color = paired ? SIDE_COLORS_MAP[s-1] : 'transparent';
+                svg += `<line class="hex-side-line${paired?' paired':''}" data-side="${s}" x1="${edge[0][0]}" y1="${edge[0][1]}" x2="${edge[1][0]}" y2="${edge[1][1]}" stroke="${color}"/>`;
+            }
+            svg += `</svg>`;
+            return svg;
+        }
+        function isTileSelected(mac){return selectAllMode||selectedMacs.has(mac);}
+        function renderTileHexagons(){
+            tileHexContainer.innerHTML='';const tiles=getRegisteredTiles();
+            if(tiles.length===0){tileStatusEmpty.style.display='';refreshBatteryBtn.disabled=true;return;}
+            tileStatusEmpty.style.display='none';refreshBatteryBtn.disabled=!controlsEnabled;
+            for(const tile of tiles){
+                const hex=document.createElement('div');hex.className='tile-hex';
+                if(isTileSelected(tile.mac))hex.classList.add('selected');hex.dataset.mac=tile.mac;
+                const idx=tile.displayIndex-1;const name=idx<TILE_NAMES.length?TILE_NAMES[idx]:tile.displayIndex;
+                let batteryText='--',batteryClass='';
+                if(tile.batteryLoading){batteryText='...';batteryClass=' loading';}
+                else if(tile.battery!==undefined){batteryText=tile.battery+'%';if(tile.battery<20)batteryClass=' low';}
+                hex.innerHTML=createHexSVG(tile.currentTileId)+`<div class="tile-hex-content"><span class="tile-hex-id">${name}</span><span class="tile-hex-battery${batteryClass}">${batteryText}</span></div>`;
+                hex.addEventListener('click',()=>toggleTileSelection(tile.mac));
+                tileHexContainer.appendChild(hex);
+            }
+            selectAllBtn.classList.toggle('active',selectAllMode);
+        }
+        function toggleTileSelection(mac){
+            if(selectAllMode){selectAllMode=false;selectedMacs.clear();selectedMacs.add(mac);}
+            else{if(selectedMacs.has(mac)){selectedMacs.delete(mac);if(selectedMacs.size===0)selectAllMode=true;}else{selectedMacs.add(mac);}}
+            renderTileHexagons();
+        }
+        selectAllBtn.addEventListener('click',()=>{selectAllMode=true;selectedMacs.clear();renderTileHexagons();});
+        function setAllBatteryLoading(){for(const m in tileRegistry)tileRegistry[m].batteryLoading=true;renderTileHexagons();}
+        function animateTileHex(tileId,animClass,ms){const mac=Object.keys(tileRegistry).find(m=>tileRegistry[m].currentTileId===tileId);if(!mac)return;const el=tileHexContainer.querySelector(`.tile-hex[data-mac="${mac}"]`);if(!el)return;el.classList.remove(animClass);void el.offsetWidth;el.classList.add(animClass);setTimeout(()=>el.classList.remove(animClass),ms||600);}
+
+        // ---- Side selection ----
+        document.querySelectorAll('.side-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const s = parseInt(btn.dataset.side);
+                if (selectedSides.has(s)) { selectedSides.delete(s); if(selectedSides.size===0) selectedSides.add(s); }
+                else selectedSides.add(s);
+                document.querySelectorAll('.side-btn').forEach(b => b.classList.toggle('active', selectedSides.has(parseInt(b.dataset.side))));
+            });
+        });
+
+        // Build SideColors: selected sides get color, others get black (off)
+        function buildSideColors(r, g, b) {
+            const off = new TileColor(0, 0, 0);
+            const on = new TileColor(r, g, b);
+            return new SideColors(
+                selectedSides.has(1)?on:off, selectedSides.has(2)?on:off, selectedSides.has(3)?on:off,
+                selectedSides.has(4)?on:off, selectedSides.has(5)?on:off, selectedSides.has(6)?on:off
+            );
         }
 
-        // Update UI based on connection state
-        function updateConnectionUI(connected) {
-            const buttons = [
-                queryPairedBtn, queryOnlineBtn, triggerLightBtn, turnOffLightBtn,
-                triggerVibrateBtn, triggerSoundBtn, triggerComboBtn,
-                enableTouchBtn, disableTouchBtn, enableShakeBtn, disableShakeBtn,
-                getBatteryBtn, redBtn, greenBtn, blueBtn, yellowBtn,
-                pairTilesBtn, clearMacListBtn
-            ];
-            
-            buttons.forEach(btn => btn.disabled = !connected);
-            connectBtn.disabled = connected;
-            disconnectBtn.disabled = !connected;
-            
-            if (connected) {
-                statusDot.classList.add('connected');
+        // ---- Side Pairing ----
+        // Track recent pair events to correlate which sides snapped together
+        let recentPairEvents = []; // {tileId, side, status, time}
+
+        // Light up a specific side on a tile (others stay off)
+        const SIDE_PAIR_COLORS = [
+            new TileColor(153,0,0),    // S1: red
+            new TileColor(153,153,0),  // S2: yellow
+            new TileColor(0,153,0),    // S3: green
+            new TileColor(0,153,153),  // S4: cyan
+            new TileColor(0,0,153),    // S5: blue
+            new TileColor(153,0,153)   // S6: magenta
+        ];
+        const BLACK = new TileColor(0,0,0);
+
+        function lightUpSide(tileId, sideNum) {
+            const sides = [BLACK,BLACK,BLACK,BLACK,BLACK,BLACK];
+            sides[sideNum - 1] = SIDE_PAIR_COLORS[sideNum - 1];
+            const sc = new SideColors(sides[0],sides[1],sides[2],sides[3],sides[4],sides[5]);
+            bleManager.triggerSideLight(sc, TIMEOUT_DELAY.SEC_3, LOG_REACTION_TIME.NONE, TIMEOUT_RESPONSE.IMMEDIATE, tileId)
+                .catch(e => _origLog('Side light error:', e));
+        }
+
+        function handleSidePair(response) {
+            const {updatedTileId: tid, updatedTileSide: side, sidePairStatus: status} = response;
+            const key = `${tid}:${side}`;
+            sidePairGraph[key] = { status };
+
+            if (status === 1) {
+                // Light up the paired side on this tile
+                lightUpSide(tid, side);
+
+                // Try to find a matching pair event from another tile within 1s
+                const now = Date.now();
+                recentPairEvents = recentPairEvents.filter(e => now - e.time < 1000);
+                const match = recentPairEvents.find(e => e.tileId !== tid && e.status === 1 && now - e.time < 1000);
+                if (match) {
+                    sidePairGraph[key].neighborTileId = match.tileId;
+                    sidePairGraph[key].neighborSide = match.side;
+                    sidePairGraph[`${match.tileId}:${match.side}`].neighborTileId = tid;
+                    sidePairGraph[`${match.tileId}:${match.side}`].neighborSide = side;
+                    log(`Side pair: Tile ${tid} S${side} <-> Tile ${match.tileId} S${match.side}`, 'success');
+                    recentPairEvents = recentPairEvents.filter(e => e !== match);
+                } else {
+                    recentPairEvents.push({tileId: tid, side, status, time: now});
+                }
             } else {
-                statusDot.classList.remove('connected');
+                // Unpaired: clear neighbor info, turn off side lights on both tiles
+                const existing = sidePairGraph[key];
+                if (existing && existing.neighborTileId !== undefined) {
+                    const nk = `${existing.neighborTileId}:${existing.neighborSide}`;
+                    if (sidePairGraph[nk]) { delete sidePairGraph[nk].neighborTileId; delete sidePairGraph[nk].neighborSide; sidePairGraph[nk].status = 0; }
+                }
+                sidePairGraph[key] = { status: 0 };
             }
+            renderTileHexagons();
+            renderSpatialMap();
         }
 
-        // Event Listeners Setup
-        bleManager.onConnectionStateChanged((state) => {
-            const stateNames = ['Disconnected', 'Connecting', 'Connected', 'Disconnecting'];
-            statusText.textContent = stateNames[state];
-            log(`Connection state: ${stateNames[state]}`, 
-                state === CONNECTION_STATE.CONNECTED ? 'success' : 'info');
-            updateConnectionUI(state === CONNECTION_STATE.CONNECTED);
-        });
+        // ---- Spatial Map ----
+        // Pointy-top hex: offset of neighbor relative to center for each side
+        // Side numbering assumed: 1=top-right, 2=right, 3=bottom-right, 4=bottom-left, 5=left, 6=top-left
+        const HEX_R = 40; // hex radius for spatial map
+        const NEIGHBOR_OFFSETS = {
+            1: { dx: HEX_R * Math.sqrt(3)/2, dy: -HEX_R * 1.5 },    // top-right
+            2: { dx: HEX_R * Math.sqrt(3),   dy: 0 },                 // right
+            3: { dx: HEX_R * Math.sqrt(3)/2, dy: HEX_R * 1.5 },      // bottom-right
+            4: { dx: -HEX_R * Math.sqrt(3)/2, dy: HEX_R * 1.5 },     // bottom-left
+            5: { dx: -HEX_R * Math.sqrt(3),   dy: 0 },                // left
+            6: { dx: -HEX_R * Math.sqrt(3)/2, dy: -HEX_R * 1.5 },    // top-left
+        };
 
-        bleManager.onTouch((response) => {
-            log(`Touch detected on Tile ${response.tileId} (Reaction: ${response.reactionTime.toFixed(3)}s)`, 'success');
-        });
-
-        bleManager.onShake((response) => {
-            log(`Shake detected on Tile ${response.tileId} (Reaction: ${response.reactionTime.toFixed(3)}s)`, 'success');
-        });
-
-        bleManager.onStepChanged((response) => {
-            const status = response.stepStatus === 0 ? 'ON' : 'OFF';
-            log(`Step ${status} Tile ${response.tileId}`, 'info');
-        });
-
-        bleManager.onPairedTileListReceived((response) => {
-            const tilesList = response.pairedTileIds.join(', ') || 'None';
-            log(`📋 Paired tiles (${response.pairedTileTotal}): ${tilesList}`, 'info');
-            
-            console.log('Full paired tiles response:', response);
-            console.log('Paired tile IDs array:', response.pairedTileIds);
-            console.log('Total count:', response.pairedTileTotal);
-            
-            if (response.pairedTileTotal === 0) {
-                log('💡 No tiles paired yet. Use the auto-discovery pairing button.', 'warning');
-            }
-        });
-
-        bleManager.onOnlineTileStatusReceived((response) => {
-            const macStr = response.macAddress.map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(':');
-            log(`Tile ${response.tileId} online - MAC: ${macStr}, Battery: ${response.batteryPercentage}%, Type: ${response.tileType}, HW: ${response.hardwareVersion}, FW: ${response.firmwareVersion}`, 'success');
-        });
-
-        bleManager.onBatteryStatusReceived((response) => {
-            log(`Battery level: ${response.batteryPercentage}%`, 'info');
-        });
-
-        bleManager.onDataReceived((data) => {
-            console.log('Raw BLE data received:', data);
-        });
-
-        // Button Handlers
-        connectBtn.addEventListener('click', async () => {
-            try {
-                log('Requesting device...', 'info');
-                const device = await bleManager.requestDevice();
-                deviceName.textContent = device.name || 'iTILES';
-                log(`Device selected: ${device.name}`, 'success');
-                
-                log('Connecting...', 'info');
-                await bleManager.connect();
-                log('Connected successfully!', 'success');
-            } catch (error) {
-                log(`Connection error: ${error.message}`, 'error');
-            }
-        });
-
-        disconnectBtn.addEventListener('click', async () => {
-            try {
-                await bleManager.disconnect();
-                deviceName.textContent = 'No Device';
-                log('Disconnected', 'warning');
-            } catch (error) {
-                log(`Disconnect error: ${error.message}`, 'error');
-            }
-        });
-
-        queryPairedBtn.addEventListener('click', async () => {
-            try {
-                await bleManager.queryPairedTiles();
-                log('Querying paired tiles...', 'info');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
-            }
-        });
-
-        queryOnlineBtn.addEventListener('click', async () => {
-            try {
-                await bleManager.queryOnlineTiles();
-                log('Querying online tiles...', 'info');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
-            }
-        });
-
-        // Pairing Button Handler - Auto-discovery workflow
-        pairTilesBtn.addEventListener('click', async () => {
-            try {
-                log('📡 Starting automatic tile discovery and pairing...', 'info');
-                log('⏳ This will take approximately 20-25 seconds', 'warning');
-                log('🔴 Make sure all standard tiles are powered on and nearby!', 'warning');
-                
-                // Disable button during process
-                pairTilesBtn.disabled = true;
-                pairTilesBtn.textContent = 'Pairing in progress...';
-                
-                // Step 1: Query online tiles (this triggers auto-pairing!)
-                log('Step 1: Discovering online tiles...', 'info');
-                await bleManager.queryOnlineTiles(SELECT_ITILE.ALL);
-                
-                // Step 2: Wait for tiles to pair (20 seconds as per Unity code)
-                log('Step 2: Waiting for tiles to pair (20 seconds)...', 'info');
-                let countdown = 20;
-                const countdownInterval = setInterval(() => {
-                    log(`⏱️  ${countdown} seconds remaining...`, 'info');
-                    countdown--;
-                    if (countdown < 0) clearInterval(countdownInterval);
-                }, 1000);
-                
-                await new Promise(r => setTimeout(r, 20000));
-                clearInterval(countdownInterval);
-                
-                // Step 3: Confirm assignment
-                log('Step 3: Confirming tile assignments...', 'info');
-                await bleManager.confirmAssignment(SELECT_ITILE.ALL);
-                await new Promise(r => setTimeout(r, 500));
-                
-                // Step 4: Set game in progress for all discovered tiles
-                log('Step 4: Activating tiles...', 'info');
-                for (let i = 1; i <= 6; i++) {
-                    await bleManager.gameInProgress(GAME_STATUS.IN_GAME, i);
-                    await new Promise(r => setTimeout(r, 500));
+        function renderSpatialMap() {
+            // Build adjacency from sidePairGraph
+            const links = [];
+            const seen = new Set();
+            for (const key in sidePairGraph) {
+                const info = sidePairGraph[key];
+                if (info.status === 1 && info.neighborTileId !== undefined) {
+                    const [tid, side] = key.split(':').map(Number);
+                    const pairKey = [Math.min(tid, info.neighborTileId), Math.max(tid, info.neighborTileId)].join('-');
+                    if (!seen.has(pairKey)) {
+                        seen.add(pairKey);
+                        links.push({ tileA: tid, sideA: side, tileB: info.neighborTileId, sideB: info.neighborSide });
+                    }
                 }
-                
-                // Step 5: Query paired tiles to confirm
-                log('Step 5: Verifying paired tiles...', 'info');
-                await new Promise(r => setTimeout(r, 1000));
-                await bleManager.queryPairedTiles();
-                
-                log('✅ Pairing sequence complete!', 'success');
-                log('💡 Check above for the list of paired tiles.', 'info');
-                
-                // Re-enable button
-                pairTilesBtn.disabled = false;
-                pairTilesBtn.textContent = '🔗 Pair Tiles (Auto-discover)';
-                
-            } catch (error) {
-                log(`Pairing error: ${error.message}`, 'error');
-                pairTilesBtn.disabled = false;
-                pairTilesBtn.textContent = '🔗 Pair Tiles (Auto-discover)';
             }
-        });
 
-        // Clear MAC list button handler
-        clearMacListBtn.addEventListener('click', async () => {
-            try {
-                if (!confirm('Are you sure you want to clear the MAC list? This will unpair all tiles.')) {
-                    return;
+            if (links.length === 0) {
+                spatialMapEmpty.style.display = '';
+                spatialMapContainer.querySelectorAll('svg').forEach(s => s.remove());
+                return;
+            }
+            spatialMapEmpty.style.display = 'none';
+
+            // BFS layout: place first tile at origin, expand neighbors
+            const positions = {}; // tileId -> {x, y}
+            const tiles = getRegisteredTiles();
+            if (tiles.length === 0) return;
+
+            // Start with the first tile that has a link
+            const startTile = links[0].tileA;
+            positions[startTile] = { x: 0, y: 0 };
+
+            let changed = true;
+            let iter = 0;
+            while (changed && iter < 20) {
+                changed = false; iter++;
+                for (const link of links) {
+                    if (positions[link.tileA] && !positions[link.tileB]) {
+                        const off = NEIGHBOR_OFFSETS[link.sideA];
+                        if (off) { positions[link.tileB] = { x: positions[link.tileA].x + off.dx, y: positions[link.tileA].y + off.dy }; changed = true; }
+                    } else if (positions[link.tileB] && !positions[link.tileA]) {
+                        const off = NEIGHBOR_OFFSETS[link.sideB];
+                        if (off) { positions[link.tileA] = { x: positions[link.tileB].x + off.dx, y: positions[link.tileB].y + off.dy }; changed = true; }
+                    }
                 }
-                
-                await bleManager.clearMacList();
-                log('🗑️ MAC list cleared. All tiles unpaired.', 'warning');
-            } catch (error) {
-                log(`Error clearing MAC list: ${error.message}`, 'error');
             }
-        });
-
-        triggerLightBtn.addEventListener('click', async () => {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                const r = parseInt(document.getElementById('colorR').value);
-                const g = parseInt(document.getElementById('colorG').value);
-                const b = parseInt(document.getElementById('colorB').value);
-                const duration = parseInt(document.getElementById('duration').value);
-                
-                const color = new TileColor(r, g, b);
-                await bleManager.triggerLight(
-                    color,
-                    duration,
-                    LOG_REACTION_TIME.TOUCH_OR_STEP,
-                    TIMEOUT_RESPONSE.IMMEDIATE,
-                    tileId
-                );
-                log(`Light triggered (RGB: ${r},${g},${b})`, 'success');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
+            // Place any unlinked tiles we know about
+            let offsetX = 0;
+            for (const t of tiles) {
+                if (!positions[t.currentTileId]) {
+                    positions[t.currentTileId] = { x: offsetX, y: 200 };
+                    offsetX += HEX_R * 2.5;
+                }
             }
-        });
 
-        turnOffLightBtn.addEventListener('click', async () => {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                await bleManager.turnOffLight(tileId);
-                log('Light turned off', 'info');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
+            // Compute bounds
+            const posArr = Object.values(positions);
+            const minX = Math.min(...posArr.map(p=>p.x)) - HEX_R - 10;
+            const maxX = Math.max(...posArr.map(p=>p.x)) + HEX_R + 10;
+            const minY = Math.min(...posArr.map(p=>p.y)) - HEX_R - 10;
+            const maxY = Math.max(...posArr.map(p=>p.y)) + HEX_R + 10;
+            const w = maxX - minX, h = maxY - minY;
+
+            // Pointy-top hex points
+            function hexPoints(cx, cy, r) {
+                const pts = [];
+                for (let i = 0; i < 6; i++) {
+                    const angle = Math.PI / 6 + i * Math.PI / 3;
+                    pts.push(`${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`);
+                }
+                return pts.join(' ');
             }
-        });
-
-        triggerVibrateBtn.addEventListener('click', async () => {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                const pattern = parseInt(document.getElementById('vibrationPattern').value);
-                const repeat = parseInt(document.getElementById('repeatCount').value);
-                
-                await bleManager.triggerVibration(
-                    pattern,
-                    repeat,
-                    LOG_REACTION_TIME.NONE,
-                    TIMEOUT_RESPONSE.IMMEDIATE,
-                    tileId
-                );
-                log('Vibration triggered', 'success');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
+            function hexEdgeMidpoint(cx, cy, r, sideIdx) {
+                const a1 = Math.PI / 6 + (sideIdx - 1) * Math.PI / 3;
+                const a2 = Math.PI / 6 + sideIdx * Math.PI / 3;
+                return { x: cx + r * (Math.cos(a1) + Math.cos(a2)) / 2, y: cy + r * (Math.sin(a1) + Math.sin(a2)) / 2 };
             }
-        });
 
-        triggerSoundBtn.addEventListener('click', async () => {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                const sound = parseInt(document.getElementById('soundTrack').value);
-                const repeat = parseInt(document.getElementById('repeatCount').value);
-                
-                await bleManager.triggerSound(
-                    sound,
-                    repeat,
-                    LOG_REACTION_TIME.NONE,
-                    TIMEOUT_RESPONSE.IMMEDIATE,
-                    tileId
-                );
-                log('Sound triggered', 'success');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
+            let svg = `<svg class="spatial-map-svg" viewBox="${minX} ${minY} ${w} ${h}" xmlns="http://www.w3.org/2000/svg">`;
+            // Draw links
+            for (const link of links) {
+                const pA = positions[link.tileA], pB = positions[link.tileB];
+                if (pA && pB) {
+                    const mA = hexEdgeMidpoint(pA.x, pA.y, HEX_R * 0.85, link.sideA);
+                    const mB = hexEdgeMidpoint(pB.x, pB.y, HEX_R * 0.85, link.sideB);
+                    svg += `<line class="spatial-link" x1="${mA.x}" y1="${mA.y}" x2="${mB.x}" y2="${mB.y}"/>`;
+                }
             }
-        });
-
-        triggerComboBtn.addEventListener('click', async () => {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                const r = parseInt(document.getElementById('colorR').value);
-                const g = parseInt(document.getElementById('colorG').value);
-                const b = parseInt(document.getElementById('colorB').value);
-                const duration = parseInt(document.getElementById('duration').value);
-                const sound = parseInt(document.getElementById('soundTrack').value);
-                const pattern = parseInt(document.getElementById('vibrationPattern').value);
-                const repeat = parseInt(document.getElementById('repeatCount').value);
-                
-                const color = new TileColor(r, g, b);
-                await bleManager.triggerLightSoundVibration(
-                    color,
-                    duration,
-                    sound,
-                    pattern,
-                    repeat,
-                    LOG_REACTION_TIME.TOUCH_OR_STEP,
-                    TIMEOUT_RESPONSE.IMMEDIATE,
-                    tileId
-                );
-                log('Combo effect triggered!', 'success');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
+            // Draw hexes
+            for (const tid in positions) {
+                const p = positions[tid];
+                const tileData = tiles.find(t => t.currentTileId === parseInt(tid));
+                const idx = tileData ? tileData.displayIndex - 1 : 0;
+                const name = idx < TILE_NAMES.length ? TILE_NAMES[idx] : tid;
+                const isSelected = tileData && isTileSelected(tileData.mac);
+                svg += `<polygon class="spatial-hex-fill${isSelected?' selected':''}" points="${hexPoints(p.x, p.y, HEX_R * 0.85)}"/>`;
+                svg += `<text class="spatial-hex-label" x="${p.x}" y="${p.y}">${name}</text>`;
             }
-        });
+            svg += `</svg>`;
 
-        enableTouchBtn.addEventListener('click', async () => {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                await bleManager.toggleTouchSensor(TOGGLE_SENSOR.ON, tileId);
-                log('Touch sensor enabled', 'success');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
-            }
-        });
-
-        disableTouchBtn.addEventListener('click', async () => {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                await bleManager.toggleTouchSensor(TOGGLE_SENSOR.OFF, tileId);
-                log('Touch sensor disabled', 'warning');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
-            }
-        });
-
-        enableShakeBtn.addEventListener('click', async () => {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                await bleManager.toggleShakeSensor(TOGGLE_SENSOR.ON, tileId);
-                log('Shake sensor enabled', 'success');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
-            }
-        });
-
-        disableShakeBtn.addEventListener('click', async () => {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                await bleManager.toggleShakeSensor(TOGGLE_SENSOR.OFF, tileId);
-                log('Shake sensor disabled', 'warning');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
-            }
-        });
-
-        getBatteryBtn.addEventListener('click', async () => {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                await bleManager.getBattery(tileId);
-                log('Requesting battery status...', 'info');
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
-            }
-        });
-
-        clearLogBtn.addEventListener('click', () => {
-            logContainer.innerHTML = '';
-            log('Log cleared', 'info');
-        });
-
-        // Quick color buttons
-        async function triggerQuickColor(color) {
-            try {
-                const tileId = parseInt(document.getElementById('tileSelect').value);
-                await bleManager.triggerLight(
-                    color,
-                    TIMEOUT_DELAY.SEC_5,
-                    LOG_REACTION_TIME.TOUCH_OR_STEP,
-                    TIMEOUT_RESPONSE.IMMEDIATE,
-                    tileId
-                );
-            } catch (error) {
-                log(`Error: ${error.message}`, 'error');
-            }
+            // Remove old svg, add new
+            spatialMapContainer.querySelectorAll('svg').forEach(s => s.remove());
+            spatialMapContainer.insertAdjacentHTML('beforeend', svg);
         }
 
-        redBtn.addEventListener('click', () => triggerQuickColor(TileColor.RED));
-        greenBtn.addEventListener('click', () => triggerQuickColor(TileColor.GREEN));
-        blueBtn.addEventListener('click', () => triggerQuickColor(TileColor.BLUE));
-        yellowBtn.addEventListener('click', () => triggerQuickColor(TileColor.YELLOW));
+        // ---- Command Monitor ----
+        function displayCommand(bytes,direction){
+            cmdDir.textContent=direction;cmdDir.className='cmd-monitor-dir '+(direction==='TX'?'tx':'rx');
+            const names=direction==='TX'?TX_CMD_NAMES:RX_CMD_NAMES;
+            if(!bytes||bytes.length<5){cmdContent.innerHTML=`<div class="cmd-bytes">${bytes?Array.from(bytes).map(b=>`<span class="cmd-byte">${b.toString(16).padStart(2,'0').toUpperCase()}</span>`).join(''):''}
+</div>`;return;}
+            const cmdName=names[bytes[2]]||`0x${bytes[2].toString(16).toUpperCase()}`;
+            let html='<div class="cmd-bytes">';
+            for(let i=0;i<bytes.length;i++){const hx=bytes[i].toString(16).padStart(2,'0').toUpperCase();let cls='cmd-byte';if(i===0)cls+=' start';else if(i===bytes.length-1)cls+=' end';else if(i===1)cls+=' tile-id';else if(i===2)cls+=' command';else if(i===3)cls+=' length';else cls+=' param';html+=`<span class="${cls}">${hx}</span>`;}
+            html+='</div><div class="cmd-label-row">';
+            for(let i=0;i<bytes.length;i++){let l='';if(i===0)l='START';else if(i===bytes.length-1)l='END';else if(i===1)l='TILE';else if(i===2)l='CMD';else if(i===3)l='LEN';else l=`P${i-4}`;html+=`<span class="cmd-label">${l}</span>`;}
+            html+='</div>';const tId=bytes[1]===0xFF?'ALL':bytes[1];
+            html+=`<div class="cmd-desc">${direction} ${cmdName} &rarr; Tile: ${tId}, Params: ${bytes[3]}</div>`;
+            cmdContent.innerHTML=html;
+        }
+        const _origLog=console.log;
+        console.log=function(...args){_origLog.apply(console,args);if(args.length>=2&&args[0]==='Command bytes:'){const b=args[1];if(Array.isArray(b))displayCommand(new Uint8Array(b),'TX');}};
 
-        log('Application ready. Click "Connect to iTiles" to begin.', 'success');
+        // ---- Enable/Disable ----
+        function enableControls(en){
+            controlsEnabled=en;
+            const btns=[triggerLightBtn,turnOffLightBtn,triggerVibrateBtn,triggerSoundBtn,triggerComboBtn,enableTouchBtn,disableTouchBtn,enableShakeBtn,disableShakeBtn,redBtn,greenBtn,blueBtn,yellowBtn,triggerSideLightBtn,turnOffSideLightBtn];
+            document.querySelectorAll('.side-quick-color').forEach(b=>btns.push(b));
+            if(en){controlsGrid.classList.remove('disabled-controls');btns.forEach(b=>b.disabled=false);refreshBatteryBtn.disabled=false;selectAllBtn.disabled=false;}
+            else{controlsGrid.classList.add('disabled-controls');btns.forEach(b=>b.disabled=true);refreshBatteryBtn.disabled=true;selectAllBtn.disabled=true;}
+        }
+        function updateConnectionUI(c){
+            connectBtn.disabled=c;disconnectBtn.disabled=!c;pairTilesBtn.disabled=!c;clearMacListBtn.disabled=!c;
+            if(!c){tileRegistry={};nextDisplayIndex=1;selectAllMode=true;selectedMacs.clear();sidePairGraph={};recentPairEvents=[];updateAppBar(false);enableControls(false);renderTileHexagons();renderSpatialMap();cmdContent.innerHTML='<span class="cmd-empty">No commands sent yet</span>';}
+        }
+
+        // ---- BLE Events ----
+        bleManager.onConnectionStateChanged((state)=>{const n=['Disconnected','Connecting','Connected','Disconnecting'];log(`Connection state: ${n[state]}`,state===CONNECTION_STATE.CONNECTED?'success':'info');updateConnectionUI(state===CONNECTION_STATE.CONNECTED);updateAppBar(state===CONNECTION_STATE.CONNECTED);});
+        bleManager.onTouch((r)=>{log(`Touch on Tile ${r.tileId} (${r.reactionTime.toFixed(3)}s)`,'success');animateTileHex(r.tileId,'anim-touch',500);});
+        bleManager.onShake((r)=>{log(`Shake on Tile ${r.tileId} (${r.reactionTime.toFixed(3)}s)`,'success');animateTileHex(r.tileId,'anim-shake',550);});
+        bleManager.onStepChanged((r)=>{log(`Step ${r.stepStatus===0?'ON':'OFF'} Tile ${r.tileId}`,'info');if(r.stepStatus===0)animateTileHex(r.tileId,'anim-step',650);});
+        bleManager.onSidePaired((r)=>{
+            const statusStr = r.sidePairStatus === 1 ? 'PAIRED' : 'UNPAIRED';
+            log(`Side update: Tile ${r.updatedTileId} Side ${r.updatedTileSide} ${statusStr}`, r.sidePairStatus === 1 ? 'success' : 'warning');
+            handleSidePair(r);
+        });
+        bleManager.onPairedTileListReceived((r)=>{const l=r.pairedTileIds.join(', ')||'None';log(`Paired tiles (${r.pairedTileTotal}): ${l}`,'info');if(r.pairedTileTotal===0)log('No tiles paired yet. Use Pair Tiles.','warning');const c=Object.keys(tileRegistry).length;updateAppBar(true,c);renderTileHexagons();if(c>0)enableControls(true);});
+        bleManager.onOnlineTileStatusReceived((r)=>{const mac=r.macAddress.map(b=>b.toString(16).padStart(2,'0').toUpperCase()).join(':');log(`Tile ${r.tileId} online - Battery: ${r.batteryPercentage}%, MAC: ${mac}, HW: ${r.hardwareVersion}, FW: ${r.firmwareVersion}`,'success');registerTile(mac,r.tileId,{battery:r.batteryPercentage,batteryLoading:false,hw:r.hardwareVersion,fw:r.firmwareVersion,tileType:r.tileType});const c=Object.keys(tileRegistry).length;updateAppBar(true,c);renderTileHexagons();if(c>0)enableControls(true);});
+        bleManager.onBatteryStatusReceived((r)=>log(`Battery response: ${r.batteryPercentage}%`,'info'));
+        bleManager.onDataReceived((data)=>{const bytes=[];const clean=data.replace(/:/g,'');for(let i=0;i<clean.length;i+=2)bytes.push(parseInt(clean.substr(i,2),16));displayCommand(new Uint8Array(bytes),'RX');});
+
+        // ---- Button Handlers ----
+        connectBtn.addEventListener('click',async()=>{try{log('Requesting device...','info');const d=await bleManager.requestDevice();log(`Device selected: ${d.name}`,'success');log('Connecting...','info');await bleManager.connect();log('Connected successfully!','success');}catch(e){log(`Connection error: ${e.message}`,'error');}});
+        disconnectBtn.addEventListener('click',async()=>{try{await bleManager.disconnect();log('Disconnected','warning');}catch(e){log(`Error: ${e.message}`,'error');}});
+        refreshBatteryBtn.addEventListener('click',async()=>{try{refreshBatteryBtn.textContent='Refreshing...';refreshBatteryBtn.disabled=true;setAllBatteryLoading();await bleManager.queryOnlineTiles(SELECT_ITILE.ALL);log('Refreshing tile status...','info');setTimeout(()=>{refreshBatteryBtn.textContent='Refresh Status';refreshBatteryBtn.disabled=!controlsEnabled;},5000);}catch(e){log(`Error: ${e.message}`,'error');refreshBatteryBtn.textContent='Refresh Status';refreshBatteryBtn.disabled=!controlsEnabled;}});
+        pairTilesBtn.addEventListener('click',async()=>{const DEF='Pair Tiles';try{log('Starting automatic tile discovery and pairing...','info');log('This will take ~20-25 seconds. Make sure tiles are powered on!','warning');pairTilesBtn.disabled=true;pairTilesBtn.textContent='1/5 Discovering...';await bleManager.queryOnlineTiles(SELECT_ITILE.ALL);let cd=20;pairTilesBtn.textContent=`2/5 Pairing (${cd}s)`;const iv=setInterval(()=>{cd--;if(cd>=0)pairTilesBtn.textContent=`2/5 Pairing (${cd}s)`;if(cd<0)clearInterval(iv);},1000);await new Promise(r=>setTimeout(r,20000));clearInterval(iv);pairTilesBtn.textContent='3/5 Confirming...';await bleManager.confirmAssignment(SELECT_ITILE.ALL);await new Promise(r=>setTimeout(r,500));pairTilesBtn.textContent='4/5 Activating...';for(let i=1;i<=6;i++){await bleManager.gameInProgress(GAME_STATUS.IN_GAME,i);await new Promise(r=>setTimeout(r,500));}pairTilesBtn.textContent='5/5 Verifying...';await new Promise(r=>setTimeout(r,1000));await bleManager.queryPairedTiles();log('Pairing complete!','success');pairTilesBtn.disabled=false;pairTilesBtn.textContent=DEF;}catch(e){log(`Pairing error: ${e.message}`,'error');pairTilesBtn.disabled=false;pairTilesBtn.textContent=DEF;}});
+        clearMacListBtn.addEventListener('click',async()=>{try{if(!confirm('Reset all pairings? This will unpair all tiles.'))return;await bleManager.clearMacList();log('All pairings reset.','warning');tileRegistry={};nextDisplayIndex=1;selectAllMode=true;selectedMacs.clear();sidePairGraph={};recentPairEvents=[];updateAppBar(true,0);enableControls(false);renderTileHexagons();renderSpatialMap();}catch(e){log(`Error: ${e.message}`,'error');}});
+
+        // Light
+        triggerLightBtn.addEventListener('click',async()=>{try{const r=parseInt(document.getElementById('colorR').value),g=parseInt(document.getElementById('colorG').value),b=parseInt(document.getElementById('colorB').value),d=parseInt(document.getElementById('duration').value);await sendToSelected(t=>bleManager.triggerLight(new TileColor(r,g,b),d,LOG_REACTION_TIME.TOUCH_OR_STEP,TIMEOUT_RESPONSE.IMMEDIATE,t));log(`Light (RGB: ${r},${g},${b}, ${d}s)`,'success');}catch(e){log(`Error: ${e.message}`,'error');}});
+        turnOffLightBtn.addEventListener('click',async()=>{try{await sendToSelected(t=>bleManager.turnOffLight(t));log('Light off','info');}catch(e){log(`Error: ${e.message}`,'error');}});
+
+        // Side Light
+        triggerSideLightBtn.addEventListener('click',async()=>{try{const r=parseInt(document.getElementById('sideColorR').value),g=parseInt(document.getElementById('sideColorG').value),b=parseInt(document.getElementById('sideColorB').value),d=parseInt(document.getElementById('duration').value);const sc=buildSideColors(r,g,b);await sendToSelected(t=>bleManager.triggerSideLight(sc,d,LOG_REACTION_TIME.NONE,TIMEOUT_RESPONSE.IMMEDIATE,t));const sides=[...selectedSides].sort().join(',');log(`Side light S${sides} (RGB: ${r},${g},${b})`,'success');}catch(e){log(`Error: ${e.message}`,'error');}});
+        turnOffSideLightBtn.addEventListener('click',async()=>{try{const allOff=new SideColors(new TileColor(0,0,0),new TileColor(0,0,0),new TileColor(0,0,0),new TileColor(0,0,0),new TileColor(0,0,0),new TileColor(0,0,0));await sendToSelected(t=>bleManager.triggerSideLight(allOff,0,LOG_REACTION_TIME.NONE,TIMEOUT_RESPONSE.IMMEDIATE,t));log('All sides off','info');}catch(e){log(`Error: ${e.message}`,'error');}});
+        document.querySelectorAll('.side-quick-color').forEach(btn=>{btn.addEventListener('click',async()=>{try{const r=parseInt(btn.dataset.r),g=parseInt(btn.dataset.g),b=parseInt(btn.dataset.b),d=parseInt(document.getElementById('duration').value);const sc=buildSideColors(r,g,b);await sendToSelected(t=>bleManager.triggerSideLight(sc,d,LOG_REACTION_TIME.NONE,TIMEOUT_RESPONSE.IMMEDIATE,t));}catch(e){log(`Error: ${e.message}`,'error');}});});
+
+        // Sound & Vibration
+        triggerVibrateBtn.addEventListener('click',async()=>{try{const p=parseInt(document.getElementById('vibrationPattern').value),rp=parseInt(document.getElementById('repeatCount').value);await sendToSelected(t=>bleManager.triggerVibration(p,rp,LOG_REACTION_TIME.NONE,TIMEOUT_RESPONSE.IMMEDIATE,t));log(`Vibration (pattern: ${p}, repeat: ${rp})`,'success');}catch(e){log(`Error: ${e.message}`,'error');}});
+        triggerSoundBtn.addEventListener('click',async()=>{try{const s=parseInt(document.getElementById('soundTrack').value),rp=parseInt(document.getElementById('repeatCount').value);await sendToSelected(t=>bleManager.triggerSound(s,rp,LOG_REACTION_TIME.NONE,TIMEOUT_RESPONSE.IMMEDIATE,t));log(`Sound (track: ${s}, repeat: ${rp})`,'success');}catch(e){log(`Error: ${e.message}`,'error');}});
+        triggerComboBtn.addEventListener('click',async()=>{try{const r=parseInt(document.getElementById('colorR').value),g=parseInt(document.getElementById('colorG').value),b=parseInt(document.getElementById('colorB').value),d=parseInt(document.getElementById('duration').value),s=parseInt(document.getElementById('soundTrack').value),p=parseInt(document.getElementById('vibrationPattern').value),rp=parseInt(document.getElementById('repeatCount').value);await sendToSelected(t=>bleManager.triggerLightSoundVibration(new TileColor(r,g,b),d,s,p,rp,LOG_REACTION_TIME.TOUCH_OR_STEP,TIMEOUT_RESPONSE.IMMEDIATE,t));log('Combo effect triggered!','success');}catch(e){log(`Error: ${e.message}`,'error');}});
+
+        // Sensors
+        enableTouchBtn.addEventListener('click',async()=>{try{await sendToSelected(t=>bleManager.toggleTouchSensor(TOGGLE_SENSOR.ON,t));log('Touch enabled','success');}catch(e){log(`Error: ${e.message}`,'error');}});
+        disableTouchBtn.addEventListener('click',async()=>{try{await sendToSelected(t=>bleManager.toggleTouchSensor(TOGGLE_SENSOR.OFF,t));log('Touch disabled','warning');}catch(e){log(`Error: ${e.message}`,'error');}});
+        enableShakeBtn.addEventListener('click',async()=>{try{await sendToSelected(t=>bleManager.toggleShakeSensor(TOGGLE_SENSOR.ON,t));log('Shake enabled','success');}catch(e){log(`Error: ${e.message}`,'error');}});
+        disableShakeBtn.addEventListener('click',async()=>{try{await sendToSelected(t=>bleManager.toggleShakeSensor(TOGGLE_SENSOR.OFF,t));log('Shake disabled','warning');}catch(e){log(`Error: ${e.message}`,'error');}});
+
+        // Log
+        clearLogBtn.addEventListener('click',()=>{logContainer.innerHTML='';log('Log cleared','info');});
+        copyLogBtn.addEventListener('click',()=>{const text=Array.from(logContainer.querySelectorAll('.log-entry')).map(e=>e.textContent.trim()).join('\n');navigator.clipboard.writeText(text).then(()=>{copyLogBtn.textContent='Copied!';setTimeout(()=>{copyLogBtn.textContent='Copy Logs';},1500);}).catch(()=>log('Copy failed','error'));});
+
+        // Quick colors
+        async function triggerQuickColor(color){try{const d=parseInt(document.getElementById('duration').value);await sendToSelected(t=>bleManager.triggerLight(color,d,LOG_REACTION_TIME.TOUCH_OR_STEP,TIMEOUT_RESPONSE.IMMEDIATE,t));}catch(e){log(`Error: ${e.message}`,'error');}}
+        redBtn.addEventListener('click',()=>triggerQuickColor(TileColor.RED));
+        greenBtn.addEventListener('click',()=>triggerQuickColor(TileColor.GREEN));
+        blueBtn.addEventListener('click',()=>triggerQuickColor(TileColor.BLUE));
+        yellowBtn.addEventListener('click',()=>triggerQuickColor(TileColor.YELLOW));
+
+        log('Ready. Click Connect to begin.','success');
     </script>
 </body>
 </html>
