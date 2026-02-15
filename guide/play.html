@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<title>Stakco Play — Interactive Digital Puzzles</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f6f9; --card: #ffffff; --hover: #f0f0f5;
+    --orange: #c87a1a; --pink: #be3070; --green: #16805a;
+    --blue: #2563b8; --purple: #6d4daa; --cyan: #0d7f94; --amber: #9a7209;
+    --text: #1a1a2e; --text-sub: #444455; --text-muted: #8888a0;
+    --border: rgba(0,0,0,0.07);
+    --accent: var(--pink); --accent-bg: rgba(190,48,112,0.05); --accent-border: rgba(190,48,112,0.15);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
+  .container { max-width:800px; margin:0 auto; padding:48px 32px 64px; }
+  a { color:var(--accent); text-decoration:none; }
+  a:hover { text-decoration:underline; }
+
+  .back-link { font-size:0.78rem; color:var(--text-muted); margin-bottom:24px; display:inline-block; }
+  .back-link:hover { color:var(--text-sub); text-decoration:none; }
+
+  .hero { margin-bottom:36px; }
+  .hero-badge { display:inline-block; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:999px; background:var(--accent); color:#fff; margin-bottom:12px; }
+  .hero h1 { font-size:1.75rem; font-weight:700; margin-bottom:4px; }
+  .hero .tagline { font-size:1rem; color:var(--text-sub); }
+
+  .section { margin-bottom:32px; }
+  .section-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:10px; }
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:22px 24px; margin-bottom:16px; }
+  .card p { color:var(--text-sub); font-size:0.88rem; line-height:1.6; }
+  .card p + p { margin-top:10px; }
+  .card strong { color:var(--text); }
+
+  .price-card { background:var(--accent-bg); border:1px solid var(--accent-border); border-radius:10px; padding:20px 24px; margin-bottom:16px; }
+  .price-card .price-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px; }
+  .price-card .price-label { font-size:0.78rem; font-weight:600; color:var(--text-sub); }
+  .price-card .price-value { font-family:'JetBrains Mono',monospace; font-size:1.1rem; font-weight:700; color:var(--accent); }
+  .price-card .price-note { font-size:0.72rem; color:var(--text-muted); margin-top:4px; }
+
+  .features-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  @media (max-width:600px) { .features-grid { grid-template-columns:1fr; } }
+  .feature-item { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px 16px; }
+  .feature-item .ft-title { font-size:0.82rem; font-weight:700; color:var(--text); margin-bottom:3px; }
+  .feature-item .ft-desc { font-size:0.75rem; color:var(--text-muted); line-height:1.4; }
+
+  .faq-section .faq-item { border-bottom:1px solid var(--border); }
+  .faq-section .faq-item:last-child { border-bottom:none; }
+  .faq-q { display:block; font-size:0.85rem; font-weight:600; color:var(--text-sub); padding:12px 0; cursor:pointer; user-select:none; }
+  .faq-q::before { content:'▸ '; color:var(--text-muted); }
+  .faq-item.open .faq-q::before { content:'▾ '; }
+  .faq-q:hover { color:var(--text); }
+  .faq-a { display:none; font-size:0.82rem; color:var(--text-muted); line-height:1.6; padding:0 0 12px 14px; }
+  .faq-item.open .faq-a { display:block; }
+
+  .flow-bar { display:flex; align-items:center; gap:6px; flex-wrap:wrap; padding:14px 0; }
+  .flow-tag { font-size:0.68rem; font-weight:600; color:var(--text-muted); background:rgba(0,0,0,0.04); padding:4px 10px; border-radius:5px; }
+  .flow-tag.accent { color:var(--accent); background:var(--accent-bg); border:1px solid var(--accent-border); }
+  .flow-sep { font-size:0.75rem; color:var(--text-muted); font-weight:700; }
+
+  .cta-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:8px; }
+  .cta-btn { display:inline-block; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600; padding:10px 24px; border-radius:8px; text-decoration:none; transition:opacity 0.15s; }
+  .cta-btn:hover { text-decoration:none; opacity:0.88; }
+  .cta-primary { background:var(--accent); color:#fff; }
+  .cta-secondary { background:var(--card); color:var(--text-sub); border:1px solid var(--border); }
+  .cta-secondary:hover { background:var(--hover); }
+
+  .footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--border); font-size:0.78rem; color:var(--text-muted); }
+
+  @media (max-width:600px) { .container { padding:24px 16px 48px; } .hero h1 { font-size:1.3rem; } }
+</style>
+</head>
+<body>
+<div class="container">
+
+<a href="stakco-onboarding-v2.html" class="back-link">← Back to overview</a>
+
+<div class="hero">
+  <div class="hero-badge">Digital</div>
+  <h1>Stakco Play</h1>
+  <div class="tagline">Interactive puzzles in the browser — share via link, no install needed</div>
+</div>
+
+<!-- What is it -->
+<div class="section">
+  <div class="section-label">What is Stakco Play?</div>
+  <div class="card">
+    <p>Stakco Play is the online platform where puzzles come to life. Publish your puzzle creations from Stakco Studio and share them with anyone — players open a link and start solving directly in their browser on any device.</p>
+    <p>Host puzzles on <strong>play.stakcos.com</strong> or set up a <strong>custom subdomain</strong> (yourname.play.stakcos.com) for a branded experience. Organise puzzles into albums, track engagement, and update content anytime.</p>
+  </div>
+</div>
+
+<!-- How it works -->
+<div class="section">
+  <div class="section-label">How it works</div>
+  <div class="card">
+    <div class="flow-bar">
+      <span class="flow-tag">Create in Studio</span>
+      <span class="flow-sep">→</span>
+      <span class="flow-tag accent">Publish with Play module</span>
+      <span class="flow-sep">→</span>
+      <span class="flow-tag">Players solve at play.stakcos.com</span>
+    </div>
+    <p>Design your puzzle in Stakco Studio (free), then use the Play module to publish it online. Share the link — players don't need an account or app to play.</p>
+  </div>
+</div>
+
+<!-- Features -->
+<div class="section">
+  <div class="section-label">What's included</div>
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="ft-title">Puzzle Albums</div>
+      <div class="ft-desc">Organise puzzles into themed collections — daily, weekly, or custom series</div>
+    </div>
+    <div class="feature-item">
+      <div class="ft-title">Custom Subdomain</div>
+      <div class="ft-desc">Host on yourname.play.stakcos.com for a branded experience</div>
+    </div>
+    <div class="feature-item">
+      <div class="ft-title">Analytics</div>
+      <div class="ft-desc">Track completion rates, time spent, and popular content</div>
+    </div>
+    <div class="feature-item">
+      <div class="ft-title">Instant Sharing</div>
+      <div class="ft-desc">Share via link — works on any device, no install required</div>
+    </div>
+    <div class="feature-item">
+      <div class="ft-title">Dynamic Updates</div>
+      <div class="ft-desc">Change or refresh published content anytime</div>
+    </div>
+    <div class="feature-item">
+      <div class="ft-title">Any Device</div>
+      <div class="ft-desc">Desktop, tablet, mobile — responsive by default</div>
+    </div>
+  </div>
+</div>
+
+<!-- Pricing -->
+<div class="section">
+  <div class="section-label">Pricing</div>
+  <div class="price-card">
+    <div class="price-row">
+      <span class="price-label">Playing puzzles</span>
+      <span class="price-value">Free</span>
+    </div>
+    <div class="price-note">Players never pay. Publishing requires the Studio Play module subscription.</div>
+  </div>
+</div>
+
+<!-- Who is it for -->
+<div class="section">
+  <div class="section-label">Who is it for?</div>
+  <div class="card">
+    <p><strong>Content creators</strong> sharing interactive puzzle series with their audience.</p>
+    <p><strong>Educators</strong> distributing course-related puzzles to students.</p>
+    <p><strong>Businesses</strong> running branded engagement campaigns.</p>
+    <p><strong>Families</strong> sharing puzzles with friends via a simple link.</p>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section">
+  <div class="section-label">Frequently asked questions</div>
+  <div class="card faq-section">
+    <div class="faq-item">
+      <span class="faq-q" onclick="this.parentElement.classList.toggle('open')">Do players need an account?</span>
+      <div class="faq-a">No. Anyone with the link can play immediately — no sign-up or download required.</div>
+    </div>
+    <div class="faq-item">
+      <span class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I embed puzzles on my website?</span>
+      <div class="faq-a">Yes — with the Dev module you can embed interactive puzzles as widgets on any web page.</div>
+    </div>
+    <div class="faq-item">
+      <span class="faq-q" onclick="this.parentElement.classList.toggle('open')">How do I get a custom subdomain?</span>
+      <div class="faq-a">The Play module includes custom subdomain setup. Choose your name and it's live at yourname.play.stakcos.com.</div>
+    </div>
+    <div class="faq-item">
+      <span class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I update puzzles after publishing?</span>
+      <div class="faq-a">Yes. Published content can be updated, replaced, or reorganised at any time from Studio.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="section">
+  <div class="cta-row">
+    <a href="https://studio.stakcos.com" class="cta-btn cta-primary">Start Creating Free</a>
+    <a href="https://play.stakcos.com" class="cta-btn cta-secondary">Try Stakco Play</a>
+  </div>
+</div>
+
+<div class="footer">Stakco Play is part of the Stakco platform. Start with a free Studio account, add the Play module when you're ready to publish. · Stakco 2026</div>
+
+</div>
+</body>
+</html>
