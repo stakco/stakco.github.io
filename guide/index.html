@@ -103,6 +103,10 @@
 
   .cell-flex { display:flex; flex-wrap:wrap; gap:4px; }
 
+  /* Module column: stack vertically to align with cost */
+  td:nth-child(2) .cell-flex { flex-direction:column; gap:4px; }
+  td:nth-child(2) .cell-flex .mod { width:fit-content; }
+
   /* Cost column */
   .cost { font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--text-sub); }
   .cost-stack { display:flex; flex-direction:column; gap:4px; }
@@ -226,11 +230,11 @@
 <!-- Platform -->
 <div class="intro-card">
   <div class="intro-label">The Stakco Platform</div>
-  <p><strong>Stakco Studio</strong> — Free web-based tool for designing puzzles using stencils.<br>
+  <p><strong><a href="https://studio.stakcos.com" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--text-muted)">Stakco Studio</a></strong> — Free web-based tool for designing puzzles using stencils.<br>
   <span style="color:var(--text-muted);font-size:0.82rem">Paid modules unlock additional capabilities — printing, online publishing, projection, AI generation, marketplace selling, and developer integration.</span></p>
-  <p style="margin-top:10px"><strong>Stakco Play</strong> — Online platform where published puzzles are played in the browser.<br>
+  <p style="margin-top:10px"><strong><a href="https://play.stakcos.com" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--text-muted)">Stakco Play</a></strong> — Online platform where published puzzles are played in the browser.<br>
   <span style="color:var(--text-muted);font-size:0.82rem">Creators share interactive puzzles via links or custom subdomains. Players solve them directly — no install required.</span></p>
-  <p style="margin-top:10px"><strong>Stakco Shop</strong> — Marketplace for modules, stencils, printed puzzles, and community designs.<br>
+  <p style="margin-top:10px"><strong><a href="https://shop.stakcos.com" target="_blank" style="color:inherit;text-decoration:none;border-bottom:1px dashed var(--text-muted)">Stakco Shop</a></strong> — Marketplace for modules, stencils, printed puzzles, and community designs.<br>
   <span style="color:var(--text-muted);font-size:0.82rem">Users browse and purchase add-ons to power up Studio. Creators list and sell their own work here.</span></p>
 </div>
 
@@ -245,16 +249,16 @@
       <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:10px">Digital · Browser-based</div>
       <div style="font-size:0.78rem;color:var(--text-sub);line-height:1.5">
         <div style="margin-bottom:6px">
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> No physical materials needed<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Content dynamically updatable<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Shareable via link — instant access<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Analytics and engagement tracking<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Accessible on any device
+          😊 No physical materials needed<br>
+          😊 Content dynamically updatable<br>
+          😊 Shareable via link — instant access<br>
+          😊 Analytics and engagement tracking<br>
+          😊 Accessible on any device
         </div>
         <div>
-          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> No tangible interface<br>
-          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Requires internet connection<br>
-          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Screen-dependent experience
+          😕 No tangible interface<br>
+          😕 Requires internet connection<br>
+          😕 Screen-dependent experience
         </div>
       </div>
     </div>
@@ -265,16 +269,16 @@
       <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:10px">Hybrid · Projection / Kiosk</div>
       <div style="font-size:0.78rem;color:var(--text-sub);line-height:1.5">
         <div style="margin-bottom:6px">
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Tangible, physical interaction<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Content remotely updatable<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Scalable to any surface size<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Multi-user simultaneous play<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Therapeutic &amp; calming visual effect
+          😊 Tangible, physical interaction<br>
+          😊 Content remotely updatable<br>
+          😊 Scalable to any surface size<br>
+          😊 Multi-user simultaneous play<br>
+          😊 Therapeutic &amp; calming visual effect
         </div>
         <div>
-          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Requires projector or display hardware<br>
-          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Needs power &amp; installation<br>
-          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Fixed location setup
+          😕 Requires projector or display hardware<br>
+          😕 Needs power &amp; installation<br>
+          😕 Fixed location setup
         </div>
       </div>
     </div>
@@ -285,16 +289,16 @@
       <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:10px">Physical · Printed</div>
       <div style="font-size:0.78rem;color:var(--text-sub);line-height:1.5">
         <div style="margin-bottom:6px">
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Fully tactile experience<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> No electricity or internet needed<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Thin profile — easy to store &amp; ship<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Multiple materials &amp; form factors<br>
-          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Great as gifts, souvenirs, collectibles
+          😊 Fully tactile experience<br>
+          😊 No electricity or internet needed<br>
+          😊 Thin profile — easy to store &amp; ship<br>
+          😊 Multiple materials &amp; form factors<br>
+          😊 Great as gifts, souvenirs, collectibles
         </div>
         <div>
-          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Content cannot be changed once printed<br>
-          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Per-unit production cost<br>
-          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Single-use unless laminated
+          😕 Content cannot be changed once printed<br>
+          😕 Per-unit production cost<br>
+          😕 Single-use unless laminated
         </div>
       </div>
     </div>
@@ -457,11 +461,11 @@
 
     <!-- PRINT MODULE -->
     <tr class="section-row"><td colspan="5">Physical Puzzles</td></tr>
-    <tr data-segments="education personal">
+    <tr data-segments="personal">
       <td><div class="use-case">Print puzzles at home or office</div><div class="use-desc">High-res export for paper printing</div></td>
       <td><div class="cell-flex"><span class="mod mod-print">Print</span></div></td>
       <td class="cost"></td>
-      <td><div class="cell-flex"><span class="seg seg-personal">Personal &amp; Family</span><span class="seg seg-education">Education</span></div></td>
+      <td><div class="cell-flex"><span class="seg seg-personal">Personal &amp; Family</span></div></td>
       <td class="example">Party favors, classroom handouts, hobby crafting</td>
     </tr>
     <tr data-segments="business creators">
@@ -470,13 +474,6 @@
       <td class="cost"></td>
       <td><div class="cell-flex"><span class="seg seg-business">Business &amp; Corporate</span><span class="seg seg-creators">Creators &amp; Artists</span></div></td>
       <td class="example">Trade show giveaways, branded merch, print shop catalog</td>
-    </tr>
-    <tr data-segments="creators">
-      <td><div class="use-case">Sell printed puzzles on the Marketplace</div><div class="use-desc">List physical puzzle designs in the Shop</div></td>
-      <td><div class="cell-flex"><span class="mod mod-print">Print</span><span class="mod mod-publish">Publish</span></div></td>
-      <td class="cost"></td>
-      <td><div class="cell-flex"><span class="seg seg-creators">Creators &amp; Artists</span></div></td>
-      <td class="example">Artists monetizing designs, print shops expanding catalog</td>
     </tr>
     <tr data-segments="education health">
       <td><div class="use-case">Printed puzzles for motor skill therapy</div><div class="use-desc">Physical rotating layers as fine motor practice</div></td>
@@ -488,18 +485,11 @@
 
     <!-- PLAY MODULE -->
     <tr class="section-row"><td colspan="5">Online Interactive Puzzles</td></tr>
-    <tr data-segments="creators personal">
-      <td><div class="use-case">Share puzzles online via link or subdomain</div><div class="use-desc">Anyone can play — no install required</div></td>
-      <td><div class="cell-flex"><span class="mod mod-play">Play</span></div></td>
-      <td class="cost"></td>
-      <td><div class="cell-flex"><span class="seg seg-personal">Personal &amp; Family</span><span class="seg seg-creators">Creators &amp; Artists</span></div></td>
-      <td class="example">Social media challenges, portfolios, family sharing</td>
-    </tr>
-    <tr data-segments="creators education">
+    <tr data-segments="creators education venues">
       <td><div class="use-case">Publish a curated puzzle album</div><div class="use-desc">Themed collections for distribution</div></td>
       <td><div class="cell-flex"><span class="mod mod-play">Play</span></div></td>
       <td class="cost"></td>
-      <td><div class="cell-flex"><span class="seg seg-creators">Creators &amp; Artists</span><span class="seg seg-education">Education</span></div></td>
+      <td><div class="cell-flex"><span class="seg seg-creators">Creators &amp; Artists</span><span class="seg seg-education">Education</span><span class="seg seg-venues">Venues &amp; Events</span></div></td>
       <td class="example">Content series, course material, themed sets</td>
     </tr>
     <tr data-segments="business education">
@@ -509,11 +499,11 @@
       <td><div class="cell-flex"><span class="seg seg-education">Education</span><span class="seg seg-business">Business &amp; Corporate</span></div></td>
       <td class="example">Student progress tracking, campaign metrics</td>
     </tr>
-    <tr data-segments="health personal">
+    <tr data-segments="personal">
       <td><div class="use-case">Mindfulness &amp; stress-relief sessions</div><div class="use-desc">Puzzles as a calming, focused activity</div></td>
       <td><div class="cell-flex"><span class="mod mod-play">Play</span></div></td>
       <td class="cost"></td>
-      <td><div class="cell-flex"><span class="seg seg-health">Healthcare &amp; Therapy</span><span class="seg seg-personal">Personal &amp; Family</span></div></td>
+      <td><div class="cell-flex"><span class="seg seg-personal">Personal &amp; Family</span></div></td>
       <td class="example">Wellness apps, self-care routines, mental health support</td>
     </tr>
 
@@ -564,13 +554,6 @@
       <td><div class="cell-flex"><span class="seg seg-personal">Personal &amp; Family</span><span class="seg seg-education">Education</span></div></td>
       <td class="example">Casual users, students, quick prototyping</td>
     </tr>
-    <tr data-segments="business venues">
-      <td><div class="use-case">Batch-generate puzzles for campaigns</div><div class="use-desc">Rapidly produce many themed puzzles at once</div></td>
-      <td><div class="cell-flex"><span class="mod mod-ai">AI</span><span class="mod mod-print">Print</span></div></td>
-      <td class="cost"></td>
-      <td><div class="cell-flex"><span class="seg seg-business">Business &amp; Corporate</span><span class="seg seg-venues">Venues &amp; Events</span></div></td>
-      <td class="example">Marketing campaigns, event-specific puzzle sets</td>
-    </tr>
 
     <!-- PUBLISH -->
     <tr class="section-row"><td colspan="5">Sell on the Marketplace</td></tr>
@@ -581,11 +564,11 @@
       <td><div class="cell-flex"><span class="seg seg-creators">Creators &amp; Artists</span></div></td>
       <td class="example">Graphic designers selling unique cut patterns and templates</td>
     </tr>
-    <tr data-segments="business creators education personal">
-      <td><div class="use-case">Sell puzzle creations</div><div class="use-desc">Anyone can list their finished puzzles on the Shop</div></td>
+    <tr data-segments="creators personal">
+      <td><div class="use-case">Sell puzzle creations</div><div class="use-desc">Anyone can list their puzzle creation on the Shop</div></td>
       <td><div class="cell-flex"><span class="mod mod-publish">Publish</span></div></td>
       <td class="cost"></td>
-      <td><div class="cell-flex"><span class="seg seg-creators">Creators &amp; Artists</span><span class="seg seg-personal">Personal &amp; Family</span><span class="seg seg-business">Business &amp; Corporate</span><span class="seg seg-education">Education</span></div></td>
+      <td><div class="cell-flex"><span class="seg seg-creators">Creators &amp; Artists</span><span class="seg seg-personal">Personal &amp; Family</span></div></td>
       <td class="example">Hobbyists monetizing designs, teachers sharing paid content</td>
     </tr>
 
