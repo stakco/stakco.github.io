@@ -219,30 +219,33 @@
 </header>
 
 <!-- Key Concepts -->
-<div class="key-grid">
+<div class="key-grid" style="margin-bottom:20px;">
+
   <!-- Stakco Puzzle card -->
-  <div class="intro-card" style="margin-bottom:0">
-    <div class="intro-label">Stakco Puzzle</div>
-    <p>A rotating multi-layer puzzle made of 2–5 concentric circular rings.<br>
-    <span style="color:var(--text-muted);font-size:0.82rem">Users rotate each ring to align the pieces and complete an image. Available as printed paper, interactive online, or projected installations.</span></p>
-    <div style="margin-top:14px;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;text-align:center;">
-      <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:8px;">Today's Puzzle</div>
+  <div class="intro-card" style="margin-bottom:0;display:flex;align-items:center;gap:20px;padding:16px 24px;">
+    <div style="flex-shrink:0;width:120px;min-height:80px;display:flex;align-items:center;justify-content:center;">
       <script src="https://cdn.stakcos.com/components/stakco-daily-embed.js"></script>
       <stakco-daily-embed></stakco-daily-embed>
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div class="intro-label">Stakco Puzzle</div>
+      <p>A rotating multi-layer puzzle made of 2–5 concentric circular rings.<br>
+      <span style="color:var(--text-muted);font-size:0.82rem">Users rotate each ring to align the pieces and complete an image. Available as printed paper, interactive online, or projected installations.</span></p>
     </div>
   </div>
 
   <!-- Stakco Stencil card -->
-  <div class="intro-card" style="margin-bottom:0">
-    <div class="intro-label">Stakco Stencil</div>
-    <p>A reusable template that defines a puzzle's layer structure and cut pattern.<br>
-    <span style="color:var(--text-muted);font-size:0.82rem">Creators design or purchase stencils, then apply their own artwork to produce unique puzzles.</span></p>
-    <div style="margin-top:14px;padding:12px;background:var(--bg);border:1px solid var(--border);border-radius:8px;text-align:center;">
-      <div style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);margin-bottom:8px;">Example Stencil</div>
-      <img src="https://storage.googleapis.com/stakco-images/stencils/jigsaw_medium-3.thumb.png" alt="Jigsaw Medium 3-layer stencil" style="max-width:180px;width:100%;height:auto;border-radius:6px;">
-      <div style="font-size:0.68rem;color:var(--text-muted);margin-top:6px;">Jigsaw Medium · 3 layers</div>
+  <div class="intro-card" style="margin-bottom:0;display:flex;align-items:center;gap:20px;padding:16px 24px;">
+    <div style="flex-shrink:0;width:120px;min-height:80px;display:flex;align-items:center;justify-content:center;">
+      <img src="https://storage.googleapis.com/stakco-images/stencils/jigsaw_medium-3.thumb.png" alt="Stakco Stencil" style="max-width:100px;width:100%;height:auto;border-radius:6px;">
+    </div>
+    <div style="flex:1;min-width:0;">
+      <div class="intro-label">Stakco Stencil</div>
+      <p>A reusable template that defines a puzzle's layer structure and cut pattern.<br>
+      <span style="color:var(--text-muted);font-size:0.82rem">Creators design or purchase stencils, then apply their own artwork to produce unique puzzles.</span></p>
     </div>
   </div>
+
 </div>
 
 <!-- Platform -->
