@@ -155,9 +155,14 @@
 
   /* Steps */
   .guide-progress { display:flex; gap:6px; margin-bottom:20px; }
-  .guide-dot { width:100%; height:3px; border-radius:2px; background:var(--border); transition:background 0.3s; }
-  .guide-dot.done { background:linear-gradient(135deg,#e8912a,#d43a7a); }
-  .guide-dot.current { background:rgba(0,0,0,0.15); }
+  .guide-dot { width:100%; height:3px; border-radius:2px; background:var(--border); position:relative; overflow:hidden; }
+  .guide-dot .fill {
+    position:absolute; top:0; left:0; height:100%; width:0%;
+    background:linear-gradient(135deg,#e8912a,#d43a7a);
+    border-radius:2px; transition:width 0.15s;
+  }
+  .guide-dot.done .fill { width:100% !important; }
+  .guide-dot.filling .fill { transition:width linear; }
 
   .guide-step { display:none; }
   .guide-step.active { display:block; }
@@ -399,9 +404,9 @@
   </div>
 
   <div class="guide-progress" id="guideProgress">
-    <div class="guide-dot current"></div>
-    <div class="guide-dot"></div>
-    <div class="guide-dot"></div>
+    <div class="guide-dot" data-dot="1"><div class="fill"></div></div>
+    <div class="guide-dot" data-dot="2"><div class="fill"></div></div>
+    <div class="guide-dot" data-dot="3"><div class="fill"></div></div>
   </div>
 
   <!-- Step 1 -->
@@ -693,8 +698,11 @@
 
   let currentStep = 1;
   const totalSteps = 3;
-  // guideSelections[step] = Set of segment keys
   let guideSelections = { 1: new Set(), 2: new Set(), 3: new Set() };
+  const AUTO_ADVANCE_MS = 5000;
+  let autoTimer = null;
+  let fillStartTime = null;
+  let fillAnimFrame = null;
 
   const dots = document.querySelectorAll('.guide-dot');
   const steps = document.querySelectorAll('.guide-step');
@@ -710,10 +718,64 @@
 
   function updateDots() {
     dots.forEach((dot, i) => {
-      dot.classList.remove('done', 'current');
-      if (i < currentStep - 1) dot.classList.add('done');
-      else if (i === currentStep - 1) dot.classList.add('current');
+      dot.classList.remove('done', 'filling');
+      const fill = dot.querySelector('.fill');
+      if (i < currentStep - 1) {
+        dot.classList.add('done');
+        fill.style.width = '100%';
+        fill.style.transitionDuration = '';
+      } else if (i > currentStep - 1) {
+        fill.style.width = '0%';
+        fill.style.transitionDuration = '';
+      }
     });
+  }
+
+  function clearAutoTimer() {
+    if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+    if (fillAnimFrame) { cancelAnimationFrame(fillAnimFrame); fillAnimFrame = null; }
+    fillStartTime = null;
+  }
+
+  function startAutoTimer() {
+    clearAutoTimer();
+    // Only auto-advance if current step has selections
+    if (guideSelections[currentStep].size === 0) return;
+
+    const dot = dots[currentStep - 1];
+    const fill = dot.querySelector('.fill');
+    dot.classList.add('filling');
+
+    // Animate fill from 0 to 100% over AUTO_ADVANCE_MS
+    fill.style.transitionDuration = '0s';
+    fill.style.width = '0%';
+    fillStartTime = performance.now();
+
+    function animate(now) {
+      const elapsed = now - fillStartTime;
+      const pct = Math.min((elapsed / AUTO_ADVANCE_MS) * 100, 100);
+      fill.style.width = pct + '%';
+      if (pct < 100) {
+        fillAnimFrame = requestAnimationFrame(animate);
+      }
+    }
+    fillAnimFrame = requestAnimationFrame(animate);
+
+    autoTimer = setTimeout(() => {
+      fill.style.width = '100%';
+      if (currentStep < totalSteps) {
+        guideNext();
+      } else {
+        guideSubmit();
+      }
+    }, AUTO_ADVANCE_MS);
+  }
+
+  function resetCurrentDotFill() {
+    const dot = dots[currentStep - 1];
+    const fill = dot.querySelector('.fill');
+    fill.style.width = '0%';
+    dot.classList.remove('filling');
   }
 
   function updateNavButtons() {
@@ -723,6 +785,7 @@
   }
 
   function showStep(n) {
+    clearAutoTimer();
     currentStep = n;
     steps.forEach(s => s.classList.remove('active'));
     resultEl.classList.remove('active');
@@ -732,6 +795,8 @@
     retakeBtn.style.display = 'none';
     updateDots();
     updateNavButtons();
+    // If this step already has selections, start the timer
+    if (guideSelections[currentStep].size > 0) startAutoTimer();
   }
 
   // Multi-select: toggle on click
@@ -746,6 +811,14 @@
       } else {
         opt.classList.add('selected');
         guideSelections[step].add(seg);
+      }
+
+      // Reset and restart timer on every click
+      if (guideSelections[step].size > 0) {
+        startAutoTimer();
+      } else {
+        clearAutoTimer();
+        resetCurrentDotFill();
       }
     });
   });
@@ -763,8 +836,9 @@
   }
 
   function showResult() {
+    clearAutoTimer();
     steps.forEach(s => s.classList.remove('active'));
-    dots.forEach(d => { d.classList.add('done'); d.classList.remove('current'); });
+    dots.forEach(d => { d.classList.add('done'); d.classList.remove('filling'); d.querySelector('.fill').style.width = '100%'; });
     progressEl.style.display = 'none';
     resultEl.classList.add('active');
     navBtns.style.display = 'none';
@@ -804,12 +878,14 @@
     showResult();
   };
   window.resetGuide = function() {
+    clearAutoTimer();
     currentStep = 1;
     guideSelections = { 1: new Set(), 2: new Set(), 3: new Set() };
     retakeBtn.style.display = 'none';
     progressEl.style.display = 'flex';
     resultEl.classList.remove('active');
     document.querySelectorAll('.guide-opt').forEach(o => o.classList.remove('selected'));
+    dots.forEach(d => { d.classList.remove('done','filling'); d.querySelector('.fill').style.width = '0%'; });
     activeFilters.clear();
     applyFilter();
     showStep(1);
