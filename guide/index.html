@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<title>Stakco — Who Buys What & Why</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f6f9;
+    --card: #ffffff;
+    --row-alt: #fafafc;
+    --hover: #f0f0f5;
+    --orange: #c87a1a;
+    --pink: #be3070;
+    --green: #16805a;
+    --blue: #2563b8;
+    --purple: #6d4daa;
+    --cyan: #0d7f94;
+    --amber: #9a7209;
+    --text: #1a1a2e;
+    --text-sub: #444455;
+    --text-muted: #8888a0;
+    --border: rgba(0,0,0,0.07);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.55; }
+
+  .container { max-width:1200px; margin:0 auto; padding:48px 32px 64px; }
+
+  header { margin-bottom:40px; text-align:center; }
+  header h1 { font-size:1.75rem; font-weight:700; color:var(--text); margin-bottom:6px; }
+  header h1 span { background:linear-gradient(135deg,#e8912a,#d43a7a); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+  header p { color:var(--text-sub); font-size:0.95rem; max-width:700px; line-height:1.6; margin:0 auto; }
+
+  /* Intro card */
+  .intro-card { margin-bottom:20px; padding:22px 24px; background:var(--card); border:1px solid var(--border); border-radius:10px; }
+  .intro-card .intro-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:6px; }
+  .intro-card p { color:var(--text-sub); font-size:0.88rem; line-height:1.55; margin:0; }
+  .intro-card strong { color:var(--text); font-weight:600; }
+
+  /* Key cards */
+  .key-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:32px; }
+  .key-card { padding:20px 24px; background:var(--card); border:1px solid var(--border); border-radius:10px; display:flex; flex-direction:column; gap:10px; }
+  .key-card-title { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); }
+  .key-items { display:flex; flex-wrap:wrap; gap:6px; }
+  @media (max-width:640px) { .key-grid { grid-template-columns:1fr; } }
+
+  .mod {
+    font-family:'JetBrains Mono',monospace;
+    font-size:0.68rem; font-weight:600;
+    padding:3px 9px; border-radius:5px; white-space:nowrap;
+  }
+  .mod-print   { background:rgba(200,122,26,0.08); color:var(--orange); }
+  .mod-play    { background:rgba(190,48,112,0.08); color:var(--pink); }
+  .mod-light   { background:rgba(154,114,9,0.08); color:var(--amber); }
+  .mod-publish { background:rgba(22,128,90,0.08); color:var(--green); }
+  .mod-ai      { background:rgba(109,77,170,0.08); color:var(--purple); }
+  .mod-dev     { background:rgba(13,127,148,0.08); color:var(--cyan); }
+
+  .seg {
+    font-size:0.68rem; font-weight:500;
+    padding:2px 9px; border-radius:999px; white-space:nowrap;
+  }
+  .seg-creators  { background:rgba(190,48,112,0.07); color:#a82864; border:1px solid rgba(190,48,112,0.15); }
+  .seg-business  { background:rgba(37,99,184,0.07); color:#1f55a0; border:1px solid rgba(37,99,184,0.15); }
+  .seg-education { background:rgba(22,128,90,0.07); color:#12704e; border:1px solid rgba(22,128,90,0.15); }
+  .seg-venues    { background:rgba(154,114,9,0.07); color:#7a5c09; border:1px solid rgba(154,114,9,0.15); }
+  .seg-devs      { background:rgba(13,127,148,0.07); color:#0a6e80; border:1px solid rgba(13,127,148,0.15); }
+  .seg-personal  { background:rgba(109,77,170,0.07); color:#5d3f96; border:1px solid rgba(109,77,170,0.15); }
+  .seg-health    { background:rgba(20,145,130,0.07); color:#0e7a6e; border:1px solid rgba(20,145,130,0.15); }
+
+  /* Table */
+  table { width:100%; border-collapse:separate; border-spacing:0; border-radius:10px; overflow:hidden; background:var(--card); border:1px solid var(--border); table-layout:fixed; }
+  thead th {
+    padding:12px 16px; font-size:0.67rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--text-muted); background:#f2f2f6;
+    border-bottom:1px solid var(--border); text-align:left;
+    position:sticky; top:0; z-index:10;
+  }
+  thead th:first-child { padding-left:20px; }
+
+  .section-row td {
+    padding:22px 16px 8px; font-size:0.72rem; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.08em;
+    color:var(--orange); border-bottom:2px solid rgba(200,122,26,0.25);
+    background:transparent !important;
+  }
+
+  tbody tr { transition:background 0.12s; }
+  tbody tr:hover:not(.section-row) { background:var(--hover); }
+  tbody tr:nth-child(even):not(.section-row) { background:var(--row-alt); }
+  tbody tr:nth-child(even):not(.section-row):hover { background:var(--hover); }
+
+  td { padding:11px 16px; font-size:0.85rem; border-bottom:1px solid var(--border); vertical-align:top; }
+  td:first-child { padding-left:20px; }
+
+  .use-case { color:var(--text); font-weight:500; }
+  .use-desc { color:var(--text-sub); font-size:0.8rem; margin-top:2px; }
+  .example  { color:var(--text-sub); font-size:0.8rem; font-style:italic; }
+
+  .cell-flex { display:flex; flex-wrap:wrap; gap:4px; }
+
+  /* Cost column */
+  .cost { font-family:'JetBrains Mono',monospace; font-size:0.75rem; color:var(--text-sub); }
+  .cost-stack { display:flex; flex-direction:column; gap:4px; }
+  .cost-item { white-space:nowrap; }
+  .cost-type { font-size:0.62rem; color:var(--text-muted); font-family:'DM Sans',sans-serif; }
+
+  /* Filter bar */
+  .filter-bar { margin-bottom:20px; padding:18px 24px; background:var(--card); border:1px solid var(--border); border-radius:10px; }
+  .filter-bar .filter-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:10px; }
+  .filter-bar .filter-pills { display:flex; flex-wrap:wrap; gap:8px; }
+  .filter-pill {
+    font-size:0.75rem; font-weight:500; padding:6px 14px; border-radius:999px;
+    cursor:pointer; user-select:none; transition:all 0.15s;
+  }
+  .filter-pill:hover { opacity:0.85; }
+  .filter-pill[data-filter="all"]       { border:1px solid var(--border); background:var(--bg); color:var(--text-sub); }
+  .filter-pill[data-filter="all"].active { background:var(--text); color:#fff; border-color:var(--text); }
+  .filter-pill[data-filter="personal"]       { border:1px solid rgba(109,77,170,0.2); background:rgba(109,77,170,0.05); color:#5d3f96; }
+  .filter-pill[data-filter="personal"].active { background:#5d3f96; color:#fff; border-color:#5d3f96; }
+  .filter-pill[data-filter="creators"]       { border:1px solid rgba(190,48,112,0.2); background:rgba(190,48,112,0.05); color:#a82864; }
+  .filter-pill[data-filter="creators"].active { background:#a82864; color:#fff; border-color:#a82864; }
+  .filter-pill[data-filter="business"]       { border:1px solid rgba(37,99,184,0.2); background:rgba(37,99,184,0.05); color:#1f55a0; }
+  .filter-pill[data-filter="business"].active { background:#1f55a0; color:#fff; border-color:#1f55a0; }
+  .filter-pill[data-filter="education"]       { border:1px solid rgba(22,128,90,0.2); background:rgba(22,128,90,0.05); color:#12704e; }
+  .filter-pill[data-filter="education"].active { background:#12704e; color:#fff; border-color:#12704e; }
+  .filter-pill[data-filter="venues"]       { border:1px solid rgba(154,114,9,0.2); background:rgba(154,114,9,0.05); color:#7a5c09; }
+  .filter-pill[data-filter="venues"].active { background:#7a5c09; color:#fff; border-color:#7a5c09; }
+  .filter-pill[data-filter="health"]       { border:1px solid rgba(20,145,130,0.2); background:rgba(20,145,130,0.05); color:#0e7a6e; }
+  .filter-pill[data-filter="health"].active { background:#0e7a6e; color:#fff; border-color:#0e7a6e; }
+  .filter-pill[data-filter="devs"]       { border:1px solid rgba(13,127,148,0.2); background:rgba(13,127,148,0.05); color:#0a6e80; }
+  .filter-pill[data-filter="devs"].active { background:#0a6e80; color:#fff; border-color:#0a6e80; }
+  
+  /* Hidden rows */
+  tr.hidden-row { display:none; }
+
+  /* Smart Guide */
+  .guide-card { margin-bottom:16px; padding:24px; background:var(--card); border:1px solid var(--border); border-radius:10px; position:relative; }
+  .guide-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  .guide-header-left { display:flex; align-items:center; gap:10px; }
+  .guide-icon { width:32px; height:32px; border-radius:8px; background:linear-gradient(135deg,#e8912a,#d43a7a); display:flex; align-items:center; justify-content:center; color:#fff; font-size:0.85rem; flex-shrink:0; }
+  .guide-title { font-size:0.95rem; font-weight:700; color:var(--text); }
+  .guide-subtitle { font-size:0.78rem; color:var(--text-muted); }
+  .guide-retake { font-size:0.72rem; color:var(--text-muted); cursor:pointer; padding:5px 12px; border-radius:6px; border:1px solid var(--border); background:var(--bg); transition:all 0.15s; }
+  .guide-retake:hover { border-color:rgba(0,0,0,0.15); color:var(--text-sub); }
+  .guide-header-right { display:flex; align-items:center; gap:8px; }
+
+  /* Steps */
+  .guide-progress { display:flex; gap:6px; margin-bottom:20px; }
+  .guide-dot { width:100%; height:3px; border-radius:2px; background:var(--border); transition:background 0.3s; }
+  .guide-dot.done { background:linear-gradient(135deg,#e8912a,#d43a7a); }
+  .guide-dot.current { background:rgba(0,0,0,0.15); }
+
+  .guide-step { display:none; }
+  .guide-step.active { display:block; }
+  .guide-question { font-size:0.95rem; font-weight:600; color:var(--text); margin-bottom:14px; }
+  .guide-options { display:flex; flex-wrap:wrap; gap:8px; }
+  .guide-opt {
+    font-size:0.8rem; font-weight:500; padding:8px 16px; border-radius:8px;
+    cursor:pointer; user-select:none; transition:all 0.15s;
+    border:1px solid var(--border); background:var(--bg); color:var(--text-sub);
+  }
+  .guide-opt:hover { border-color:rgba(0,0,0,0.15); background:#eeeef3; }
+  .guide-opt.selected { background:var(--text); color:#fff; border-color:var(--text); }
+  .guide-hint { font-size:0.72rem; color:var(--text-muted); margin-top:6px; font-style:italic; }
+
+  /* Nav buttons */
+  .guide-nav { display:flex; align-items:center; justify-content:space-between; margin-top:18px; }
+  .guide-btn {
+    font-family:'DM Sans',sans-serif; font-size:0.8rem; font-weight:600;
+    padding:8px 20px; border-radius:8px; cursor:pointer; transition:all 0.15s; border:none;
+  }
+  .guide-btn:disabled { opacity:0.35; cursor:not-allowed; }
+  .guide-btn-prev {
+    background:var(--bg); color:var(--text-sub); border:1px solid var(--border);
+  }
+  .guide-btn-prev:hover:not(:disabled) { background:#eeeef3; }
+  .guide-btn-next {
+    background:var(--text); color:#fff;
+  }
+  .guide-btn-next:hover:not(:disabled) { opacity:0.88; }
+  .guide-btn-submit {
+    background:linear-gradient(135deg,#e8912a,#d43a7a); color:#fff;
+  }
+  .guide-btn-submit:hover:not(:disabled) { opacity:0.88; }
+  .guide-step-label { font-size:0.72rem; color:var(--text-muted); font-weight:500; }
+
+  /* Result */
+  .guide-result { display:none; }
+  .guide-result.active { display:block; }
+  .guide-result-label { font-size:0.72rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
+  .guide-result-pills { display:flex; flex-wrap:wrap; gap:6px; }
+
+  .footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--border); font-size:0.78rem; color:var(--text-muted); }
+
+  @media (max-width:768px) {
+    .container { padding:24px 16px 48px; }
+    header h1 { font-size:1.3rem; }
+    .key-row { gap:16px; padding:14px 16px; }
+    td, thead th { padding:9px 10px; font-size:0.8rem; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco" style="width:48px;height:auto;margin:0 auto 12px;">
+  <h1><span>Stakco</span> — Who Buys What &amp; Why</h1>
+  <p>Every Stakco customer starts with a free Studio account. Paid modules unlock specific capabilities. This maps real customer needs to the modules they'd purchase and the audience they represent.</p>
+</header>
+
+<!-- Key Concepts -->
+<div class="intro-card">
+  <div class="intro-label">Key Concepts</div>
+  <p><strong>Stakco Puzzle</strong> — A rotating multi-layer puzzle made of 2–5 concentric circular rings.<br>
+  <span style="color:var(--text-muted);font-size:0.82rem">Users rotate each ring to align the pieces and complete an image. Available as printed paper, interactive online, or projected installations.</span></p>
+  <p style="margin-top:10px"><strong>Stakco Stencil</strong> — A reusable template that defines a puzzle's layer structure and cut pattern.<br>
+  <span style="color:var(--text-muted);font-size:0.82rem">Creators design or purchase stencils, then apply their own artwork to produce unique puzzles.</span></p>
+</div>
+
+<!-- Platform -->
+<div class="intro-card">
+  <div class="intro-label">The Stakco Platform</div>
+  <p><strong>Stakco Studio</strong> — Free web-based tool for designing puzzles using stencils.<br>
+  <span style="color:var(--text-muted);font-size:0.82rem">Paid modules unlock additional capabilities — printing, online publishing, projection, AI generation, marketplace selling, and developer integration.</span></p>
+  <p style="margin-top:10px"><strong>Stakco Play</strong> — Online platform where published puzzles are played in the browser.<br>
+  <span style="color:var(--text-muted);font-size:0.82rem">Creators share interactive puzzles via links or custom subdomains. Players solve them directly — no install required.</span></p>
+  <p style="margin-top:10px"><strong>Stakco Shop</strong> — Marketplace for modules, stencils, printed puzzles, and community designs.<br>
+  <span style="color:var(--text-muted);font-size:0.82rem">Users browse and purchase add-ons to power up Studio. Creators list and sell their own work here.</span></p>
+</div>
+
+<!-- Product Forms -->
+<div class="intro-card" style="padding-bottom:20px">
+  <div class="intro-label">Stakco Product Forms</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:10px">
+
+    <!-- Play -->
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <div style="font-weight:700;font-size:0.88rem;color:var(--text);margin-bottom:2px">Stakco Play</div>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:10px">Digital · Browser-based</div>
+      <div style="font-size:0.78rem;color:var(--text-sub);line-height:1.5">
+        <div style="margin-bottom:6px">
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> No physical materials needed<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Content dynamically updatable<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Shareable via link — instant access<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Analytics and engagement tracking<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Accessible on any device
+        </div>
+        <div>
+          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> No tangible interface<br>
+          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Requires internet connection<br>
+          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Screen-dependent experience
+        </div>
+      </div>
+    </div>
+
+    <!-- Light -->
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <div style="font-weight:700;font-size:0.88rem;color:var(--text);margin-bottom:2px">Stakco Light</div>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:10px">Hybrid · Projection / Kiosk</div>
+      <div style="font-size:0.78rem;color:var(--text-sub);line-height:1.5">
+        <div style="margin-bottom:6px">
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Tangible, physical interaction<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Content remotely updatable<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Scalable to any surface size<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Multi-user simultaneous play<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Therapeutic &amp; calming visual effect
+        </div>
+        <div>
+          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Requires projector or display hardware<br>
+          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Needs power &amp; installation<br>
+          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Fixed location setup
+        </div>
+      </div>
+    </div>
+
+    <!-- Paper -->
+    <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:16px">
+      <div style="font-weight:700;font-size:0.88rem;color:var(--text);margin-bottom:2px">Stakco Paper</div>
+      <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:10px">Physical · Printed</div>
+      <div style="font-size:0.78rem;color:var(--text-sub);line-height:1.5">
+        <div style="margin-bottom:6px">
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Fully tactile experience<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> No electricity or internet needed<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Thin profile — easy to store &amp; ship<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Multiple materials &amp; form factors<br>
+          <span style="color:#12704e;font-weight:600;font-size:0.7rem">✓</span> Great as gifts, souvenirs, collectibles
+        </div>
+        <div>
+          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Content cannot be changed once printed<br>
+          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Per-unit production cost<br>
+          <span style="color:#b33030;font-weight:600;font-size:0.7rem">✗</span> Single-use unless laminated
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Key: Modules -->
+<div class="key-grid">
+  <div class="key-card">
+    <div class="key-card-title">Paid Add-On Modules</div>
+    <div class="key-items">
+      <span class="mod mod-print">Print</span> <span style="font-size:0.75rem;color:var(--text-muted)">Export for paper</span>
+    </div>
+    <div class="key-items">
+      <span class="mod mod-play">Play</span> <span style="font-size:0.75rem;color:var(--text-muted)">Publish online</span>
+    </div>
+    <div class="key-items">
+      <span class="mod mod-light">Light</span> <span style="font-size:0.75rem;color:var(--text-muted)">Projection &amp; kiosks</span>
+    </div>
+    <div class="key-items">
+      <span class="mod mod-publish">Publish</span> <span style="font-size:0.75rem;color:var(--text-muted)">Sell on marketplace</span>
+    </div>
+    <div class="key-items">
+      <span class="mod mod-ai">AI</span> <span style="font-size:0.75rem;color:var(--text-muted)">Generate from text</span>
+    </div>
+    <div class="key-items">
+      <span class="mod mod-dev">Dev</span> <span style="font-size:0.75rem;color:var(--text-muted)">SDK &amp; API access</span>
+    </div>
+  </div>
+
+  <!-- Key: Segments -->
+  <div class="key-card">
+    <div class="key-card-title">Customer Segments</div>
+    <div class="key-items">
+      <span class="seg seg-personal">Personal &amp; Family</span> <span style="font-size:0.75rem;color:var(--text-muted)">Hobbyists, parents, casual users</span>
+    </div>
+    <div class="key-items">
+      <span class="seg seg-creators">Creators &amp; Artists</span> <span style="font-size:0.75rem;color:var(--text-muted)">Designers, influencers, freelancers</span>
+    </div>
+    <div class="key-items">
+      <span class="seg seg-business">Business &amp; Corporate</span> <span style="font-size:0.75rem;color:var(--text-muted)">Marketing teams, HR, agencies</span>
+    </div>
+    <div class="key-items">
+      <span class="seg seg-education">Education</span> <span style="font-size:0.75rem;color:var(--text-muted)">Teachers, schools, workshops</span>
+    </div>
+    <div class="key-items">
+      <span class="seg seg-venues">Venues &amp; Events</span> <span style="font-size:0.75rem;color:var(--text-muted)">Museums, hotels, exhibitions</span>
+    </div>
+    <div class="key-items">
+      <span class="seg seg-devs">Developers</span> <span style="font-size:0.75rem;color:var(--text-muted)">App builders, SaaS platforms</span>
+    </div>
+    <div class="key-items">
+      <span class="seg seg-health">Healthcare &amp; Therapy</span> <span style="font-size:0.75rem;color:var(--text-muted)">Hospitals, clinics, special needs schools</span>
+    </div>
+  </div>
+</div>
+
+<!-- Smart Guide -->
+<div class="guide-card" id="guideCard">
+  <div class="guide-header">
+    <div class="guide-header-left">
+      <div class="guide-icon"><img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="" style="width:20px;height:auto;"></div>
+      <div>
+        <div class="guide-title">Smart Guide</div>
+        <div class="guide-subtitle">Find the right <strong>Stakco Studio</strong> modules</div>
+      </div>
+    </div>
+    <div class="guide-header-right" id="guideHeaderRight">
+      <div id="guideNavBtns" style="display:flex;align-items:center;gap:8px;">
+        <button class="guide-btn guide-btn-prev" id="guidePrevBtn" onclick="guidePrev()" style="display:none">← Back</button>
+        <button class="guide-btn guide-btn-next" id="guideNextBtn" onclick="guideNext()">Next →</button>
+        <button class="guide-btn guide-btn-submit" id="guideSubmitBtn" onclick="guideSubmit()" style="display:none">Show Results ✦</button>
+      </div>
+      <button class="guide-btn guide-btn-prev" id="guideRetake" style="display:none" onclick="resetGuide()">↻ Re-assess</button>
+    </div>
+  </div>
+
+  <div class="guide-progress" id="guideProgress">
+    <div class="guide-dot current"></div>
+    <div class="guide-dot"></div>
+    <div class="guide-dot"></div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="guide-step active" data-step="1">
+    <div class="guide-question">I am a...</div>
+    <div class="guide-options">
+      <span class="guide-opt" data-segments="personal">Hobbyist / Parent</span>
+      <span class="guide-opt" data-segments="creators">Creator / Artist</span>
+      <span class="guide-opt" data-segments="business">Business Professional</span>
+      <span class="guide-opt" data-segments="education">Educator</span>
+      <span class="guide-opt" data-segments="venues">Venue Operator</span>
+      <span class="guide-opt" data-segments="health">Healthcare Provider</span>
+      <span class="guide-opt" data-segments="devs">Developer</span>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="guide-step" data-step="2">
+    <div class="guide-question">I want to use Stakco for...</div>
+    <div class="guide-options">
+      <span class="guide-opt" data-segments="personal">Fun &amp; Family Activities</span>
+      <span class="guide-opt" data-segments="creators">Creating &amp; Selling Art</span>
+      <span class="guide-opt" data-segments="business">Branding &amp; Marketing</span>
+      <span class="guide-opt" data-segments="education">Teaching &amp; Learning</span>
+      <span class="guide-opt" data-segments="venues">Public Installations</span>
+      <span class="guide-opt" data-segments="health">Therapy &amp; Wellbeing</span>
+      <span class="guide-opt" data-segments="devs">Apps &amp; Integrations</span>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="guide-step" data-step="3">
+    <div class="guide-question">My main goal is to...</div>
+    <div class="guide-options">
+      <span class="guide-opt" data-segments="personal">Enjoy &amp; Share With Family</span>
+      <span class="guide-opt" data-segments="creators">Create &amp; Monetize</span>
+      <span class="guide-opt" data-segments="business">Promote My Brand</span>
+      <span class="guide-opt" data-segments="education">Engage My Students</span>
+      <span class="guide-opt" data-segments="venues">Wow My Visitors</span>
+      <span class="guide-opt" data-segments="health">Support Patient Wellbeing</span>
+      <span class="guide-opt" data-segments="devs">Build With Puzzles</span>
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div class="guide-result" id="guideResult">
+    <div class="guide-result-pills" id="guideResultPills"></div>
+  </div>
+</div>
+
+<!-- Filter -->
+<div class="filter-bar">
+  <div class="filter-label">Filter by segment</div>
+  <div class="filter-pills">
+    <span class="filter-pill active" data-filter="all">All</span>
+    <span class="filter-pill" data-filter="personal">Personal &amp; Family</span>
+    <span class="filter-pill" data-filter="creators">Creators &amp; Artists</span>
+    <span class="filter-pill" data-filter="business">Business &amp; Corporate</span>
+    <span class="filter-pill" data-filter="education">Education</span>
+    <span class="filter-pill" data-filter="venues">Venues &amp; Events</span>
+    <span class="filter-pill" data-filter="health">Healthcare &amp; Therapy</span>
+    <span class="filter-pill" data-filter="devs">Developers</span>
+  </div>
+</div>
+
+<!-- Table -->
+<table>
+  <thead>
+    <tr>
+      <th style="width:34%">What they might need</th>
+      <th style="width:13%">Modules</th>
+      <th style="width:9%">Cost</th>
+      <th style="width:22%">Who needs this</th>
+      <th style="width:22%">Real-world example</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- PRINT MODULE -->
+    <tr class="section-row"><td colspan="5">Physical Puzzles</td></tr>
+    <tr data-segments="education personal">
+      <td><div class="use-case">Print puzzles at home or office</div><div class="use-desc">High-res export for paper printing</div></td>
+      <td><div class="cell-flex"><span class="mod mod-print">Print</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-personal">Personal &amp; Family</span><span class="seg seg-education">Education</span></div></td>
+      <td class="example">Party favors, classroom handouts, hobby crafting</td>
+    </tr>
+    <tr data-segments="business creators">
+      <td><div class="use-case">Produce branded or bulk puzzles</div><div class="use-desc">Professional-quality printing for merch or resale</div></td>
+      <td><div class="cell-flex"><span class="mod mod-print">Print</span><span class="mod mod-ai">AI</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-business">Business &amp; Corporate</span><span class="seg seg-creators">Creators &amp; Artists</span></div></td>
+      <td class="example">Trade show giveaways, branded merch, print shop catalog</td>
+    </tr>
+    <tr data-segments="creators">
+      <td><div class="use-case">Sell printed puzzles on the Marketplace</div><div class="use-desc">List physical puzzle designs in the Shop</div></td>
+      <td><div class="cell-flex"><span class="mod mod-print">Print</span><span class="mod mod-publish">Publish</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-creators">Creators &amp; Artists</span></div></td>
+      <td class="example">Artists monetizing designs, print shops expanding catalog</td>
+    </tr>
+    <tr data-segments="education health">
+      <td><div class="use-case">Printed puzzles for motor skill therapy</div><div class="use-desc">Physical rotating layers as fine motor practice</div></td>
+      <td><div class="cell-flex"><span class="mod mod-print">Print</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-health">Healthcare &amp; Therapy</span><span class="seg seg-education">Education</span></div></td>
+      <td class="example">OT clinics, paediatric therapy, hand rehab</td>
+    </tr>
+
+    <!-- PLAY MODULE -->
+    <tr class="section-row"><td colspan="5">Online Interactive Puzzles</td></tr>
+    <tr data-segments="creators personal">
+      <td><div class="use-case">Share puzzles online via link or subdomain</div><div class="use-desc">Anyone can play — no install required</div></td>
+      <td><div class="cell-flex"><span class="mod mod-play">Play</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-personal">Personal &amp; Family</span><span class="seg seg-creators">Creators &amp; Artists</span></div></td>
+      <td class="example">Social media challenges, portfolios, family sharing</td>
+    </tr>
+    <tr data-segments="creators education">
+      <td><div class="use-case">Publish a curated puzzle album</div><div class="use-desc">Themed collections for distribution</div></td>
+      <td><div class="cell-flex"><span class="mod mod-play">Play</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-creators">Creators &amp; Artists</span><span class="seg seg-education">Education</span></div></td>
+      <td class="example">Content series, course material, themed sets</td>
+    </tr>
+    <tr data-segments="business education">
+      <td><div class="use-case">Track puzzle engagement analytics</div><div class="use-desc">Completion rates, time spent, popular content</div></td>
+      <td><div class="cell-flex"><span class="mod mod-play">Play</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-education">Education</span><span class="seg seg-business">Business &amp; Corporate</span></div></td>
+      <td class="example">Student progress tracking, campaign metrics</td>
+    </tr>
+    <tr data-segments="health personal">
+      <td><div class="use-case">Mindfulness &amp; stress-relief sessions</div><div class="use-desc">Puzzles as a calming, focused activity</div></td>
+      <td><div class="cell-flex"><span class="mod mod-play">Play</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-health">Healthcare &amp; Therapy</span><span class="seg seg-personal">Personal &amp; Family</span></div></td>
+      <td class="example">Wellness apps, self-care routines, mental health support</td>
+    </tr>
+
+    <!-- LIGHT MODULE -->
+    <tr class="section-row"><td colspan="5">Projection, Installations, Therapy</td></tr>
+    <tr data-segments="education health venues">
+      <td><div class="use-case">Display puzzles on projection or kiosk</div><div class="use-desc">Deploy to large screens or digital signage</div></td>
+      <td><div class="cell-flex"><span class="mod mod-light">Light</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-venues">Venues &amp; Events</span><span class="seg seg-education">Education</span><span class="seg seg-health">Healthcare &amp; Therapy</span></div></td>
+      <td class="example">Museum wall, STEM lab, hospital common area</td>
+    </tr>
+    <tr data-segments="business venues">
+      <td><div class="use-case">Rotate seasonal puzzle displays</div><div class="use-desc">Schedule changing themes automatically</div></td>
+      <td><div class="cell-flex"><span class="mod mod-light">Light</span><span class="mod mod-ai">AI</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-venues">Venues &amp; Events</span><span class="seg seg-business">Business &amp; Corporate</span></div></td>
+      <td class="example">Museum seasons, hotel lobbies, trade show booths</td>
+    </tr>
+    <tr data-segments="education health">
+      <td><div class="use-case">Sensory &amp; calming therapy for special needs</div><div class="use-desc">Projected puzzles for sensory rooms and therapy</div></td>
+      <td><div class="cell-flex"><span class="mod mod-light">Light</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-health">Healthcare &amp; Therapy</span><span class="seg seg-education">Education</span></div></td>
+      <td class="example">Autism therapy centres, special needs schools</td>
+    </tr>
+    <tr data-segments="health">
+      <td><div class="use-case">Patient relaxation &amp; cognitive engagement</div><div class="use-desc">Calming visual activity for recovery and elderly care</div></td>
+      <td><div class="cell-flex"><span class="mod mod-light">Light</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-health">Healthcare &amp; Therapy</span></div></td>
+      <td class="example">Hospital wards, rehab centres, aged care homes</td>
+    </tr>
+    <tr data-segments="business health venues">
+      <td><div class="use-case">Entertainment &amp; infotainment displays</div><div class="use-desc">Engaging visual experiences for public spaces</div></td>
+      <td><div class="cell-flex"><span class="mod mod-light">Light</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-venues">Venues &amp; Events</span><span class="seg seg-business">Business &amp; Corporate</span><span class="seg seg-health">Healthcare &amp; Therapy</span></div></td>
+      <td class="example">Hotel lobbies, waiting rooms, visitor centres</td>
+    </tr>
+
+    <!-- AI -->
+    <tr class="section-row"><td colspan="5">Automated Puzzle Creation</td></tr>
+    <tr data-segments="education personal">
+      <td><div class="use-case">Generate puzzles from text description</div><div class="use-desc">No design skills needed — AI creates the art</div></td>
+      <td><div class="cell-flex"><span class="mod mod-ai">AI</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-personal">Personal &amp; Family</span><span class="seg seg-education">Education</span></div></td>
+      <td class="example">Casual users, students, quick prototyping</td>
+    </tr>
+    <tr data-segments="business venues">
+      <td><div class="use-case">Batch-generate puzzles for campaigns</div><div class="use-desc">Rapidly produce many themed puzzles at once</div></td>
+      <td><div class="cell-flex"><span class="mod mod-ai">AI</span><span class="mod mod-print">Print</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-business">Business &amp; Corporate</span><span class="seg seg-venues">Venues &amp; Events</span></div></td>
+      <td class="example">Marketing campaigns, event-specific puzzle sets</td>
+    </tr>
+
+    <!-- PUBLISH -->
+    <tr class="section-row"><td colspan="5">Sell on the Marketplace</td></tr>
+    <tr data-segments="creators">
+      <td><div class="use-case">Sell custom stencil designs</div><div class="use-desc">Artists create original layer patterns for others to use</div></td>
+      <td><div class="cell-flex"><span class="mod mod-publish">Publish</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-creators">Creators &amp; Artists</span></div></td>
+      <td class="example">Graphic designers selling unique cut patterns and templates</td>
+    </tr>
+    <tr data-segments="business creators education personal">
+      <td><div class="use-case">Sell puzzle creations</div><div class="use-desc">Anyone can list their finished puzzles on the Shop</div></td>
+      <td><div class="cell-flex"><span class="mod mod-publish">Publish</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-creators">Creators &amp; Artists</span><span class="seg seg-personal">Personal &amp; Family</span><span class="seg seg-business">Business &amp; Corporate</span><span class="seg seg-education">Education</span></div></td>
+      <td class="example">Hobbyists monetizing designs, teachers sharing paid content</td>
+    </tr>
+
+    <!-- DEV -->
+    <tr class="section-row"><td colspan="5">Develop, Embed, Integrate</td></tr>
+    <tr data-segments="creators devs">
+      <td><div class="use-case">Embed puzzles into a website or blog</div><div class="use-desc">Interactive widgets for any web page</div></td>
+      <td><div class="cell-flex"><span class="mod mod-dev">Dev</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-devs">Developers</span><span class="seg seg-creators">Creators &amp; Artists</span></div></td>
+      <td class="example">Blog widget, daily puzzle, portfolio showcase</td>
+    </tr>
+    <tr data-segments="business devs">
+      <td><div class="use-case">Integrate puzzles into an app via API</div><div class="use-desc">SDK/API for mobile, web, or internal tools</div></td>
+      <td><div class="cell-flex"><span class="mod mod-dev">Dev</span><span class="mod mod-ai">AI</span></div></td>
+      <td class="cost"></td>
+      <td><div class="cell-flex"><span class="seg seg-devs">Developers</span><span class="seg seg-business">Business &amp; Corporate</span></div></td>
+      <td class="example">Mobile mini-games, SaaS gamification</td>
+    </tr>
+
+
+  </tbody>
+</table>
+
+<div class="footer">
+  All use cases include the free Stakco Studio account. Modules shown are paid add-ons. Customers typically start with one and expand as needs grow. · Stakco 2026
+</div>
+
+</div>
+<script>
+(function() {
+  // ========== FILTER SYSTEM ==========
+  const pills = document.querySelectorAll('.filter-pill');
+  const rows = document.querySelectorAll('tr[data-segments]');
+  const sectionRows = document.querySelectorAll('tr.section-row');
+  const totalCount = rows.length;
+  let activeFilters = new Set();
+
+  function syncPillsToFilters() {
+    pills.forEach(p => {
+      if (p.dataset.filter === 'all') {
+        p.classList.toggle('active', activeFilters.size === 0);
+      } else {
+        p.classList.toggle('active', activeFilters.has(p.dataset.filter));
+      }
+    });
+  }
+
+  function applyFilter() {
+    let visible = 0;
+    if (activeFilters.size === 0) {
+      rows.forEach(r => { r.classList.remove('hidden-row'); visible++; });
+      sectionRows.forEach(r => r.classList.remove('hidden-row'));
+    } else {
+      rows.forEach(r => {
+        const segs = r.dataset.segments.split(' ');
+        const match = segs.some(s => activeFilters.has(s));
+        r.classList.toggle('hidden-row', !match);
+        if (match) visible++;
+      });
+      sectionRows.forEach(sr => {
+        let next = sr.nextElementSibling;
+        let anyVisible = false;
+        while (next && !next.classList.contains('section-row')) {
+          if (next.dataset.segments && !next.classList.contains('hidden-row')) { anyVisible = true; break; }
+          next = next.nextElementSibling;
+        }
+        sr.classList.toggle('hidden-row', !anyVisible);
+      });
+    }
+    syncPillsToFilters();
+  }
+
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const filter = pill.dataset.filter;
+      if (filter === 'all') {
+        activeFilters.clear();
+      } else {
+        if (activeFilters.has(filter)) activeFilters.delete(filter);
+        else activeFilters.add(filter);
+      }
+      applyFilter();
+    });
+  });
+
+  // ========== SMART GUIDE ==========
+  const segmentLabels = {
+    personal:'Personal & Family', creators:'Creators & Artists', business:'Business & Corporate',
+    education:'Education', venues:'Venues & Events', health:'Healthcare & Therapy', devs:'Developers'
+  };
+  const segmentColors = {
+    personal:{ bg:'#5d3f96', border:'rgba(109,77,170,0.3)' },
+    creators:{ bg:'#a82864', border:'rgba(190,48,112,0.3)' },
+    business:{ bg:'#1f55a0', border:'rgba(37,99,184,0.3)' },
+    education:{ bg:'#12704e', border:'rgba(22,128,90,0.3)' },
+    venues:{ bg:'#7a5c09', border:'rgba(154,114,9,0.3)' },
+    health:{ bg:'#0e7a6e', border:'rgba(20,145,130,0.3)' },
+    devs:{ bg:'#0a6e80', border:'rgba(13,127,148,0.3)' }
+  };
+
+  let currentStep = 1;
+  const totalSteps = 3;
+  // guideSelections[step] = Set of segment keys
+  let guideSelections = { 1: new Set(), 2: new Set(), 3: new Set() };
+
+  const dots = document.querySelectorAll('.guide-dot');
+  const steps = document.querySelectorAll('.guide-step');
+  const resultEl = document.getElementById('guideResult');
+  const resultPills = document.getElementById('guideResultPills');
+  const retakeBtn = document.getElementById('guideRetake');
+  const progressEl = document.getElementById('guideProgress');
+
+  const prevBtn = document.getElementById('guidePrevBtn');
+  const nextBtn = document.getElementById('guideNextBtn');
+  const submitBtn = document.getElementById('guideSubmitBtn');
+  const navBtns = document.getElementById('guideNavBtns');
+
+  function updateDots() {
+    dots.forEach((dot, i) => {
+      dot.classList.remove('done', 'current');
+      if (i < currentStep - 1) dot.classList.add('done');
+      else if (i === currentStep - 1) dot.classList.add('current');
+    });
+  }
+
+  function updateNavButtons() {
+    prevBtn.style.display = currentStep > 1 ? 'inline-block' : 'none';
+    nextBtn.style.display = currentStep < totalSteps ? 'inline-block' : 'none';
+    submitBtn.style.display = currentStep === totalSteps ? 'inline-block' : 'none';
+  }
+
+  function showStep(n) {
+    currentStep = n;
+    steps.forEach(s => s.classList.remove('active'));
+    resultEl.classList.remove('active');
+    const target = document.querySelector(`.guide-step[data-step="${n}"]`);
+    if (target) target.classList.add('active');
+    navBtns.style.display = 'flex';
+    retakeBtn.style.display = 'none';
+    updateDots();
+    updateNavButtons();
+  }
+
+  // Multi-select: toggle on click
+  document.querySelectorAll('.guide-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const step = parseInt(opt.closest('.guide-step').dataset.step);
+      const seg = opt.dataset.segments;
+
+      if (opt.classList.contains('selected')) {
+        opt.classList.remove('selected');
+        guideSelections[step].delete(seg);
+      } else {
+        opt.classList.add('selected');
+        guideSelections[step].add(seg);
+      }
+    });
+  });
+
+  function computeGuideSegments() {
+    const counts = {};
+    for (let s = 1; s <= totalSteps; s++) {
+      guideSelections[s].forEach(seg => {
+        counts[seg] = (counts[seg] || 0) + 1;
+      });
+    }
+    return Object.entries(counts)
+      .sort((a, b) => b[1] - a[1])
+      .map(([seg]) => seg);
+  }
+
+  function showResult() {
+    steps.forEach(s => s.classList.remove('active'));
+    dots.forEach(d => { d.classList.add('done'); d.classList.remove('current'); });
+    progressEl.style.display = 'none';
+    resultEl.classList.add('active');
+    navBtns.style.display = 'none';
+    retakeBtn.style.display = 'inline-block';
+
+    const segments = computeGuideSegments();
+
+    resultPills.innerHTML = '';
+    if (segments.length === 0) {
+      activeFilters.clear();
+      applyFilter();
+      return;
+    }
+
+    segments.forEach(seg => {
+      const c = segmentColors[seg] || { bg:'#666', border:'#999' };
+      const pill = document.createElement('span');
+      pill.className = 'seg';
+      pill.style.cssText = `background:${c.bg};color:#fff;border:1px solid ${c.border};font-size:0.78rem;padding:4px 12px;`;
+      pill.textContent = segmentLabels[seg] || seg;
+      resultPills.appendChild(pill);
+    });
+
+    activeFilters.clear();
+    segments.forEach(s => activeFilters.add(s));
+    applyFilter();
+  }
+
+  // Navigation
+  window.guideNext = function() {
+    if (currentStep < totalSteps) showStep(currentStep + 1);
+  };
+  window.guidePrev = function() {
+    if (currentStep > 1) showStep(currentStep - 1);
+  };
+  window.guideSubmit = function() {
+    showResult();
+  };
+  window.resetGuide = function() {
+    currentStep = 1;
+    guideSelections = { 1: new Set(), 2: new Set(), 3: new Set() };
+    retakeBtn.style.display = 'none';
+    progressEl.style.display = 'flex';
+    resultEl.classList.remove('active');
+    document.querySelectorAll('.guide-opt').forEach(o => o.classList.remove('selected'));
+    activeFilters.clear();
+    applyFilter();
+    showStep(1);
+  };
+
+  showStep(1);
+
+  // ========== LIVE PRICING FROM PLATFORM JSON ==========
+  const PLATFORM_URL = 'https://storage.googleapis.com/stakco-images/platform.json?v=' + Date.now();
+
+  const modKeyMap = {
+    'Print': 'PRINT', 'Play': 'PLAY', 'Light': 'LIGHT',
+    'Publish': 'PUBLISH', 'AI': 'AI', 'Dev': 'DEV'
+  };
+
+  function formatPrice(mod) {
+    const p = mod.Pricing;
+    const price = mod.Price;
+    if (p && p.Type === 'SUBSCRIPTION') {
+      return `<span class="cost-item">$${price}<span class="cost-type"> /mo</span></span>`;
+    } else if (p && p.Type === 'ONE_TIME') {
+      return `<span class="cost-item">$${price}<span class="cost-type"> once</span></span>`;
+    } else {
+      return `<span class="cost-item">$${price}</span>`;
+    }
+  }
+
+  async function loadPricing() {
+    try {
+      const res = await fetch(PLATFORM_URL);
+      const data = await res.json();
+      const studioModules = data.Products?.STAKCO_STUDIO?.Modules || {};
+
+      document.querySelectorAll('tr[data-segments]').forEach(row => {
+        const modBadges = row.querySelectorAll('.mod');
+        const costCell = row.querySelector('.cost');
+        if (!costCell || modBadges.length === 0) return;
+
+        const items = [];
+        modBadges.forEach(badge => {
+          const name = badge.textContent.trim();
+          const key = modKeyMap[name];
+          const mod = key && studioModules[key];
+          if (mod) items.push(formatPrice(mod));
+        });
+
+        if (items.length > 0) {
+          costCell.innerHTML = '<div class="cost-stack">' + items.join('') + '</div>';
+        }
+      });
+    } catch (e) {
+      console.warn('Could not load pricing:', e);
+    }
+  }
+
+  loadPricing();
+})();
+</script>
+</body>
+</html>
