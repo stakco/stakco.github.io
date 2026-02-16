@@ -16,7 +16,7 @@
   }
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-  .container { max-width:960px; margin:0 auto; padding:48px 40px 64px; }
+  .container { max-width:960px; margin:0 auto; padding:48px 40px 64px; position:relative; }
 
   /* Header */
   .header { text-align:center; margin-bottom:44px; }
@@ -95,6 +95,10 @@
   .col-light { color:var(--amber); font-weight:600; }
   .col-paper { color:var(--orange); font-weight:600; }
 
+  /* Section headings */
+  .section-heading { font-size:1.1rem; font-weight:700; margin-bottom:18px; color:var(--text); }
+  .section-heading span { color:var(--text-muted); font-weight:500; font-size:0.82rem; margin-left:6px; }
+
   /* Key audiences */
   .audiences-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:36px; }
   .audience-card {
@@ -102,6 +106,42 @@
   }
   .audience-card h4 { font-size:0.82rem; font-weight:700; margin-bottom:6px; }
   .audience-card p { font-size:0.75rem; color:var(--text-muted); line-height:1.45; }
+
+  /* Partnership cards */
+  .partner-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:28px; }
+  .partner-card {
+    background:var(--card); border:1px solid var(--border); border-radius:10px; padding:18px 22px;
+    position:relative;
+  }
+  .partner-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:4px; }
+  .partner-card .partner-desc { font-size:0.78rem; color:var(--text-sub); line-height:1.5; margin-bottom:10px; }
+  .partner-card .partner-benefit {
+    font-size:0.72rem; font-weight:600; color:var(--green); background:var(--green-bg);
+    padding:6px 0; border-radius:6px; display:block; line-height:1.7;
+  }
+  .partner-card .partner-benefit .bp { display:flex; align-items:baseline; justify-content:space-between; gap:8px; }
+  .bp-label {
+    font-size:0.55rem; font-weight:700; padding:1px 6px; border-radius:3px; flex-shrink:0;
+    text-transform:uppercase; letter-spacing:0.04em; margin-left:auto;
+  }
+  .bp-label.l-play { color:var(--pink); background:rgba(190,48,112,0.08); }
+  .bp-label.l-light { color:var(--amber); background:rgba(154,114,9,0.08); }
+  .bp-label.l-paper { color:var(--orange); background:rgba(200,122,26,0.08); }
+  .bp-label.l-all { color:var(--purple); background:rgba(109,77,170,0.08); }
+
+  .partner-terms {
+    margin-top:10px; padding:8px 10px 6px; border-radius:6px;
+    background:rgba(0,0,0,0.02); border:1px dashed rgba(0,0,0,0.08);
+    font-size:0.66rem; color:var(--text-muted); line-height:1.5;
+    position:relative;
+  }
+  .partner-terms::before {
+    content:'Terms'; position:absolute; top:-7px; left:10px;
+    font-size:0.52rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+    color:var(--text-muted); background:var(--bg); padding:0 5px;
+  }
+  .partner-terms strong { display:none; }
+  .partner-card .partner-products { display:none; }
 
   /* CTA */
   .cta-section { text-align:center; padding:28px 0; }
@@ -115,9 +155,50 @@
 
   .footer { margin-top:20px; padding-top:16px; border-top:1px solid var(--border); font-size:0.7rem; color:var(--text-muted); text-align:center; }
 
+  /* Print icon */
+  .print-icon {
+    position:absolute; top:20px; right:20px;
+    background:none; border:1px solid var(--border); border-radius:6px;
+    padding:6px 10px; cursor:pointer; color:var(--text-muted); font-size:0.7rem;
+    font-family:'DM Sans',sans-serif; transition:all 0.12s; display:flex; align-items:center; gap:4px;
+  }
+  .print-icon:hover { color:var(--text-sub); border-color:var(--border-strong); }
+
+  .mobile-break { display:none; }
+
+  @media print {
+    @page { size:A4 landscape; margin:8mm 12mm; }
+    body { background:#fff; }
+    .container { padding:0; max-width:100%; }
+    .print-icon { display:none; }
+    .header { margin-bottom:16px; }
+    .section-heading { break-after:avoid; page-break-after:avoid; }
+    .glance-grid { break-inside:avoid; page-break-inside:avoid; }
+    .compare-section { break-inside:avoid; page-break-inside:avoid; }
+    .audiences-grid { break-inside:avoid; page-break-inside:avoid; }
+    .partner-grid { break-inside:avoid; page-break-inside:avoid; gap:6px; }
+    .partner-card { padding:10px 14px; }
+    .partner-card h4 { font-size:0.75rem; margin-bottom:2px; }
+    .partner-card .partner-desc { font-size:0.62rem; margin-bottom:4px; line-height:1.35; }
+    .partner-card .partner-benefit { font-size:0.6rem; line-height:1.45; padding:3px 0; }
+    .partner-terms { margin-top:4px; padding:4px 8px 3px; font-size:0.54rem; line-height:1.3; }
+    .partner-terms::before { font-size:0.44rem; top:-6px; padding:0 3px; }
+    .bp-label { font-size:0.46rem; padding:0 4px; }
+    .partner-card { padding:10px 14px; }
+    .partner-card h4 { font-size:0.75rem; }
+    .partner-card .partner-desc { font-size:0.65rem; margin-bottom:6px; }
+    .partner-card .partner-benefit { font-size:0.62rem; line-height:1.5; padding:4px 0; }
+    .partner-terms { font-size:0.56rem; padding:5px 8px; margin-top:6px; }
+    .partner-terms::before { font-size:0.46rem; top:-6px; }
+    table { break-inside:avoid; page-break-inside:avoid; }
+    .cta-section { display:none; }
+    .footer { display:none; }
+  }
+
   @media (max-width:700px) {
+    .mobile-break { display:block; }
     .container { padding:24px 16px 48px; }
-    .glance-grid, .audiences-grid { grid-template-columns:1fr; }
+    .glance-grid, .audiences-grid, .partner-grid { grid-template-columns:1fr; }
     .header h1 { font-size:1.3rem; }
     table { font-size:0.72rem; }
     thead th { padding:8px 8px; font-size:0.55rem; }
@@ -130,20 +211,20 @@
 <body>
 <div class="container">
 
+<button class="print-icon" onclick="window.print()">🖨</button>
+
 <!-- Header -->
 <div class="header">
   <div class="brand">
     <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
-    <span>Stakco Pte Ltd</span>
+    <span>Stakco</span>
   </div>
-  <h1>Commercial Pricing Overview</h1>
-  <div class="subtitle">Three product lines, one platform. Detailed pricing for each product available below.</div>
-  <div class="meta">
-    <span>Confidential</span>·<span>February 2026</span>·<span>All prices in SGD</span>
-  </div>
+  <h1>Pricing & Partnership</h1>
+  <div class="subtitle">Three products. One platform. Multiple ways to earn.</div>
 </div>
 
-<!-- At a Glance -->
+<!-- Section 1: Products -->
+<h2 class="section-heading">Products & Pricing</h2>
 <div class="glance-grid">
 
   <!-- Play -->
@@ -151,7 +232,7 @@
     <div class="glance-body">
       <div class="glance-badge">Digital</div>
       <h3>Stakco Play</h3>
-      <div class="glance-desc">Interactive puzzles in the browser. Creator-pays, player-free subscription model.</div>
+      <div class="glance-desc">Browser-based puzzle platform. Creators subscribe, players access free.</div>
       <div class="glance-stats">
         <div class="glance-stat">
           <span class="gs-label">For players</span>
@@ -159,7 +240,7 @@
         </div>
         <div class="glance-stat">
           <span class="gs-label">Play module</span>
-          <span class="gs-value">$9.90/mo</span>
+          <span class="gs-value">S$9.90/mo</span>
         </div>
         <div class="glance-stat">
           <span class="gs-label">Revenue type</span>
@@ -167,7 +248,7 @@
         </div>
         <div class="glance-stat">
           <span class="gs-label">Max user spend</span>
-          <span class="gs-value">$40+/mo</span>
+          <span class="gs-value">S$40+/mo</span>
         </div>
       </div>
     </div>
@@ -179,19 +260,19 @@
     <div class="glance-body">
       <div class="glance-badge">Projection</div>
       <h3>Stakco Light</h3>
-      <div class="glance-desc">Projected puzzle installation with tangible rotary structure, therapeutic audio, and immersive augmentations.</div>
+      <div class="glance-desc">Turnkey interactive installation for venues, schools, and therapy centres.</div>
       <div class="glance-stats">
         <div class="glance-stat">
           <span class="gs-label">Purchase price</span>
-          <span class="gs-value">$25,000</span>
+          <span class="gs-value">S$25,000</span>
         </div>
         <div class="glance-stat">
           <span class="gs-label">Operating (Yr 1)</span>
-          <span class="gs-value">~$35/mo</span>
+          <span class="gs-value">~S$35/mo</span>
         </div>
         <div class="glance-stat">
           <span class="gs-label">Operating (Yr 2+)</span>
-          <span class="gs-value">~$185/mo</span>
+          <span class="gs-value">~S$185/mo</span>
         </div>
         <div class="glance-stat">
           <span class="gs-label">Lead time</span>
@@ -207,19 +288,19 @@
     <div class="glance-body">
       <div class="glance-badge">Physical</div>
       <h3>Stakco Paper</h3>
-      <div class="glance-desc">Printed rotating puzzles. Per-unit pricing with bulk discounts for events, retail, and corporate.</div>
+      <div class="glance-desc">Physical rotating puzzles. Bulk-friendly pricing for retail, events, and gifting.</div>
       <div class="glance-stats">
         <div class="glance-stat">
           <span class="gs-label">Retail (from)</span>
-          <span class="gs-value">$20/unit</span>
+          <span class="gs-value">S$20/unit</span>
         </div>
         <div class="glance-stat">
           <span class="gs-label">Bulk 100+</span>
-          <span class="gs-value">$12/unit</span>
+          <span class="gs-value">S$12/unit</span>
         </div>
         <div class="glance-stat">
           <span class="gs-label">Bulk 1,000+</span>
-          <span class="gs-value">$8/unit</span>
+          <span class="gs-value">S$8/unit</span>
         </div>
         <div class="glance-stat">
           <span class="gs-label">Lead time</span>
@@ -232,7 +313,8 @@
 
 </div>
 
-<!-- Side-by-side comparison -->
+<!-- Section 2: Comparison -->
+<h2 class="section-heading">At a Glance</h2>
 <div class="compare-section">
   <table>
     <thead>
@@ -258,9 +340,9 @@
       </tr>
       <tr>
         <td><strong>Entry price</strong></td>
-        <td class="num col-play">$9.90/mo</td>
-        <td class="num col-light">$25,000</td>
-        <td class="num col-paper">$20/unit</td>
+        <td class="col-play" style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;">S$9.90/mo</td>
+        <td class="col-light" style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;">S$25,000</td>
+        <td class="col-paper" style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;">S$20/unit</td>
       </tr>
       <tr>
         <td><strong>Margin profile</strong></td>
@@ -302,31 +384,137 @@
   </table>
 </div>
 
-<!-- Key audiences -->
-<div class="compare-label">Key Audiences by Product</div>
+<!-- Section 3: Audiences -->
+<h2 class="section-heading">Who It's For</h2>
 <div class="audiences-grid">
   <div class="audience-card">
-    <h4 style="color:var(--pink)">Play — Who buys</h4>
-    <p>Content creators publishing puzzle series. Educators delivering interactive coursework. Businesses running branded engagement campaigns. Developers embedding puzzles via API.</p>
+    <h4 style="color:var(--pink)">Play</h4>
+    <p>
+      Content creators publishing puzzle series.<br>
+      Educators delivering interactive coursework.<br>
+      Brands running engagement campaigns.<br>
+      Developers embedding puzzles via API.
+    </p>
   </div>
   <div class="audience-card">
-    <h4 style="color:var(--amber)">Light — Who buys</h4>
-    <p>Museums and galleries adding interactive exhibits. Schools and therapy centres for sensory engagement. Hotels and hospitals creating calming environments. Event organisers with immersive installations.</p>
+    <h4 style="color:var(--amber)">Light</h4>
+    <p>
+      Museums and galleries with interactive exhibits.<br>
+      Schools and therapy centres for sensory engagement.<br>
+      Hotels and hospitals creating calming spaces.<br>
+      Event organisers with immersive installations.
+    </p>
   </div>
   <div class="audience-card">
-    <h4 style="color:var(--orange)">Paper — Who buys</h4>
-    <p>Businesses producing branded merchandise and corporate gifts. Educators creating classroom handouts. Therapists using puzzles for fine motor exercises. Hobbyists and families making gifts.</p>
+    <h4 style="color:var(--orange)">Paper</h4>
+    <p>
+      Businesses producing branded merchandise.<br>
+      Corporate teams ordering event giveaways.<br>
+      Educators creating classroom handouts.<br>
+      Therapists using puzzles for motor exercises.
+    </p>
   </div>
 </div>
+
+<!-- Section 4: Partnerships -->
+<div style="break-before:page;">
+<h2 class="section-heading">Partnership Models</h2>
+
+<div class="partner-grid">
+  <div class="partner-card">
+    <h4>Reseller</h4>
+    <div class="partner-desc">Buy at wholesale pricing, sell under your own terms. Set your own margins with volume-based discounts.</div>
+    <div class="partner-benefit"><span class="bp">S$5K–10K+ per unit resold <span class="bp-label l-light">Light</span></span><span class="bp">Set your own margins <span class="bp-label l-paper">Paper</span></span></div>
+    <div class="partner-terms"><strong>Requires:</strong> Min. 3 units/yr (Light) or 50 units/yr (Paper)<br>Signed reseller agreement</div>
+    <div class="partner-products">
+      <span class="pp-tag pp-light">Light</span>
+      <span class="pp-tag pp-paper">Paper</span>
+    </div>
+  </div>
+
+  <div class="partner-card">
+    <h4>Affiliate / Referral</h4>
+    <div class="partner-desc">Refer customers through your network. Earn commission on every converted purchase.</div>
+    <div class="partner-benefit"><span class="bp">S$2,500+ per referral <span class="bp-label l-light">Light</span></span><span class="bp">20% on every order <span class="bp-label l-paper">Paper</span></span><span class="bp">No inventory, no risk <span class="bp-label l-all">All</span></span></div>
+    <div class="partner-terms"><strong>Requires:</strong> Approved affiliate application<br>Commission paid after 30-day return window</div>
+    <div class="partner-products">
+      <span class="pp-tag pp-all">All products</span>
+    </div>
+  </div>
+
+  <div class="partner-card">
+    <h4>Installation Partner</h4>
+    <div class="partner-desc">Get certified to install and service Stakco Light units in your region. Earn on installation and ongoing maintenance.</div>
+    <div class="partner-benefit"><span class="bp">S$3K–5K per installation <span class="bp-label l-light">Light</span></span><span class="bp">S$600/yr service contracts <span class="bp-label l-light">Light</span></span></div>
+    <div class="partner-terms"><strong>Requires:</strong> Technical certification (provided by Stakco)<br>Min. 2 installations/yr to maintain status</div>
+    <div class="partner-products">
+      <span class="pp-tag pp-light">Light</span>
+    </div>
+  </div>
+
+  <div class="partner-card">
+    <h4>Content Agency</h4>
+    <div class="partner-desc">Design puzzle campaigns for your clients using Stakco tools. Charge your own creative fees — we provide the platform.</div>
+    <div class="partner-benefit"><span class="bp">S$2K–15K+ per campaign <span class="bp-label l-play">Play</span></span><span class="bp">You set your fee <span class="bp-label l-all">All</span></span></div>
+    <div class="partner-terms"><strong>Requires:</strong> Active Play or Print module subscription<br>Portfolio of 3+ completed campaigns</div>
+    <div class="partner-products">
+      <span class="pp-tag pp-play">Play</span>
+      <span class="pp-tag pp-paper">Paper</span>
+    </div>
+  </div>
+
+  <div class="partner-card">
+    <h4>Education Reseller</h4>
+    <div class="partner-desc">Bundle Stakco into school and institutional offerings. Volume licensing with discounted per-seat pricing for your clients.</div>
+    <div class="partner-benefit"><span class="bp">S$3–5 margin per seat/mo <span class="bp-label l-play">Play</span></span><span class="bp">100 seats = S$300–500/mo <span class="bp-label l-play">Play</span></span></div>
+    <div class="partner-terms"><strong>Requires:</strong> Min. 10 seats per institution<br>Annual commitment with quarterly billing</div>
+    <div class="partner-products">
+      <span class="pp-tag pp-play">Play</span>
+      <span class="pp-tag pp-light">Light</span>
+    </div>
+  </div>
+
+  <div class="partner-card">
+    <h4>Platform Integrator</h4>
+    <div class="partner-desc">Embed Stakco puzzles into your own app or SaaS product via API. Add gamification and engagement without building from scratch.</div>
+    <div class="partner-benefit"><span class="bp">Save S$50K+ in dev — from S$20/mo <span class="bp-label l-play">Play</span></span><span class="bp">Engagement features via API <span class="bp-label l-play">Play</span></span></div>
+    <div class="partner-terms"><strong>Requires:</strong> Active Dev module subscription<br>Fair-use API limits; enterprise tiers at scale</div>
+    <div class="partner-products">
+      <span class="pp-tag pp-play">Play</span>
+    </div>
+  </div>
+
+  <div class="partner-card">
+    <h4>White-Label Partner</h4>
+    <div class="partner-desc">Rebrand Stakco products under your own name. Full white-label packaging and subdomain customisation available.</div>
+    <div class="partner-benefit"><span class="bp">S$8–20 margin per unit <span class="bp-label l-paper">Paper</span></span><span class="bp">Your brand, your price <span class="bp-label l-light">Light</span></span></div>
+    <div class="partner-terms"><strong>Requires:</strong> Min. 100 units/order (Paper) or 1 unit (Light)<br>12-month territory exclusivity</div>
+    <div class="partner-products">
+      <span class="pp-tag pp-paper">Paper</span>
+      <span class="pp-tag pp-light">Light</span>
+    </div>
+  </div>
+
+  <div class="partner-card">
+    <h4>Co-Branding / Sponsorship</h4>
+    <div class="partner-desc">Joint product development and cross-promotion. Create branded puzzle series together and share the audience.</div>
+    <div class="partner-benefit"><span class="bp">Shared audience reach <span class="bp-label l-all">All</span></span><span class="bp">Zero dev cost <span class="bp-label l-all">All</span></span></div>
+    <div class="partner-terms"><strong>Requires:</strong> Mutual co-branding agreement<br>Revenue share negotiated per project</div>
+    <div class="partner-products">
+      <span class="pp-tag pp-all">All products</span>
+    </div>
+  </div>
+</div>
+</div><!-- /partnership-section -->
 
 <!-- CTA -->
 <div class="cta-section">
-  <p>For detailed pricing, volume terms, or partnership enquiries</p>
-  <a href="mailto:hello@stakcos.com?subject=Stakco pricing enquiry" class="cta-btn">Get in Touch</a>
+  <p>Ready to talk?</p>
+  <a href="mailto:hello@stakcos.com?subject=Stakco partnership enquiry" class="cta-btn">Contact Us</a>
 </div>
 
 <div class="footer">
-  Stakco Pte Ltd · All prices in SGD · Confidential — do not distribute · February 2026
+  Stakco · All prices in S$
 </div>
 
 </div>
