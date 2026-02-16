@@ -23,9 +23,33 @@
   .page-layout { display:grid; grid-template-columns:220px 1fr; max-width:1120px; margin:0 auto; min-height:100vh; }
 
   .side-nav { position:sticky; top:0; height:100vh; padding:24px 0 24px 20px; overflow-y:auto; border-right:1px solid var(--border); }
-  .side-nav-brand { display:flex; align-items:center; gap:8px; margin-bottom:20px; padding-right:16px; }
-  .side-nav-brand img { width:22px; height:auto; }
-  .side-nav-brand span { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); }
+
+  /* ===== Product Nav Cards (side pane) ===== */
+  .pn-cards { display:flex; flex-direction:column; gap:3px; margin-bottom:14px; padding-right:16px; }
+  .pn-cards a {
+    display:flex; align-items:center; gap:8px;
+    padding:7px 10px; border-radius:6px; text-decoration:none;
+    border:1px solid transparent; transition:all 0.12s;
+  }
+  .pn-cards a:hover { background:rgba(0,0,0,0.03); }
+  .pn-cards a img { width:18px; height:18px; object-fit:contain; flex-shrink:0; opacity:0.45; transition:opacity 0.12s; }
+  .pn-cards a:hover img { opacity:0.7; }
+  .pn-cards .pn-info { min-width:0; }
+  .pn-cards .pn-name { font-size:0.7rem; font-weight:600; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:color 0.12s; }
+  .pn-cards a:hover .pn-name { color:var(--text-sub); }
+  .pn-cards .pn-tag { font-size:0.52rem; color:var(--text-muted); font-weight:500; text-transform:uppercase; letter-spacing:0.04em; opacity:0.7; }
+  .pn-cards a.pn-active { pointer-events:none; background:var(--accent); border-color:var(--accent); }
+  .pn-cards a.pn-active img { opacity:1; }
+  .pn-cards a.pn-active .pn-name { color:#fff; font-weight:700; }
+  .pn-cards a.pn-active .pn-tag { color:rgba(255,255,255,0.7); }
+  .pn-cards a.pn-overview.pn-active { background:#6d4daa; border-color:#6d4daa; }
+  .pn-cards a.pn-overview.pn-active .pn-name { color:#fff; }
+  .pn-cards a.pn-overview.pn-active .pn-tag { color:rgba(255,255,255,0.7); }
+  .pn-cards a.pn-play:not(.pn-active):hover .pn-name { color:#be3070; }
+  .pn-cards a.pn-light:not(.pn-active):hover .pn-name { color:#9a7209; }
+  .pn-cards a.pn-paper:not(.pn-active):hover .pn-name { color:#c87a1a; }
+  .pn-cards a.pn-overview:not(.pn-active):hover .pn-name { color:#6d4daa; }
+  .pn-divider { height:1px; background:var(--border); margin:0 16px 12px 0; }
   .side-nav-list { list-style:none; }
   .side-nav-list li { margin-bottom:1px; }
   .side-nav-list a {
@@ -122,10 +146,25 @@
 <div class="page-layout">
 
 <nav class="side-nav">
-  <div class="side-nav-brand">
-    <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
-    <span>Stakco Light</span>
+  <div class="pn-cards">
+    <a href="stakco-pricing-overview.html" class="pn-overview">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Overview</div><div class="pn-tag">All Products</div></div>
+    </a>
+    <a href="stakco-play-pricing.html" class="pn-play">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Stakco Play</div><div class="pn-tag">Digital</div></div>
+    </a>
+    <a href="stakco-light-pricing.html" class="pn-light pn-active">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Stakco Light</div><div class="pn-tag">Projection</div></div>
+    </a>
+    <a href="stakco-paper-pricing.html" class="pn-paper">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Stakco Paper</div><div class="pn-tag">Physical</div></div>
+    </a>
   </div>
+  <div class="pn-divider"></div>
   <ul class="side-nav-list">
     <li><a href="#summary" class="active">Summary</a></li>
     <li><a href="#one-time">1. One-Time Costs</a></li>
@@ -147,18 +186,8 @@
 
 <!-- ===== HEADER ===== -->
 <div class="doc-header">
-  <div class="brand">
-    <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
-    <span>Stakco Pte Ltd</span>
-  </div>
   <h1>Stakco Light — Commercial Pricing & Cost Structure</h1>
   <div class="subtitle">Complete cost breakdown for the Stakco Light projected puzzle installation</div>
-  <div class="doc-meta">
-    <span>Document version: 1.0</span>
-    <span>Prepared: February 2026</span>
-    <span>Currency: SGD unless noted</span>
-    <span>Confidential — do not distribute</span>
-  </div>
 </div>
 
 <!-- ===== EXECUTIVE SUMMARY ===== -->
