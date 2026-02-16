@@ -33,14 +33,36 @@
   .glance-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:40px; }
   .glance-card {
     background:var(--card); border:1px solid var(--border); border-radius:12px;
-    padding:20px 22px; position:relative; overflow:hidden;
+    padding:20px 22px 0; position:relative; overflow:hidden;
+    text-decoration:none; color:inherit; display:flex; flex-direction:column;
+    transition:border-color 0.15s, box-shadow 0.15s;
   }
+  .glance-card:hover { border-color:var(--border-strong); box-shadow:0 2px 12px rgba(0,0,0,0.06); }
+  .glance-card.play:hover { border-color:rgba(190,48,112,0.25); }
+  .glance-card.light:hover { border-color:rgba(154,114,9,0.25); }
+  .glance-card.paper:hover { border-color:rgba(200,122,26,0.25); }
   .glance-card::before {
     content:''; position:absolute; top:0; left:0; right:0; height:3px;
   }
   .glance-card.play::before { background:var(--pink); }
   .glance-card.light::before { background:var(--amber); }
   .glance-card.paper::before { background:var(--orange); }
+
+  .glance-body { flex:1; }
+
+  .glance-cta {
+    margin:16px -22px 0; padding:12px 22px;
+    font-size:0.78rem; font-weight:700; text-align:center;
+    border-top:1px solid var(--border);
+    transition:all 0.15s; letter-spacing:0.02em;
+  }
+  .play .glance-cta { color:var(--pink); background:rgba(190,48,112,0.03); }
+  .light .glance-cta { color:var(--amber); background:rgba(154,114,9,0.03); }
+  .paper .glance-cta { color:var(--orange); background:rgba(200,122,26,0.03); }
+  .glance-card:hover .glance-cta { letter-spacing:0.04em; }
+  .play:hover .glance-cta { background:rgba(190,48,112,0.08); }
+  .light:hover .glance-cta { background:rgba(154,114,9,0.08); }
+  .paper:hover .glance-cta { background:rgba(200,122,26,0.08); }
 
   .glance-badge { display:inline-block; font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:3px 10px; border-radius:999px; color:#fff; margin-bottom:10px; }
   .play .glance-badge { background:var(--pink); }
@@ -57,16 +79,6 @@
   .play .gs-value { color:var(--pink); }
   .light .gs-value { color:var(--amber); }
   .paper .gs-value { color:var(--orange); }
-
-  .glance-link {
-    display:inline-flex; align-items:center; gap:5px;
-    font-size:0.75rem; font-weight:600; color:var(--text-muted); text-decoration:none;
-    padding:7px 14px; border:1px solid var(--border); border-radius:6px; transition:all 0.12s;
-  }
-  .glance-link:hover { border-color:var(--border-strong); color:var(--text-sub); background:rgba(0,0,0,0.02); }
-  .play .glance-link:hover { color:var(--pink); border-color:rgba(190,48,112,0.25); }
-  .light .glance-link:hover { color:var(--amber); border-color:rgba(154,114,9,0.25); }
-  .paper .glance-link:hover { color:var(--orange); border-color:rgba(200,122,26,0.25); }
 
   /* Comparison table */
   .compare-section { margin-bottom:36px; }
@@ -107,6 +119,11 @@
     .container { padding:24px 16px 48px; }
     .glance-grid, .audiences-grid { grid-template-columns:1fr; }
     .header h1 { font-size:1.3rem; }
+    table { font-size:0.72rem; }
+    thead th { padding:8px 8px; font-size:0.55rem; }
+    tbody td { padding:8px 8px; }
+    .num { font-size:0.68rem; }
+    .col-play, .col-light, .col-paper { font-size:0.55rem; }
   }
 </style>
 </head>
@@ -127,92 +144,96 @@
 </div>
 
 <!-- At a Glance -->
-<div class="glance-label">At a Glance</div>
 <div class="glance-grid">
 
   <!-- Play -->
-  <div class="glance-card play">
-    <div class="glance-badge">Digital</div>
-    <h3>Stakco Play</h3>
-    <div class="glance-desc">Interactive puzzles in the browser. Creator-pays, player-free subscription model.</div>
-    <div class="glance-stats">
-      <div class="glance-stat">
-        <span class="gs-label">For players</span>
-        <span class="gs-value">Free</span>
-      </div>
-      <div class="glance-stat">
-        <span class="gs-label">Play module</span>
-        <span class="gs-value">$9.90/mo</span>
-      </div>
-      <div class="glance-stat">
-        <span class="gs-label">Revenue type</span>
-        <span class="gs-value">Recurring</span>
-      </div>
-      <div class="glance-stat">
-        <span class="gs-label">Max user spend</span>
-        <span class="gs-value">$40+/mo</span>
+  <a href="stakco-play-pricing.html" class="glance-card play">
+    <div class="glance-body">
+      <div class="glance-badge">Digital</div>
+      <h3>Stakco Play</h3>
+      <div class="glance-desc">Interactive puzzles in the browser. Creator-pays, player-free subscription model.</div>
+      <div class="glance-stats">
+        <div class="glance-stat">
+          <span class="gs-label">For players</span>
+          <span class="gs-value">Free</span>
+        </div>
+        <div class="glance-stat">
+          <span class="gs-label">Play module</span>
+          <span class="gs-value">$9.90/mo</span>
+        </div>
+        <div class="glance-stat">
+          <span class="gs-label">Revenue type</span>
+          <span class="gs-value">Recurring</span>
+        </div>
+        <div class="glance-stat">
+          <span class="gs-label">Max user spend</span>
+          <span class="gs-value">$40+/mo</span>
+        </div>
       </div>
     </div>
-    <a href="stakco-play-pricing.html" class="glance-link">View full pricing →</a>
-  </div>
+    <div class="glance-cta">View Full Pricing</div>
+  </a>
 
   <!-- Light -->
-  <div class="glance-card light">
-    <div class="glance-badge">Projection</div>
-    <h3>Stakco Light</h3>
-    <div class="glance-desc">Projected puzzle installation with tangible rotary structure, therapeutic audio, and immersive augmentations.</div>
-    <div class="glance-stats">
-      <div class="glance-stat">
-        <span class="gs-label">Purchase price</span>
-        <span class="gs-value">$25,000</span>
-      </div>
-      <div class="glance-stat">
-        <span class="gs-label">Operating (Yr 1)</span>
-        <span class="gs-value">~$35/mo</span>
-      </div>
-      <div class="glance-stat">
-        <span class="gs-label">Operating (Yr 2+)</span>
-        <span class="gs-value">~$185/mo</span>
-      </div>
-      <div class="glance-stat">
-        <span class="gs-label">Lead time</span>
-        <span class="gs-value">~8 weeks</span>
+  <a href="stakco-light-pricing.html" class="glance-card light">
+    <div class="glance-body">
+      <div class="glance-badge">Projection</div>
+      <h3>Stakco Light</h3>
+      <div class="glance-desc">Projected puzzle installation with tangible rotary structure, therapeutic audio, and immersive augmentations.</div>
+      <div class="glance-stats">
+        <div class="glance-stat">
+          <span class="gs-label">Purchase price</span>
+          <span class="gs-value">$25,000</span>
+        </div>
+        <div class="glance-stat">
+          <span class="gs-label">Operating (Yr 1)</span>
+          <span class="gs-value">~$35/mo</span>
+        </div>
+        <div class="glance-stat">
+          <span class="gs-label">Operating (Yr 2+)</span>
+          <span class="gs-value">~$185/mo</span>
+        </div>
+        <div class="glance-stat">
+          <span class="gs-label">Lead time</span>
+          <span class="gs-value">~8 weeks</span>
+        </div>
       </div>
     </div>
-    <a href="stakco-light-pricing.html" class="glance-link">View full pricing →</a>
-  </div>
+    <div class="glance-cta">View Full Pricing</div>
+  </a>
 
   <!-- Paper -->
-  <div class="glance-card paper">
-    <div class="glance-badge">Physical</div>
-    <h3>Stakco Paper</h3>
-    <div class="glance-desc">Printed rotating puzzles. Per-unit pricing with bulk discounts for events, retail, and corporate.</div>
-    <div class="glance-stats">
-      <div class="glance-stat">
-        <span class="gs-label">Retail (from)</span>
-        <span class="gs-value">$20/unit</span>
-      </div>
-      <div class="glance-stat">
-        <span class="gs-label">Bulk 100+</span>
-        <span class="gs-value">$12/unit</span>
-      </div>
-      <div class="glance-stat">
-        <span class="gs-label">Bulk 1,000+</span>
-        <span class="gs-value">$8/unit</span>
-      </div>
-      <div class="glance-stat">
-        <span class="gs-label">Lead time</span>
-        <span class="gs-value">5 days – 4 wks</span>
+  <a href="stakco-paper-pricing.html" class="glance-card paper">
+    <div class="glance-body">
+      <div class="glance-badge">Physical</div>
+      <h3>Stakco Paper</h3>
+      <div class="glance-desc">Printed rotating puzzles. Per-unit pricing with bulk discounts for events, retail, and corporate.</div>
+      <div class="glance-stats">
+        <div class="glance-stat">
+          <span class="gs-label">Retail (from)</span>
+          <span class="gs-value">$20/unit</span>
+        </div>
+        <div class="glance-stat">
+          <span class="gs-label">Bulk 100+</span>
+          <span class="gs-value">$12/unit</span>
+        </div>
+        <div class="glance-stat">
+          <span class="gs-label">Bulk 1,000+</span>
+          <span class="gs-value">$8/unit</span>
+        </div>
+        <div class="glance-stat">
+          <span class="gs-label">Lead time</span>
+          <span class="gs-value">5 days – 4 wks</span>
+        </div>
       </div>
     </div>
-    <a href="stakco-paper-pricing.html" class="glance-link">View full pricing →</a>
-  </div>
+    <div class="glance-cta">View Full Pricing</div>
+  </a>
 
 </div>
 
 <!-- Side-by-side comparison -->
 <div class="compare-section">
-  <div class="compare-label">Side-by-Side Comparison</div>
   <table>
     <thead>
       <tr>
