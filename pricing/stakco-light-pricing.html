@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<title>Stakco Light — Commercial Pricing & Cost Structure</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f6f9; --card: #ffffff;
+    --orange: #c87a1a; --amber: #9a7209;
+    --text: #1a1a2e; --text-sub: #444455; --text-muted: #8888a0;
+    --border: rgba(0,0,0,0.07); --border-strong: rgba(0,0,0,0.12);
+    --accent: var(--amber); --accent-bg: rgba(154,114,9,0.04); --accent-border: rgba(154,114,9,0.12);
+    --green: #16805a; --green-bg: rgba(22,128,90,0.06);
+    --red: #c0392b; --red-bg: rgba(192,57,43,0.04);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  /* Layout: side nav + main content */
+  .page-layout { display:grid; grid-template-columns:220px 1fr; max-width:1120px; margin:0 auto; min-height:100vh; }
+
+  .side-nav { position:sticky; top:0; height:100vh; padding:24px 0 24px 20px; overflow-y:auto; border-right:1px solid var(--border); }
+  .side-nav-brand { display:flex; align-items:center; gap:8px; margin-bottom:20px; padding-right:16px; }
+  .side-nav-brand img { width:22px; height:auto; }
+  .side-nav-brand span { font-size:0.68rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); }
+  .side-nav-list { list-style:none; }
+  .side-nav-list li { margin-bottom:1px; }
+  .side-nav-list a {
+    display:block; padding:7px 12px; font-size:0.78rem; font-weight:500; color:var(--text-muted);
+    text-decoration:none; border-radius:6px; transition:all 0.12s; border-left:2px solid transparent; line-height:1.4;
+  }
+  .side-nav-list a:hover { color:var(--text-sub); background:rgba(0,0,0,0.03); }
+  .side-nav-list a.active { color:var(--accent); border-left-color:var(--accent); background:var(--accent-bg); font-weight:600; }
+  .side-nav-actions { margin-top:16px; padding-top:14px; border-top:1px solid var(--border); padding-right:16px; }
+  .print-btn {
+    display:flex; align-items:center; justify-content:center; gap:6px; width:100%;
+    padding:8px 12px; font-family:'DM Sans',sans-serif; font-size:0.75rem; font-weight:600;
+    color:var(--text-sub); background:var(--card); border:1px solid var(--border); border-radius:6px;
+    cursor:pointer; transition:all 0.12s;
+  }
+  .print-btn:hover { background:var(--bg); border-color:var(--border-strong); }
+
+  .container { max-width:900px; padding:28px 40px 48px; }
+
+  /* Header */
+  .doc-header { margin-bottom:24px; padding-bottom:16px; border-bottom:2px solid var(--border-strong); }
+  .doc-header .brand { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .doc-header .brand img { width:28px; height:auto; }
+  .doc-header .brand span { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); }
+  .doc-header h1 { font-size:1.6rem; font-weight:700; margin-bottom:4px; }
+  .doc-header .subtitle { font-size:0.92rem; color:var(--text-sub); }
+  .doc-meta { display:flex; gap:24px; margin-top:16px; font-size:0.72rem; color:var(--text-muted); }
+  .doc-meta span { display:flex; align-items:center; gap:4px; }
+
+  /* Sections */
+  .section { margin-bottom:24px; }
+  .section-title { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:10px; padding-bottom:5px; border-bottom:1px solid var(--accent-border); }
+  .section-note { font-size:0.75rem; color:var(--text-muted); line-height:1.5; margin-bottom:16px; font-style:italic; }
+
+  /* Cards */
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px 22px; margin-bottom:10px; }
+  .card p { font-size:0.85rem; color:var(--text-sub); line-height:1.6; }
+
+  /* Tables */
+  table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:10px; font-size:0.82rem; }
+  thead th { padding:10px 16px; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); background:#f2f2f6; border-bottom:1px solid var(--border); text-align:left; }
+  tbody td { padding:10px 16px; border-bottom:1px solid rgba(0,0,0,0.03); color:var(--text-sub); vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:hover { background:rgba(0,0,0,0.015); }
+
+  /* Totals row */
+  .row-total td { font-weight:700; color:var(--text); border-top:2px solid var(--border-strong); background:#fafafa; }
+  .row-sub td { color:var(--text-muted); font-size:0.78rem; }
+  .row-highlight td { background:var(--accent-bg); }
+
+  /* Numeric cells */
+  .num { text-align:right; font-family:'JetBrains Mono',monospace; font-size:0.78rem; white-space:nowrap; }
+  .num-accent { color:var(--accent); font-weight:700; }
+  .num-green { color:var(--green); }
+  .num-muted { color:var(--text-muted); }
+
+  /* Labels */
+  .label-included { font-size:0.65rem; font-weight:600; color:var(--green); background:var(--green-bg); padding:2px 8px; border-radius:4px; }
+  .label-optional { font-size:0.65rem; font-weight:600; color:var(--text-muted); background:rgba(0,0,0,0.04); padding:2px 8px; border-radius:4px; }
+  .label-estimate { font-size:0.65rem; font-weight:600; color:var(--amber); background:var(--accent-bg); padding:2px 8px; border-radius:4px; }
+
+  /* Summary boxes */
+  .summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:14px; }
+  .summary-box { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px 16px; text-align:center; }
+  .summary-box .sb-value { font-family:'JetBrains Mono',monospace; font-size:1.2rem; font-weight:700; color:var(--accent); margin-bottom:2px; }
+  .summary-box .sb-label { font-size:0.68rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
+
+  /* Footnotes */
+  .footnotes { margin-top:20px; padding-top:16px; border-top:1px solid var(--border); }
+  .footnotes p { font-size:0.7rem; color:var(--text-muted); line-height:1.5; margin-bottom:4px; }
+  .fn-ref { font-size:0.6rem; vertical-align:super; color:var(--accent); font-weight:700; }
+
+  @media print {
+    .page-layout { display:block; }
+    .side-nav { display:none; }
+    body { background:#fff; }
+    .container { padding:24px; max-width:100%; }
+    .section { page-break-inside:avoid; break-inside:avoid; }
+    table { page-break-inside:avoid; break-inside:avoid; }
+    .section-title { break-after:avoid; page-break-after:avoid; }
+    .doc-header { break-after:avoid; page-break-after:avoid; }
+    .summary-grid { break-inside:avoid; page-break-inside:avoid; }
+  }
+  @media (max-width:900px) {
+    .page-layout { grid-template-columns:1fr; }
+    .side-nav { display:none; }
+    .container { padding:24px 16px 48px; }
+    .summary-grid { grid-template-columns:1fr; }
+    .doc-meta { flex-direction:column; gap:6px; }
+  }
+</style>
+</head>
+<body>
+<div class="page-layout">
+
+<nav class="side-nav">
+  <div class="side-nav-brand">
+    <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+    <span>Stakco Light</span>
+  </div>
+  <ul class="side-nav-list">
+    <li><a href="#summary" class="active">Summary</a></li>
+    <li><a href="#one-time">1. One-Time Costs</a></li>
+    <li><a href="#add-ons">2. Add-Ons</a></li>
+    <li><a href="#operating">3. Operating Costs</a></li>
+    <li><a href="#tco">4. Total Ownership</a></li>
+    <li><a href="#reseller">5. Reseller Terms</a></li>
+    <li><a href="#leasing">6. Leasing Model</a></li>
+    <li><a href="#specs">7. Specifications</a></li>
+    <li><a href="#lead-times">8. Lead Times</a></li>
+    <li><a href="#payment">9. Payment Terms</a></li>
+  </ul>
+  <div class="side-nav-actions">
+    <button class="print-btn" onclick="window.print()">🖨 Print / Save PDF</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ===== HEADER ===== -->
+<div class="doc-header">
+  <div class="brand">
+    <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+    <span>Stakco Pte Ltd</span>
+  </div>
+  <h1>Stakco Light — Commercial Pricing & Cost Structure</h1>
+  <div class="subtitle">Complete cost breakdown for the Stakco Light projected puzzle installation</div>
+  <div class="doc-meta">
+    <span>Document version: 1.0</span>
+    <span>Prepared: February 2026</span>
+    <span>Currency: SGD unless noted</span>
+    <span>Confidential — do not distribute</span>
+  </div>
+</div>
+
+<!-- ===== EXECUTIVE SUMMARY ===== -->
+<div class="section" id="summary">
+  <div class="section-title">Executive Summary</div>
+  <div class="card">
+    <p>Stakco Light is a turnkey interactive installation combining a physical rotary structure with projected puzzle imagery, therapeutic audio, and immersive visual augmentations. This document details the complete cost of ownership for prospective buyers, partners, and resellers.</p>
+  </div>
+  <div class="summary-grid">
+    <div class="summary-box">
+      <div class="sb-value">$25,000</div>
+      <div class="sb-label">One-time purchase</div>
+    </div>
+    <div class="summary-box">
+      <div class="sb-value">~$170/mo</div>
+      <div class="sb-label">Estimated operating</div>
+    </div>
+    <div class="summary-box">
+      <div class="sb-value">~2 months</div>
+      <div class="sb-label">Lead time</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 1. ONE-TIME COSTS ===== -->
+<div class="section" id="one-time">
+  <div class="section-title">1. One-Time Costs (Purchase & Installation)</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:45%">Item</th>
+        <th style="width:20%">Included</th>
+        <th style="width:35%" class="num">Cost (SGD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <strong>Rotary structure</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Nested ring plates, railing tracks, grab handles. Standard up to 120 cm diameter, ~50 mm height, ~15 kg</span>
+        </td>
+        <td><span class="label-included">Included</span></td>
+        <td class="num">—</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Projector hardware</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Overhead or surface projector calibrated to rotary structure</span>
+        </td>
+        <td><span class="label-included">Included</span></td>
+        <td class="num">—</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Audio system</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Speakers for therapeutic music and immersive sound augmentations</span>
+        </td>
+        <td><span class="label-included">Included</span></td>
+        <td class="num">—</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Compute unit</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Dedicated device running Stakco Light software</span>
+        </td>
+        <td><span class="label-included">Included</span></td>
+        <td class="num">—</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>On-site installation & calibration</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Mounting, wiring, projection alignment, software setup, testing</span>
+        </td>
+        <td><span class="label-included">Included</span></td>
+        <td class="num">—</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Studio Light module license</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Remote content management via Stakco Studio</span>
+        </td>
+        <td><span class="label-included">Included</span></td>
+        <td class="num">—</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>1-year warranty & service</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Hardware repairs, software updates, remote support</span>
+        </td>
+        <td><span class="label-included">Included</span></td>
+        <td class="num">—</td>
+      </tr>
+      <tr class="row-total">
+        <td>Total one-time cost</td>
+        <td></td>
+        <td class="num num-accent">$25,000</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">All items above are bundled in the SGD 25,000 package. No hidden or separate hardware charges.</div>
+</div>
+
+<!-- ===== 2. OPTIONAL ADD-ONS ===== -->
+<div class="section" id="add-ons">
+  <div class="section-title">2. Optional Add-Ons</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:45%">Item</th>
+        <th style="width:20%">Type</th>
+        <th style="width:35%" class="num">Cost (SGD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <strong>Custom rotary dimensions</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Non-standard diameter, height, or ring count</span>
+        </td>
+        <td><span class="label-optional">Optional</span></td>
+        <td class="num">Quote on request</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Premium materials</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Upgraded finishes, branded surface treatments</span>
+        </td>
+        <td><span class="label-optional">Optional</span></td>
+        <td class="num">Quote on request</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Additional installation unit</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Second unit at same location (shared content)</span>
+        </td>
+        <td><span class="label-optional">Optional</span></td>
+        <td class="num">From $20,000</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>AI content generation module</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Auto-generate puzzle artwork from text prompts</span>
+        </td>
+        <td><span class="label-optional">Optional</span></td>
+        <td class="num">$9.90/mo</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 3. MONTHLY OPERATING COSTS ===== -->
+<div class="section" id="operating">
+  <div class="section-title">3. Monthly Operating Costs</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:45%">Item</th>
+        <th style="width:20%">Notes</th>
+        <th style="width:35%" class="num">Monthly (SGD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <strong>Internet connectivity</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Required for content delivery and analytics streaming</span>
+        </td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Venue-provided</span></td>
+        <td class="num num-muted">Existing<span class="fn-ref"> 1</span></td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Electricity</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Projector (~300W) + compute (~50W) + audio (~20W), 10 hrs/day</span>
+        </td>
+        <td><span class="label-estimate">Estimate</span></td>
+        <td class="num">~$35</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Content licensing fee</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Access to Stakco content library and platform updates</span>
+        </td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Year 1 free</span></td>
+        <td class="num">$0 <span style="font-size:0.68rem;color:var(--text-muted)">(Yr 1)</span></td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Content licensing fee (Year 2+)</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Continued access and feature updates after first year</span>
+        </td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">From Year 2</span></td>
+        <td class="num">~$100/mo</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Extended warranty & service</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Hardware support, on-site repairs, replacement parts</span>
+        </td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">From Year 2</span></td>
+        <td class="num">~$50/mo</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table style="break-before:page;">
+    <thead>
+      <tr>
+        <th style="width:65%">Estimated monthly operating total</th>
+        <th style="width:35%" class="num">Monthly (SGD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Year 1</strong> <span style="font-size:0.75rem;color:var(--text-muted)">(warranty + content included)</span></td>
+        <td class="num num-green">~$35</td>
+      </tr>
+      <tr class="row-highlight">
+        <td><strong>Year 2+</strong> <span style="font-size:0.75rem;color:var(--text-muted)">(content license + extended warranty + electricity)</span></td>
+        <td class="num num-accent">~$185</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 4. TOTAL COST OF OWNERSHIP ===== -->
+<div class="section" id="tco">
+  <div class="section-title">4. Total Cost of Ownership</div>
+  <div class="section-note">Projected over 1, 3, and 5 years assuming standard operation. Excludes optional add-ons.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:35%">Period</th>
+        <th class="num" style="width:20%">One-time</th>
+        <th class="num" style="width:20%">Operating</th>
+        <th class="num" style="width:25%">Total (SGD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Year 1</strong></td>
+        <td class="num">$25,000</td>
+        <td class="num">$420</td>
+        <td class="num"><strong>$25,420</strong></td>
+      </tr>
+      <tr>
+        <td><strong>3 Years</strong></td>
+        <td class="num">$25,000</td>
+        <td class="num">$4,860</td>
+        <td class="num"><strong>$29,860</strong></td>
+      </tr>
+      <tr class="row-highlight">
+        <td><strong>5 Years</strong></td>
+        <td class="num">$25,000</td>
+        <td class="num">$9,300</td>
+        <td class="num num-accent"><strong>$34,300</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">Year 1 operating: ~$35/mo × 12. Years 2–5: ~$185/mo × 48 months.</div>
+</div>
+
+<!-- ===== 5. RESELLER / DISTRIBUTOR PRICING ===== -->
+<div class="section" id="reseller">
+  <div class="section-title">5. Reseller & Distributor Terms</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:35%">Volume (units/year)</th>
+        <th style="width:25%" class="num">Unit Price (SGD)</th>
+        <th style="width:20%" class="num">Discount</th>
+        <th style="width:20%" class="num">Min. commitment</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1–2 units</td>
+        <td class="num">$25,000</td>
+        <td class="num num-muted">—</td>
+        <td class="num">None</td>
+      </tr>
+      <tr>
+        <td>3–5 units</td>
+        <td class="num">$22,500</td>
+        <td class="num num-green">10%</td>
+        <td class="num">Annual</td>
+      </tr>
+      <tr>
+        <td>6–10 units</td>
+        <td class="num">$20,000</td>
+        <td class="num num-green">20%</td>
+        <td class="num">Annual</td>
+      </tr>
+      <tr>
+        <td>10+ units</td>
+        <td class="num" colspan="3">Custom pricing — contact partnerships@stakcos.com</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">Reseller margins are not prescribed — resellers set their own end-customer pricing. Stakco provides co-marketing support and technical training for certified resellers.</div>
+</div>
+
+<!-- ===== 6. LEASING / RENTAL MODEL ===== -->
+<div class="section" id="leasing">
+  <div class="section-title">6. Leasing Model (Alternative to Purchase)</div>
+  <div class="section-note">For venues that prefer operating expenditure over capital expenditure. Subject to availability and credit assessment.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:35%">Term</th>
+        <th style="width:25%" class="num">Monthly (SGD)</th>
+        <th style="width:20%">Includes</th>
+        <th style="width:20%">End of term</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>12-month lease</strong></td>
+        <td class="num">$2,500</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Hardware + content + warranty</span></td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Return or renew</span></td>
+      </tr>
+      <tr>
+        <td><strong>24-month lease</strong></td>
+        <td class="num">$1,500</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Hardware + content + warranty</span></td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Buyout option</span></td>
+      </tr>
+      <tr>
+        <td><strong>36-month lease</strong></td>
+        <td class="num">$1,100</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Hardware + content + warranty</span></td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Buyout option</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 7. WHAT'S INCLUDED ===== -->
+<div class="section" id="specs">
+  <div class="section-title">7. Hardware Specifications</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:35%">Specification</th>
+        <th style="width:65%">Detail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Rotary structure</strong></td>
+        <td>Concentric ring plates on railing tracks with grab handles. Up to 120 cm diameter, ~50 mm height, ~15 kg</td>
+      </tr>
+      <tr>
+        <td><strong>Mounting options</strong></td>
+        <td>Wall-mounted, horizontal surface, or tabletop</td>
+      </tr>
+      <tr>
+        <td><strong>Projector</strong></td>
+        <td>Short-throw or overhead, calibrated to rotary surface</td>
+      </tr>
+      <tr>
+        <td><strong>Audio</strong></td>
+        <td>Integrated speakers — therapeutic music and real-time sound augmentations</td>
+      </tr>
+      <tr>
+        <td><strong>Connectivity</strong></td>
+        <td>Wi-Fi or Ethernet (required for operation)</td>
+      </tr>
+      <tr>
+        <td><strong>Power consumption</strong></td>
+        <td>~370W total (projector + compute + audio)</td>
+      </tr>
+      <tr>
+        <td><strong>Software</strong></td>
+        <td>Stakco Light OS with remote management via Studio. Automatic content and security updates.</td>
+      </tr>
+      <tr>
+        <td><strong>Custom sizing</strong></td>
+        <td>Non-standard dimensions available on request (affects lead time and pricing)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 8. LEAD TIMES ===== -->
+<div class="section" id="lead-times">
+  <div class="section-title">8. Lead Times & Delivery</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:40%">Phase</th>
+        <th style="width:30%">Duration</th>
+        <th style="width:30%">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Order confirmation & site survey</strong></td>
+        <td>1–2 weeks</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">50% deposit required</span></td>
+      </tr>
+      <tr>
+        <td><strong>Fabrication & assembly</strong></td>
+        <td>4–6 weeks</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Custom sizing adds 1–2 weeks</span></td>
+      </tr>
+      <tr>
+        <td><strong>Delivery & installation</strong></td>
+        <td>1–2 weeks</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Singapore only; overseas on request</span></td>
+      </tr>
+      <tr>
+        <td><strong>Testing & handover</strong></td>
+        <td>1–2 days</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Staff orientation included</span></td>
+      </tr>
+      <tr class="row-total">
+        <td>Total lead time</td>
+        <td><strong>~8 weeks</strong></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 9. PAYMENT TERMS ===== -->
+<div class="section" id="payment">
+  <div class="section-title">9. Payment Terms</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:40%">Milestone</th>
+        <th class="num" style="width:25%">Amount</th>
+        <th style="width:35%">When</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Deposit</strong></td>
+        <td class="num">50% ($12,500)</td>
+        <td>Upon order confirmation</td>
+      </tr>
+      <tr>
+        <td><strong>Final payment</strong></td>
+        <td class="num">50% ($12,500)</td>
+        <td>Upon installation completion</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">Payment via bank transfer. Leasing terms have separate payment schedules — enquire for details.</div>
+</div>
+
+<!-- ===== FOOTNOTES ===== -->
+<div class="footnotes">
+  <p><span class="fn-ref">1</span> Internet costs vary by venue. A stable broadband connection (minimum 10 Mbps) is required. Most venues already have this in place.</p>
+  <p>All prices in Singapore Dollars (SGD). Prices are subject to change. This document is for informational purposes and does not constitute a binding offer. Final pricing confirmed upon order.</p>
+  <p style="margin-top:12px;color:var(--text-sub);font-weight:600;">Contact: hello@stakcos.com · stakcos.com</p>
+</div>
+
+</div>
+</div><!-- /page-layout -->
+
+<script>
+(function() {
+  const links = document.querySelectorAll('.side-nav-list a');
+  const sections = [];
+  links.forEach(link => {
+    const id = link.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) sections.push({ id, el, link });
+  });
+
+  function updateActive() {
+    let current = sections[0];
+    const offset = 80;
+    for (const s of sections) {
+      if (s.el.getBoundingClientRect().top <= offset) current = s;
+    }
+    links.forEach(l => l.classList.remove('active'));
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+})();
+</script>
+</body>
+</html>
