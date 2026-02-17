@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Water Mist</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; overflow: hidden; background: #ffffff; touch-action: none; }
+  canvas { display: block; width: 100%; height: 100%; }
+  #info {
+    position: fixed; bottom: 12px; left: 50%; transform: translateX(-50%);
+    color: rgba(0,0,0,0.2); font: 10px/1 monospace; text-align: center;
+    pointer-events: none; z-index: 1;
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="info">tilt device or move cursor</div>
+<script>
+(() => {
+  const canvas = document.getElementById('c');
+  const ctx = canvas.getContext('2d');
+  const info = document.getElementById('info');
+
+  let W, H, dpr;
+  const DENSITY = 0.00020;
+
+  let droplets = [];
+
+  let tiltX = 0, tiltY = 0, tiltZ = 0;
+  let smoothX = 0, smoothY = 0, smoothZ = 0;
+  const SMOOTH = 0.08;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    initDroplets();
+  }
+
+  // Random-walk connected cluster of 3-5 cells
+  function generateCluster() {
+    const count = 3 + (Math.random() * 3) | 0;
+    const set = new Set();
+    set.add('0,0');
+    const list = [[0, 0]];
+    const dirs = [[1,0],[-1,0],[0,1],[0,-1]];
+
+    while (list.length < count) {
+      const src = list[(Math.random() * list.length) | 0];
+      const d = dirs[(Math.random() * 4) | 0];
+      const nx = src[0] + d[0], ny = src[1] + d[1];
+      const key = nx + ',' + ny;
+      if (!set.has(key)) {
+        set.add(key);
+        list.push([nx, ny]);
+      }
+    }
+
+    return list.map((p, i) => ({
+      dx: p[0], dy: p[1],
+      alpha: i === 0 ? 0.8 : (0.35 + Math.random() * 0.35)
+    }));
+  }
+
+  function initDroplets() {
+    const count = Math.floor(W * H * DENSITY);
+    droplets = new Array(count);
+    for (let i = 0; i < count; i++) {
+      const x = Math.random() * W;
+      const y = Math.random() * H;
+      const hue = ((x / W) * 260 + (y / H) * 100) % 360;
+      const scale = 0.4 + Math.random() * 0.4; // 0.4-0.8px per cell
+      droplets[i] = { x, y, hue, cells: generateCluster(), scale };
+    }
+  }
+
+  // --- Input ---
+  function handleOrientation(e) {
+    if (e.gamma != null) {
+      tiltX = (e.gamma || 0) / 90;
+      tiltY = (e.beta || 0) / 180;
+      tiltZ = (e.alpha || 0) / 360;
+      info.style.display = 'none';
+    }
+  }
+  function handleMotion(e) {
+    const a = e.accelerationIncludingGravity;
+    if (a && a.x != null) {
+      tiltX = Math.max(-1, Math.min(1, (a.x || 0) / 10));
+      tiltY = Math.max(-1, Math.min(1, (a.y || 0) / 10));
+      tiltZ = Math.max(-1, Math.min(1, (a.z || 0) / 10));
+      info.style.display = 'none';
+    }
+  }
+  function handleMouse(e) {
+    tiltX = (e.clientX / W) * 2 - 1;
+    tiltY = (e.clientY / H) * 2 - 1;
+    tiltZ = (tiltX + tiltY) * 0.5;
+  }
+
+  function requestSensorPermission() {
+    if (typeof DeviceOrientationEvent !== 'undefined' &&
+        typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().then(s => {
+        if (s === 'granted') window.addEventListener('deviceorientation', handleOrientation, true);
+      }).catch(() => {});
+    } else {
+      window.addEventListener('deviceorientation', handleOrientation, true);
+    }
+    if (typeof DeviceMotionEvent !== 'undefined' &&
+        typeof DeviceMotionEvent.requestPermission === 'function') {
+      DeviceMotionEvent.requestPermission().then(s => {
+        if (s === 'granted') window.addEventListener('devicemotion', handleMotion, true);
+      }).catch(() => {});
+    } else {
+      window.addEventListener('devicemotion', handleMotion, true);
+    }
+  }
+
+  document.addEventListener('click', requestSensorPermission, { once: true });
+  document.addEventListener('touchstart', requestSensorPermission, { once: true });
+  requestSensorPermission();
+  window.addEventListener('mousemove', handleMouse, { passive: true });
+
+  // --- Color ---
+  function hslToRgb(h, s, l) {
+    h /= 360; s /= 100; l /= 100;
+    if (s === 0) { const v = (l*255)|0; return [v,v,v]; }
+    const hue2rgb = (p, q, t) => {
+      if (t < 0) t += 1; if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q-p)*6*t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q-p)*(2/3-t)*6;
+      return p;
+    };
+    const q = l < 0.5 ? l*(1+s) : l+s-l*s;
+    const p = 2*l - q;
+    return [(hue2rgb(p,q,h+1/3)*255)|0, (hue2rgb(p,q,h)*255)|0, (hue2rgb(p,q,h-1/3)*255)|0];
+  }
+
+  // --- Render ---
+  let imgData, pixels;
+
+  function ensureImageData() {
+    const w = canvas.width, h = canvas.height;
+    if (!imgData || imgData.width !== w || imgData.height !== h) {
+      imgData = ctx.createImageData(w, h);
+      pixels = imgData.data;
+    }
+  }
+
+  function render() {
+    smoothX += (tiltX - smoothX) * SMOOTH;
+    smoothY += (tiltY - smoothY) * SMOOTH;
+    smoothZ += (tiltZ - smoothZ) * SMOOTH;
+
+    const hueOffset = smoothX * 120 + smoothY * 80 + smoothZ * 60;
+    const saturation = 72 + smoothX * 18;
+    const lightness = 55 + smoothY * 12;
+
+    ensureImageData();
+    const w = canvas.width;
+    const h = canvas.height;
+    const data = pixels;
+
+    // Clear to white
+    for (let i = 0, len = data.length; i < len; i += 4) {
+      data[i] = 255; data[i+1] = 255; data[i+2] = 255; data[i+3] = 255;
+    }
+
+    const d = dpr;
+    const dLen = droplets.length;
+
+    for (let i = 0; i < dLen; i++) {
+      const drop = droplets[i];
+      const hue = (drop.hue + hueOffset + 360) % 360;
+      const [r, g, b] = hslToRgb(hue, saturation, lightness);
+
+      const bx = (drop.x * d) | 0;
+      const by = (drop.y * d) | 0;
+      const s = Math.round(drop.scale * d) || 1;
+      const cells = drop.cells;
+      const cLen = cells.length;
+
+      for (let j = 0; j < cLen; j++) {
+        const cell = cells[j];
+        const ox = bx + cell.dx * s;
+        const oy = by + cell.dy * s;
+        const ca = cell.alpha;
+
+        for (let py = 0; py < s; py++) {
+          const fy = oy + py;
+          if (fy < 0 || fy >= h) continue;
+          for (let px = 0; px < s; px++) {
+            const fx = ox + px;
+            if (fx < 0 || fx >= w) continue;
+            const pi = (fy * w + fx) * 4;
+            data[pi]   = (data[pi]   + (r - data[pi])   * ca) | 0;
+            data[pi+1] = (data[pi+1] + (g - data[pi+1]) * ca) | 0;
+            data[pi+2] = (data[pi+2] + (b - data[pi+2]) * ca) | 0;
+          }
+        }
+      }
+    }
+
+    ctx.putImageData(imgData, 0, 0);
+    requestAnimationFrame(render);
+  }
+
+  window.addEventListener('resize', resize);
+  resize();
+  render();
+})();
+</script>
+</body>
+</html>
