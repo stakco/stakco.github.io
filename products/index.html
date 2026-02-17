@@ -140,6 +140,7 @@
   .seg-devs      { background:rgba(13,127,148,0.07); color:#0a6e80; border:1px solid rgba(13,127,148,0.15); }
   .seg-personal  { background:rgba(109,77,170,0.07); color:#5d3f96; border:1px solid rgba(109,77,170,0.15); }
   .seg-health    { background:rgba(20,145,130,0.07); color:#0e7a6e; border:1px solid rgba(20,145,130,0.15); }
+  .seg-luxury    { background:rgba(142,100,40,0.07); color:#8e6428; border:1px solid rgba(142,100,40,0.15); }
 
   /* ===== SMART GUIDE (single-step card selection) ===== */
   .guide-card { margin-bottom:20px; padding:24px; background:var(--card); border:1px solid var(--border); border-radius:10px; }
@@ -533,6 +534,13 @@
         <div class="seg-card-examples"><span>Blog widgets · Daily puzzle embed · Mobile mini-games · SaaS gamification</span></div>
       </div>
 
+      <div class="guide-seg-card" data-segments="luxury" onclick="toggleGuideCard(this)">
+        <div class="seg-card-title">Luxury & Premium Brands</div>
+        <div class="seg-card-desc">Experiential activations, VIP gifting, flagship installations</div>
+        <div class="seg-card-tags"><span class="seg seg-luxury">Luxury & Premium Brands</span></div>
+        <div class="seg-card-examples"><span>Flagship store installations · Limited-edition collectibles · VIP client gifts · Fashion week activations</span></div>
+      </div>
+
     </div>
 
     <button class="guide-btn guide-btn-submit" id="guideSubmitBtn" onclick="guideSubmit()" disabled>Show My Recommendations ✦</button>
@@ -616,6 +624,13 @@
         <td><div class="cell-flex"><span class="seg seg-health">Healthcare & Therapy</span><span class="seg seg-education">Education</span></div></td>
         <td class="example">OT clinics, paediatric therapy, hand rehab</td>
       </tr>
+      <tr data-segments="luxury" data-section="print">
+        <td><div class="use-case">Premium branded collectibles & VIP gifts</div><div class="use-desc">Limited-edition puzzles in luxury packaging for client gifting and brand activations</div></td>
+        <td><div class="cell-flex"><span class="mod mod-print">Print</span><span class="mod mod-ai">AI</span></div></td>
+        <td class="cost"></td>
+        <td><div class="cell-flex"><span class="seg seg-luxury">Luxury & Premium Brands</span></div></td>
+        <td class="example">VIP client gifts, fashion house collectibles, boutique in-store exclusives</td>
+      </tr>
 
       <!-- PLAY -->
       <tr class="section-row"><td colspan="5">Online Interactive Puzzles</td></tr>
@@ -639,6 +654,13 @@
         <td class="cost"></td>
         <td><div class="cell-flex"><span class="seg seg-personal">Personal & Family</span></div></td>
         <td class="example">Wellness apps, self-care routines, mental health support</td>
+      </tr>
+      <tr data-segments="luxury" data-section="play">
+        <td><div class="use-case">Branded digital campaign puzzles</div><div class="use-desc">Interactive product launch experiences with engagement analytics and exclusive content</div></td>
+        <td><div class="cell-flex"><span class="mod mod-play">Play</span><span class="mod mod-ai">AI</span></div></td>
+        <td class="cost"></td>
+        <td><div class="cell-flex"><span class="seg seg-luxury">Luxury & Premium Brands</span></div></td>
+        <td class="example">Product launch campaigns, loyalty rewards, seasonal brand activations</td>
       </tr>
 
       <!-- LIGHT -->
@@ -677,6 +699,13 @@
         <td class="cost"></td>
         <td><div class="cell-flex"><span class="seg seg-venues">Venues & Events</span><span class="seg seg-business">Business & Corporate</span><span class="seg seg-health">Healthcare & Therapy</span></div></td>
         <td class="example">Hotel lobbies, waiting rooms, visitor centres</td>
+      </tr>
+      <tr data-segments="luxury" data-section="light">
+        <td><div class="use-case">Flagship store & experiential installations</div><div class="use-desc">Interactive art pieces for retail spaces, showrooms, and brand events</div></td>
+        <td><div class="cell-flex"><span class="mod mod-light">Light</span></div></td>
+        <td class="cost"></td>
+        <td><div class="cell-flex"><span class="seg seg-luxury">Luxury & Premium Brands</span></div></td>
+        <td class="example">Flagship boutiques, fashion week booths, five-star hotel lobbies</td>
       </tr>
 
       <!-- AI -->
@@ -759,11 +788,15 @@
     // Dev
     { section:'Embed & Integrate', useCase:'Embed puzzles into a website or blog', desc:'Interactive widgets for any web page', modules:['Dev'], segments:['devs','creators'], example:'Blog widget, daily puzzle, portfolio showcase' },
     { section:'Embed & Integrate', useCase:'Integrate puzzles into an app via API', desc:'SDK/API for mobile, web, or internal tools', modules:['Dev','AI'], segments:['devs','business'], example:'Mobile mini-games, SaaS gamification' },
+    // Luxury & Premium Brands
+    { section:'Physical Puzzles', useCase:'Premium branded collectibles & VIP gifts', desc:'Limited-edition puzzles in luxury packaging for client gifting and brand activations', modules:['Print','AI'], segments:['luxury'], example:'VIP client gifts, fashion house collectibles, boutique in-store exclusives' },
+    { section:'Online Interactive Puzzles', useCase:'Branded digital campaign puzzles', desc:'Interactive product launch experiences with engagement analytics and exclusive content', modules:['Play','AI'], segments:['luxury'], example:'Product launch campaigns, loyalty rewards, seasonal brand activations' },
+    { section:'Projection & Installations', useCase:'Flagship store & experiential installations', desc:'Interactive art pieces for retail spaces, showrooms, and brand events', modules:['Light'], segments:['luxury'], example:'Flagship boutiques, fashion week booths, five-star hotel lobbies' },
   ];
 
   const modClassMap = { Print:'mod-print', Play:'mod-play', Light:'mod-light', Publish:'mod-publish', AI:'mod-ai', Dev:'mod-dev' };
-  const segClassMap = { personal:'seg-personal', creators:'seg-creators', business:'seg-business', education:'seg-education', venues:'seg-venues', health:'seg-health', devs:'seg-devs' };
-  const segLabelMap = { personal:'Personal & Family', creators:'Creators & Artists', business:'Business & Corporate', education:'Education', venues:'Venues & Events', health:'Healthcare & Therapy', devs:'Developers' };
+  const segClassMap = { personal:'seg-personal', creators:'seg-creators', business:'seg-business', education:'seg-education', venues:'seg-venues', health:'seg-health', devs:'seg-devs', luxury:'seg-luxury' };
+  const segLabelMap = { personal:'Personal & Family', creators:'Creators & Artists', business:'Business & Corporate', education:'Education', venues:'Venues & Events', health:'Healthcare & Therapy', devs:'Developers', luxury:'Luxury & Premium Brands' };
   const segColorMap = {
     personal:{ bg:'#5d3f96', border:'rgba(109,77,170,0.3)' },
     creators:{ bg:'#a82864', border:'rgba(190,48,112,0.3)' },
@@ -771,7 +804,8 @@
     education:{ bg:'#12704e', border:'rgba(22,128,90,0.3)' },
     venues:{ bg:'#7a5c09', border:'rgba(154,114,9,0.3)' },
     health:{ bg:'#0e7a6e', border:'rgba(20,145,130,0.3)' },
-    devs:{ bg:'#0a6e80', border:'rgba(13,127,148,0.3)' }
+    devs:{ bg:'#0a6e80', border:'rgba(13,127,148,0.3)' },
+    luxury:{ bg:'#8e6428', border:'rgba(142,100,40,0.3)' }
   };
 
   // ========== FILTER SYSTEM (for full table) ==========
