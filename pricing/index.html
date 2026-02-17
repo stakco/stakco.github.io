@@ -107,6 +107,10 @@
   }
   .audience-card h4 { font-size:0.82rem; font-weight:700; margin-bottom:6px; }
   .audience-card p { font-size:0.75rem; color:var(--text-muted); line-height:1.45; }
+  .audience-card .aud-line { display:block; margin-bottom:4px; padding-left:12px; position:relative; }
+  .audience-card .aud-line::before { content:'▸'; position:absolute; left:0; color:var(--text-muted); font-size:0.65rem; top:0.5px; }
+  .audience-card .aud-line strong { color:var(--text); }
+  .audience-card .aud-use { display:block; padding-left:12px; font-size:0.7rem; color:var(--text-muted); margin-bottom:6px; }
 
   /* Partnership cards */
   .partner-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:28px; }
@@ -146,6 +150,25 @@
 
   /* CTA */
   .cta-section { text-align:center; padding:28px 0; }
+
+  /* BD Partner section */
+  .bd-section { margin-bottom:36px; }
+  .bd-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:16px; }
+  .bd-card {
+    background:var(--card); border:1px solid var(--border); border-radius:10px; padding:20px 22px;
+    position:relative; border-top:3px solid var(--purple);
+  }
+  .bd-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:2px; color:var(--text); }
+  .bd-card .bd-subtitle { font-size:0.68rem; font-weight:600; color:var(--purple); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; }
+  .bd-card .bd-desc { font-size:0.78rem; color:var(--text-sub); line-height:1.5; margin-bottom:12px; }
+  .bd-card .bd-row { display:flex; justify-content:space-between; align-items:baseline; font-size:0.72rem; padding:4px 0; border-bottom:1px solid rgba(0,0,0,0.04); }
+  .bd-card .bd-row:last-child { border-bottom:none; }
+  .bd-card .bd-row .bd-label { color:var(--text-muted); }
+  .bd-card .bd-row .bd-val { font-weight:600; color:var(--text); font-family:'JetBrains Mono',monospace; font-size:0.7rem; }
+  .bd-card .bd-row .bd-val-green { font-weight:600; color:var(--green); font-family:'JetBrains Mono',monospace; font-size:0.7rem; }
+  .bd-card .bd-ideal { margin-top:12px; padding:8px 10px; border-radius:6px; background:rgba(109,77,170,0.04); border:1px solid rgba(109,77,170,0.1); font-size:0.66rem; color:var(--text-muted); line-height:1.5; }
+  .bd-card .bd-ideal strong { color:var(--text-sub); font-weight:600; }
+  .bd-note { font-size:0.72rem; color:var(--text-muted); line-height:1.5; font-style:italic; }
   .cta-section p { font-size:0.85rem; color:var(--text-sub); margin-bottom:14px; }
   .cta-btn {
     display:inline-block; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600;
@@ -191,6 +214,15 @@
     .partner-card .partner-benefit { font-size:0.62rem; line-height:1.5; padding:4px 0; }
     .partner-terms { font-size:0.56rem; padding:5px 8px; margin-top:6px; }
     .partner-terms::before { font-size:0.46rem; top:-6px; }
+    .bd-grid { grid-template-columns:repeat(3,1fr); gap:6px; break-inside:avoid; page-break-inside:avoid; }
+    .bd-card { padding:10px 12px; border-top-width:2px; }
+    .bd-card h4 { font-size:0.72rem; }
+    .bd-card .bd-subtitle { font-size:0.52rem; margin-bottom:4px; }
+    .bd-card .bd-desc { font-size:0.58rem; margin-bottom:6px; line-height:1.35; }
+    .bd-card .bd-row { font-size:0.56rem; padding:2px 0; }
+    .bd-card .bd-row .bd-val, .bd-card .bd-row .bd-val-green { font-size:0.56rem; }
+    .bd-card .bd-ideal { font-size:0.52rem; padding:4px 6px; margin-top:6px; }
+    .bd-note { font-size:0.56rem; }
     table { break-inside:avoid; page-break-inside:avoid; }
     .cta-section { display:none; }
     .footer { display:none; }
@@ -199,7 +231,7 @@
   @media (max-width:700px) {
     .mobile-break { display:block; }
     .container { padding:24px 16px 48px; }
-    .glance-grid, .audiences-grid, .partner-grid { grid-template-columns:1fr; }
+    .glance-grid, .audiences-grid, .partner-grid, .bd-grid { grid-template-columns:1fr; }
     .header h1 { font-size:1.3rem; }
     table { font-size:0.72rem; }
     thead th { padding:8px 8px; font-size:0.55rem; }
@@ -236,11 +268,11 @@
       <div class="glance-desc">Browser-based puzzle platform. Creators subscribe, players access free.</div>
       <div class="glance-stats">
         <div class="glance-stat">
-          <span class="gs-label">For players</span>
+          <span class="gs-label">Players access</span>
           <span class="gs-value">Free</span>
         </div>
         <div class="glance-stat">
-          <span class="gs-label">Play module</span>
+          <span class="gs-label">Creators subscribe</span>
           <span class="gs-value">S$9.90/mo</span>
         </div>
         <div class="glance-stat">
@@ -248,8 +280,8 @@
           <span class="gs-value">Recurring</span>
         </div>
         <div class="glance-stat">
-          <span class="gs-label">Max user spend</span>
-          <span class="gs-value">S$40+/mo</span>
+          <span class="gs-label">All modules</span>
+          <span class="gs-value">~S$40/mo</span>
         </div>
       </div>
     </div>
@@ -305,7 +337,7 @@
         </div>
         <div class="glance-stat">
           <span class="gs-label">Lead time</span>
-          <span class="gs-value">5 days – 4 wks</span>
+          <span class="gs-value">~7 days</span>
         </div>
       </div>
     </div>
@@ -337,7 +369,7 @@
         <td><strong>Revenue model</strong></td>
         <td>Monthly subscription</td>
         <td>One-time + operating</td>
-        <td>Per-unit sales</td>
+        <td>Per-order pricing</td>
       </tr>
       <tr>
         <td><strong>Entry price</strong></td>
@@ -346,10 +378,10 @@
         <td class="col-paper" style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;">S$20/unit</td>
       </tr>
       <tr>
-        <td><strong>Margin profile</strong></td>
-        <td><span style="color:var(--green);font-weight:600">High (digital)</span></td>
-        <td>Medium (hardware)</td>
-        <td>Medium (production)</td>
+        <td><strong>Gross margin</strong></td>
+        <td><span style="color:var(--green);font-weight:600">High (near-zero COGS)</span></td>
+        <td>Medium (hardware + install)</td>
+        <td>Medium (materials + print)</td>
       </tr>
       <tr>
         <td><strong>Recurring revenue</strong></td>
@@ -361,7 +393,7 @@
         <td><strong>Lead time</strong></td>
         <td>Instant</td>
         <td>~8 weeks</td>
-        <td>5 days – 4 weeks</td>
+        <td>~7 days</td>
       </tr>
       <tr>
         <td><strong>Scalability</strong></td>
@@ -378,7 +410,7 @@
       <tr>
         <td><strong>Reseller model</strong></td>
         <td>Volume licensing</td>
-        <td>Unit discounts + leasing</td>
+        <td>Unit discounts</td>
         <td>Bulk tiers + white-label</td>
       </tr>
     </tbody>
@@ -391,31 +423,46 @@
   <div class="audience-card">
     <h4 style="color:var(--pink)">Play</h4>
     <p>
-      Content creators publishing puzzle series.<br>
-      Educators delivering interactive coursework.<br>
-      Brands running engagement campaigns.<br>
-      Luxury brands launching digital activations.<br>
-      Developers embedding puzzles via API.
+      <span class="aud-line"><strong>Content creators</strong></span>
+      <span class="aud-use">Publishing puzzle series</span>
+      <span class="aud-line"><strong>Educators</strong></span>
+      <span class="aud-use">Delivering interactive coursework</span>
+      <span class="aud-line"><strong>Brands</strong></span>
+      <span class="aud-use">Running engagement campaigns</span>
+      <span class="aud-line"><strong>Luxury brands</strong></span>
+      <span class="aud-use">Launching digital activations</span>
+      <span class="aud-line"><strong>Developers</strong></span>
+      <span class="aud-use">Embedding puzzles via API</span>
     </p>
   </div>
   <div class="audience-card">
     <h4 style="color:var(--amber)">Light</h4>
     <p>
-      Museums and galleries with interactive exhibits.<br>
-      Schools and therapy centres for sensory engagement.<br>
-      Hotels and hospitals creating calming spaces.<br>
-      Luxury brands with flagship store installations.<br>
-      Event organisers with immersive installations.
+      <span class="aud-line"><strong>Museums & galleries</strong></span>
+      <span class="aud-use">Interactive exhibits</span>
+      <span class="aud-line"><strong>Schools & therapy centres</strong></span>
+      <span class="aud-use">Sensory engagement</span>
+      <span class="aud-line"><strong>Hotels & hospitals</strong></span>
+      <span class="aud-use">Calming spaces for guests and patients</span>
+      <span class="aud-line"><strong>Luxury brands</strong></span>
+      <span class="aud-use">Flagship store installations</span>
+      <span class="aud-line"><strong>Event organisers</strong></span>
+      <span class="aud-use">Immersive installations</span>
     </p>
   </div>
   <div class="audience-card">
     <h4 style="color:var(--orange)">Paper</h4>
     <p>
-      Businesses producing branded merchandise.<br>
-      Luxury brands creating VIP gifts and collectibles.<br>
-      Corporate teams ordering event giveaways.<br>
-      Educators creating classroom handouts.<br>
-      Therapists using puzzles for motor exercises.
+      <span class="aud-line"><strong>Businesses</strong></span>
+      <span class="aud-use">Branded merchandise</span>
+      <span class="aud-line"><strong>Luxury brands</strong></span>
+      <span class="aud-use">VIP gifts and collectibles</span>
+      <span class="aud-line"><strong>Corporate teams</strong></span>
+      <span class="aud-use">Event giveaways</span>
+      <span class="aud-line"><strong>Educators</strong></span>
+      <span class="aud-use">Classroom handouts</span>
+      <span class="aud-line"><strong>Therapists</strong></span>
+      <span class="aud-use">Motor skill exercises</span>
     </p>
   </div>
 </div>
@@ -429,7 +476,7 @@
     <h4>Reseller</h4>
     <div class="partner-desc">Buy at wholesale pricing, sell under your own terms. Set your own margins with volume-based discounts.</div>
     <div class="partner-benefit"><span class="bp">S$5K–10K+ per unit resold <span class="bp-label l-light">Light</span></span><span class="bp">Set your own margins <span class="bp-label l-paper">Paper</span></span></div>
-    <div class="partner-terms"><strong>Requires:</strong> Min. 3 units/yr (Light) or 50 units/yr (Paper)<br>Signed reseller agreement</div>
+    <div class="partner-terms"><strong>Requires:</strong> Min. 2 units/yr (Light) or 100 units/mo (Paper)<br>Signed reseller agreement</div>
     <div class="partner-products">
       <span class="pp-tag pp-light">Light</span>
       <span class="pp-tag pp-paper">Paper</span>
@@ -450,7 +497,7 @@
     <h4>Installation Partner</h4>
     <div class="partner-desc">Get certified to install and service Stakco Light units in your region. Earn on installation and ongoing maintenance.</div>
     <div class="partner-benefit"><span class="bp">S$3K–5K per installation <span class="bp-label l-light">Light</span></span><span class="bp">S$600/yr service contracts <span class="bp-label l-light">Light</span></span></div>
-    <div class="partner-terms"><strong>Requires:</strong> Technical certification (provided by Stakco)<br>Min. 2 installations/yr to maintain status</div>
+    <div class="partner-terms"><strong>Requires:</strong> Technical certification (provided by Stakco)<br>Active status maintained with annual recertification</div>
     <div class="partner-products">
       <span class="pp-tag pp-light">Light</span>
     </div>
@@ -511,9 +558,63 @@
 </div>
 </div><!-- /partnership-section -->
 
+<!-- Section 5: BD Partners -->
+<div style="break-before:page;">
+<h2 class="section-heading">Business Development Partners <span>Revenue-share models — no equity</span></h2>
+<div class="bd-section">
+
+<div class="bd-grid">
+
+  <!-- Sales Partner -->
+  <div class="bd-card">
+    <h4>Sales Partner</h4>
+    <div class="bd-subtitle">Commission-based</div>
+    <div class="bd-desc">Source and close deals across all Stakco products. Earn commission on every sale you bring — ongoing royalty on recurring revenue.</div>
+    <div class="bd-row"><span class="bd-label">Play subscriptions</span><span class="bd-val-green">20% recurring royalty</span></div>
+    <div class="bd-row"><span class="bd-label">Light hardware</span><span class="bd-val-green">S$2,500/unit</span></div>
+    <div class="bd-row"><span class="bd-label">Light service contracts</span><span class="bd-val-green">15% recurring royalty</span></div>
+    <div class="bd-row"><span class="bd-label">Paper orders</span><span class="bd-val-green">S$1–2/unit + 15% reorders</span></div>
+    <div class="bd-row"><span class="bd-label">Payout</span><span class="bd-val">Monthly, net-30</span></div>
+    <div class="bd-row"><span class="bd-label">Commitment</span><span class="bd-val">Non-exclusive</span></div>
+    <div class="bd-ideal"><strong>Ideal for:</strong> Sales executives and BD professionals with existing networks in education, healthcare, hospitality, or retail — focused on deal volume.</div>
+  </div>
+
+  <!-- Growth Partner -->
+  <div class="bd-card">
+    <h4>Growth Partner</h4>
+    <div class="bd-subtitle">Phantom equity</div>
+    <div class="bd-desc">Participate in company value growth without ownership. Phantom units vest over time, tied to revenue milestones you help achieve.</div>
+    <div class="bd-row"><span class="bd-label">Phantom units</span><span class="bd-val-green">Allocated at onboarding</span></div>
+    <div class="bd-row"><span class="bd-label">Vesting</span><span class="bd-val">3 years, quarterly</span></div>
+    <div class="bd-row"><span class="bd-label">Payout trigger</span><span class="bd-val">Revenue milestones or exit event</span></div>
+    <div class="bd-row"><span class="bd-label">Base commission</span><span class="bd-val-green">10% on all sales (stacks)</span></div>
+    <div class="bd-row"><span class="bd-label">Commitment</span><span class="bd-val">Exclusive, minimum hours</span></div>
+    <div class="bd-ideal"><strong>Ideal for:</strong> Senior BD or operations leaders committing significant time — want upside participation beyond commission, aligned with long-term growth.</div>
+  </div>
+
+  <!-- Regional Partner -->
+  <div class="bd-card">
+    <h4>Regional Partner</h4>
+    <div class="bd-subtitle">Territory rights</div>
+    <div class="bd-desc">Exclusive rights to sell, distribute, and service Stakco products in a defined geography. Build and own your regional market.</div>
+    <div class="bd-row"><span class="bd-label">Play subscriptions</span><span class="bd-val-green">25% recurring royalty</span></div>
+    <div class="bd-row"><span class="bd-label">Light hardware</span><span class="bd-val-green">S$3,500/unit + service rev</span></div>
+    <div class="bd-row"><span class="bd-label">Paper orders</span><span class="bd-val-green">20% of order value</span></div>
+    <div class="bd-row"><span class="bd-label">Territory</span><span class="bd-val">Exclusive, defined region</span></div>
+    <div class="bd-row"><span class="bd-label">Term</span><span class="bd-val">12 months, renewable</span></div>
+    <div class="bd-row"><span class="bd-label">Minimum targets</span><span class="bd-val">Quarterly review</span></div>
+    <div class="bd-ideal"><strong>Ideal for:</strong> Regional directors or distributors with deep local presence — want to build a Stakco business in their market with exclusivity protection.</div>
+  </div>
+
+</div>
+
+<div class="bd-note">All BD partner arrangements are individually negotiated. Commission and phantom equity can be combined. Revenue-share percentages above are indicative starting points — final terms depend on territory, volume commitment, and scope of engagement. Contact <a href="mailto:partnerships@stakcos.com" style="color:var(--purple)">partnerships@stakcos.com</a> to discuss.</div>
+
+</div>
+</div>
+
 <!-- CTA -->
 <div class="cta-section">
-  <p>Ready to talk?</p>
   <a href="mailto:hello@stakcos.com?subject=Stakco partnership enquiry" class="cta-btn">Contact Us</a>
 </div>
 
