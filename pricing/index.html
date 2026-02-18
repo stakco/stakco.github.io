@@ -65,12 +65,13 @@
   .light:hover .glance-cta { background:rgba(154,114,9,0.08); }
   .paper:hover .glance-cta { background:rgba(200,122,26,0.08); }
 
-  .glance-badge { display:inline-block; font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:3px 10px; border-radius:999px; color:#fff; margin-bottom:10px; }
+  .glance-badge { display:inline-block; font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:3px 10px; border-radius:999px; color:#fff; }
   .play .glance-badge { background:var(--pink); }
   .light .glance-badge { background:var(--amber); }
   .paper .glance-badge { background:var(--orange); }
 
-  .glance-card h3 { font-size:1rem; font-weight:700; margin-bottom:4px; }
+  .glance-title-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; }
+  .glance-card h3 { font-size:1rem; font-weight:700; margin:0; }
   .glance-card .glance-desc { font-size:0.78rem; color:var(--text-muted); margin-bottom:14px; line-height:1.45; }
 
   .glance-stats { display:flex; flex-direction:column; gap:8px; margin-bottom:16px; }
@@ -263,8 +264,7 @@
   <!-- Play -->
   <a href="stakco-play-pricing.html" class="glance-card play">
     <div class="glance-body">
-      <div class="glance-badge">Digital</div>
-      <h3>Stakco Play</h3>
+      <div class="glance-title-row"><h3>Stakco Play</h3><div class="glance-badge">Digital</div></div>
       <div class="glance-desc">Browser-based puzzle platform. Creators subscribe, players access free.</div>
       <div class="glance-stats">
         <div class="glance-stat">
@@ -291,8 +291,7 @@
   <!-- Light -->
   <a href="stakco-light-pricing.html" class="glance-card light">
     <div class="glance-body">
-      <div class="glance-badge">Projection</div>
-      <h3>Stakco Light</h3>
+      <div class="glance-title-row"><h3>Stakco Light</h3><div class="glance-badge">Projection</div></div>
       <div class="glance-desc">Turnkey interactive installation for venues, schools, and therapy centres.</div>
       <div class="glance-stats">
         <div class="glance-stat">
@@ -319,8 +318,7 @@
   <!-- Paper -->
   <a href="stakco-paper-pricing.html" class="glance-card paper">
     <div class="glance-body">
-      <div class="glance-badge">Physical</div>
-      <h3>Stakco Paper</h3>
+      <div class="glance-title-row"><h3>Stakco Paper</h3><div class="glance-badge">Physical</div></div>
       <div class="glance-desc">Physical rotating puzzles. Bulk-friendly pricing for retail, events, and gifting.</div>
       <div class="glance-stats">
         <div class="glance-stat">
@@ -616,7 +614,7 @@
 <!-- Section 6: Advisory Program -->
 <h2 class="section-heading">Strategic Advisory Program <span>Invitation only</span></h2>
 <div class="bd-section">
-  <div class="bd-card" style="border-top-color:var(--text); max-width:640px;">
+  <div class="bd-card" style="border-top-color:var(--text);">
     <h4>Strategic Advisor</h4>
     <div class="bd-subtitle">Phantom equity · long-term</div>
     <div class="bd-desc">High-level strategic guidance, network access, and institutional insight from senior academics and corporate leaders. Advisory positions are extended by invitation to collaborators with a minimum of three years of demonstrated engagement.</div>
