@@ -193,7 +193,7 @@
       <div class="sb-label">For players</div>
     </div>
     <div class="summary-box">
-      <div class="sb-value">$9.90/mo</div>
+      <div class="sb-value" data-price="PLAY.monthly" data-price-suffix="/mo">##</div>
       <div class="sb-label">Play module</div>
     </div>
     <div class="summary-box">
@@ -262,8 +262,8 @@
     <tbody>
       <tr class="row-highlight">
         <td><strong>Play module</strong></td>
-        <td class="num num-accent">$9.90/mo</td>
-        <td class="num">$99/yr</td>
+        <td class="num num-accent" data-price="PLAY.monthly" data-price-suffix="/mo">##</td>
+        <td class="num" data-price="PLAY.annual" data-price-suffix="/yr">##</td>
         <td><span style="font-size:0.75rem;color:var(--green);font-weight:600">~17% off with annual</span></td>
       </tr>
     </tbody>
@@ -360,15 +360,15 @@
         <td><strong>Play</strong></td>
         <td>Publish albums to custom subdomain</td>
         <td><span class="label-recurring">Subscription</span></td>
-        <td class="num num-accent">$9.90</td>
-        <td class="num">$99/yr</td>
+        <td class="num num-accent" data-price="PLAY.monthly">##</td>
+        <td class="num" data-price="PLAY.annual" data-price-suffix="/yr">##</td>
       </tr>
       <tr>
         <td><strong>AI</strong></td>
         <td>Generate puzzle artwork from text prompts</td>
         <td><span class="label-recurring">Subscription</span></td>
-        <td class="num">$9.90</td>
-        <td class="num">$99/yr</td>
+        <td class="num" data-price="AI.monthly">##</td>
+        <td class="num" data-price="AI.annual" data-price-suffix="/yr">##</td>
       </tr>
       <tr>
         <td><strong>Print</strong></td>
@@ -388,8 +388,8 @@
         <td><strong>Dev</strong></td>
         <td>SDK & API for embedding puzzles</td>
         <td><span class="label-recurring">Subscription</span></td>
-        <td class="num">$19.90</td>
-        <td class="num">$199/yr</td>
+        <td class="num" data-price="DEV.monthly">##</td>
+        <td class="num" data-price="DEV.annual" data-price-suffix="/yr">##</td>
       </tr>
     </tbody>
   </table>
@@ -464,14 +464,14 @@
       <tr>
         <td><strong>Hobby publisher</strong></td>
         <td><span style="font-size:0.78rem;color:var(--text-sub)">Play</span></td>
-        <td class="num">$9.90</td>
-        <td class="num">$99</td>
+        <td class="num" data-price="PLAY.monthly">##</td>
+        <td class="num" data-price="PLAY.annual">##</td>
       </tr>
       <tr class="row-highlight">
         <td><strong>Content creator</strong></td>
         <td><span style="font-size:0.78rem;color:var(--text-sub)">Play + AI</span></td>
-        <td class="num num-accent">$19.80</td>
-        <td class="num">$198</td>
+        <td class="num num-accent" data-price-sum="PLAY.monthly+AI.monthly">##</td>
+        <td class="num" data-price-sum="PLAY.annual+AI.annual">##</td>
       </tr>
       <tr>
         <td><strong>Educator / business</strong></td>
@@ -607,7 +607,7 @@
     <tbody>
       <tr>
         <td><strong>Setup cost</strong></td>
-        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600">$9.90/mo</span></td>
+        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600" data-price="PLAY.monthly" data-price-suffix="/mo">##</span></td>
         <td><span style="font-size:0.78rem;color:var(--text-sub)">$20–100/mo</span></td>
         <td><span style="font-size:0.78rem;color:var(--text-sub)">$5,000–50,000+</span></td>
       </tr>
@@ -687,6 +687,73 @@
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
+})();
+</script>
+
+<script>
+(function(){
+  const PLATFORM_URL = 'https://storage.googleapis.com/stakco-images/platform.json?v=' + Date.now();
+  const FALLBACK = '##';
+
+  async function loadPlatformPricing() {
+    try {
+      const res = await fetch(PLATFORM_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const mods = data.Products?.STAKCO_STUDIO?.Modules || {};
+
+      // Build a flat price map: { "PLAY.monthly": 9.90, "PLAY.annual": 99, "PLAY.price": 9.90, ... }
+      const priceMap = {};
+      Object.entries(mods).forEach(([key, mod]) => {
+        const p = mod.Pricing;
+        const price = mod.Price;
+        if (p && p.Type === 'SUBSCRIPTION') {
+          priceMap[key + '.monthly'] = price;
+          priceMap[key + '.annual'] = p.Annual || (price * 10);
+        } else if (p && p.Type === 'ONE_TIME') {
+          priceMap[key + '.price'] = price;
+        } else if (price != null) {
+          priceMap[key + '.price'] = price;
+          priceMap[key + '.monthly'] = price;
+        }
+      });
+
+      // Update single-price elements: data-price="PLAY.monthly"
+      document.querySelectorAll('[data-price]').forEach(el => {
+        const key = el.dataset.price;
+        const val = priceMap[key];
+        if (val != null) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          el.textContent = prefix + val + suffix;
+        }
+      });
+
+      // Update sum elements: data-price-sum="PLAY.monthly+AI.monthly"
+      document.querySelectorAll('[data-price-sum]').forEach(el => {
+        const keys = el.dataset.priceSum.split('+');
+        let total = 0;
+        let allFound = true;
+        keys.forEach(k => {
+          const v = priceMap[k.trim()];
+          if (v != null) total += v;
+          else allFound = false;
+        });
+        if (allFound) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          const formatted = total % 1 === 0 ? total : total.toFixed(2);
+          el.textContent = prefix + formatted + suffix;
+        }
+      });
+
+    } catch (e) {
+      console.warn('Stakco pricing fetch failed:', e);
+      // Leave ## placeholders as-is
+    }
+  }
+
+  loadPlatformPricing();
 })();
 </script>
 </body>

@@ -273,7 +273,7 @@
         </div>
         <div class="glance-stat">
           <span class="gs-label">Creators subscribe</span>
-          <span class="gs-value">S$9.90/mo</span>
+          <span class="gs-value" data-price="PLAY.monthly" data-price-prefix="S$" data-price-suffix="/mo">##</span>
         </div>
         <div class="glance-stat">
           <span class="gs-label">Revenue type</span>
@@ -281,7 +281,7 @@
         </div>
         <div class="glance-stat">
           <span class="gs-label">All modules</span>
-          <span class="gs-value">~S$40/mo</span>
+          <span class="gs-value" data-price-sum="PLAY.monthly+AI.monthly+DEV.monthly" data-price-prefix="~S$" data-price-suffix="/mo">##</span>
         </div>
       </div>
     </div>
@@ -373,7 +373,7 @@
       </tr>
       <tr>
         <td><strong>Entry price</strong></td>
-        <td class="col-play" style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;">S$9.90/mo</td>
+        <td class="col-play" style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;" data-price="PLAY.monthly" data-price-prefix="S$" data-price-suffix="/mo">##</td>
         <td class="col-light" style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;">S$25,000</td>
         <td class="col-paper" style="font-family:'JetBrains Mono',monospace;font-size:0.78rem;">S$20/unit</td>
       </tr>
@@ -613,6 +613,22 @@
 </div>
 </div>
 
+<!-- Section 6: Advisory Program -->
+<h2 class="section-heading">Strategic Advisory Program <span>Invitation only</span></h2>
+<div class="bd-section">
+  <div class="bd-card" style="border-top-color:var(--text); max-width:640px;">
+    <h4>Strategic Advisor</h4>
+    <div class="bd-subtitle">Phantom equity · long-term</div>
+    <div class="bd-desc">High-level strategic guidance, network access, and institutional insight from senior academics and corporate leaders. Advisory positions are extended by invitation to collaborators with a minimum of three years of demonstrated engagement.</div>
+    <div class="bd-row"><span class="bd-label">Phantom equity</span><span class="bd-val-green">1–2%</span></div>
+    <div class="bd-row"><span class="bd-label">Eligibility</span><span class="bd-val">3+ years engagement</span></div>
+    <div class="bd-row"><span class="bd-label">Appointment</span><span class="bd-val">By invitation</span></div>
+    <div class="bd-row"><span class="bd-label">Ownership / voting</span><span class="bd-val">None</span></div>
+    <div class="bd-row"><span class="bd-label">Payout</span><span class="bd-val">Aligned with company growth</span></div>
+    <div class="bd-ideal"><strong>Scope:</strong> Strategic direction, industry introductions, institutional credibility. No operational control. All appointments subject to formal agreement and defined performance alignment.</div>
+  </div>
+</div>
+
 <!-- CTA -->
 <div class="cta-section">
   <a href="mailto:hello@stakcos.com?subject=Stakco partnership enquiry" class="cta-btn">Contact Us</a>
@@ -623,5 +639,72 @@
 </div>
 
 </div>
+
+<script>
+(function(){
+  const PLATFORM_URL = 'https://storage.googleapis.com/stakco-images/platform.json?v=' + Date.now();
+  const FALLBACK = '##';
+
+  async function loadPlatformPricing() {
+    try {
+      const res = await fetch(PLATFORM_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const mods = data.Products?.STAKCO_STUDIO?.Modules || {};
+
+      // Build a flat price map: { "PLAY.monthly": 9.90, "PLAY.annual": 99, "PLAY.price": 9.90, ... }
+      const priceMap = {};
+      Object.entries(mods).forEach(([key, mod]) => {
+        const p = mod.Pricing;
+        const price = mod.Price;
+        if (p && p.Type === 'SUBSCRIPTION') {
+          priceMap[key + '.monthly'] = price;
+          priceMap[key + '.annual'] = p.Annual || (price * 10);
+        } else if (p && p.Type === 'ONE_TIME') {
+          priceMap[key + '.price'] = price;
+        } else if (price != null) {
+          priceMap[key + '.price'] = price;
+          priceMap[key + '.monthly'] = price;
+        }
+      });
+
+      // Update single-price elements: data-price="PLAY.monthly"
+      document.querySelectorAll('[data-price]').forEach(el => {
+        const key = el.dataset.price;
+        const val = priceMap[key];
+        if (val != null) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          el.textContent = prefix + val + suffix;
+        }
+      });
+
+      // Update sum elements: data-price-sum="PLAY.monthly+AI.monthly"
+      document.querySelectorAll('[data-price-sum]').forEach(el => {
+        const keys = el.dataset.priceSum.split('+');
+        let total = 0;
+        let allFound = true;
+        keys.forEach(k => {
+          const v = priceMap[k.trim()];
+          if (v != null) total += v;
+          else allFound = false;
+        });
+        if (allFound) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          const formatted = total % 1 === 0 ? total : total.toFixed(2);
+          el.textContent = prefix + formatted + suffix;
+        }
+      });
+
+    } catch (e) {
+      console.warn('Stakco pricing fetch failed:', e);
+      // Leave ## placeholders as-is
+    }
+  }
+
+  loadPlatformPricing();
+})();
+</script>
 </body>
 </html>

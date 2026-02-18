@@ -331,7 +331,7 @@
           <span style="font-size:0.75rem;color:var(--text-muted)">Auto-generate puzzle artwork from text prompts</span>
         </td>
         <td><span class="label-optional">Optional</span></td>
-        <td class="num">$9.90/mo</td>
+        <td class="num" data-price="AI.monthly" data-price-suffix="/mo">##</td>
       </tr>
     </tbody>
   </table>
@@ -646,6 +646,73 @@
       if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
+})();
+</script>
+
+<script>
+(function(){
+  const PLATFORM_URL = 'https://storage.googleapis.com/stakco-images/platform.json?v=' + Date.now();
+  const FALLBACK = '##';
+
+  async function loadPlatformPricing() {
+    try {
+      const res = await fetch(PLATFORM_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const mods = data.Products?.STAKCO_STUDIO?.Modules || {};
+
+      // Build a flat price map: { "PLAY.monthly": 9.90, "PLAY.annual": 99, "PLAY.price": 9.90, ... }
+      const priceMap = {};
+      Object.entries(mods).forEach(([key, mod]) => {
+        const p = mod.Pricing;
+        const price = mod.Price;
+        if (p && p.Type === 'SUBSCRIPTION') {
+          priceMap[key + '.monthly'] = price;
+          priceMap[key + '.annual'] = p.Annual || (price * 10);
+        } else if (p && p.Type === 'ONE_TIME') {
+          priceMap[key + '.price'] = price;
+        } else if (price != null) {
+          priceMap[key + '.price'] = price;
+          priceMap[key + '.monthly'] = price;
+        }
+      });
+
+      // Update single-price elements: data-price="PLAY.monthly"
+      document.querySelectorAll('[data-price]').forEach(el => {
+        const key = el.dataset.price;
+        const val = priceMap[key];
+        if (val != null) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          el.textContent = prefix + val + suffix;
+        }
+      });
+
+      // Update sum elements: data-price-sum="PLAY.monthly+AI.monthly"
+      document.querySelectorAll('[data-price-sum]').forEach(el => {
+        const keys = el.dataset.priceSum.split('+');
+        let total = 0;
+        let allFound = true;
+        keys.forEach(k => {
+          const v = priceMap[k.trim()];
+          if (v != null) total += v;
+          else allFound = false;
+        });
+        if (allFound) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          const formatted = total % 1 === 0 ? total : total.toFixed(2);
+          el.textContent = prefix + formatted + suffix;
+        }
+      });
+
+    } catch (e) {
+      console.warn('Stakco pricing fetch failed:', e);
+      // Leave ## placeholders as-is
+    }
+  }
+
+  loadPlatformPricing();
 })();
 </script>
 </body>
