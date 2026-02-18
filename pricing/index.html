@@ -280,8 +280,8 @@
           <span class="gs-value">Recurring</span>
         </div>
         <div class="glance-stat">
-          <span class="gs-label">All modules</span>
-          <span class="gs-value" data-price-sum="PLAY.monthly+AI.monthly+DEV.monthly" data-price-prefix="~S$" data-price-suffix="/mo">##</span>
+          <span class="gs-label">Subscriptions</span>
+          <span class="gs-value" data-price-sum="PLAY.monthly+AI.monthly" data-price-prefix="~S$" data-price-suffix="/mo">##</span>
         </div>
       </div>
     </div>
@@ -641,7 +641,6 @@
 <script>
 (function(){
   const PLATFORM_URL = 'https://storage.googleapis.com/stakco-images/platform.json?v=' + Date.now();
-  const FALLBACK = '##';
 
   async function loadPlatformPricing() {
     try {
@@ -650,20 +649,19 @@
       const data = await res.json();
       const mods = data.Products?.STAKCO_STUDIO?.Modules || {};
 
-      // Build a flat price map: { "PLAY.monthly": 9.90, "PLAY.annual": 99, "PLAY.price": 9.90, ... }
+      // Build a flat price map from platform config
       const priceMap = {};
       Object.entries(mods).forEach(([key, mod]) => {
         const p = mod.Pricing;
         const price = mod.Price;
         if (p && p.Type === 'SUBSCRIPTION') {
-          priceMap[key + '.monthly'] = price;
-          priceMap[key + '.annual'] = p.Annual || (price * 10);
+          priceMap[key + '.monthly'] = p.MonthlyPrice || price;
+          priceMap[key + '.annual'] = p.AnnualPrice || (price * 10);
         } else if (p && p.Type === 'ONE_TIME') {
           priceMap[key + '.price'] = price;
-        } else if (price != null) {
-          priceMap[key + '.price'] = price;
-          priceMap[key + '.monthly'] = price;
         }
+        // Always set .price as fallback
+        if (price != null) priceMap[key + '.price'] = price;
       });
 
       // Update single-price elements: data-price="PLAY.monthly"
@@ -697,7 +695,6 @@
 
     } catch (e) {
       console.warn('Stakco pricing fetch failed:', e);
-      // Leave ## placeholders as-is
     }
   }
 
