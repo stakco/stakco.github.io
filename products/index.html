@@ -111,11 +111,20 @@
   .flow-tag.accent { color:var(--text); background:rgba(0,0,0,0.06); }
   .flow-sep { font-size:0.6rem; color:var(--border); }
 
-  .product-readmore { display:inline-block; margin-top:14px; font-size:0.78rem; font-weight:600; color:var(--text-muted); text-decoration:none; transition:color 0.15s; }
-  .product-readmore:hover { color:var(--text); }
-  .product-card.play .product-readmore:hover { color:var(--pink); }
-  .product-card.light .product-readmore:hover { color:var(--amber); }
-  .product-card.paper .product-readmore:hover { color:var(--orange); }
+  .product-readmore {
+    display:block; text-align:center; text-decoration:none;
+    font-size:0.78rem; font-weight:700; letter-spacing:0.02em;
+    padding:10px 16px; margin:-24px -24px -24px; margin-top:18px;
+    border-top:1px solid var(--border);
+    transition:background 0.15s, color 0.15s;
+    border-radius:0 0 12px 12px;
+  }
+  .product-card.play .product-readmore { color:var(--pink); background:rgba(190,48,112,0.03); }
+  .product-card.play .product-readmore:hover { background:rgba(190,48,112,0.08); }
+  .product-card.light .product-readmore { color:var(--amber); background:rgba(154,114,9,0.03); }
+  .product-card.light .product-readmore:hover { background:rgba(154,114,9,0.08); }
+  .product-card.paper .product-readmore { color:var(--orange); background:rgba(200,122,26,0.03); }
+  .product-card.paper .product-readmore:hover { background:rgba(200,122,26,0.08); }
 
   /* ===== MODULES & SEGMENTS keys (collapsed by default) ===== */
   .key-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:28px; }
@@ -178,20 +187,11 @@
   .guide-seg-card .seg-card-desc { font-size:0.7rem; color:var(--text-muted); line-height:1.4; }
   .guide-seg-card .seg-card-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; }
 
-  .guide-seg-card .seg-card-examples { display:none; margin-top:8px; padding-top:8px; border-top:1px solid rgba(0,0,0,0.05); }
-  .guide-seg-card.selected .seg-card-examples { display:block; }
-  .seg-card-examples span { font-size:0.65rem; color:var(--text-muted); line-height:1.4; }
+  .guide-seg-card .seg-card-examples { display:none; }
+  .guide-seg-card.selected .seg-card-examples { display:none; }
 
   .guide-btn { font-family:'DM Sans',sans-serif; font-size:0.8rem; font-weight:600; padding:8px 20px; border-radius:8px; cursor:pointer; transition:all 0.15s; border:none; }
   .guide-btn:disabled { opacity:0.35; cursor:not-allowed; }
-  .guide-btn-submit { background:linear-gradient(135deg,#e8912a,#d43a7a); color:#fff; margin-top:16px; }
-  .guide-btn-submit:hover:not(:disabled) { opacity:0.88; }
-
-  .guide-result { display:none; }
-  .guide-result.active { display:block; }
-  .guide-result-label { font-size:0.72rem; font-weight:600; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.06em; margin-bottom:8px; }
-  .guide-result-pills { display:flex; flex-wrap:wrap; gap:6px; }
-
   /* ===== RECOMMENDATIONS (shown after guide) ===== */
   .reco-section { margin-bottom:28px; display:none; }
   .reco-section.visible { display:block; }
@@ -353,11 +353,6 @@
 </div>
 
 <!-- ===== SECTION 3: Three Products (the main offerings) ===== -->
-<div class="intro-card" style="padding-bottom:8px;">
-  <div class="intro-label">Three Ways to Experience Stakco</div>
-  <p style="margin-bottom:16px;">Every puzzle you create can be delivered as a digital experience, a projected installation, or a physical print.</p>
-</div>
-
 <div class="products-grid">
 
   <!-- Stakco Play — Digital -->
@@ -374,6 +369,7 @@
         <span class="price-value">Free</span>
       </div>
       <div class="price-note">Publishing requires Studio Play module</div>
+      <div class="price-note" style="margin-top:3px;font-size:0.68rem;">Studio Play module: <span style="font-family:'JetBrains Mono',monospace;font-weight:600;" data-price="PLAY">##</span>/mo</div>
     </div>
 
     <div class="product-faq">
@@ -394,7 +390,7 @@
     <div class="product-flow">
       <span class="flow-tag">Studio</span><span class="flow-sep">→</span><span class="flow-tag accent">Play module</span><span class="flow-sep">→</span><span class="flow-tag">play.stakcos.com</span>
     </div>
-    <a href="stakco-play.html" class="product-readmore">Read more →</a>
+    <a href="stakco-play.html" class="product-readmore">Learn more</a>
   </div>
 
   <!-- Stakco Light — Projection -->
@@ -431,7 +427,7 @@
     <div class="product-flow">
       <span class="flow-tag">Studio</span><span class="flow-sep">→</span><span class="flow-tag accent">Light module</span><span class="flow-sep">→</span><span class="flow-tag">Installation</span>
     </div>
-    <a href="stakco-light.html" class="product-readmore">Read more →</a>
+    <a href="stakco-light.html" class="product-readmore">Learn more</a>
   </div>
 
   <!-- Stakco Paper — Physical -->
@@ -468,7 +464,7 @@
     <div class="product-flow">
       <span class="flow-tag">Studio</span><span class="flow-sep">→</span><span class="flow-tag accent">Print module</span><span class="flow-sep">→</span><span class="flow-tag">Physical puzzle</span>
     </div>
-    <a href="stakco-paper.html" class="product-readmore">Read more →</a>
+    <a href="stakco-paper.html" class="product-readmore">Learn more</a>
   </div>
 
 </div>
@@ -543,14 +539,8 @@
 
     </div>
 
-    <button class="guide-btn guide-btn-submit" id="guideSubmitBtn" onclick="guideSubmit()" disabled>Show My Recommendations ✦</button>
   </div>
 
-  <!-- Result -->
-  <div class="guide-result" id="guideResult">
-    <div class="guide-result-label">Showing results for</div>
-    <div class="guide-result-pills" id="guideResultPills"></div>
-  </div>
 </div>
 
 <!-- ===== SECTION 5: Recommendations (shown after Smart Guide) ===== -->
@@ -561,7 +551,7 @@
   </div>
   <div class="reco-cards" id="recoCards"></div>
 
-  <button class="show-all-btn" id="showAllBtn" onclick="showFullTable()">
+  <button class="show-all-btn" id="showAllBtn" onclick="showFullTable()" style="margin-top:24px;">
     📋 View complete table with all use cases
   </button>
 </div>
@@ -859,10 +849,7 @@
   // ========== SMART GUIDE (single-step card selection) ==========
   let selectedSegments = new Set();
 
-  const resultEl = document.getElementById('guideResult');
-  const resultPills = document.getElementById('guideResultPills');
   const retakeBtn = document.getElementById('guideRetake');
-  const submitBtn = document.getElementById('guideSubmitBtn');
   const selectionArea = document.getElementById('guideSelectionArea');
   const recoSection = document.getElementById('recoSection');
   const recoCards = document.getElementById('recoCards');
@@ -879,28 +866,24 @@
       card.classList.add('selected');
       segs.forEach(s => selectedSegments.add(s));
     }
-    submitBtn.disabled = selectedSegments.size === 0;
+    // Dynamic: update recommendations immediately
+    updateRecommendations();
   };
 
-  window.guideSubmit = function() {
+  function updateRecommendations() {
     const segments = [...selectedSegments];
-    if (segments.length === 0) return;
+    if (segments.length === 0) {
+        retakeBtn.style.display = 'none';
+      recoSection.classList.remove('visible');
+      preGuidePrompt.style.display = '';
+      activeFilters.clear();
+      applyFilter();
+      return;
+    }
 
-    // Hide selection, show result
-    selectionArea.style.display = 'none';
-    resultEl.classList.add('active');
     retakeBtn.style.display = 'inline-block';
 
     // Build result pills
-    resultPills.innerHTML = '';
-    segments.forEach(seg => {
-      const c = segColorMap[seg] || { bg:'#666', border:'#999' };
-      const pill = document.createElement('span');
-      pill.className = 'seg';
-      pill.style.cssText = `background:${c.bg};color:#fff;border:1px solid ${c.border};font-size:0.78rem;padding:4px 12px;`;
-      pill.textContent = segLabelMap[seg] || seg;
-      resultPills.appendChild(pill);
-    });
 
     // Build recommendations
     buildRecoCards(segments);
@@ -909,14 +892,12 @@
     activeFilters.clear();
     segments.forEach(s => activeFilters.add(s));
     applyFilter();
-  };
+  }
 
   window.resetGuide = function() {
     selectedSegments.clear();
     document.querySelectorAll('.guide-seg-card').forEach(c => c.classList.remove('selected'));
-    submitBtn.disabled = true;
     selectionArea.style.display = '';
-    resultEl.classList.remove('active');
     retakeBtn.style.display = 'none';
     activeFilters.clear();
     applyFilter();
@@ -924,6 +905,7 @@
     fullTableSection.classList.remove('visible');
     preGuidePrompt.style.display = '';
   };
+
 
   // ========== RECOMMENDATION CARDS ==========
   function buildRecoCards(segments) {
@@ -1020,6 +1002,12 @@
           if (mod) items.push(formatPrice(mod));
         });
         if (items.length > 0) costCell.innerHTML = '<div class="cost-stack">' + items.join('') + '</div>';
+      });
+      // Populate data-price elements in product cards
+      document.querySelectorAll('[data-price]').forEach(el => {
+        const key = el.dataset.price;
+        const mod = studioModules[key];
+        if (mod) el.textContent = 'SGD ' + mod.Price;
       });
     } catch (e) { console.warn('Could not load pricing:', e); }
   }
