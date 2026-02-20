@@ -140,6 +140,15 @@
     .summary-grid { grid-template-columns:1fr; }
     .doc-meta { flex-direction:column; gap:6px; }
   }
+
+  .ip-note {
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:10px; font-size:0.68rem; font-weight:500;
+    color:var(--text-muted); 
+    padding:4px 10px; border-radius:5px;
+    background:rgba(0,0,0,0.03); border:1px solid var(--border);
+  }
+  .ip-note::before { content:'⚖'; font-size:0.72rem; }
 </style>
 </head>
 <body>
@@ -186,6 +195,7 @@
 <div class="doc-header">
   <h1>Stakco Light — Commercial Pricing & Cost Structure</h1>
   <div class="subtitle">Complete cost breakdown for the Stakco Light projected puzzle installation</div>
+  <div class="ip-note">Proprietary puzzle technology · exclusively licensed for commercial use</div>
 </div>
 
 <!-- ===== EXECUTIVE SUMMARY ===== -->
@@ -509,12 +519,12 @@
     <tbody>
       <tr>
         <td><strong>Deposit</strong></td>
-        <td class="num">50% ($12,500)</td>
+        <td class="num">50% (<span data-price-half="LIGHT.price" data-price-prefix="SGD ">SGD ##</span>)</td>
         <td>Upon order confirmation</td>
       </tr>
       <tr>
         <td><strong>Final payment</strong></td>
-        <td class="num">50% ($12,500)</td>
+        <td class="num">50% (<span data-price-half="LIGHT.price" data-price-prefix="SGD ">SGD ##</span>)</td>
         <td>Upon installation completion</td>
       </tr>
     </tbody>
@@ -577,7 +587,7 @@
       const data = await res.json();
       const mods = data.Products?.STAKCO_STUDIO?.Modules || {};
 
-      // Build a flat price map from platform config
+      // Build a flat price map from studio modules
       const priceMap = {};
       Object.entries(mods).forEach(([key, mod]) => {
         const p = mod.Pricing;
@@ -588,11 +598,16 @@
         } else if (p && p.Type === 'ONE_TIME') {
           priceMap[key + '.price'] = price;
         }
-        // Always set .price as fallback
         if (price != null) priceMap[key + '.price'] = price;
       });
 
-      // Update single-price elements: data-price="PLAY.monthly"
+      // Add top-level hardware product prices (e.g. LIGHT)
+      Object.entries(data.Products || {}).forEach(([key, product]) => {
+        const price = product.Price || product.BasePrice;
+        if (price != null) priceMap[key + '.price'] = price;
+      });
+
+      // Update single-price elements
       document.querySelectorAll('[data-price]').forEach(el => {
         const key = el.dataset.price;
         const val = priceMap[key];
@@ -603,7 +618,7 @@
         }
       });
 
-      // Update sum elements: data-price-sum="PLAY.monthly+AI.monthly"
+      // Update sum elements
       document.querySelectorAll('[data-price-sum]').forEach(el => {
         const keys = el.dataset.priceSum.split('+');
         let total = 0;
@@ -617,6 +632,21 @@
           const prefix = el.dataset.pricePrefix || '$';
           const suffix = el.dataset.priceSuffix || '';
           const formatted = total % 1 === 0 ? total : total.toFixed(2);
+          el.textContent = prefix + formatted + suffix;
+        }
+      });
+
+      // Update half-price elements (50% of referenced price)
+      document.querySelectorAll('[data-price-half]').forEach(el => {
+        const key = el.dataset.priceHalf;
+        const val = priceMap[key];
+        if (val != null) {
+          const half = val / 2;
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          const formatted = half % 1 === 0
+            ? half.toLocaleString()
+            : half.toFixed(2);
           el.textContent = prefix + formatted + suffix;
         }
       });
