@@ -206,7 +206,7 @@
   </div>
   <div class="summary-grid">
     <div class="summary-box">
-      <div class="sb-value">$29,000</div>
+      <div class="sb-value light-unit-price">SGD 29,000</div>
       <div class="sb-label">One-time purchase</div>
     </div>
     <div class="summary-box">
@@ -291,7 +291,7 @@
       <tr class="row-total">
         <td>Total one-time cost</td>
         <td></td>
-        <td class="num num-accent">$29,000</td>
+        <td class="num num-accent light-unit-price">SGD 29,000</td>
       </tr>
     </tbody>
   </table>
@@ -403,7 +403,7 @@
     <tbody>
       <tr>
         <td>1–2 units</td>
-        <td class="num">$29,000</td>
+        <td class="num light-unit-price">SGD 29,000</td>
         <td class="num num-muted">—</td>
         <td class="num">None</td>
       </tr>
@@ -519,12 +519,12 @@
     <tbody>
       <tr>
         <td><strong>Deposit</strong></td>
-        <td class="num">50% (<span data-price-half="LIGHT.price" data-price-prefix="SGD ">SGD ##</span>)</td>
+        <td class="num">50% (<span id="payDeposit">SGD ##</span>)</td>
         <td>Upon order confirmation</td>
       </tr>
       <tr>
         <td><strong>Final payment</strong></td>
-        <td class="num">50% (<span data-price-half="LIGHT.price" data-price-prefix="SGD ">SGD ##</span>)</td>
+        <td class="num">50% (<span id="payFinal">SGD ##</span>)</td>
         <td>Upon installation completion</td>
       </tr>
     </tbody>
@@ -636,20 +636,15 @@
         }
       });
 
-      // Update half-price elements (50% of referenced price)
-      document.querySelectorAll('[data-price-half]').forEach(el => {
-        const key = el.dataset.priceHalf;
-        const val = priceMap[key];
-        if (val != null) {
-          const half = val / 2;
-          const prefix = el.dataset.pricePrefix || '$';
-          const suffix = el.dataset.priceSuffix || '';
-          const formatted = half % 1 === 0
-            ? half.toLocaleString()
-            : half.toFixed(2);
-          el.textContent = prefix + formatted + suffix;
-        }
-      });
+      // Payment terms: 50% of Light hardware unit price
+      // Hardware price is not in platform.json — defined as a constant here
+      const LIGHT_UNIT_PRICE = 29000;
+      const half = LIGHT_UNIT_PRICE / 2;
+      const halfFormatted = 'SGD ' + half.toLocaleString();
+      const deposit = document.getElementById('payDeposit');
+      const final = document.getElementById('payFinal');
+      if (deposit) deposit.textContent = halfFormatted;
+      if (final) final.textContent = halfFormatted;
 
     } catch (e) {
       console.warn('Stakco pricing fetch failed:', e);
