@@ -106,7 +106,11 @@
   .audience-card {
     background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px 20px;
   }
-  .audience-card h4 { font-size:0.82rem; font-weight:700; margin-bottom:6px; }
+  .audience-card h4 { font-size:0.82rem; font-weight:700; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+  .aud-product-badge { font-size:0.58rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; padding:2px 8px; border-radius:4px; }
+  .aud-badge-digital  { background:rgba(190,48,112,0.1);  color:var(--pink); }
+  .aud-badge-optical  { background:rgba(154,114,9,0.1);   color:var(--amber); }
+  .aud-badge-physical { background:rgba(200,122,26,0.1);  color:var(--orange); }
   .audience-card p { font-size:0.75rem; color:var(--text-muted); line-height:1.45; }
   .audience-card .aud-line { display:block; margin-bottom:4px; padding-left:12px; position:relative; }
   .audience-card .aud-line::before { content:'▸'; position:absolute; left:0; color:var(--text-muted); font-size:0.65rem; top:0.5px; }
@@ -119,7 +123,8 @@
     background:var(--card); border:1px solid var(--border); border-radius:10px; padding:18px 22px;
     position:relative;
   }
-  .partner-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:4px; }
+  .partner-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:6px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .rev-badge { font-size:0.56rem; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; padding:2px 7px; border-radius:4px; background:rgba(0,0,0,0.05); color:var(--text-muted); white-space:nowrap; }
   .partner-card .partner-desc { font-size:0.78rem; color:var(--text-sub); line-height:1.5; margin-bottom:10px; }
   .partner-card .partner-benefit {
     font-size:0.72rem; font-weight:600; color:var(--green); background:var(--green-bg);
@@ -161,7 +166,7 @@
   }
   .bd-card h4 { font-size:0.88rem; font-weight:700; margin-bottom:2px; color:var(--text); }
   .bd-card .bd-subtitle { font-size:0.68rem; font-weight:600; color:var(--purple); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; }
-  .bd-card .bd-desc { font-size:0.78rem; color:var(--text-sub); line-height:1.5; margin-bottom:12px; }
+  .bd-card .bd-desc { font-size:0.78rem; color:var(--text-sub); line-height:1.5; margin-bottom:12px; text-align:left; }
   .bd-card .bd-row { display:flex; justify-content:space-between; align-items:baseline; font-size:0.72rem; padding:4px 0; border-bottom:1px solid rgba(0,0,0,0.04); }
   .bd-card .bd-row:last-child { border-bottom:none; }
   .bd-card .bd-row .bd-label { color:var(--text-muted); }
@@ -240,6 +245,15 @@
     .num { font-size:0.68rem; }
     .col-play, .col-light, .col-paper { font-size:0.55rem; }
   }
+
+  .ip-note {
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:10px; font-size:0.68rem; font-weight:500;
+    color:var(--text-muted); 
+    padding:4px 10px; border-radius:5px;
+    background:rgba(0,0,0,0.03); border:1px solid var(--border);
+  }
+  .ip-note::before { content:'⚖'; font-size:0.72rem; }
 </style>
 </head>
 <body>
@@ -255,6 +269,7 @@
   </div>
   <h1>Pricing & Partnership</h1>
   <div class="subtitle">Three products. One platform. Multiple ways to earn.</div>
+  <div class="ip-note">Proprietary puzzle technology · exclusively licensed for commercial use</div>
 </div>
 
 <!-- Section 1: Products -->
@@ -291,7 +306,7 @@
   <!-- Light -->
   <a href="stakco-light-pricing.html" class="glance-card light">
     <div class="glance-body">
-      <div class="glance-title-row"><h3>Stakco Light</h3><div class="glance-badge">Projection</div></div>
+      <div class="glance-title-row"><h3>Stakco Light</h3><div class="glance-badge">Optical</div></div>
       <div class="glance-desc">Turnkey interactive installation for venues, schools, and therapy centres.</div>
       <div class="glance-stats">
         <div class="glance-stat">
@@ -415,42 +430,42 @@
 <h2 class="section-heading">Who It's For</h2>
 <div class="audiences-grid">
   <div class="audience-card">
-    <h4 style="color:var(--pink)">Play</h4>
+    <h4 style="color:var(--pink)">Play <span class="aud-product-badge aud-badge-digital">Digital</span></h4>
     <p>
       <span class="aud-line"><strong>Content creators</strong></span>
-      <span class="aud-use">Publishing puzzle series</span>
+      <span class="aud-use">Distribute puzzle series</span>
       <span class="aud-line"><strong>Educators</strong></span>
-      <span class="aud-use">Delivering interactive coursework</span>
+      <span class="aud-use">Interactive coursework</span>
       <span class="aud-line"><strong>Brands</strong></span>
-      <span class="aud-use">Running engagement campaigns</span>
+      <span class="aud-use">Branded campaigns</span>
       <span class="aud-line"><strong>Luxury brands</strong></span>
-      <span class="aud-use">Launching digital activations</span>
+      <span class="aud-use">Digital activations</span>
       <span class="aud-line"><strong>Developers</strong></span>
-      <span class="aud-use">Embedding puzzles via API</span>
+      <span class="aud-use">API &amp; embed tools</span>
     </p>
   </div>
   <div class="audience-card">
-    <h4 style="color:var(--amber)">Light</h4>
+    <h4 style="color:var(--amber)">Light <span class="aud-product-badge aud-badge-optical">Optical</span></h4>
     <p>
       <span class="aud-line"><strong>Museums & galleries</strong></span>
       <span class="aud-use">Interactive exhibits</span>
       <span class="aud-line"><strong>Schools & therapy centres</strong></span>
       <span class="aud-use">Sensory engagement</span>
       <span class="aud-line"><strong>Hotels & hospitals</strong></span>
-      <span class="aud-use">Calming spaces for guests and patients</span>
+      <span class="aud-use">Calming ambient display</span>
       <span class="aud-line"><strong>Luxury brands</strong></span>
-      <span class="aud-use">Flagship store installations</span>
+      <span class="aud-use">Experiential installations</span>
       <span class="aud-line"><strong>Event organisers</strong></span>
-      <span class="aud-use">Immersive installations</span>
+      <span class="aud-use">Pop-up activations</span>
     </p>
   </div>
   <div class="audience-card">
-    <h4 style="color:var(--orange)">Paper</h4>
+    <h4 style="color:var(--orange)">Paper <span class="aud-product-badge aud-badge-physical">Physical</span></h4>
     <p>
       <span class="aud-line"><strong>Businesses</strong></span>
       <span class="aud-use">Branded merchandise</span>
       <span class="aud-line"><strong>Luxury brands</strong></span>
-      <span class="aud-use">VIP gifts and collectibles</span>
+      <span class="aud-use">VIP gifts &amp; collectibles</span>
       <span class="aud-line"><strong>Corporate teams</strong></span>
       <span class="aud-use">Event giveaways</span>
       <span class="aud-line"><strong>Educators</strong></span>
@@ -463,11 +478,11 @@
 
 <!-- Section 4: Partnerships -->
 <div style="break-before:page;">
-<h2 class="section-heading">Partnership Models</h2>
+<h2 class="section-heading">Sales Partnership Models</h2>
 
 <div class="partner-grid">
   <div class="partner-card">
-    <h4>Reseller</h4>
+    <h4>Reseller <span class="rev-badge">Margin per unit</span></h4>
     <div class="partner-desc">Buy at wholesale pricing, sell under your own terms. Set your own margins with volume-based discounts.</div>
     <div class="partner-benefit"><span class="bp">S$5K–10K+ per unit resold <span class="bp-label l-light">Light</span></span><span class="bp">Set your own margins <span class="bp-label l-paper">Paper</span></span></div>
     <div class="partner-terms"><strong>Requires:</strong> Min. 2 units/yr (Light) or 100 units/mo (Paper)<br>Signed reseller agreement</div>
@@ -478,7 +493,7 @@
   </div>
 
   <div class="partner-card">
-    <h4>Affiliate / Referral</h4>
+    <h4>Affiliate / Referral <span class="rev-badge">Commission</span></h4>
     <div class="partner-desc">Refer customers through your network. Earn commission on every converted purchase.</div>
     <div class="partner-benefit"><span class="bp">S$2,500+ per referral <span class="bp-label l-light">Light</span></span><span class="bp">20% on every order <span class="bp-label l-paper">Paper</span></span><span class="bp">No inventory, no risk <span class="bp-label l-all">All</span></span></div>
     <div class="partner-terms"><strong>Requires:</strong> Approved affiliate application<br>Commission paid after 30-day return window</div>
@@ -488,7 +503,7 @@
   </div>
 
   <div class="partner-card">
-    <h4>Installation Partner</h4>
+    <h4>Installation Partner <span class="rev-badge">Fee per install</span></h4>
     <div class="partner-desc">Get certified to install and service Stakco Light units in your region. Earn on installation and ongoing maintenance.</div>
     <div class="partner-benefit"><span class="bp">S$3K–5K per installation <span class="bp-label l-light">Light</span></span><span class="bp">S$600/yr service contracts <span class="bp-label l-light">Light</span></span></div>
     <div class="partner-terms"><strong>Requires:</strong> Technical certification (provided by Stakco)<br>Active status maintained with annual recertification</div>
@@ -498,7 +513,7 @@
   </div>
 
   <div class="partner-card">
-    <h4>Content Agency</h4>
+    <h4>Content Agency <span class="rev-badge">Creative fee</span></h4>
     <div class="partner-desc">Design puzzle campaigns for your clients using Stakco tools. Charge your own creative fees — we provide the platform.</div>
     <div class="partner-benefit"><span class="bp">S$2K–15K+ per campaign <span class="bp-label l-play">Play</span></span><span class="bp">You set your fee <span class="bp-label l-all">All</span></span></div>
     <div class="partner-terms"><strong>Requires:</strong> Active Play or Print module subscription<br>Portfolio of 3+ completed campaigns</div>
@@ -509,7 +524,7 @@
   </div>
 
   <div class="partner-card">
-    <h4>Education Reseller</h4>
+    <h4>Education Reseller <span class="rev-badge">Recurring per seat</span></h4>
     <div class="partner-desc">Bundle Stakco into school and institutional offerings. Volume licensing with discounted per-seat pricing for your clients.</div>
     <div class="partner-benefit"><span class="bp">S$3–5 margin per seat/mo <span class="bp-label l-play">Play</span></span><span class="bp">100 seats = S$300–500/mo <span class="bp-label l-play">Play</span></span></div>
     <div class="partner-terms"><strong>Requires:</strong> Min. 10 seats per institution<br>Annual commitment with quarterly billing</div>
@@ -520,7 +535,7 @@
   </div>
 
   <div class="partner-card">
-    <h4>Platform Integrator</h4>
+    <h4>Platform Integrator <span class="rev-badge">Subscription</span></h4>
     <div class="partner-desc">Embed Stakco puzzles into your own app or SaaS product via API. Add gamification and engagement without building from scratch.</div>
     <div class="partner-benefit"><span class="bp">Save S$50K+ in dev — from S$20/mo <span class="bp-label l-play">Play</span></span><span class="bp">Engagement features via API <span class="bp-label l-play">Play</span></span></div>
     <div class="partner-terms"><strong>Requires:</strong> Active Dev module subscription<br>Fair-use API limits; enterprise tiers at scale</div>
@@ -530,7 +545,7 @@
   </div>
 
   <div class="partner-card">
-    <h4>White-Label Partner</h4>
+    <h4>White-Label Partner <span class="rev-badge">Margin per unit</span></h4>
     <div class="partner-desc">Rebrand Stakco products under your own name. Full white-label packaging and subdomain customisation available.</div>
     <div class="partner-benefit"><span class="bp">S$8–20 margin per unit <span class="bp-label l-paper">Paper</span></span><span class="bp">Your brand, your price <span class="bp-label l-light">Light</span></span></div>
     <div class="partner-terms"><strong>Requires:</strong> Min. 100 units/order (Paper) or 1 unit (Light)<br>12-month territory exclusivity</div>
@@ -541,7 +556,7 @@
   </div>
 
   <div class="partner-card">
-    <h4>Co-Branding / Sponsorship</h4>
+    <h4>Co-Branding / Sponsorship <span class="rev-badge">Revenue share</span></h4>
     <div class="partner-desc">Joint product development and cross-promotion. Create branded puzzle series together and share the audience.</div>
     <div class="partner-benefit"><span class="bp">Shared audience reach <span class="bp-label l-all">All</span></span><span class="bp">Zero dev cost <span class="bp-label l-all">All</span></span></div>
     <div class="partner-terms"><strong>Requires:</strong> Mutual co-branding agreement<br>Revenue share negotiated per project</div>
@@ -563,41 +578,41 @@
   <div class="bd-card">
     <h4>Sales Partner</h4>
     <div class="bd-subtitle">Commission-based</div>
-    <div class="bd-desc">Source and close deals across all Stakco products. Earn commission on every sale you bring — ongoing royalty on recurring revenue.</div>
+    <div class="bd-desc">Close deals, earn commission. Ongoing royalty on recurring revenue.</div>
     <div class="bd-row"><span class="bd-label">Play subscriptions</span><span class="bd-val-green">20% recurring royalty</span></div>
     <div class="bd-row"><span class="bd-label">Light hardware</span><span class="bd-val-green">S$2,500/unit</span></div>
     <div class="bd-row"><span class="bd-label">Light service contracts</span><span class="bd-val-green">15% recurring royalty</span></div>
     <div class="bd-row"><span class="bd-label">Paper orders</span><span class="bd-val-green">S$1–2/unit + 15% reorders</span></div>
     <div class="bd-row"><span class="bd-label">Payout</span><span class="bd-val">Monthly, net-30</span></div>
     <div class="bd-row"><span class="bd-label">Commitment</span><span class="bd-val">Non-exclusive</span></div>
-    <div class="bd-ideal"><strong>Ideal for:</strong> Sales executives and BD professionals with existing networks in education, healthcare, hospitality, or retail — focused on deal volume.</div>
+    <div class="bd-ideal"><strong>Ideal for:</strong> Sales execs and BD professionals with networks in education, healthcare, hospitality, or retail.</div>
   </div>
 
   <!-- Growth Partner -->
   <div class="bd-card">
     <h4>Growth Partner</h4>
     <div class="bd-subtitle">Phantom equity</div>
-    <div class="bd-desc">Participate in company value growth without ownership. Phantom units vest over time, tied to revenue milestones you help achieve.</div>
+    <div class="bd-desc">Equity-like upside without ownership. Units vest against milestones you drive.</div>
     <div class="bd-row"><span class="bd-label">Phantom units</span><span class="bd-val-green">Allocated at onboarding</span></div>
     <div class="bd-row"><span class="bd-label">Vesting</span><span class="bd-val">3 years, quarterly</span></div>
-    <div class="bd-row"><span class="bd-label">Payout trigger</span><span class="bd-val">Revenue milestones or exit event</span></div>
+    <div class="bd-row"><span class="bd-label">Payout trigger</span><span class="bd-val">Milestones or exit</span></div>
     <div class="bd-row"><span class="bd-label">Base commission</span><span class="bd-val-green">10% on all sales (stacks)</span></div>
     <div class="bd-row"><span class="bd-label">Commitment</span><span class="bd-val">Exclusive, minimum hours</span></div>
-    <div class="bd-ideal"><strong>Ideal for:</strong> Senior BD or operations leaders committing significant time — want upside participation beyond commission, aligned with long-term growth.</div>
+    <div class="bd-ideal"><strong>Ideal for:</strong> Senior BD leaders wanting long-term upside beyond commission.</div>
   </div>
 
   <!-- Regional Partner -->
   <div class="bd-card">
     <h4>Regional Partner</h4>
     <div class="bd-subtitle">Territory rights</div>
-    <div class="bd-desc">Exclusive rights to sell, distribute, and service Stakco products in a defined geography. Build and own your regional market.</div>
+    <div class="bd-desc">Exclusive territory to sell, distribute, and service. Own your market.</div>
     <div class="bd-row"><span class="bd-label">Play subscriptions</span><span class="bd-val-green">25% recurring royalty</span></div>
     <div class="bd-row"><span class="bd-label">Light hardware</span><span class="bd-val-green">S$3,500/unit + service rev</span></div>
     <div class="bd-row"><span class="bd-label">Paper orders</span><span class="bd-val-green">20% of order value</span></div>
     <div class="bd-row"><span class="bd-label">Territory</span><span class="bd-val">Exclusive, defined region</span></div>
     <div class="bd-row"><span class="bd-label">Term</span><span class="bd-val">12 months, renewable</span></div>
     <div class="bd-row"><span class="bd-label">Minimum targets</span><span class="bd-val">Quarterly review</span></div>
-    <div class="bd-ideal"><strong>Ideal for:</strong> Regional directors or distributors with deep local presence — want to build a Stakco business in their market with exclusivity protection.</div>
+    <div class="bd-ideal"><strong>Ideal for:</strong> Regional directors or distributors with strong local presence seeking exclusivity.</div>
   </div>
 
 </div>
@@ -613,13 +628,13 @@
   <div class="bd-card" style="border-top-color:var(--text);">
     <h4>Strategic Advisor</h4>
     <div class="bd-subtitle">Phantom equity · long-term</div>
-    <div class="bd-desc">High-level strategic guidance, network access, and institutional insight from senior academics and corporate leaders. Advisory positions are extended by invitation to collaborators with a minimum of three years of demonstrated engagement.</div>
+    <div class="bd-desc">Strategic guidance, network access, and institutional credibility. Invitation only.</div>
     <div class="bd-row"><span class="bd-label">Phantom equity</span><span class="bd-val-green">1–2%</span></div>
     <div class="bd-row"><span class="bd-label">Eligibility</span><span class="bd-val">3+ years engagement</span></div>
     <div class="bd-row"><span class="bd-label">Appointment</span><span class="bd-val">By invitation</span></div>
     <div class="bd-row"><span class="bd-label">Ownership / voting</span><span class="bd-val">None</span></div>
     <div class="bd-row"><span class="bd-label">Payout</span><span class="bd-val">Aligned with company growth</span></div>
-    <div class="bd-ideal"><strong>Scope:</strong> Strategic direction, industry introductions, institutional credibility. No operational control. All appointments subject to formal agreement and defined performance alignment.</div>
+    <div class="bd-ideal"><strong>Scope:</strong> Strategic direction and introductions. No operational role. Formal agreement required.</div>
   </div>
 </div>
 
