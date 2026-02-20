@@ -151,68 +151,132 @@
   .seg-health    { background:rgba(20,145,130,0.07); color:#0e7a6e; border:1px solid rgba(20,145,130,0.15); }
   .seg-luxury    { background:rgba(142,100,40,0.07); color:#8e6428; border:1px solid rgba(142,100,40,0.15); }
 
-  /* ===== SMART GUIDE (single-step card selection) ===== */
-  .guide-card { margin-bottom:20px; padding:24px; background:var(--card); border:1px solid var(--border); border-radius:10px; }
-  .guide-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
+  /* ===== SMART GUIDE ===== */
+  .guide-card { margin-bottom:20px; padding:28px 28px 24px; background:var(--card); border:1px solid var(--border); border-radius:10px; }
+
+  .guide-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:20px; }
   .guide-header-left { display:flex; align-items:center; gap:10px; }
   .guide-icon { width:32px; height:32px; border-radius:8px; background:linear-gradient(135deg,#e8912a,#d43a7a); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .guide-title { font-size:0.95rem; font-weight:700; color:var(--text); }
   .guide-subtitle { font-size:0.78rem; color:var(--text-muted); }
-  .guide-header-right { display:flex; align-items:center; gap:8px; }
   .guide-retake { font-size:0.72rem; color:var(--text-muted); cursor:pointer; padding:5px 12px; border-radius:6px; border:1px solid var(--border); background:var(--bg); transition:all 0.15s; }
   .guide-retake:hover { border-color:rgba(0,0,0,0.15); color:var(--text-sub); }
 
-  .guide-question { font-size:0.92rem; font-weight:600; color:var(--text); margin-bottom:16px; }
+  /* Animated sentence */
+  .guide-sentence {
+    font-size:1.05rem; font-weight:600; color:var(--text);
+    margin-bottom:20px; min-height:1.7em; line-height:1.6;
+    display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 8px;
+  }
+  .guide-sentence .sentence-static { color:var(--text); }
+  .guide-label-pill {
+    display:inline-flex; align-items:center; gap:5px;
+    padding:2px 10px 2px 8px; border-radius:999px;
+    background:linear-gradient(135deg,#e8912a22,#d43a7a22);
+    border:1px solid rgba(200,80,120,0.2);
+    color:var(--text); font-weight:700; font-size:0.92rem;
+    animation:pillFadeIn 0.25s ease-out;
+  }
+  .guide-label-pill .pill-x {
+    font-size:0.65rem; font-weight:400; opacity:0.5; cursor:pointer;
+    margin-left:2px; line-height:1;
+  }
+  .guide-label-pill .pill-x:hover { opacity:1; }
+
+  /* Animated placeholder text */
+  .guide-sentence-placeholder {
+    display:inline-block;
+    background:linear-gradient(90deg, #e8912a, #d43a7a, #e8912a);
+    background-size:200% 100%;
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+    background-clip:text;
+    animation:shimmerText 2.5s ease-in-out infinite;
+    font-style:italic; font-weight:600;
+  }
+  @keyframes shimmerText {
+    0%   { background-position:100% 0; opacity:0.5; }
+    50%  { background-position:0% 0; opacity:1; }
+    100% { background-position:100% 0; opacity:0.5; }
+  }
+  @keyframes pillFadeIn {
+    from { opacity:0; transform:translateY(3px) scale(0.95); }
+    to   { opacity:1; transform:translateY(0) scale(1); }
+  }
 
   /* Segment cards grid */
-  .guide-cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
-  @media (max-width:768px) { .guide-cards-grid { grid-template-columns:repeat(2,1fr); } }
-  @media (max-width:480px) { .guide-cards-grid { grid-template-columns:1fr; } }
+  .guide-cards-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+  @media (max-width:900px) { .guide-cards-grid { grid-template-columns:repeat(3,1fr); } }
+  @media (max-width:600px) { .guide-cards-grid { grid-template-columns:repeat(2,1fr); } }
 
   .guide-seg-card {
     padding:14px 16px; border-radius:10px; cursor:pointer; user-select:none;
     border:2px solid var(--border); background:var(--bg);
-    transition:all 0.15s; position:relative;
+    transition:border-color 0.15s, background 0.15s, transform 0.12s;
+    position:relative;
   }
-  .guide-seg-card:hover { border-color:rgba(0,0,0,0.15); background:#ededf2; }
-  .guide-seg-card.selected { border-color:var(--text); background:rgba(26,26,46,0.04); }
+  .guide-seg-card:hover { border-color:rgba(0,0,0,0.15); background:#ededf2; transform:translateY(-1px); }
+  .guide-seg-card.selected {
+    border-color:transparent;
+    background:linear-gradient(var(--card),var(--card)) padding-box,
+               linear-gradient(135deg,#e8912a,#d43a7a) border-box;
+    border:2px solid transparent;
+  }
   .guide-seg-card.selected::after {
     content:'✓'; position:absolute; top:8px; right:10px;
-    font-size:0.7rem; font-weight:700; color:#fff;
-    width:18px; height:18px; border-radius:50%;
-    background:var(--text); display:flex; align-items:center; justify-content:center;
+    font-size:0.65rem; font-weight:700; color:#fff;
+    width:16px; height:16px; border-radius:50%;
+    background:linear-gradient(135deg,#e8912a,#d43a7a);
+    display:flex; align-items:center; justify-content:center;
   }
+  .guide-seg-card .seg-card-title { font-size:0.88rem; font-weight:700; color:var(--text); margin-bottom:4px; }
+  .guide-seg-card .seg-card-desc { font-size:0.74rem; color:var(--text-muted); line-height:1.45; }
 
-  .guide-seg-card .seg-card-title { font-size:0.82rem; font-weight:700; color:var(--text); margin-bottom:3px; }
-  .guide-seg-card .seg-card-desc { font-size:0.7rem; color:var(--text-muted); line-height:1.4; }
-  .guide-seg-card .seg-card-tags { display:flex; flex-wrap:wrap; gap:4px; margin-top:8px; }
-
-  .guide-seg-card .seg-card-examples { display:none; }
-  .guide-seg-card.selected .seg-card-examples { display:none; }
-
-  .guide-btn { font-family:'DM Sans',sans-serif; font-size:0.8rem; font-weight:600; padding:8px 20px; border-radius:8px; cursor:pointer; transition:all 0.15s; border:none; }
-  .guide-btn:disabled { opacity:0.35; cursor:not-allowed; }
-  /* ===== RECOMMENDATIONS (shown after guide) ===== */
+  /* ===== RECOMMENDATIONS ===== */
   .reco-section { margin-bottom:28px; display:none; }
   .reco-section.visible { display:block; }
   .reco-section-title { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:14px; display:flex; align-items:center; gap:8px; }
   .reco-section-title .count-badge { background:linear-gradient(135deg,#e8912a,#d43a7a); color:#fff; font-size:0.62rem; padding:2px 8px; border-radius:999px; }
 
-  /* Recommendation cards (replaces the table for filtered results) */
-  .reco-cards { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .reco-cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   @media (max-width:768px) { .reco-cards { grid-template-columns:1fr; } }
-  .reco-card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:18px 20px; transition:all 0.15s; }
-  .reco-card:hover { border-color:rgba(0,0,0,0.12); box-shadow:0 4px 12px rgba(0,0,0,0.04); }
-  .reco-card-header { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:8px; }
-  .reco-card .use-case { font-weight:600; font-size:0.88rem; color:var(--text); }
-  .reco-card .use-desc { font-size:0.78rem; color:var(--text-muted); margin-bottom:10px; }
-  .reco-card .reco-modules { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px; }
-  .reco-card .reco-segs { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:8px; }
-  .reco-card .reco-example { font-size:0.75rem; color:var(--text-muted); font-style:italic; }
 
-  /* Section dividers for reco cards */
-  .reco-group-title { font-size:0.78rem; font-weight:700; color:var(--orange); text-transform:uppercase; letter-spacing:0.06em; margin:20px 0 10px; padding-bottom:6px; border-bottom:2px solid rgba(200,122,26,0.2); grid-column:1/-1; }
+  .reco-card {
+    background:var(--card); border:1px solid var(--border); border-radius:10px;
+    padding:16px 18px 14px; transition:border-color 0.15s, box-shadow 0.15s;
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .reco-card:hover { border-color:rgba(0,0,0,0.12); box-shadow:0 4px 12px rgba(0,0,0,0.04); }
+
+  .reco-card .reco-title { font-weight:700; font-size:0.9rem; color:var(--text); line-height:1.35; }
+  .reco-card .reco-desc { font-size:0.78rem; color:var(--text-sub); line-height:1.5; }
+  .reco-card .reco-example {
+    font-size:0.72rem; color:var(--text-muted); font-style:italic;
+    padding-top:4px; border-top:1px solid var(--border); margin-top:2px;
+  }
+  .reco-card .reco-via {
+    display:flex; flex-wrap:wrap; gap:4px; margin-top:2px;
+  }
+  .reco-via-label { font-size:0.62rem; color:var(--text-muted); align-self:center; margin-right:2px; }
+
+  /* Section group title with product badge */
+  .reco-group-title {
+    grid-column:1/-1; display:flex; align-items:center; gap:10px;
+    margin:18px 0 8px; padding-bottom:8px;
+    border-bottom:1px solid var(--border);
+  }
   .reco-group-title:first-child { margin-top:0; }
+  .reco-group-name { font-size:0.78rem; font-weight:700; color:var(--text-sub); text-transform:uppercase; letter-spacing:0.07em; }
+  .reco-group-product { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:2px 8px; border-radius:4px; }
+  .reco-group-product.gp-paper  { background:rgba(200,122,26,0.1); color:var(--orange); }
+  .reco-group-product.gp-play   { background:rgba(190,48,112,0.1); color:var(--pink); }
+  .reco-group-product.gp-light  { background:rgba(154,114,9,0.1);  color:var(--amber); }
+  .reco-group-product.gp-studio { background:rgba(109,77,170,0.1); color:var(--purple); }
+  .reco-group-product.gp-shop   { background:rgba(37,99,184,0.1);  color:var(--blue); }
+  a.reco-group-product { text-decoration:none; cursor:pointer; }
+  a.reco-group-product:hover { opacity:0.75; }
+  a.mod { text-decoration:none; }
+  a.mod:hover { opacity:0.75; }
 
   /* ===== FULL TABLE (hidden by default, shown via "View All") ===== */
   .full-table-section { display:none; margin-bottom:28px; }
@@ -368,8 +432,7 @@
         <span class="price-label">Players</span>
         <span class="price-value">Free</span>
       </div>
-      <div class="price-note">Publishing requires Studio Play module</div>
-      <div class="price-note" style="margin-top:3px;font-size:0.68rem;">Studio Play module: <span style="font-family:'JetBrains Mono',monospace;font-weight:600;" data-price="PLAY">##</span>/mo</div>
+      <div class="price-note">Publishing requires Studio Play module · <span style="font-family:'JetBrains Mono',monospace;font-weight:600;" data-price="PLAY">##</span>/mo</div>
     </div>
 
     <div class="product-faq">
@@ -395,7 +458,7 @@
 
   <!-- Stakco Light — Projection -->
   <div class="product-card light">
-    <div class="product-badge">Projection</div>
+    <div class="product-badge">Optical</div>
     <h3>Stakco Light</h3>
     <div class="subtitle">Projected puzzle installation</div>
     <div class="product-intro">
@@ -469,78 +532,75 @@
 
 </div>
 
-<!-- ===== SECTION 4: Smart Guide (single-step card selection) ===== -->
+<!-- ===== SECTION 4: Smart Guide ===== -->
 <div class="guide-card" id="guideCard">
   <div class="guide-header">
     <div class="guide-header-left">
       <div class="guide-icon"><img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="" style="width:20px;height:auto;"></div>
       <div>
         <div class="guide-title">Smart Guide</div>
-        <div class="guide-subtitle">Select what describes you and we'll show relevant use cases</div>
+        <div class="guide-subtitle">Select who you are — we'll show what fits</div>
       </div>
     </div>
-    <div class="guide-header-right" id="guideHeaderRight">
-      <button class="guide-retake" id="guideRetake" style="display:none" onclick="resetGuide()">↻ Clear</button>
-    </div>
+    <button class="guide-retake" id="guideRetake" style="display:none" onclick="resetGuide()">↻ Clear</button>
+  </div>
+
+  <div class="guide-sentence" id="guideSentence">
+    <span class="sentence-static">I'm</span>
+    <span id="sentenceLabels"></span>
+    <span id="sentenceSuffix"><span class="guide-sentence-placeholder">looking to use Stakco for...</span></span>
   </div>
 
   <div id="guideSelectionArea">
-    <div class="guide-question">I'm looking to use Stakco for...</div>
     <div class="guide-cards-grid">
 
-      <div class="guide-seg-card" data-segments="personal" onclick="toggleGuideCard(this)">
-        <div class="seg-card-title">Personal & Family</div>
-        <div class="seg-card-desc">Fun activities, gifts, hobby crafting</div>
-        <div class="seg-card-tags"><span class="seg seg-personal">Personal & Family</span></div>
-        <div class="seg-card-examples"><span>Party favors · Family puzzles · Hobby crafting · Mindfulness activities</span></div>
+      <div class="guide-seg-card" data-segments="personal" data-labels="an Individual,a Hobbyist" onclick="toggleGuideCard(this)">
+        <div class="seg-card-title">Individual & Hobbyist</div>
+        <div class="seg-card-desc">Gifts, family activities, hobby crafting, mindfulness</div>
       </div>
 
-      <div class="guide-seg-card" data-segments="creators" onclick="toggleGuideCard(this)">
-        <div class="seg-card-title">Creating & Selling</div>
-        <div class="seg-card-desc">Design, publish, and monetize puzzles or stencils</div>
-        <div class="seg-card-tags"><span class="seg seg-creators">Creators & Artists</span></div>
-        <div class="seg-card-examples"><span>Sell stencils · Puzzle portfolios · Content series · Marketplace listings</span></div>
+      <div class="guide-seg-card" data-segments="creators" data-labels="a Creator,an Artist" onclick="toggleGuideCard(this)">
+        <div class="seg-card-title">Creator & Artist</div>
+        <div class="seg-card-desc">Design, publish, and sell puzzles or stencils</div>
       </div>
 
-      <div class="guide-seg-card" data-segments="business" onclick="toggleGuideCard(this)">
-        <div class="seg-card-title">Business & Branding</div>
-        <div class="seg-card-desc">Marketing campaigns, branded merch, engagement</div>
-        <div class="seg-card-tags"><span class="seg seg-business">Business & Corporate</span></div>
-        <div class="seg-card-examples"><span>Trade show giveaways · Branded puzzles · Campaign analytics · Corporate gifts</span></div>
+      <div class="guide-seg-card" data-segments="education" data-labels="an Educator" onclick="toggleGuideCard(this)">
+        <div class="seg-card-title">Educator</div>
+        <div class="seg-card-desc">Classroom materials, interactive learning, student engagement</div>
       </div>
 
-      <div class="guide-seg-card" data-segments="education health" onclick="toggleGuideCard(this)">
-        <div class="seg-card-title">Education & Therapy</div>
-        <div class="seg-card-desc">Teaching tools, sensory therapy, cognitive engagement</div>
-        <div class="seg-card-tags"><span class="seg seg-education">Education</span><span class="seg seg-health">Healthcare & Therapy</span></div>
-        <div class="seg-card-examples"><span>Classroom handouts · Sensory rooms · Motor skill therapy · Student activities</span></div>
+      <div class="guide-seg-card" data-segments="health" data-labels="a Therapist" onclick="toggleGuideCard(this)">
+        <div class="seg-card-title">Therapist</div>
+        <div class="seg-card-desc">Sensory therapy, motor skills, cognitive & dementia care</div>
       </div>
 
-      <div class="guide-seg-card" data-segments="venues" onclick="toggleGuideCard(this)">
-        <div class="seg-card-title">Venues & Events</div>
-        <div class="seg-card-desc">Installations, lobby displays, exhibitions</div>
-        <div class="seg-card-tags"><span class="seg seg-venues">Venues & Events</span></div>
-        <div class="seg-card-examples"><span>Museum walls · Hotel lobbies · Event booths · Waiting room displays</span></div>
+      <div class="guide-seg-card" data-segments="business" data-labels="a Business Owner" onclick="toggleGuideCard(this)">
+        <div class="seg-card-title">Business</div>
+        <div class="seg-card-desc">Branded merch, campaigns, corporate gifts, trade shows</div>
       </div>
 
-      <div class="guide-seg-card" data-segments="devs" onclick="toggleGuideCard(this)">
-        <div class="seg-card-title">Apps & Integrations</div>
-        <div class="seg-card-desc">Embed puzzles, API access, SDK for your product</div>
-        <div class="seg-card-tags"><span class="seg seg-devs">Developers</span></div>
-        <div class="seg-card-examples"><span>Blog widgets · Daily puzzle embed · Mobile mini-games · SaaS gamification</span></div>
+      <div class="guide-seg-card" data-segments="venues" data-labels="a Venue Manager" onclick="toggleGuideCard(this)">
+        <div class="seg-card-title">Venue</div>
+        <div class="seg-card-desc">Museum, hotel, gallery, hospital lobby, permanent installation</div>
       </div>
 
-      <div class="guide-seg-card" data-segments="luxury" onclick="toggleGuideCard(this)">
-        <div class="seg-card-title">Luxury & Premium Brands</div>
-        <div class="seg-card-desc">Experiential activations, VIP gifting, flagship installations</div>
-        <div class="seg-card-tags"><span class="seg seg-luxury">Luxury & Premium Brands</span></div>
-        <div class="seg-card-examples"><span>Flagship store installations · Limited-edition collectibles · VIP client gifts · Fashion week activations</span></div>
+      <div class="guide-seg-card" data-segments="venues" data-labels="an Event Planner" onclick="toggleGuideCard(this)">
+        <div class="seg-card-title">Event Planner</div>
+        <div class="seg-card-desc">Pop-ups, exhibitions, trade shows, activations, temporary installs</div>
+      </div>
+
+      <div class="guide-seg-card" data-segments="luxury" data-labels="a Brand Manager" onclick="toggleGuideCard(this)">
+        <div class="seg-card-title">Luxury Brand</div>
+        <div class="seg-card-desc">VIP gifts, flagship installations, limited-edition collectibles</div>
+      </div>
+
+      <div class="guide-seg-card" data-segments="devs" data-labels="a Developer" onclick="toggleGuideCard(this)">
+        <div class="seg-card-title">Developer</div>
+        <div class="seg-card-desc">Embed puzzles, API / SDK, app integrations, white-label</div>
       </div>
 
     </div>
-
   </div>
-
 </div>
 
 <!-- ===== SECTION 5: Recommendations (shown after Smart Guide) ===== -->
@@ -654,7 +714,7 @@
       </tr>
 
       <!-- LIGHT -->
-      <tr class="section-row"><td colspan="5">Projection, Installations, Therapy</td></tr>
+      <tr class="section-row"><td colspan="5">Optical Installations & Therapy</td></tr>
       <tr data-segments="education health venues" data-section="light">
         <td><div class="use-case">Display puzzles on projection or kiosk</div><div class="use-desc">Deploy to large screens or digital signage</div></td>
         <td><div class="cell-flex"><span class="mod mod-light">Light</span></div></td>
@@ -747,7 +807,7 @@
 </div>
 
 <div class="footer">
-  All use cases include the free Stakco Studio account. Modules shown are paid add-ons. Customers typically start with one and expand as needs grow. · Stakco 2026
+  Stakco Studio requires a one-time base licence (<span data-price="STUDIO_BASE" style="font-family:'JetBrains Mono',monospace;font-weight:600;">SGD 13</span>) — modules are purchased on top. Customers typically start with one and expand as needs grow. · Stakco 2026 · Proprietary puzzle technology · exclusively licensed for commercial use.
 </div>
 
 </div>
@@ -765,11 +825,11 @@
     { section:'Online Interactive Puzzles', useCase:'Track puzzle engagement analytics', desc:'Completion rates, time spent, popular content', modules:['Play'], segments:['education','business'], example:'Student progress tracking, campaign metrics' },
     { section:'Online Interactive Puzzles', useCase:'Mindfulness & stress-relief sessions', desc:'Puzzles as a calming, focused activity', modules:['Play'], segments:['personal'], example:'Wellness apps, self-care routines, mental health support' },
     // Light
-    { section:'Projection & Installations', useCase:'Display puzzles on projection or kiosk', desc:'Deploy to large screens or digital signage', modules:['Light'], segments:['venues','education','health'], example:'Museum wall, STEM lab, hospital common area' },
-    { section:'Projection & Installations', useCase:'Rotate seasonal puzzle displays', desc:'Schedule changing themes automatically', modules:['Light','AI'], segments:['venues','business'], example:'Museum seasons, hotel lobbies, trade show booths' },
-    { section:'Projection & Installations', useCase:'Sensory & calming therapy for special needs', desc:'Projected puzzles for sensory rooms', modules:['Light'], segments:['health','education'], example:'Autism therapy centres, special needs schools' },
-    { section:'Projection & Installations', useCase:'Patient relaxation & cognitive engagement', desc:'Calming visual activity for recovery and elderly care', modules:['Light'], segments:['health'], example:'Hospital wards, rehab centres, aged care homes' },
-    { section:'Projection & Installations', useCase:'Entertainment & infotainment displays', desc:'Engaging visual experiences for public spaces', modules:['Light'], segments:['venues','business','health'], example:'Hotel lobbies, waiting rooms, visitor centres' },
+    { section:'Optical Installations', useCase:'Display puzzles on projection or kiosk', desc:'Deploy to large screens or digital signage', modules:['Light'], segments:['venues','education','health'], example:'Museum wall, STEM lab, hospital common area' },
+    { section:'Optical Installations', useCase:'Rotate seasonal puzzle displays', desc:'Schedule changing themes automatically', modules:['Light','AI'], segments:['venues','business'], example:'Museum seasons, hotel lobbies, trade show booths' },
+    { section:'Optical Installations', useCase:'Sensory & calming therapy for special needs', desc:'Projected puzzles for sensory rooms', modules:['Light'], segments:['health','education'], example:'Autism therapy centres, special needs schools' },
+    { section:'Optical Installations', useCase:'Patient relaxation & cognitive engagement', desc:'Calming visual activity for recovery and elderly care', modules:['Light'], segments:['health'], example:'Hospital wards, rehab centres, aged care homes' },
+    { section:'Optical Installations', useCase:'Entertainment & infotainment displays', desc:'Engaging visual experiences for public spaces', modules:['Light'], segments:['venues','business','health'], example:'Hotel lobbies, waiting rooms, visitor centres' },
     // AI
     { section:'Automated Creation', useCase:'Generate puzzles from text description', desc:'No design skills needed — AI creates the art', modules:['AI'], segments:['personal','education'], example:'Casual users, students, quick prototyping' },
     // Publish
@@ -781,7 +841,7 @@
     // Luxury & Premium Brands
     { section:'Physical Puzzles', useCase:'Premium branded collectibles & VIP gifts', desc:'Limited-edition puzzles in luxury packaging for client gifting and brand activations', modules:['Print','AI'], segments:['luxury'], example:'VIP client gifts, fashion house collectibles, boutique in-store exclusives' },
     { section:'Online Interactive Puzzles', useCase:'Branded digital campaign puzzles', desc:'Interactive product launch experiences with engagement analytics and exclusive content', modules:['Play','AI'], segments:['luxury'], example:'Product launch campaigns, loyalty rewards, seasonal brand activations' },
-    { section:'Projection & Installations', useCase:'Flagship store & experiential installations', desc:'Interactive art pieces for retail spaces, showrooms, and brand events', modules:['Light'], segments:['luxury'], example:'Flagship boutiques, fashion week booths, five-star hotel lobbies' },
+    { section:'Optical Installations', useCase:'Flagship store & experiential installations', desc:'Interactive art pieces for retail spaces, showrooms, and brand events', modules:['Light'], segments:['luxury'], example:'Flagship boutiques, fashion week booths, five-star hotel lobbies' },
   ];
 
   const modClassMap = { Print:'mod-print', Play:'mod-play', Light:'mod-light', Publish:'mod-publish', AI:'mod-ai', Dev:'mod-dev' };
@@ -846,10 +906,14 @@
     });
   });
 
-  // ========== SMART GUIDE (single-step card selection) ==========
+  // ========== SMART GUIDE ==========
   let selectedSegments = new Set();
+  // Map: segment key(s) -> { label, card element }
+  let selectedCards = []; // ordered list of { segs, label }
 
   const retakeBtn = document.getElementById('guideRetake');
+  const sentenceLabels = document.getElementById('sentenceLabels');
+  const sentenceSuffix = document.getElementById('sentenceSuffix');
   const selectionArea = document.getElementById('guideSelectionArea');
   const recoSection = document.getElementById('recoSection');
   const recoCards = document.getElementById('recoCards');
@@ -857,38 +921,79 @@
   const preGuidePrompt = document.getElementById('preGuidePrompt');
   const fullTableSection = document.getElementById('fullTableSection');
 
+  function buildSentence() {
+    sentenceLabels.innerHTML = '';
+    if (selectedCards.length === 0) {
+      sentenceSuffix.innerHTML = '<span class="guide-sentence-placeholder">looking to use Stakco for...</span>';
+      return;
+    }
+    sentenceSuffix.innerHTML = 'looking to use Stakco.';
+    selectedCards.forEach((entry, i) => {
+      // Each card may produce multiple label pills
+      entry.labels.forEach((lbl, li) => {
+        // Comma separator before each pill except the very first
+        if (i > 0 || li > 0) {
+          const sep = document.createElement('span');
+          sep.className = 'sentence-static';
+          sep.textContent = ',';
+          sep.style.margin = '0 4px 0 0';
+          sentenceLabels.appendChild(sep);
+        }
+        const pill = document.createElement('span');
+        pill.className = 'guide-label-pill';
+        pill.textContent = lbl;
+        // Only the first pill of each card gets the ✕ (dismisses the whole card)
+        if (li === 0) {
+          const x = document.createElement('span');
+          x.className = 'pill-x';
+          x.textContent = '✕';
+          x.title = 'Remove';
+          x.onclick = (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.guide-seg-card').forEach(c => {
+              if (c.dataset.labels === entry.dataLabels) toggleGuideCard(c);
+            });
+          };
+          pill.appendChild(x);
+        }
+        sentenceLabels.appendChild(pill);
+      });
+    });
+  }
+
   window.toggleGuideCard = function(card) {
     const segs = card.dataset.segments.split(' ');
+    const dataLabels = card.dataset.labels; // raw attribute value, used as unique key
+    const labels = dataLabels.split(',').map(s => s.trim());
     if (card.classList.contains('selected')) {
       card.classList.remove('selected');
-      segs.forEach(s => selectedSegments.delete(s));
+      segs.forEach(s => {
+        // Only remove the segment if no other selected card also uses it
+        const stillUsed = selectedCards.some(e => e.dataLabels !== dataLabels && e.segs.includes(s));
+        if (!stillUsed) selectedSegments.delete(s);
+      });
+      selectedCards = selectedCards.filter(e => e.dataLabels !== dataLabels);
     } else {
       card.classList.add('selected');
       segs.forEach(s => selectedSegments.add(s));
+      selectedCards.push({ segs, labels, dataLabels });
     }
-    // Dynamic: update recommendations immediately
+    buildSentence();
     updateRecommendations();
   };
 
   function updateRecommendations() {
     const segments = [...selectedSegments];
     if (segments.length === 0) {
-        retakeBtn.style.display = 'none';
+      retakeBtn.style.display = 'none';
       recoSection.classList.remove('visible');
       preGuidePrompt.style.display = '';
       activeFilters.clear();
       applyFilter();
       return;
     }
-
     retakeBtn.style.display = 'inline-block';
-
-    // Build result pills
-
-    // Build recommendations
     buildRecoCards(segments);
-
-    // Sync full table filters
     activeFilters.clear();
     segments.forEach(s => activeFilters.add(s));
     applyFilter();
@@ -896,8 +1001,9 @@
 
   window.resetGuide = function() {
     selectedSegments.clear();
+    selectedCards = [];
     document.querySelectorAll('.guide-seg-card').forEach(c => c.classList.remove('selected'));
-    selectionArea.style.display = '';
+    buildSentence();
     retakeBtn.style.display = 'none';
     activeFilters.clear();
     applyFilter();
@@ -908,6 +1014,26 @@
 
 
   // ========== RECOMMENDATION CARDS ==========
+  // Map section names to product badge(s)
+  const sectionProductMap = {
+    'Physical Puzzles':         [{ cls:'gp-paper',  label:'Paper',     url:'stakco-paper.html' }],
+    'Online Interactive Puzzles':[{ cls:'gp-play',   label:'Play',      url:'stakco-play.html' }],
+    'Optical Installations':    [{ cls:'gp-light',  label:'Light',     url:'stakco-light.html' }],
+    'Automated Creation':       [{ cls:'gp-studio', label:'Studio AI', url:'https://studio.stakcos.com' }],
+    'Sell on Marketplace':      [{ cls:'gp-shop',   label:'Shop',      url:'https://shop.stakcos.com' }],
+    'Embed & Integrate':        [{ cls:'gp-studio', label:'Dev API',   url:'https://studio.stakcos.com' }],
+  };
+
+  // Human-readable module → { label, url }
+  const modViaMap = {
+    Print:   { label:'Paper',     url:'stakco-paper.html' },
+    Play:    { label:'Play',      url:'stakco-play.html' },
+    Light:   { label:'Light',     url:'stakco-light.html' },
+    AI:      { label:'Studio AI', url:'https://studio.stakcos.com' },
+    Publish: { label:'Shop',      url:'https://shop.stakcos.com' },
+    Dev:     { label:'Dev API',   url:'https://studio.stakcos.com' },
+  };
+
   function buildRecoCards(segments) {
     recoCards.innerHTML = '';
     if (segments.length === 0) {
@@ -923,7 +1049,6 @@
 
     recoCount.textContent = matched.length + ' match' + (matched.length !== 1 ? 'es' : '');
 
-    // Group by section
     const groups = {};
     matched.forEach(uc => {
       if (!groups[uc.section]) groups[uc.section] = [];
@@ -931,25 +1056,47 @@
     });
 
     Object.entries(groups).forEach(([section, items]) => {
-      const title = document.createElement('div');
-      title.className = 'reco-group-title';
-      title.textContent = section;
-      recoCards.appendChild(title);
+      // Group header with linked product badge(s)
+      const titleEl = document.createElement('div');
+      titleEl.className = 'reco-group-title';
+      const nameEl = document.createElement('span');
+      nameEl.className = 'reco-group-name';
+      nameEl.textContent = section;
+      titleEl.appendChild(nameEl);
+      const badges = sectionProductMap[section] || [];
+      badges.forEach(b => {
+        const badge = document.createElement('a');
+        badge.className = 'reco-group-product ' + b.cls;
+        badge.textContent = b.label;
+        badge.href = b.url;
+        badge.title = 'View ' + b.label + ' product page';
+        titleEl.appendChild(badge);
+      });
+      recoCards.appendChild(titleEl);
 
       items.forEach(uc => {
         const card = document.createElement('div');
         card.className = 'reco-card fade-in';
 
-        const modsHtml = uc.modules.map(m => `<span class="mod ${modClassMap[m]}">${m}</span>`).join('');
-        const segsHtml = uc.segments.map(s => `<span class="seg ${segClassMap[s]}">${segLabelMap[s]}</span>`).join('');
+        // Via line: deduplicate modules, link each to product page
+        const seen = new Set();
+        const viaItems = uc.modules
+          .map(m => modViaMap[m])
+          .filter(v => v && !seen.has(v.label) && seen.add(v.label));
+
+        const viaHtml = viaItems.length > 0
+          ? `<div class="reco-via"><span class="reco-via-label">via</span>${
+              viaItems.map(v => {
+                const m = Object.keys(modViaMap).find(k => modViaMap[k].label === v.label);
+                return `<a href="${v.url}" class="mod ${modClassMap[m] || ''}" title="View ${v.label}">${v.label}</a>`;
+              }).join('')
+            }</div>`
+          : '';
 
         card.innerHTML = `
-          <div class="reco-card-header">
-            <div class="use-case">${uc.useCase}</div>
-            <div class="reco-modules">${modsHtml}</div>
-          </div>
-          <div class="use-desc">${uc.desc}</div>
-          <div class="reco-segs">${segsHtml}</div>
+          <div class="reco-title">${uc.useCase}</div>
+          <div class="reco-desc">${uc.desc}</div>
+          ${viaHtml}
           <div class="reco-example">${uc.example}</div>
         `;
         recoCards.appendChild(card);
@@ -990,6 +1137,7 @@
       const res = await fetch(PLATFORM_URL);
       const data = await res.json();
       const studioModules = data.Products?.STAKCO_STUDIO?.Modules || {};
+      const studioBase = data.Products?.STAKCO_STUDIO;
       document.querySelectorAll('tr[data-segments]').forEach(row => {
         const modBadges = row.querySelectorAll('.mod');
         const costCell = row.querySelector('.cost');
@@ -1003,11 +1151,16 @@
         });
         if (items.length > 0) costCell.innerHTML = '<div class="cost-stack">' + items.join('') + '</div>';
       });
-      // Populate data-price elements in product cards
+      // Populate data-price elements
       document.querySelectorAll('[data-price]').forEach(el => {
         const key = el.dataset.price;
-        const mod = studioModules[key];
-        if (mod) el.textContent = 'SGD ' + mod.Price;
+        if (key === 'STUDIO_BASE') {
+          const price = studioBase?.Price || studioBase?.BasePrice;
+          if (price) el.textContent = 'SGD ' + price;
+        } else {
+          const mod = studioModules[key];
+          if (mod) el.textContent = 'SGD ' + mod.Price;
+        }
       });
     } catch (e) { console.warn('Could not load pricing:', e); }
   }

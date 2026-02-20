@@ -131,6 +131,15 @@
     .summary-grid { grid-template-columns:repeat(2,1fr); }
     .doc-meta { flex-direction:column; gap:6px; }
   }
+
+  .ip-note {
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:10px; font-size:0.68rem; font-weight:500;
+    color:var(--text-muted); 
+    padding:4px 10px; border-radius:5px;
+    background:rgba(0,0,0,0.03); border:1px solid var(--border);
+  }
+  .ip-note::before { content:'⚖'; font-size:0.72rem; }
 </style>
 </head>
 <body>
@@ -179,6 +188,7 @@
 <div class="doc-header">
   <h1>Stakco Play — Commercial Pricing & Revenue Model</h1>
   <div class="subtitle">Recurring revenue from digital puzzle publishing — module subscriptions, add-ons, and platform economics</div>
+  <div class="ip-note">Proprietary puzzle technology · exclusively licensed for commercial use</div>
 </div>
 
 <!-- ===== EXECUTIVE SUMMARY ===== -->
