@@ -27,6 +27,33 @@
   src: url('https://cdn.stakcos.com/fonts/MONT-HEAVY.ttf') format('truetype');
   font-weight: 900; font-style: normal; font-display: swap;
 }
+
+  /* ── PARTNER STRIP ────────────────────────────────────────── */
+  .partner-strip {
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+  }
+  .partner-strip-label {
+    font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--ink4); text-align: center;
+    margin-bottom: 18px;
+  }
+  .partner-logos {
+    display: flex; align-items: center; justify-content: center;
+    gap: 40px; flex-wrap: wrap;
+  }
+  .partner-logo img {
+    height: 32px; width: auto;
+    filter: grayscale(100%) opacity(0.45);
+    transition: filter 0.2s ease;
+    display: block;
+  }
+  .partner-logo:hover img { filter: grayscale(0%) opacity(0.9); }
+  @media (max-width: 600px) {
+    .partner-logos { gap: 28px; }
+    .partner-logo img { height: 26px; }
+  }
 </style>
 <style>
 /* ── RESET & ROOT ─────────────────────────────────────────── */
@@ -947,6 +974,26 @@ body {
 </div>
 
 <!-- ══ LIVE TRACKS ═══════════════════════════════════════════════ -->
+
+<!-- ══ PARTNER STRIP ══════════════════════════════════════════ -->
+<div class="partner-strip">
+  <div class="partner-strip-label">Trusted by</div>
+  <div class="partner-logos">
+    <a class="partner-logo" href="https://www.sgenable.sg" target="_blank" rel="noopener" title="SG Enable">
+      <img src="https://cdn.stakcos.com/media/partners/sgenable.png" alt="SG Enable">
+    </a>
+    <a class="partner-logo" href="https://www.awwa.org.sg" target="_blank" rel="noopener" title="AWWA">
+      <img src="https://cdn.stakcos.com/media/partners/awwa.png" alt="AWWA">
+    </a>
+    <a class="partner-logo" href="https://nus.edu.sg" target="_blank" rel="noopener" title="National University of Singapore">
+      <img src="https://cdn.stakcos.com/media/partners/nus.png" alt="NUS">
+    </a>
+    <a class="partner-logo" href="https://ahlab.org" target="_blank" rel="noopener" title="AHLab">
+      <img src="https://cdn.stakcos.com/media/partners/ahlab.png" alt="AHLab">
+    </a>
+  </div>
+</div>
+
 <div class="section" id="live-tracks">
   <span class="section-label">Free to explore</span>
   <h2 class="section-title">Try a live puzzle track</h2>
