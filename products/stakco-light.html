@@ -5,210 +5,713 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
 <title>Stakco Light — Projected Puzzle Installations</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #f6f6f9; --card: #ffffff; --hover: #f0f0f5;
-    --orange: #c87a1a; --pink: #be3070; --green: #16805a;
-    --blue: #2563b8; --purple: #6d4daa; --cyan: #0d7f94; --amber: #9a7209;
-    --text: #1a1a2e; --text-sub: #444455; --text-muted: #8888a0;
+    --bg: #f6f6f9;
+    --card: #ffffff;
+    --hover: #f0f0f5;
+    --amber: #9a7209;
+    --amber-bg: rgba(154,114,9,0.06);
+    --amber-border: rgba(154,114,9,0.18);
+    --green: #16805a;
+    --green-bg: rgba(22,128,90,0.06);
+    --text: #1a1a2e;
+    --text-sub: #444455;
+    --text-muted: #8888a0;
     --border: rgba(0,0,0,0.07);
-    --accent: var(--amber); --accent-bg: rgba(154,114,9,0.05); --accent-border: rgba(154,114,9,0.15);
+    --border-strong: rgba(0,0,0,0.12);
   }
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; }
-  .container { max-width:800px; margin:0 auto; padding:48px 32px 64px; }
-  a { color:var(--accent); text-decoration:none; }
-  a:hover { text-decoration:underline; }
 
-  .back-link { font-size:0.78rem; color:var(--text-muted); margin-bottom:24px; display:inline-block; }
-  .back-link:hover { color:var(--text-sub); text-decoration:none; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
 
-  .hero { margin-bottom:36px; }
-  .hero-badge { display:inline-block; font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; padding:4px 12px; border-radius:999px; background:var(--accent); color:#fff; margin-bottom:12px; }
-  .hero h1 { font-size:1.75rem; font-weight:700; margin-bottom:4px; }
-  .hero .tagline { font-size:1rem; color:var(--text-sub); }
+  /* ── HERO VIDEO ───────────────────────────────────────────── */
+  .hero-video-wrap {
+    position: relative; width: 100%; height: 480px;
+    overflow: hidden; background: #0e0c08;
+  }
+  .hero-video {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    object-fit: cover; opacity: 0.88; pointer-events: none;
+  }
+  .hero-fade-t {
+    position: absolute; top: 0; left: 0; right: 0; height: 90px;
+    background: linear-gradient(to bottom, rgba(14,12,8,0.6) 0%, transparent 100%);
+    pointer-events: none;
+  }
+  .hero-fade-b {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 200px;
+    background: linear-gradient(to top, var(--bg) 0%, transparent 100%);
+    pointer-events: none;
+  }
+  .hero-nav {
+    position: absolute; top: 22px; left: 28px; z-index: 10;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.75rem; font-weight: 600;
+    color: rgba(255,255,255,0.78); text-decoration: none;
+    transition: color 0.15s; text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+  }
+  .back-link:hover { color: #fff; }
+  .back-link svg { width: 14px; height: 14px; }
+  .hero-content {
+    position: absolute; bottom: 44px; left: 0; right: 0;
+    padding: 0 32px; z-index: 2;
+  }
+  .hero-badge {
+    display: inline-block; font-size: 0.58rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 4px 12px; border-radius: 999px;
+    background: var(--amber); color: #fff; margin-bottom: 10px;
+  }
+  .hero-title {
+    font-size: 2.2rem; font-weight: 700; color: #fff; line-height: 1.15;
+    margin-bottom: 8px; text-shadow: 0 1px 0 rgba(0,0,0,0.9), 0 2px 16px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.3);
+  }
+  .hero-tagline {
+    font-size: 1rem; color: rgba(255,255,255,0.82);
+    max-width: 520px; line-height: 1.5;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.5);
+  }
 
-  .section { margin-bottom:32px; }
-  .section-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); margin-bottom:10px; }
-  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:22px 24px; margin-bottom:16px; }
-  .card p { color:var(--text-sub); font-size:0.88rem; line-height:1.6; }
-  .card p + p { margin-top:10px; }
-  .card strong { color:var(--text); }
+  /* ── LAYOUT ───────────────────────────────────────────────── */
+  .container { max-width: 800px; margin: 0 auto; padding: 0 32px 72px; }
+  .section { margin-bottom: 36px; }
+  .section-label {
+    font-size: 0.62rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 12px;
+  }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 12px;
+  }
+  .card p { color: var(--text-sub); font-size: 0.87rem; line-height: 1.65; }
+  .card p + p { margin-top: 10px; }
+  .card strong { color: var(--text); }
 
-  .price-card { background:var(--accent-bg); border:1px solid var(--accent-border); border-radius:10px; padding:20px 24px; margin-bottom:16px; }
-  .price-card .price-row { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px; }
-  .price-card .price-label { font-size:0.78rem; font-weight:600; color:var(--text-sub); }
-  .price-card .price-value { font-family:'JetBrains Mono',monospace; font-size:1.1rem; font-weight:700; color:var(--accent); }
-  .price-card .price-note { font-size:0.72rem; color:var(--text-muted); margin-top:4px; }
-  .price-card .price-detail { display:flex; justify-content:space-between; font-size:0.72rem; color:var(--text-muted); margin-top:6px; }
-  .price-card .price-detail span:last-child { color:var(--text-sub); font-weight:500; }
+  /* ── LIVE PROOF BAR ───────────────────────────────────────── */
+  .proof-bar {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: linear-gradient(135deg, rgba(22,128,90,0.06), rgba(22,128,90,0.02));
+    border: 1px solid rgba(22,128,90,0.2); border-radius: 10px;
+    padding: 16px 20px; margin: 28px 0 36px;
+  }
+  .proof-dot {
+    width: 8px; height: 8px; border-radius: 50%; background: var(--green);
+    flex-shrink: 0; margin-top: 7px;
+    box-shadow: 0 0 0 3px rgba(22,128,90,0.2);
+  }
+  .proof-text { font-size: 0.82rem; color: var(--text-sub); line-height: 1.55; }
+  .proof-text strong { color: var(--text); }
 
-  .features-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
-  @media (max-width:600px) { .features-grid { grid-template-columns:1fr; } }
-  .feature-item { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px 16px; }
-  .feature-item .ft-title { font-size:0.82rem; font-weight:700; color:var(--text); margin-bottom:3px; }
-  .feature-item .ft-desc { font-size:0.75rem; color:var(--text-muted); line-height:1.4; }
+  /* ── WHAT IS IT ───────────────────────────────────────────── */
+  .what-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .what-half {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .what-half-label {
+    font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--amber); margin-bottom: 6px;
+  }
+  .what-half p { font-size: 0.84rem; color: var(--text-sub); line-height: 1.6; }
+  .what-half strong { color: var(--text); }
+  .what-summary {
+    background: var(--amber-bg); border: 1px solid var(--amber-border);
+    border-radius: 10px; padding: 16px 20px;
+    font-size: 0.84rem; color: var(--text-sub); line-height: 1.6;
+  }
+  .what-summary strong { color: var(--text); }
 
-  .faq-section .faq-item { border-bottom:1px solid var(--border); }
-  .faq-section .faq-item:last-child { border-bottom:none; }
-  .faq-q { display:block; font-size:0.85rem; font-weight:600; color:var(--text-sub); padding:12px 0; cursor:pointer; user-select:none; }
-  .faq-q::before { content:'▸ '; color:var(--text-muted); }
-  .faq-item.open .faq-q::before { content:'▾ '; }
-  .faq-q:hover { color:var(--text); }
-  .faq-a { display:none; font-size:0.82rem; color:var(--text-muted); line-height:1.6; padding:0 0 12px 14px; }
-  .faq-item.open .faq-a { display:block; }
+  /* ── OUTCOMES ─────────────────────────────────────────────── */
+  .outcomes-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .outcome-chip {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 14px;
+  }
+  .oc-head { font-size: 0.8rem; font-weight: 700; color: var(--amber); margin-bottom: 4px; }
+  .oc-label { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
 
-  .flow-bar { display:flex; align-items:center; gap:6px; flex-wrap:wrap; padding:14px 0; }
-  .flow-tag { font-size:0.68rem; font-weight:600; color:var(--text-muted); background:rgba(0,0,0,0.04); padding:4px 10px; border-radius:5px; }
-  .flow-tag.accent { color:var(--accent); background:var(--accent-bg); border:1px solid var(--accent-border); }
-  .flow-sep { font-size:0.75rem; color:var(--text-muted); font-weight:700; }
+  /* ── HOW IT WORKS ─────────────────────────────────────────── */
+  .flow-steps { display: flex; flex-direction: column; }
+  .flow-step {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 14px 0; border-bottom: 1px solid var(--border);
+  }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num {
+    width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+    background: var(--amber-bg); border: 1px solid var(--amber-border);
+    font-size: 0.7rem; font-weight: 700; color: var(--amber);
+    display: flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+  .flow-step-title { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .flow-step-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
 
-  .cta-row { display:flex; gap:12px; flex-wrap:wrap; margin-top:8px; }
-  .cta-btn { display:inline-block; font-family:'DM Sans',sans-serif; font-size:0.82rem; font-weight:600; padding:10px 24px; border-radius:8px; text-decoration:none; transition:opacity 0.15s; }
-  .cta-btn:hover { text-decoration:none; opacity:0.88; }
-  .cta-primary { background:var(--accent); color:#fff; }
-  .cta-secondary { background:var(--card); color:var(--text-sub); border:1px solid var(--border); }
-  .cta-secondary:hover { background:var(--hover); }
+  /* ── FEATURES ─────────────────────────────────────────────── */
+  .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .feature-item {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px;
+  }
+  .ft-icon { font-size: 1.1rem; margin-bottom: 6px; display: block; }
+  .ft-title { font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .ft-desc { font-size: 0.74rem; color: var(--text-muted); line-height: 1.45; }
 
-  .footer { margin-top:40px; padding-top:20px; border-top:1px solid var(--border); font-size:0.78rem; color:var(--text-muted); }
+  /* ── SPECS ────────────────────────────────────────────────── */
+  .specs-table {
+    width: 100%; border-collapse: collapse; background: var(--card);
+    border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+  }
+  .specs-table tr { border-bottom: 1px solid rgba(0,0,0,0.04); }
+  .specs-table tr:last-child { border-bottom: none; }
+  .specs-table tr:hover { background: rgba(0,0,0,0.015); }
+  .specs-table td { padding: 10px 18px; font-size: 0.82rem; vertical-align: top; }
+  .specs-table td:first-child { color: var(--text-muted); font-size: 0.74rem; width: 44%; }
+  .specs-table td:last-child { color: var(--text-sub); font-weight: 500; }
+  .specs-table td strong { color: var(--text); }
 
-  @media (max-width:600px) { .container { padding:24px 16px 48px; } .hero h1 { font-size:1.3rem; } }
+  /* ── PRICING ──────────────────────────────────────────────── */
+  .price-card {
+    background: var(--amber-bg); border: 1px solid var(--amber-border);
+    border-radius: 10px; padding: 22px 24px; margin-bottom: 12px;
+  }
+  .price-main-row {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 12px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--amber-border);
+  }
+  .price-label { font-size: 0.84rem; font-weight: 600; color: var(--text-sub); }
+  .price-value { font-family: 'JetBrains Mono', monospace; font-size: 1.55rem; font-weight: 700; color: var(--amber); }
+  .price-incl { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.55; }
+  .price-rows { display: flex; flex-direction: column; gap: 7px; }
+  .price-row { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.75rem; }
+  .price-row-label { color: var(--text-muted); }
+  .price-row-val { color: var(--text-sub); font-weight: 600; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; }
+  .price-row-val.good { color: var(--green); }
+  .price-note {
+    margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--amber-border);
+    font-size: 0.71rem; color: var(--text-muted); line-height: 1.6;
+  }
+  .price-note a { color: var(--amber); text-decoration: none; }
+  .price-note a:hover { text-decoration: underline; }
+  .leasing-note {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px;
+    font-size: 0.78rem; color: var(--text-sub);
+  }
+  .leasing-note svg { color: var(--amber); flex-shrink: 0; }
+  .leasing-note a { color: var(--amber); text-decoration: none; }
+  .leasing-note a:hover { text-decoration: underline; }
+  .leasing-note strong { color: var(--amber); }
+
+  /* ── AUDIENCE ─────────────────────────────────────────────── */
+  .audience-list { display: flex; flex-direction: column; gap: 8px; }
+  .aud-row {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 13px 16px;
+  }
+  .aud-icon { font-size: 1rem; flex-shrink: 0; margin-top: 3px; width: 20px; text-align: center; }
+  .aud-name { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .aud-use { font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; }
+
+  /* ── THERAPY CALLOUT ──────────────────────────────────────── */
+  .therapy-callout {
+    background: linear-gradient(135deg, rgba(22,128,90,0.05), rgba(22,128,90,0.02));
+    border: 1px solid rgba(22,128,90,0.18); border-radius: 10px;
+    padding: 18px 22px; margin-top: 10px;
+  }
+  .tc-head {
+    font-size: 0.65rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--green); margin-bottom: 8px;
+  }
+  .therapy-callout p { font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; }
+  .therapy-callout p + p { margin-top: 8px; }
+  .therapy-callout strong { color: var(--text); }
+  .therapy-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .therapy-tag {
+    font-size: 0.68rem; font-weight: 600; color: var(--green);
+    background: var(--green-bg); border: 1px solid rgba(22,128,90,0.15);
+    padding: 3px 10px; border-radius: 999px;
+  }
+
+  /* ── FAQ ──────────────────────────────────────────────────── */
+  .faq-section .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-section .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 0.85rem; font-weight: 600; color: var(--text-sub);
+    padding: 13px 0; cursor: pointer; user-select: none; gap: 12px;
+  }
+  .faq-q:hover { color: var(--text); }
+  .faq-arrow {
+    width: 15px; height: 15px; flex-shrink: 0; color: var(--text-muted);
+    transition: transform 0.2s ease;
+  }
+  .faq-item.open .faq-arrow { transform: rotate(90deg); }
+  .faq-item.open .faq-q { color: var(--text); }
+  .faq-a {
+    display: none; font-size: 0.82rem; color: var(--text-muted);
+    line-height: 1.65; padding: 0 4px 14px 0;
+  }
+  .faq-item.open .faq-a { display: block; }
+
+  /* ── CTA ──────────────────────────────────────────────────── */
+  .cta-section {
+    background: linear-gradient(135deg, rgba(154,114,9,0.07), rgba(154,114,9,0.02));
+    border: 1px solid var(--amber-border); border-radius: 12px;
+    padding: 28px 28px; text-align: center;
+  }
+  .cta-section h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+  .cta-section p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.55; max-width: 440px; margin-left: auto; margin-right: auto; }
+  .cta-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .cta-btn {
+    display: inline-block; font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; font-weight: 600; padding: 12px 26px;
+    border-radius: 8px; text-decoration: none; transition: opacity 0.15s;
+  }
+  .cta-btn:hover { text-decoration: none; opacity: 0.88; }
+  .cta-primary { background: var(--amber); color: #fff; }
+  .cta-secondary { background: var(--card); color: var(--text-sub); border: 1px solid var(--border-strong); }
+  .cta-secondary:hover { background: var(--hover); }
+  .cta-reassure { margin-top: 12px; font-size: 0.7rem; color: var(--text-muted); font-style: italic; }
+
+  /* ── FOOTER ───────────────────────────────────────────────── */
+  .footer {
+    margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border);
+    font-size: 0.71rem; color: var(--text-muted); text-align: center; line-height: 1.9;
+  }
+  .footer a { color: var(--text-muted); text-decoration: none; }
+  .footer a:hover { color: var(--text-sub); }
+
+
+  /* ── Product components strip ────────────────────────────── */
+  .components-strip {
+    display: flex; gap: 10px; margin-bottom: 0;
+    overflow-x: auto; padding-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .components-strip::-webkit-scrollbar { display: none; }
+  .component-thumb {
+    flex: 1 0 0; min-width: 120px; max-width: 180px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden; text-align: center;
+  }
+  .component-thumb img {
+    width: 100%; aspect-ratio: 1/1; object-fit: cover;
+    display: block; background: var(--bg);
+  }
+  .component-thumb .ct-label {
+    font-size: 0.65rem; font-weight: 600; color: var(--text-muted);
+    padding: 6px 8px 8px; line-height: 1.3; display: block;
+  }
+  @media (max-width: 640px) {
+    .component-thumb { min-width: 90px; max-width: 110px; flex-shrink: 0; }
+    .component-thumb .ct-label { font-size: 0.6rem; padding: 5px 6px 6px; }
+  }
+
+  /* ── RESPONSIVE ───────────────────────────────────────────── */
+  @media (max-width: 640px) {
+    .hero-video-wrap { height: 340px; }
+    .hero-title { font-size: 1.5rem; }
+    .hero-content { padding: 0 18px; bottom: 28px; }
+    .container { padding: 0 16px 56px; }
+    .what-grid, .features-grid, .outcomes-grid { grid-template-columns: 1fr; }
+    .cta-section { padding: 20px 18px; }
+  }
 </style>
 </head>
 <body>
+
+<!-- ══ HERO ═══════════════════════════════════════════════════ -->
+<div class="hero-video-wrap">
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="https://cdn.stakcos.com/media/light.mp4" type="video/mp4">
+  </video>
+  <div class="hero-fade-t"></div>
+  <div class="hero-fade-b"></div>
+
+  <div class="hero-nav">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      All products
+    </a>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">Projection &middot; Hardware</div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:0;">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco" style="width:40px;height:auto;flex-shrink:0;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.6));">
+      <h1 class="hero-title" style="margin-bottom:0;">Stakco Light</h1>
+    </div>
+    <p class="hero-tagline">A rotating ring puzzle, physically installed at your venue. Users turn the rings &mdash; the projector responds in real time.</p>
+  </div>
+</div>
+
+<!-- ══ BODY ════════════════════════════════════════════════════ -->
 <div class="container">
 
-<a href="./" class="back-link">← Back to overview</a>
-
-<div class="hero">
-  <div class="hero-badge">Projection</div>
-  <h1>Stakco Light</h1>
-  <div class="tagline">Projected puzzle installations for venues, therapy, and public spaces</div>
-</div>
-
-<!-- What is it -->
-<div class="section">
-  <div class="section-label">What is Stakco Light?</div>
-  <div class="card">
-    <p>Stakco Light is a physical installation that combines a <strong>tangible rotary structure</strong> — nested plates and rings on smooth railing tracks with grab handles — with projected puzzle imagery. Visitors physically rotate the layers to solve the puzzle, creating an immersive hybrid experience where digital content meets real tactile interaction.</p>
-    <p>Content is managed remotely through Stakco Studio, so you can update, rotate, or schedule new puzzles without touching the hardware. Ideal for public venues, sensory therapy rooms, and any space that benefits from calming, engaging visual experiences.</p>
-  </div>
-</div>
-
-<!-- How it works -->
-<div class="section">
-  <div class="section-label">How it works</div>
-  <div class="card">
-    <div class="flow-bar">
-      <span class="flow-tag">Create in Studio</span>
-      <span class="flow-sep">→</span>
-      <span class="flow-tag accent">Deploy with Light module</span>
-      <span class="flow-sep">→</span>
-      <span class="flow-tag">Projected on-site</span>
-    </div>
-    <p>We install the projection hardware at your location. You manage content through Studio — create new puzzles, schedule rotations, and monitor the display remotely. The system runs independently once installed.</p>
-  </div>
-</div>
-
-<!-- Features -->
-<div class="section">
-  <div class="section-label">What's included</div>
-  <div class="features-grid">
-    <div class="feature-item">
-      <div class="ft-title">Tangible Rotary Structure</div>
-      <div class="ft-desc">A hands-on surface with rotating rings that visitors turn to solve the projected puzzle</div>
-    </div>
-    <div class="feature-item">
-      <div class="ft-title">Projector Hardware</div>
-      <div class="ft-desc">Full installation including projector, mounting, and calibration onto the rotary surface</div>
-    </div>
-    <div class="feature-item">
-      <div class="ft-title">Therapeutic Audio</div>
-      <div class="ft-desc">Calming music and ambient soundscapes that play during puzzle interaction</div>
-    </div>
-    <div class="feature-item">
-      <div class="ft-title">Immersive Augmentations</div>
-      <div class="ft-desc">Visual effects, animations, and feedback that respond as visitors rotate the rings</div>
-    </div>
-    <div class="feature-item">
-      <div class="ft-title">1-Year Warranty</div>
-      <div class="ft-desc">Free service and maintenance for the first year</div>
-    </div>
-    <div class="feature-item">
-      <div class="ft-title">Studio Light Module</div>
-      <div class="ft-desc">Included — manage, update, and schedule content remotely from Stakco Studio</div>
+  <!-- Live proof -->
+  <div class="proof-bar">
+    <div class="proof-dot"></div>
+    <div class="proof-text">
+      <strong>Live installation: AWWA School, Bedok, Singapore.</strong>
+      Stakco Light is in daily use at a school for children with autism &mdash; as a sensory engagement and focus activity.
+      The first installation of its kind, now available for venues, shopping malls, therapy centres, hotels, and institutions.
     </div>
   </div>
-</div>
 
-<!-- Pricing -->
-<div class="section">
-  <div class="section-label">Pricing</div>
-  <div class="price-card">
-    <div class="price-row">
-      <span class="price-label">Complete installation</span>
-      <span class="price-value">SGD 29,000</span>
+  <!-- What is it -->
+  <div class="section">
+    <div class="section-label">What is Stakco Light?</div>
+    <div class="what-grid">
+      <div class="what-half">
+        <div class="what-half-label">The physical part</div>
+        <p><strong>Nested aluminium rings on smooth railing tracks</strong>, with grab handles. Users physically rotate each layer to solve the puzzle. No screen, no buttons &mdash; just hands and motion.</p>
+      </div>
+      <div class="what-half">
+        <div class="what-half-label">The electronic part</div>
+        <p>An <strong>ultra-short-throw projector</strong> maps puzzle imagery directly onto the ring surface. As rings rotate, the projected content responds in real time. A web camera tracks ring positions. Controlled locally via Android TV and a standard TV remote.</p>
+      </div>
+      <div class="what-half">
+        <div class="what-half-label">The software part</div>
+        <p><strong>Stakco Studio</strong> is the browser dashboard where you manage all content remotely &mdash; change puzzle themes, schedule rotations, adjust audio. No technician required. No site visit needed for updates.</p>
+      </div>
     </div>
-    <div class="price-detail"><span>Lead time</span><span>~2 months</span></div>
-    <div class="price-detail"><span>Warranty</span><span>1 year free service</span></div>
-    <div class="price-note" style="margin-top:8px;">Includes hardware, installation, Studio Light module, and on-site calibration. Pricing may vary by location and surface requirements.</div>
-  </div>
-</div>
-
-<!-- Who is it for -->
-<div class="section">
-  <div class="section-label">Who is it for?</div>
-  <div class="card">
-    <p><strong>Museums & galleries</strong> adding interactive exhibits.</p>
-    <p><strong>Hotels & lobbies</strong> creating engaging waiting experiences.</p>
-    <p><strong>Schools & therapy centres</strong> using projected puzzles for sensory therapy and calming environments.</p>
-    <p><strong>Hospitals</strong> providing cognitive stimulation and relaxation for patients.</p>
-    <p><strong>Events & exhibitions</strong> with eye-catching interactive installations.</p>
-  </div>
-</div>
-
-<!-- FAQ -->
-<div class="section">
-  <div class="section-label">Frequently asked questions</div>
-  <div class="card faq-section">
-    <div class="faq-item">
-      <span class="faq-q" onclick="this.parentElement.classList.toggle('open')">How is it mounted?</span>
-      <div class="faq-a">The rotary structure can be wall-mounted, placed on a horizontal surface, or set up as a tabletop unit. It's designed to fit comfortably in most indoor spaces.</div>
-    </div>
-    <div class="faq-item">
-      <span class="faq-q" onclick="this.parentElement.classList.toggle('open')">What are the dimensions and weight?</span>
-      <div class="faq-a">The standard rotary structure measures up to 120 cm in diameter and approximately 50 mm in height, weighing around 15 kg. Custom dimensions can be crafted to suit specific space requirements.</div>
-    </div>
-    <div class="faq-item">
-      <span class="faq-q" onclick="this.parentElement.classList.toggle('open')">Does it play music?</span>
-      <div class="faq-a">Yes. Therapeutic music and ambient soundscapes play during puzzle interaction, creating a calming multi-sensory experience. Audio can be customised or muted.</div>
-    </div>
-    <div class="faq-item">
-      <span class="faq-q" onclick="this.parentElement.classList.toggle('open')">Does it need internet?</span>
-      <div class="faq-a">Yes. A stable internet connection is required for smooth operation — the system fetches puzzle content and streams rotation data for real-time analytics.</div>
-    </div>
-    <div class="faq-item">
-      <span class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is it suitable for therapy and special needs?</span>
-      <div class="faq-a">Absolutely. Stakco Light is already used in schools for children with autism and in therapy centres for sensory engagement. The combination of gentle visuals, therapeutic audio, and hands-on interaction supports relaxation and cognitive stimulation.</div>
-    </div>
-    <div class="faq-item">
-      <span class="faq-q" onclick="this.parentElement.classList.toggle('open')">What happens after the warranty period?</span>
-      <div class="faq-a">After the first year, extended service plans are available. The hardware is designed for continuous operation with minimal maintenance.</div>
+    <div class="what-summary">
+      Think of it as a <strong>permanent interactive exhibit</strong> &mdash; not a screen, not a kiosk. Something visitors can touch, rotate, and return to. Calming enough for a therapy room. Striking enough for a hotel lobby. Meaningful enough for a museum floor.
     </div>
   </div>
-</div>
 
-<!-- CTA -->
-<div class="section">
-  <div class="cta-row">
-    <a href="mailto:hello@stakcos.com?subject=Stakco Light enquiry" class="cta-btn cta-primary">Enquire Now</a>
-    <span style="display:inline-flex;align-items:center;font-size:0.78rem;color:var(--text-muted);">Estimated from <strong style="color:var(--accent);font-family:'JetBrains Mono',monospace;margin-left:4px;">SGD 29,000</strong></span>
+
+  <!-- Product components -->
+  <div class="section" style="margin-bottom:28px;">
+    <div class="section-label">Components</div>
+    <div class="components-strip">
+      <div class="component-thumb">
+        <img src="https://cdn.stakcos.com/media/light/rotary-structure.png" alt="Rotary ring structure" loading="lazy">
+        <span class="ct-label">Rotary Ring Structure</span>
+      </div>
+      <div class="component-thumb">
+        <img src="https://cdn.stakcos.com/media/light/ust-projector.png" alt="Ultra-short throw projector" loading="lazy">
+        <span class="ct-label">UST Projector</span>
+      </div>
+      <div class="component-thumb">
+        <img src="https://cdn.stakcos.com/media/light/android-tv.png" alt="Android TV" loading="lazy">
+        <span class="ct-label">Android TV</span>
+      </div>
+      <div class="component-thumb">
+        <img src="https://cdn.stakcos.com/media/light/web-camera.png" alt="Web camera" loading="lazy">
+        <span class="ct-label">Web Camera</span>
+      </div>
+    </div>
   </div>
-</div>
+  <!-- Business outcomes -->
+  <div class="section">
+    <div class="section-label">Why venues install it</div>
+    <div class="outcomes-grid">
+      <div class="outcome-chip">
+        <div class="oc-head">Longer dwell time</div>
+        <div class="oc-label">Keeps visitors engaged without staff involvement</div>
+      </div>
+      <div class="outcome-chip">
+        <div class="oc-head">Zero ongoing ops</div>
+        <div class="oc-label">Update content remotely &mdash; no technician, no site visit</div>
+      </div>
+      <div class="outcome-chip">
+        <div class="oc-head">Fully branded</div>
+        <div class="oc-label">Custom puzzle content for your theme, season, or campaign</div>
+      </div>
+    </div>
+  </div>
 
-<div class="footer">Stakco Light is part of the Stakco platform. Installation includes hardware, setup, and the Studio Light module. · Stakco 2026</div>
+  <!-- How it works -->
+  <div class="section">
+    <div class="section-label">How it works</div>
+    <div class="card">
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div>
+            <div class="flow-step-title">We visit your site</div>
+            <div class="flow-step-desc">A Stakco team member assesses your space &mdash; ceiling height, ambient lighting, floor area, and power access. No commitment required at this stage.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div>
+            <div class="flow-step-title">We build and configure</div>
+            <div class="flow-step-desc">Hardware is fabricated and calibrated to your space. Lead time is approximately 8 weeks from confirmed order.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div>
+            <div class="flow-step-title">We install on-site</div>
+            <div class="flow-step-desc">Full installation and calibration at your venue. Typical install takes one day. The rest of your space stays operational throughout.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div>
+            <div class="flow-step-title">You control content remotely</div>
+            <div class="flow-step-desc">From day one, you manage puzzle themes, audio, and schedules from Stakco Studio &mdash; a browser dashboard. No technical knowledge needed. We are not involved in day-to-day updates.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-</div>
+  <!-- What's included -->
+  <div class="section">
+    <div class="section-label">What's included</div>
+    <div class="features-grid">
+      <div class="feature-item">
+        <span class="ft-icon">&#x2B21;</span>
+        <div class="ft-title">Rotary ring structure</div>
+        <div class="ft-desc">Nested aluminium composite rings on UHMWPE railing tracks with grab handles. Up to 120 cm diameter. No sharp edges.</div>
+      </div>
+      <div class="feature-item">
+        <span class="ft-icon">&#x25CE;</span>
+        <div class="ft-title">Projector &amp; mounting</div>
+        <div class="ft-desc">Full projection hardware, ceiling or wall mount, aligned and calibrated to the ring surface at your specific venue.</div>
+      </div>
+      <div class="feature-item">
+        <span class="ft-icon">&#9834;</span>
+        <div class="ft-title">Therapeutic audio</div>
+        <div class="ft-desc">Calming ambient soundscapes during interaction. Volume, track selection, and mute are all controllable. Custom audio can be uploaded.</div>
+      </div>
+      <div class="feature-item">
+        <span class="ft-icon">&#10022;</span>
+        <div class="ft-title">Interactive visual feedback</div>
+        <div class="ft-desc">Animations and effects respond as rings rotate &mdash; rewarding alignment, marking progress, reacting to motion in real time.</div>
+      </div>
+      <div class="feature-item">
+        <span class="ft-icon">&#8635;</span>
+        <div class="ft-title">Remote content control</div>
+        <div class="ft-desc">Stakco Studio Light module included. Change puzzle content, themes, and schedules from your desk at any time.</div>
+      </div>
+      <div class="feature-item">
+        <span class="ft-icon">&#10003;</span>
+        <div class="ft-title">1-year on-site warranty</div>
+        <div class="ft-desc">On-site service and hardware replacement included for the first year. Extended service plans available after.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Technical specifications -->
+  <div class="section">
+    <div class="section-label">Technical specifications</div>
+    <table class="specs-table">
+      <tr><td>Diameter</td><td>Up to <strong>120 cm</strong> &nbsp;&middot;&nbsp; custom sizes available</td></tr>
+      <tr><td>Height / depth</td><td>~<strong>50 mm</strong></td></tr>
+      <tr><td>Weight</td><td>~<strong>15 kg</strong></td></tr>
+      <tr><td>Materials</td><td>Aluminium composite rings &nbsp;&middot;&nbsp; UHMWPE railing tracks</td></tr>
+      <tr><td>Mounting options</td><td>Wall-mounted &nbsp;&middot;&nbsp; Floor-standing &nbsp;&middot;&nbsp; Tabletop</td></tr>
+      <tr><td>Power</td><td><strong>300 W</strong> &nbsp;&middot;&nbsp; Standard single-phase (13A socket)</td></tr>
+      <tr><td>Connectivity</td><td>Stable broadband required (Wi-Fi or Ethernet)</td></tr>
+      <tr><td>Offline behaviour</td><td>Runs on last-loaded content if connection drops &mdash; does not go blank</td></tr>
+      <tr><td>Ceiling clearance</td><td>Minimum <strong>2.8 m</strong> recommended for overhead projection</td></tr>
+      <tr><td>Lighting conditions</td><td>Best in controlled or dim ambient light</td></tr>
+      <tr><td>Installation time</td><td>Typically <strong>1 day</strong> on-site</td></tr>
+      <tr><td>Lead time</td><td>~<strong>8 weeks</strong> from confirmed order</td></tr>
+    </table>
+  </div>
+
+  <!-- Pricing -->
+  <div class="section">
+    <div class="section-label">Pricing</div>
+    <div class="price-card">
+      <div class="price-main-row">
+        <span class="price-label">Complete installation</span>
+        <span class="price-value">S$29,000</span>
+      </div>
+      <div class="price-incl">Includes hardware, on-site installation, calibration, Studio Light module, and 1-year on-site warranty. All prices in SGD.</div>
+      <div class="price-rows">
+        <div class="price-row"><span class="price-row-label">Payment structure</span><span class="price-row-val">50% deposit &nbsp;&middot;&nbsp; 50% on installation</span></div>
+        <div class="price-row"><span class="price-row-label">Lead time</span><span class="price-row-val">~8 weeks from confirmed order</span></div>
+        <div class="price-row"><span class="price-row-label">Warranty</span><span class="price-row-val good">1 year on-site service included</span></div>
+        <div class="price-row"><span class="price-row-label">After warranty</span><span class="price-row-val">Service plans available &mdash; contact for rates</span></div>
+        <div class="price-row"><span class="price-row-label">Price variation</span><span class="price-row-val">May vary by site location and surface requirements</span></div>
+      </div>
+      <div class="price-note">
+        A site visit is conducted before the final quote is confirmed &mdash; no surprises after signing.
+        For bespoke sizing, multi-unit orders, or white-label options, contact <a href="mailto:partnerships@stakcos.com">partnerships@stakcos.com</a>.
+      </div>
+    </div>
+
+    <div class="leasing-note">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+      <span><strong>Leasing available</strong> &mdash; monthly payment options for qualifying venues and institutions. Email <a href="mailto:partnerships@stakcos.com">partnerships@stakcos.com</a> for rates.</span>
+    </div>
+  </div>
+
+  <!-- Who is it for -->
+  <div class="section">
+    <div class="section-label">Who is it for?</div>
+    <div class="audience-list">
+      <div class="aud-row">
+        <span class="aud-icon"><i class="fa-solid fa-landmark" style="font-size:1rem;color:var(--amber);opacity:0.75;margin-top:2px;"></i></span>
+        <div>
+          <div class="aud-name">Museums &amp; galleries</div>
+          <div class="aud-use">An interactive exhibit visitors return to. Complements permanent collections with a tactile, rotating physical experience.</div>
+        </div>
+      </div>
+      <div class="aud-row">
+        <span class="aud-icon"><i class="fa-solid fa-hotel" style="font-size:1rem;color:var(--amber);opacity:0.75;margin-top:2px;"></i></span>
+        <div>
+          <div class="aud-name">Hotels &amp; lobbies</div>
+          <div class="aud-use">A talking point in public spaces. Keeps guests engaged without requiring staff attention. Seasonal themes updated remotely.</div>
+        </div>
+      </div>
+      <div class="aud-row">
+        <span class="aud-icon"><i class="fa-solid fa-hospital" style="font-size:1rem;color:var(--amber);opacity:0.75;margin-top:2px;"></i></span>
+        <div>
+          <div class="aud-name">Hospitals &amp; care facilities</div>
+          <div class="aud-use">Calming, repetitive motion with ambient audio &mdash; supports relaxation and cognitive engagement in waiting and recovery environments.</div>
+        </div>
+      </div>
+      <div class="aud-row">
+        <span class="aud-icon"><i class="fa-solid fa-store" style="font-size:1rem;color:var(--amber);opacity:0.75;margin-top:2px;"></i></span>
+        <div>
+          <div class="aud-name">Flagship retail &amp; luxury brands</div>
+          <div class="aud-use">A bespoke branded installation for experiential retail. Custom puzzle content reflecting your brand identity. White-label available.</div>
+        </div>
+      </div>
+      <div class="aud-row">
+        <span class="aud-icon"><i class="fa-solid fa-tent" style="font-size:1rem;color:var(--amber);opacity:0.75;margin-top:2px;"></i></span>
+        <div>
+          <div class="aud-name">Events &amp; exhibitions</div>
+          <div class="aud-use">An eye-catching centrepiece for trade shows, pop-ups, and large-format events. Leaseable for short-term deployments.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="therapy-callout">
+      <div class="tc-head">Therapy &amp; special education</div>
+      <p>Stakco Light is already in daily use at <strong>AWWA School, Bedok</strong> &mdash; a school for children with autism. The combination of slow rotational motion, gentle visual feedback, and therapeutic audio creates a sensory environment suited to clinical and educational use.</p>
+      <p>Schools, therapy centres, and occupational therapists can request documentation to support <strong>grant applications</strong> (MOE, SG Enable, and equivalent bodies).</p>
+      <div class="therapy-tags">
+        <span class="therapy-tag">Sensory regulation</span>
+        <span class="therapy-tag">Fine motor skills</span>
+        <span class="therapy-tag">Sustained attention</span>
+        <span class="therapy-tag">Calming environment</span>
+        <span class="therapy-tag">Autism-friendly</span>
+        <span class="therapy-tag">Grant documentation available</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section">
+    <div class="section-label">Frequently asked questions</div>
+    <div class="card faq-section">
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          How much space does it need?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="faq-a">The standard unit is up to 120 cm in diameter and 50 mm deep. For overhead projection, a ceiling clearance of at least 2.8 m is recommended. The system works best in controlled or dim ambient light &mdash; a corner, alcove, or dedicated room is ideal, though open lobby placement is possible. We assess all of this during the free pre-quote site visit.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          What does installation involve? Do we need to close the space?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="faq-a">Installation typically takes one full day. The immediate work area needs to be clear, but the rest of your space can remain operational. Our team handles all mounting, cabling, and calibration. Before we leave, we walk your designated contact through the Studio dashboard so you can manage content independently from day one.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Does it need internet? What happens if the connection drops?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="faq-a">A stable broadband connection is required for content updates and remote management. If the connection drops temporarily, the installation continues running on the last-loaded content &mdash; it does not go blank or stop working. Reconnection restores remote control automatically.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Can we update content ourselves? Do we need Stakco each time?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="faq-a">You manage all content through Stakco Studio &mdash; a browser-based dashboard. Change puzzle themes, schedule content rotations, and adjust audio from any device, at any time. No technical background needed. Stakco is not involved in day-to-day content changes.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          How do users control the volume and puzzle content?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="faq-a">Yes. Stakco Light runs on <strong>Android TV hardware</strong> built into the smart projector — included with every installation. Users can control the puzzle directly using a <strong>standard TV remote</strong>: shuffle puzzles, load the next track, and adjust or mute volume using the buttons they already know. No app download, no touchscreen, no setup. For deeper control — scheduling, theme changes, content uploads — the full Stakco Studio dashboard is available from any browser. Custom audio tracks can also be uploaded for branded or clinical environments.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Is it safe for children and unsupervised use?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="faq-a">Yes. The rings move on smooth, low-resistance tracks with no sharp edges, no pinch points, and minimal force required to rotate. The installation at AWWA School is in daily unsupervised use with children. For clinical environments, we can discuss specific configuration requirements.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          What happens after the 1-year warranty?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="faq-a">Extended service plans are available and quoted individually based on your usage and location. The hardware is designed for continuous operation with minimal maintenance. Contact partnerships@stakcos.com for service plan rates.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          Can we use our own branding and puzzle designs?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </div>
+        <div class="faq-a">Yes. Puzzle content is fully customisable through Stakco Studio &mdash; upload your own imagery, set brand colours, and create puzzle tracks specific to your institution or campaign. White-label options (removing Stakco branding entirely) are available for qualifying partners.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <h3>Interested in an installation?</h3>
+    <p>We visit your site before confirming any quote. First conversation is always informal &mdash; tell us about your space and we will take it from there.</p>
+    <div class="cta-row">
+      <a href="mailto:partnerships@stakcos.com?subject=Stakco%20Light%20%E2%80%94%20site%20enquiry" class="cta-btn cta-primary">Email partnerships@stakcos.com</a>
+      <a href="stakco-light-pricing.html" class="cta-btn cta-secondary">View full pricing</a>
+    </div>
+    <div class="cta-reassure">No commitment required. We respond within one business day.</div>
+  </div>
+
+  <div class="footer">
+    Stakco Light is part of the Stakco platform. Installation price includes hardware, setup, Studio Light module, and 1-year on-site warranty.<br>
+    <a href="https://stakcos.com">stakcos.com</a> &nbsp;&middot;&nbsp;
+    <a href="mailto:partnerships@stakcos.com">partnerships@stakcos.com</a> &nbsp;&middot;&nbsp;
+    Stakco Pte. Ltd. &nbsp;&middot;&nbsp; Singapore &nbsp;&middot;&nbsp; 2026
+  </div>
+
+</div><!-- /container -->
+
+<!-- ══ STAKCO PARTICLES ════════════════════════════════════════ -->
+<script>
+window.StakcoParticlesConfig = {
+  count: 38,
+  opacity: 1.0,
+  speed: 0.85,
+  fixed: true,
+  zIndex: 0,
+};
+</script>
+<script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+
 </body>
 </html>
