@@ -52,7 +52,14 @@
     pointer-events: none;
   }
   .hero-nav {
-    position: absolute; top: 22px; left: 28px; z-index: 10;
+    position: absolute; top: 22px; left: 28px; right: 28px; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .hero-corner-tag {
+    display: inline-block; font-size: 0.58rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 4px 12px; border-radius: 999px;
+    background: var(--pink); color: #fff;
   }
   .back-link {
     display: inline-flex; align-items: center; gap: 6px;
@@ -64,7 +71,7 @@
   .back-link:hover { color: #fff; }
   .back-link svg { width: 14px; height: 14px; }
   .hero-content {
-    position: absolute; bottom: 44px; left: 0; right: 0;
+    position: absolute; bottom: 32px; left: 0; right: 0;
     padding: 0 32px; z-index: 2;
   }
   .hero-badge {
@@ -101,6 +108,11 @@
   }
   .hero-pill i { font-size: 0.6rem; opacity: 0.8; }
 
+
+  /* ── MOBILE HERO BLOCK ────────────────────────────────────── */
+  .hero-content-mobile {
+    display: none;
+  }
   /* ── LAYOUT ───────────────────────────────────────────────── */
   .container { max-width: 800px; margin: 0 auto; padding: 0 32px 72px; }
   .section { margin-bottom: 36px; }
@@ -347,9 +359,18 @@
 
   /* ── RESPONSIVE ───────────────────────────────────────────── */
   @media (max-width: 640px) {
-    .hero-video-wrap { height: 340px; }
+    .hero-video-wrap { height: 300px; overflow: hidden; }
     .hero-title { font-size: 1.5rem; }
-    .hero-content { padding: 0 18px; bottom: 28px; }
+    .hero-content { display: none; }
+    .hero-content-mobile {
+      display: block;
+      margin-top: -48px;
+      padding: 0 18px 0;
+      position: relative; z-index: 3;
+    }
+    .hero-content-mobile .hero-tagline { font-size: 0.9rem; color: var(--text); text-shadow: none; }
+    .hero-content-mobile .hero-title { color: var(--text); text-shadow: none; }
+    .hero-content-mobile .hero-pills { margin-top: 10px; }
     .container { padding: 0 16px 56px; }
     .what-grid, .features-grid, .outcomes-grid, .pricing-grid { grid-template-columns: 1fr; }
     .creator-split { flex-direction: column; }
@@ -374,23 +395,27 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
       All products
     </a>
+    <span class="hero-corner-tag">Digital</span>
   </div>
 
   <div class="hero-content">
-    <div class="hero-badge">Digital &middot; Browser-based</div>
     <div class="hero-title-row">
-      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
       <h1 class="hero-title">Stakco Play</h1>
     </div>
-    <p class="hero-tagline">Publish your rotating ring puzzles online. Players solve them in any browser &mdash; no account, no app, no friction.</p>
-    <div class="hero-pills">
-      <span class="hero-pill"><i class="fa-solid fa-circle-check"></i> Free to play</span>
-      <span class="hero-pill"><i class="fa-solid fa-link"></i> Share via link</span>
-      <span class="hero-pill"><i class="fa-solid fa-mobile-screen"></i> Any device</span>
-      <span class="hero-pill"><i class="fa-solid fa-store"></i> Creator marketplace</span>
-    </div>
+    <p class="hero-tagline">Publish your rotating ring puzzles online.<br>Players solve them in any browser.<br><span style="opacity:0.65">&mdash; no account, no app, no friction.</span></p>
+
   </div>
 </div>
+
+<!-- Mobile-only hero content — sits below video with overlap -->
+<div class="hero-content-mobile">
+  <div class="hero-title-row">
+    <h1 class="hero-title">Stakco Play</h1>
+  </div>
+  <p class="hero-tagline">Publish your rotating ring puzzles online.<br>Players solve them in any browser.<br><span style="opacity:0.65">&mdash; no account, no app, no friction.</span></p>
+
+</div>
+
 
 <!-- ══ BODY ════════════════════════════════════════════════════ -->
 <div class="container">

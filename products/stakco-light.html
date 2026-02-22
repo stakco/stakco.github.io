@@ -48,7 +48,14 @@
     pointer-events: none;
   }
   .hero-nav {
-    position: absolute; top: 22px; left: 28px; z-index: 10;
+    position: absolute; top: 22px; left: 28px; right: 28px; z-index: 10;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .hero-corner-tag {
+    display: inline-block; font-size: 0.58rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    padding: 4px 12px; border-radius: 999px;
+    background: var(--amber); color: #fff;
   }
   .back-link {
     display: inline-flex; align-items: center; gap: 6px;
@@ -321,10 +328,20 @@
   }
 
   /* ── RESPONSIVE ───────────────────────────────────────────── */
+  .hero-content-mobile { display: none; }
+
   @media (max-width: 640px) {
-    .hero-video-wrap { height: 340px; }
+    .hero-video-wrap { height: 300px; overflow: hidden; }
     .hero-title { font-size: 1.5rem; }
-    .hero-content { padding: 0 18px; bottom: 28px; }
+    .hero-content { display: none; }
+    .hero-content-mobile {
+      display: block;
+      margin-top: -48px;
+      padding: 0 18px;
+      position: relative; z-index: 3;
+    }
+    .hero-content-mobile .hero-tagline { font-size: 0.9rem; color: var(--text); text-shadow: none; }
+    .hero-content-mobile .hero-title { color: var(--text); text-shadow: none; }
     .container { padding: 0 16px 56px; }
     .what-grid, .features-grid, .outcomes-grid { grid-template-columns: 1fr; }
     .cta-section { padding: 20px 18px; }
@@ -346,23 +363,25 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
       All products
     </a>
+    <span class="hero-corner-tag">Projection</span>
   </div>
 
   <div class="hero-content">
-    <div class="hero-badge">Projection &middot; Hardware</div>
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:0;">
-      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco" style="width:40px;height:auto;flex-shrink:0;filter:drop-shadow(0 1px 4px rgba(0,0,0,0.6));">
       <h1 class="hero-title" style="margin-bottom:0;">Stakco Light</h1>
     </div>
     <p class="hero-tagline">A rotating ring puzzle, physically installed at your venue. Users turn the rings &mdash; the projector responds in real time.</p>
-    <div class="hero-pills">
-      <span class="hero-pill"><i class="fa-solid fa-hand"></i> Hands-on tactile</span>
-      <span class="hero-pill"><i class="fa-solid fa-circle-dot"></i> Projection-mapped</span>
-      <span class="hero-pill"><i class="fa-solid fa-tv"></i> Android TV included</span>
-      <span class="hero-pill"><i class="fa-solid fa-heart-pulse"></i> Therapy-proven</span>
-    </div>
   </div>
 </div>
+
+<!-- Mobile-only hero content -->
+<div class="hero-content-mobile">
+  <div class="hero-title-row">
+    <h1 class="hero-title">Stakco Light</h1>
+  </div>
+  <p class="hero-tagline">A rotating ring puzzle, physically installed at your venue. Users turn the rings &mdash; the projector responds in real time.</p>
+</div>
+
 
 <!-- ══ BODY ════════════════════════════════════════════════════ -->
 <div class="container">
