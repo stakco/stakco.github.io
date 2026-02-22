@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<title>Research — Stakco</title>
+<link rel="stylesheet" href="/stakco-site.css">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { overflow-x:hidden; }
+:root {
+  --cream:#FDFAF6; --cream2:#f2ece4; --ink:#3C2F38; --ink2:#4a3c44;
+  --ink3:#8a7e85; --ink4:#b8a8b0; --card:#ffffff; --pink:#B83267;
+  --amber:#D4984F; --orange:#D4984F; --border:rgba(60,47,56,0.08);
+  --border2:rgba(60,47,56,0.13); --r:14px;
+  --shadow:0 2px 16px rgba(60,47,56,0.07); --shadow-md:0 6px 28px rgba(60,47,56,0.1);
+}
+body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink); line-height:1.6; font-size:16px; -webkit-font-smoothing:antialiased; }
+
+
+.wrap { max-width:1080px; margin:0 auto; padding:0 40px; }
+.section { padding:72px 0; }
+.section-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink4); margin-bottom:8px; display:block; }
+.section-title { font-size:1.9rem; font-weight:900; line-height:1.15; letter-spacing:-0.01em; margin-bottom:8px; }
+.section-sub { font-size:0.95rem; color:var(--ink2); line-height:1.6; max-width:600px; margin-bottom:36px; }
+
+.page-header { padding:80px 0 48px; }
+.page-header h1 { font-size:2.8rem; font-weight:900; line-height:1.1; letter-spacing:-0.02em; margin-bottom:14px; }
+.page-header h1 .accent { color:var(--pink); }
+.page-header .lead { font-size:1.05rem; color:var(--ink2); max-width:580px; line-height:1.65; }
+
+/* Research cards */
+.research-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:18px; margin-bottom:28px; }
+.rcard {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r); padding:28px 30px;
+  transition:box-shadow 0.15s, border-color 0.15s;
+}
+.rcard:hover { border-color:var(--border2); box-shadow:var(--shadow); }
+.rcard-tag {
+  font-size:0.6rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.08em; padding:4px 12px; border-radius:999px;
+  display:inline-block; margin-bottom:12px;
+}
+.rcard-tag.t-core { background:rgba(212,152,79,0.1); color:var(--amber); }
+.rcard-tag.t-access { background:rgba(184,50,103,0.1); color:var(--pink); }
+.rcard-tag.t-platform { background:rgba(60,47,56,0.07); color:var(--ink3); }
+.rcard-tag.t-applied { background:rgba(212,152,79,0.08); color:var(--orange); }
+
+.rcard-title { font-size:1.1rem; font-weight:700; margin-bottom:8px; }
+.rcard-body { font-size:0.85rem; color:var(--ink2); line-height:1.65; }
+.rcard-body strong { color:var(--ink); }
+
+/* Full-width feature */
+.feature-card {
+  background:var(--card); border:1px solid var(--border);
+  border-radius:var(--r); padding:36px 40px;
+  margin-bottom:28px; position:relative;
+}
+.feature-card::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:4px;
+  border-radius:var(--r) var(--r) 0 0;
+  background:linear-gradient(90deg,var(--pink),var(--amber));
+}
+.feature-title { font-size:1.3rem; font-weight:900; margin-bottom:10px; }
+.feature-body { font-size:0.9rem; color:var(--ink2); line-height:1.7; margin-bottom:14px; }
+.feature-body strong { color:var(--ink); }
+
+/* Collab CTA */
+.collab-banner {
+  background:var(--cream2); border:1px solid var(--border2); border-radius:var(--r);
+  padding:28px 32px; display:flex; align-items:center; justify-content:space-between; gap:24px;
+}
+.collab-banner-text { flex:1; }
+.collab-banner-title { font-size:0.95rem; font-weight:700; margin-bottom:4px; }
+.collab-banner-desc { font-size:0.82rem; color:var(--ink3); }
+.collab-banner a {
+  font-size:0.82rem; font-weight:700; padding:10px 24px; border-radius:9px;
+  background:var(--ink); color:#fff; text-decoration:none; white-space:nowrap;
+  flex-shrink:0; transition:opacity 0.15s;
+}
+.collab-banner a:hover { opacity:0.82; }
+
+/* CTA & Footer */
+.cta-band { background:var(--ink); border-radius:20px; padding:52px 56px; display:flex; align-items:center; justify-content:space-between; gap:32px; position:relative; overflow:hidden; }
+.cta-band::before { content:''; position:absolute; top:0; right:0; width:360px; height:100%; background:radial-gradient(ellipse at right,rgba(212,152,79,0.15) 0%,transparent 70%); pointer-events:none; }
+.cta-band-text h2 { font-size:1.7rem; font-weight:900; color:#fff; line-height:1.2; margin-bottom:10px; }
+.cta-band-text p { font-size:0.88rem; color:rgba(255,255,255,0.55); }
+.cta-band-actions { display:flex; flex-direction:column; gap:10px; flex-shrink:0; }
+.cta-btn-primary { font-family:'Mont',sans-serif; font-size:0.88rem; font-weight:700; padding:13px 28px; border-radius:10px; background:#fff; color:var(--ink); text-decoration:none; text-align:center; transition:opacity 0.15s; display:block; white-space:nowrap; }
+.cta-btn-primary:hover { opacity:0.9; }
+.cta-btn-ghost { font-family:'Mont',sans-serif; font-size:0.82rem; font-weight:700; padding:11px 24px; border-radius:10px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:rgba(255,255,255,0.85); text-decoration:none; text-align:center; transition:background 0.15s; display:block; white-space:nowrap; }
+.cta-btn-ghost:hover { background:rgba(255,255,255,0.14); }
+
+.footer { padding:28px 0; text-align:center; font-size:0.7rem; color:var(--ink4); line-height:1.9; }
+.footer a { color:var(--ink3); text-decoration:none; }
+.footer a:hover { color:var(--ink); }
+
+.reveal { opacity:0; transform:translateY(16px); transition:opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity:1; transform:none; }
+
+@media (max-width:900px) {
+  .wrap { padding:0 20px; }
+  .section { padding:48px 0; }
+  .page-header h1 { font-size:2rem; }
+  .research-grid { grid-template-columns:1fr; }
+  .feature-card { padding:28px 24px; }
+  .collab-banner { flex-direction:column; text-align:center; }
+  .collab-banner a { width:100%; text-align:center; }
+  .cta-band { flex-direction:column; padding:36px 28px; border-radius:14px; text-align:center; }
+  .cta-band-actions { width:100%; }
+  .cta-btn-primary,.cta-btn-ghost { width:100%; display:block; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ UNIFIED SITE NAV ══════════════════════════════════════ -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <span>Stakco</span>
+    </a>
+    <div class="site-nav-links">
+      <a href="/products/">Products</a>
+      <a href="/pricing/">Pricing</a>
+      <a href="/case-studies/">Case Studies</a>
+      <a href="/research/" class="sn-active">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<div class="page-header">
+  <span class="section-label">Research &amp; Innovation</span>
+  <h1>Pushing the <span class="accent">boundaries</span> of puzzle interaction</h1>
+  <p class="lead">Stakco sits at the intersection of tangible interface design, accessibility research, and interactive media. We partner with universities and institutions to explore what puzzles can become.</p>
+</div>
+
+<!-- ═══ FEATURED: VIDEO STAKCO ════════════════════════════════ -->
+<div class="feature-card reveal">
+  <span class="rcard-tag t-core" style="margin-bottom:16px;">Breakthrough</span>
+  <h2 class="feature-title">Video Stakco — puzzles with moving content</h2>
+  <p class="feature-body">
+    We extended the Stakco concept from static images to <strong>dynamic video</strong>. The puzzle content changes every second, requiring continuous visual tracking, temporal alignment, and active attention. From a research perspective, this opens new directions in studying cognitive load, attention span, and pattern recognition in dynamic environments.
+  </p>
+  <p class="feature-body">
+    Early feedback suggests video puzzles demand significantly higher mental engagement than static formats, making them a promising tool for <strong>real-time problem-solving research</strong> and perceptual learning studies.
+  </p>
+  <a href="https://stakcos.com/video/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;font-size:0.88rem;font-weight:700;color:#3C2F38;text-decoration:none;padding:11px 24px;border-radius:10px;border:1.5px solid rgba(60,47,56,0.13);margin-top:6px;transition:border-color 0.15s,background 0.15s;">
+    <i class="fa-solid fa-play" style="font-size:0.7rem;"></i> Try the live demo
+  </a>
+</div>
+
+<!-- ═══ CORE RESEARCH AREAS ═══════════════════════════════════ -->
+<div class="section" style="padding-top:12px;">
+  <span class="section-label">Core research areas</span>
+  <h2 class="section-title">What we're exploring</h2>
+  <p class="section-sub">Active research directions across multimedia, accessibility, and platform innovation.</p>
+
+  <div class="research-grid">
+    <div class="rcard reveal">
+      <span class="rcard-tag t-core">Multimedia</span>
+      <h3 class="rcard-title">Segmented multimedia puzzles</h3>
+      <div class="rcard-body">Investigating how segmented visual, audio, and video content can be layered across rotating rings to create novel puzzle experiences. The core mechanism — dividing media into concentric segments that must be aligned — is the foundation of all Stakco formats.</div>
+    </div>
+    <div class="rcard reveal">
+      <span class="rcard-tag t-core">Interface Design</span>
+      <h3 class="rcard-title">Tangible interface innovation</h3>
+      <div class="rcard-body">Exploring how physical rotating mechanisms interact with digital content. Stakco Light is a tangible user interface — physical plates drive a projected digital experience. We study how different input modalities affect engagement, comprehension, and therapeutic outcomes.</div>
+    </div>
+    <div class="rcard reveal">
+      <span class="rcard-tag t-access">Accessibility</span>
+      <h3 class="rcard-title">Audio puzzles for blind &amp; low-vision users</h3>
+      <div class="rcard-body">We're developing <strong>Audio Stakcos</strong> by adapting the puzzle concept to the auditory domain. Segmented audio waveforms replace visual layers, creating an interactive multi-track puzzle that relies on spatial audio, rhythm recognition, and auditory pattern matching.</div>
+    </div>
+    <div class="rcard reveal">
+      <span class="rcard-tag t-access">Inclusive Design</span>
+      <h3 class="rcard-title">Accessible puzzle formats</h3>
+      <div class="rcard-body">Developing puzzle formats that use alternative sensory inputs — tactile feedback, haptic cues, and audio guidance. Our goal is to make the Stakco experience genuinely accessible to users with diverse abilities, not as an afterthought but as a core design principle.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PLATFORM RESEARCH ═════════════════════════════════════ -->
+<div class="section" style="padding-top:0;">
+  <span class="section-label">Platform breadth</span>
+  <h2 class="section-title">Runs on more than you'd expect</h2>
+  <p class="section-sub">The Stakco puzzle engine is designed to be platform-agnostic. We've deployed it in unexpected places to test interaction patterns.</p>
+
+  <div class="research-grid">
+    <div class="rcard reveal">
+      <span class="rcard-tag t-platform">Wearable</span>
+      <h3 class="rcard-title">Galaxy Watch</h3>
+      <div class="rcard-body">Experimental Stakco apps running on smartwatches. The rotating bezel maps naturally to the ring-turning mechanic. This research explores micro-interactions and gesture-based puzzle solving on ultra-small screens.</div>
+    </div>
+    <div class="rcard reveal">
+      <span class="rcard-tag t-platform">Smart TV</span>
+      <h3 class="rcard-title">Android TV</h3>
+      <div class="rcard-body">Stakco puzzles on the big screen, controlled via remote, voice, or companion app. This investigates how large shared displays can create collaborative puzzle-solving experiences in living rooms and public spaces.</div>
+    </div>
+    <div class="rcard reveal">
+      <span class="rcard-tag t-applied">Applied Research</span>
+      <h3 class="rcard-title">Artist collaboration</h3>
+      <div class="rcard-body">We produce puzzles featuring artwork by emerging artists. The puzzle format adds interactive value to their pieces, while their work enriches the Stakco library. This research explores interactive puzzles as a new medium for artistic expression and distribution.</div>
+    </div>
+    <div class="rcard reveal">
+      <span class="rcard-tag t-applied">Immersive Tech</span>
+      <h3 class="rcard-title">AR &amp; spatial computing</h3>
+      <div class="rcard-body">Early-stage exploration of Stakco puzzles in augmented reality and spatial computing environments. Multi-dimensional puzzle interaction in 3D space represents the next frontier of the format.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ACADEMIC PARTNERSHIPS ═════════════════════════════════ -->
+<div class="section" style="padding-top:0;">
+  <div class="collab-banner reveal">
+    <div class="collab-banner-text">
+      <div class="collab-banner-title">Research collaboration</div>
+      <div class="collab-banner-desc">We partner with universities and research institutions. If you're studying tangible interfaces, accessibility, cognitive science, or interactive media — let's talk.</div>
+    </div>
+    <a href="/contact/">Get in touch</a>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="section">
+  <div class="cta-band reveal">
+    <div class="cta-band-text">
+      <h2>See it in action</h2>
+      <p>Try a live puzzle or explore our product range.</p>
+    </div>
+    <div class="cta-band-actions">
+      <a href="https://play.stakcos.com" class="cta-btn-primary">Play free puzzles</a>
+      <a href="/products/" class="cta-btn-ghost">Explore products</a>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    Stakco · <a href="https://stakcos.com">stakcos.com</a> ·
+    <a href="/products/">Products</a> · <a href="/pricing/">Pricing</a> ·
+    <a href="/case-studies/">Case Studies</a> · <a href="/research/">Research</a> ·
+    <a href="/contact/">Contact</a><br>
+    <a href="https://play.stakcos.com">Play</a> · <a href="https://studio.stakcos.com">Studio</a> ·
+    <a href="https://shop.stakcos.com">Shop</a> · <a href="mailto:hello@stakcos.com">hello@stakcos.com</a><br>
+    Proprietary puzzle technology · Patent pending (SG 10202302289U)
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+<script>window.StakcoParticlesConfig = { count: 38, opacity: 0.3, speed: 0.85, fixed: true, zIndex: 0 };</script>
+<script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+</body>
+</html>

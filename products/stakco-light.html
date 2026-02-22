@@ -343,9 +343,72 @@
     .what-grid, .features-grid, .outcomes-grid { grid-template-columns: 1fr; }
     .cta-section { padding: 20px 18px; }
   }
+
+/* ── UNIFIED SITE NAV ────────────────────────────────────── */
+.site-nav {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(250,248,244,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(60,47,56,0.08);
+  padding: 0 40px;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-inner {
+  max-width: 1080px; margin: 0 auto;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.site-nav-brand {
+  display: flex; align-items: center; gap: 9px;
+  text-decoration: none; color: #3C2F38;
+}
+.site-nav-brand img { width: 26px; height: auto; }
+.site-nav-brand span {
+  font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.site-nav-links { display: flex; align-items: center; gap: 28px; }
+.site-nav-links a {
+  font-size: 0.8rem; color: #8a7e85;
+  text-decoration: none; transition: color 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-links a:hover { color: #3C2F38; }
+.site-nav-links a.sn-active { color: #3C2F38; font-weight: 700; }
+.site-nav-cta {
+  font-size: 0.78rem; font-weight: 700;
+  padding: 8px 20px; border-radius: 8px;
+  background: #3C2F38; color: #fff;
+  text-decoration: none; transition: opacity 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-cta:hover { opacity: 0.82; }
+@media (max-width: 900px) {
+  .site-nav { padding: 0 20px; }
+  .site-nav-links { display: none; }
+}
+
 </style>
 </head>
 <body>
+<!-- ══ UNIFIED SITE NAV ══════════════════════════════════════ -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <span>Stakco</span>
+    </a>
+    <div class="site-nav-links">
+      <a href="/products/" class="sn-active">Products</a>
+      <a href="/pricing/">Pricing</a>
+      <a href="/case-studies/">Case Studies</a>
+      <a href="/research/">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+    </div>
+  </div>
+</nav>
 
 <!-- ══ HERO ═══════════════════════════════════════════════════ -->
 <div class="hero-video-wrap">
@@ -387,7 +450,7 @@
   <div class="proof-bar">
     <div class="proof-dot"></div>
     <div class="proof-text">
-      <strong>Live installation: AWWA School, Bedok, Singapore.</strong>
+      <strong>Live installation: a special needs school in Singapore.</strong>
       Stakco Light is in daily use at a school for children with autism &mdash; as a sensory engagement and focus activity.
       The first installation of its kind, now available for venues, shopping malls, therapy centres, hotels, and institutions.
     </div>
@@ -621,7 +684,7 @@
 
     <div class="therapy-callout">
       <div class="tc-head">Therapy &amp; special education</div>
-      <p>Stakco Light is already in daily use at <strong>AWWA School, Bedok</strong> &mdash; a school for children with autism. The combination of slow rotational motion, gentle visual feedback, and therapeutic audio creates a sensory environment suited to clinical and educational use.</p>
+      <p>Stakco Light is already in daily use at a special needs school in Singapore &mdash; supporting students with autism. The combination of slow rotational motion, gentle visual feedback, and therapeutic audio creates a sensory environment suited to clinical and educational use.</p>
       <p>Schools, therapy centres, and occupational therapists can request documentation to support <strong>grant applications</strong> (MOE, SG Enable, and equivalent bodies).</p>
       <div class="therapy-tags">
         <span class="therapy-tag">Sensory regulation</span>
@@ -684,7 +747,7 @@
           Is it safe for children and unsupervised use?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">Yes. The rings move on smooth, low-resistance tracks with no sharp edges, no pinch points, and minimal force required to rotate. The installation at AWWA School is in daily unsupervised use with children. For clinical environments, we can discuss specific configuration requirements.</div>
+        <div class="faq-a">Yes. The rings move on smooth, low-resistance tracks with no sharp edges, no pinch points, and minimal force required to rotate. The installation at a special needs school in Singapore is in daily unsupervised use with children. For clinical environments, we can discuss specific configuration requirements.</div>
       </div>
 
       <div class="faq-item">

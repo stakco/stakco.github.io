@@ -378,9 +378,72 @@
     .signal-chip { min-width: 100%; }
     .embed-highlight { flex-direction: column; gap: 10px; }
   }
+
+/* ── UNIFIED SITE NAV ────────────────────────────────────── */
+.site-nav {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(250,248,244,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(60,47,56,0.08);
+  padding: 0 40px;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-inner {
+  max-width: 1080px; margin: 0 auto;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.site-nav-brand {
+  display: flex; align-items: center; gap: 9px;
+  text-decoration: none; color: #3C2F38;
+}
+.site-nav-brand img { width: 26px; height: auto; }
+.site-nav-brand span {
+  font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.site-nav-links { display: flex; align-items: center; gap: 28px; }
+.site-nav-links a {
+  font-size: 0.8rem; color: #8a7e85;
+  text-decoration: none; transition: color 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-links a:hover { color: #3C2F38; }
+.site-nav-links a.sn-active { color: #3C2F38; font-weight: 700; }
+.site-nav-cta {
+  font-size: 0.78rem; font-weight: 700;
+  padding: 8px 20px; border-radius: 8px;
+  background: #3C2F38; color: #fff;
+  text-decoration: none; transition: opacity 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-cta:hover { opacity: 0.82; }
+@media (max-width: 900px) {
+  .site-nav { padding: 0 20px; }
+  .site-nav-links { display: none; }
+}
+
 </style>
 </head>
 <body>
+<!-- ══ UNIFIED SITE NAV ══════════════════════════════════════ -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <span>Stakco</span>
+    </a>
+    <div class="site-nav-links">
+      <a href="/products/" class="sn-active">Products</a>
+      <a href="/pricing/">Pricing</a>
+      <a href="/case-studies/">Case Studies</a>
+      <a href="/research/">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+    </div>
+  </div>
+</nav>
 
 <!-- ══ HERO ═══════════════════════════════════════════════════ -->
 <div class="hero-video-wrap">

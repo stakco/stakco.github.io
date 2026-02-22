@@ -6,25 +6,26 @@
 <link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <title>Stakco — Rotating Puzzle Platform</title>
+<link rel="stylesheet" href="/stakco-site.css">
 <style id="mont-fonts">
 @font-face {
   font-family: 'Mont';
-  src: url('https://cdn.stakcos.com/fonts/MONT-LIGHT.ttf') format('truetype');
+  src: url('https://cdn.stakcos.com/fonts/MONT-LIGHT.TTF') format('truetype');
   font-weight: 300; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Mont';
-  src: url('https://cdn.stakcos.com/fonts/MONT-REGULAR.ttf') format('truetype');
+  src: url('https://cdn.stakcos.com/fonts/MONT-REGULAR.TTF') format('truetype');
   font-weight: 400; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Mont';
-  src: url('https://cdn.stakcos.com/fonts/MONT-BOLD.ttf') format('truetype');
+  src: url('https://cdn.stakcos.com/fonts/MONT-BOLD.TTF') format('truetype');
   font-weight: 700; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Mont';
-  src: url('https://cdn.stakcos.com/fonts/MONT-HEAVY.ttf') format('truetype');
+  src: url('https://cdn.stakcos.com/fonts/MONT-HEAVY.TTF') format('truetype');
   font-weight: 900; font-style: normal; font-display: swap;
 }
 
@@ -224,6 +225,8 @@ body {
   display: flex; align-items: flex-start; justify-content: center;
   position: relative;
   padding-top: 8px;
+  max-width: 100%;
+  overflow: hidden;
 }
 .puzzle-stage {
   --stage: 300px;
@@ -612,6 +615,7 @@ body {
   padding: 18px 20px;
   transition: box-shadow 0.15s, border-color 0.15s;
   text-decoration: none; color: inherit;
+  display: flex; flex-direction: column;
 }
 .reco-card:hover { border-color: var(--border2); box-shadow: var(--shadow); }
 .reco-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
@@ -626,7 +630,8 @@ body {
 .rp-paper { background: rgba(212,152,79,0.1); color: var(--orange); }
 .rp-multi { background: rgba(60,47,56,0.07); color: var(--ink3); }
 
-.reco-desc { font-size: 0.78rem; color: var(--ink2); line-height: 1.5; margin-bottom: 10px; }
+.reco-desc { font-size: 0.78rem; color: var(--ink2); line-height: 1.5; margin-bottom: 10px; flex: 1; }
+.reco-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
 .reco-cost {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.72rem; color: var(--ink3);
@@ -636,7 +641,7 @@ body {
   display: inline-block;
 }
 .reco-link {
-  float: right; font-size: 0.72rem; font-weight: 700;
+  font-size: 0.72rem; font-weight: 700;
   color: var(--ink4);
   transition: color 0.15s;
 }
@@ -898,6 +903,20 @@ body {
   /* Module legend — collapse to 1 col on mobile */
   .module-legend { grid-template-columns: 1fr !important; }
   .pricing-col { padding: 22px 20px; }
+
+  /* Daily puzzle embed — fit to screen, keep square */
+  .puzzle-demo { overflow: hidden; max-width: 100%; }
+  .puzzle-demo > div { max-width: 100%; }
+  stakco-daily-embed {
+    max-width: 100% !important;
+    max-height: calc(100vw - 40px) !important;
+    aspect-ratio: 1 / 1;
+    display: block;
+  }
+
+  /* Create-track nudge card — stack on mobile */
+  .create-track-nudge { flex-direction: column !important; text-align: center; }
+  .create-track-nudge a { width: 100%; text-align: center; }
 }
 
 @media (max-width: 480px) {
@@ -913,30 +932,33 @@ body {
 }
 
 @media print {
-  .nav, .cta-band, .footer { display: none; }
+  .site-nav, .cta-band, .footer { display: none; }
   body { background: #fff; }
 }
+
 </style>
 </head>
 <body>
 
 <!-- ══ NAV ══════════════════════════════════════════════════════ -->
-<nav class="nav">
-  <div class="nav-inner">
-    <a href="https://stakcos.com" class="nav-brand">
+<!-- ══ UNIFIED SITE NAV ══════════════════════════════════════ -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
       <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
-      <span class="nav-brand-name">Stakco</span>
+      <span>Stakco</span>
     </a>
-    <div class="nav-links">
-      <a href="#live-tracks">Live tracks</a>
-      <a href="#how-it-works">How it works</a>
-      <a href="#find-your-fit">Find your fit</a>
-      <a href="#pricing-truth">Pricing</a>
-      <a href="https://shop.stakcos.com">Shop</a>
-      <a href="https://play.stakcos.com" class="nav-cta">Explore free</a>
+    <div class="site-nav-links">
+      <a href="/products/" class="sn-active">Products</a>
+      <a href="/pricing/">Pricing</a>
+      <a href="/case-studies/">Case Studies</a>
+      <a href="/research/">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
     </div>
   </div>
 </nav>
+
 
 <div class="wrap">
 
@@ -1063,7 +1085,7 @@ body {
   </div>
 
   <!-- "Want to create your own?" nudge -->
-  <div style="background:linear-gradient(135deg,rgba(212,152,79,0.06),rgba(184,50,103,0.04));border:1px solid var(--border2);border-radius:12px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
+  <div class="create-track-nudge" style="background:linear-gradient(135deg,rgba(212,152,79,0.06),rgba(184,50,103,0.04));border:1px solid var(--border2);border-radius:12px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
     <div style="flex:1;min-width:0;">
       <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:3px;">Want to create a track like these?</div>
       <div style="font-size:0.8rem;color:var(--ink3);">A Play track is your own puzzle collection on a dedicated web address — science, seasonal, branded, or anything you imagine. Your audience plays for free. Starts from S$13 + Play module.</div>
@@ -1106,7 +1128,7 @@ body {
         <i class="fa-solid fa-heart" style="color:var(--amber);font-size:1rem;"></i>
       </div>
       <div>
-        <div style="font-family:'Mont',sans-serif;font-size:0.82rem;font-weight:700;color:var(--ink);margin-bottom:2px;">AWWA School, Bedok</div>
+        <div style="font-family:'Mont',sans-serif;font-size:0.82rem;font-weight:700;color:var(--ink);margin-bottom:2px;">Special needs school, Singapore</div>
         <div style="font-size:0.72rem;color:var(--ink3);line-height:1.4;">Stakco Light's first installation — a sensory puzzle experience for students with autism. Used daily as a tactile engagement and focus activity.</div>
       </div>
     </div>
@@ -1193,7 +1215,7 @@ body {
           <div class="pcard-feat"><span class="pcard-feat-dot"></span>Run seasonal themes or branded content — change it from your desk, no technician</div>
           <div class="pcard-feat"><span class="pcard-feat-dot"></span>Installed in sensory classrooms, hotel lobbies, museums, and therapy spaces</div>
         </div>
-        <div style="font-size:0.68rem;color:var(--ink4);margin-top:8px;padding:7px 10px;background:rgba(212,152,79,0.06);border-radius:7px;border-left:2px solid var(--amber);">First installation at <strong style="color:var(--ink3);">AWWA School Bedok</strong> — used daily with students with autism.</div>
+        <div style="font-size:0.68rem;color:var(--ink4);margin-top:8px;padding:7px 10px;background:rgba(212,152,79,0.06);border-radius:7px;border-left:2px solid var(--amber);">First installation at <strong style="color:var(--ink3);">a special needs school in Singapore</strong> — used daily with students with autism.</div>
         <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.65;"></i></div>
       </div>
     </a>
@@ -1627,8 +1649,10 @@ body {
           <span class="reco-product ${PRODUCT_CLASS[r.product]}">${PRODUCT_LABEL[r.product]}</span>
         </div>
         <div class="reco-desc">${r.desc}</div>
-        <span class="reco-cost">${r.cost}</span>
-        <span class="reco-link">See details <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.55rem;"></i></span>
+        <div class="reco-bottom">
+          <span class="reco-cost">${r.cost}</span>
+          <span class="reco-link">See details <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.55rem;"></i></span>
+        </div>
       </a>
     `).join('');
 
