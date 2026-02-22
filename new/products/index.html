@@ -1,0 +1,1685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<title>Stakco — Rotating Puzzle Platform</title>
+<link rel="stylesheet" href="/stakco-site.css">
+<style id="mont-fonts">
+@font-face {
+  font-family: 'Mont';
+  src: url('https://cdn.stakcos.com/fonts/MONT-LIGHT.TTF') format('truetype');
+  font-weight: 300; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Mont';
+  src: url('https://cdn.stakcos.com/fonts/MONT-REGULAR.TTF') format('truetype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Mont';
+  src: url('https://cdn.stakcos.com/fonts/MONT-BOLD.TTF') format('truetype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Mont';
+  src: url('https://cdn.stakcos.com/fonts/MONT-HEAVY.TTF') format('truetype');
+  font-weight: 900; font-style: normal; font-display: swap;
+}
+
+  /* ── PARTNER STRIP ────────────────────────────────────────── */
+  .partner-strip {
+    padding: 28px 0 0;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+  }
+  .partner-strip-label {
+    font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--ink4); text-align: center;
+    margin-bottom: 18px;
+  }
+  .partner-logos {
+    display: flex; align-items: center; justify-content: center;
+    gap: 40px; flex-wrap: wrap;
+  }
+  .partner-logo img {
+    height: 32px; width: auto;
+    filter: grayscale(100%) opacity(0.45);
+    transition: filter 0.2s ease;
+    display: block;
+  }
+  .partner-logo:hover img { filter: grayscale(0%) opacity(0.9); }
+  @media (max-width: 600px) {
+    .partner-logos { gap: 28px; }
+    .partner-logo img { height: 26px; }
+  }
+</style>
+<style>
+/* ── RESET & ROOT ─────────────────────────────────────────── */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { overflow-x: hidden; }
+body { overflow-x: hidden; }
+
+:root {
+  --cream: #FDFAF6;
+  --cream2: #f2ece4;
+  --ink: #3C2F38;
+  --ink2: #4a3c44;
+  --ink3: #8a7e85;
+  --ink4: #b8a8b0;
+  --card: #ffffff;
+  --pink: #B83267;
+  --amber: #D4984F;
+  --orange: #D4984F;
+  --caramel: #DFAC6D;
+  --purple: #B83267;
+  --green: #D4984F;
+  --cyan: #DFAC6D;
+  --border: rgba(60,47,56,0.08);
+  --border2: rgba(60,47,56,0.13);
+  --r: 14px;
+  --shadow: 0 2px 16px rgba(60,47,56,0.07);
+  --shadow-md: 0 6px 28px rgba(60,47,56,0.1);
+}
+
+body {
+  font-family: 'Mont', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.6;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ────────────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(250,248,244,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+}
+.nav-inner {
+  max-width: 1080px; margin: 0 auto;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  display: flex; align-items: center; gap: 9px;
+  text-decoration: none; color: var(--ink);
+}
+.nav-brand img { width: 26px; height: auto; }
+.nav-brand-name {
+  font-family: 'Mont', sans-serif;
+  font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.nav-links { display: flex; align-items: center; gap: 28px; }
+.nav-links a {
+  font-size: 0.8rem; color: var(--ink3);
+  text-decoration: none; transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-cta {
+  font-size: 0.78rem; font-weight: 700;
+  padding: 8px 20px; border-radius: 8px;
+  background: var(--ink); color: #fff;
+  text-decoration: none; transition: opacity 0.15s;
+}
+.nav-cta:hover { opacity: 0.82; }
+
+/* ── LAYOUT ──────────────────────────────────────────────────── */
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 72px 0; }
+
+/* ── HERO ────────────────────────────────────────────────────── */
+.hero {
+  padding: 80px 0 72px;
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  gap: 48px;
+  align-items: center;
+}
+
+.hero-left {}
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.72rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--orange);
+  margin-bottom: 22px;
+}
+.hero-eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--orange);
+  animation: pulse 2.4s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero h1 {
+  font-family: 'Mont', sans-serif;
+  font-size: 3.4rem;
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  margin-bottom: 22px;
+  color: var(--ink);
+}
+.hero h1 .accent { color: var(--orange); }
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--ink2);
+  line-height: 1.65;
+  max-width: 480px;
+  margin-bottom: 14px;
+}
+
+.pricing-promise {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.82rem; color: var(--ink3);
+  background: var(--cream2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-bottom: 30px;
+}
+.pricing-promise .pp-free {
+  font-weight: 700; color: var(--green);
+}
+.pricing-promise .pp-sep {
+  color: var(--ink4); margin: 0 2px;
+}
+
+.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.btn-primary {
+  font-family: 'Mont', sans-serif;
+  font-size: 0.9rem; font-weight: 700;
+  padding: 13px 30px; border-radius: 10px;
+  background: var(--ink); color: #fff;
+  text-decoration: none;
+  transition: transform 0.15s, box-shadow 0.15s;
+  display: inline-block;
+}
+.btn-primary:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); }
+.btn-ghost {
+  font-family: 'Mont', sans-serif;
+  font-size: 0.9rem; font-weight: 700;
+  padding: 12px 26px; border-radius: 10px;
+  background: transparent; color: var(--ink2);
+  text-decoration: none;
+  border: 1.5px solid var(--border2);
+  transition: border-color 0.15s, background 0.15s;
+  display: inline-block;
+}
+.btn-ghost:hover { border-color: var(--ink); background: var(--cream2); }
+
+/* ── PUZZLE DEMO (CSS animated rings) ────────────────────────── */
+.puzzle-demo {
+  display: flex; align-items: flex-start; justify-content: center;
+  position: relative;
+  padding-top: 8px;
+  max-width: 100%;
+  overflow: hidden;
+}
+.puzzle-stage {
+  --stage: 300px;
+  width: var(--stage); height: var(--stage);
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Glow background */
+.puzzle-stage::before {
+  content: '';
+  position: absolute;
+  width: 80%; height: 80%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(212,152,79,0.12) 0%, rgba(184,50,103,0.06) 60%, transparent 80%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  top: 50%; left: 50%;
+}
+
+/* Outer ring — 93% of stage */
+.ring-1 {
+  width: calc(var(--stage) * 0.93); height: calc(var(--stage) * 0.93);
+  border: calc(var(--stage) * 0.08) solid transparent;
+  border-top-color: var(--orange);
+  border-right-color: #e8d4a8;
+  border-bottom-color: #DFAC6D;
+  border-left-color: var(--orange);
+  transform: translate(-50%, -50%);
+  animation: spin-slow 18s linear infinite;
+  filter: drop-shadow(0 4px 12px rgba(212,152,79,0.25));
+}
+
+/* Middle ring — 70% of stage */
+.ring-2 {
+  width: calc(var(--stage) * 0.70); height: calc(var(--stage) * 0.70);
+  border: calc(var(--stage) * 0.065) solid transparent;
+  border-top-color: #f5e8d0;
+  border-right-color: var(--pink);
+  border-bottom-color: var(--pink);
+  border-left-color: #daa8b0;
+  transform: translate(-50%, -50%);
+  animation: spin-slow 12s linear infinite reverse;
+  filter: drop-shadow(0 3px 8px rgba(184,50,103,0.2));
+}
+
+/* Inner ring — 50% of stage */
+.ring-3 {
+  width: calc(var(--stage) * 0.50); height: calc(var(--stage) * 0.50);
+  border: calc(var(--stage) * 0.055) solid transparent;
+  border-top-color: var(--amber);
+  border-right-color: var(--amber);
+  border-bottom-color: #DFAC6D;
+  border-left-color: #f0e0a0;
+  transform: translate(-50%, -50%);
+  animation: spin-slow 8s linear infinite;
+  filter: drop-shadow(0 2px 6px rgba(212,152,79,0.25));
+}
+
+/* Centre disc — 29% of stage */
+.ring-center {
+  position: absolute;
+  width: calc(var(--stage) * 0.29); height: calc(var(--stage) * 0.29);
+  background: var(--cream);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: inset 0 2px 8px rgba(60,47,56,0.08);
+}
+.ring-center img { width: 38%; height: auto; opacity: 0.7; }
+
+@keyframes spin-slow {
+  from { transform: translate(-50%,-50%) rotate(0deg); }
+  to   { transform: translate(-50%,-50%) rotate(360deg); }
+}
+
+/* Demo hint */
+.demo-hint {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.68rem; font-weight: 600; color: var(--ink3);
+  background: var(--cream2); border: 1px solid var(--border2);
+  padding: 5px 12px; border-radius: 999px;
+}
+.demo-hint svg { color: var(--orange); flex-shrink: 0; }
+
+/* Demo caption */
+.demo-caption {
+  font-size: 0.7rem; color: var(--ink4);
+  text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  margin-top: 10px;
+}
+.demo-caption::before { content: ''; width: 20px; height: 1px; background: var(--ink4); }
+.demo-caption::after  { content: ''; width: 20px; height: 1px; background: var(--ink4); }
+
+/* Demo try link */
+.demo-try {
+  display: block; text-align: center;
+  font-size: 0.72rem; font-weight: 700;
+  color: var(--orange); text-decoration: none;
+  margin-top: 6px;
+  transition: opacity 0.15s;
+}
+.demo-try:hover { opacity: 0.75; }
+
+/* ── WHAT IS IT (3-col explainer) ─────────────────────────── */
+.explainer {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.exp-col {
+  background: var(--card);
+  padding: 30px 28px;
+}
+.exp-num {
+  font-family: 'Mont', sans-serif;
+  font-size: 2.4rem; font-weight: 900;
+  color: var(--cream2);
+  line-height: 1;
+  margin-bottom: 12px;
+  -webkit-text-stroke: 1.5px var(--border2);
+}
+.exp-title {
+  font-family: 'Mont', sans-serif;
+  font-size: 0.95rem; font-weight: 700;
+  margin-bottom: 8px;
+}
+.exp-body {
+  font-size: 0.85rem; color: var(--ink2); line-height: 1.6;
+}
+
+/* ── PRODUCT CARDS ────────────────────────────────────────── */
+.section-label {
+  font-family: 'Mont', sans-serif;
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--ink4); margin-bottom: 8px;
+  display: block;
+}
+.section-title {
+  font-family: 'Mont', sans-serif;
+  font-size: 1.9rem; font-weight: 900;
+  line-height: 1.15; letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+.section-sub {
+  font-size: 0.95rem; color: var(--ink2);
+  line-height: 1.6; max-width: 560px;
+  margin-bottom: 36px;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 18px;
+}
+
+.pcard {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  position: relative;
+  transition: box-shadow 0.2s, transform 0.2s;
+  text-decoration: none; color: inherit;
+}
+.pcard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+.pcard-stripe { height: 4px; width: 100%; }
+.pcard.c-play .pcard-stripe { background: linear-gradient(90deg, var(--pink), #c83870); }
+.pcard.c-light .pcard-stripe { background: linear-gradient(90deg, var(--amber), #D4984F); }
+.pcard.c-paper .pcard-stripe { background: linear-gradient(90deg, var(--orange), #D4984F); }
+
+/* Visual placeholder area */
+.pcard-vis {
+  aspect-ratio: 4/3;
+  position: relative;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 10px;
+}
+.c-play  .pcard-vis { background: linear-gradient(145deg,rgba(184,50,103,0.06),rgba(184,50,103,0.14)); }
+.c-light .pcard-vis { background: linear-gradient(145deg,rgba(212,152,79,0.06),rgba(212,152,79,0.16)); }
+.c-paper .pcard-vis { background: linear-gradient(145deg,rgba(212,152,79,0.06),rgba(212,152,79,0.16)); }
+
+.pcard-vis-icon { font-size: 2rem; opacity: 0.22; color: var(--ink); }
+.pcard-vis-hint {
+  font-size: 0.6rem; font-weight: 400; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--ink4);
+  text-align: center; max-width: 160px; line-height: 1.5;
+}
+.pcard-vis-cap {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(transparent, rgba(60,47,56,0.5));
+  color: rgba(255,255,255,0.88);
+  font-size: 0.6rem; font-style: italic;
+  padding: 16px 14px 10px;
+  line-height: 1.4;
+}
+/* TODO: replace .pcard-vis divs with <img> tags once product photos are ready */
+
+/* ── LIGHT CARD — background video ──────────────────────── */
+.pcard-vis-video { background: #1a1208; } /* dark fallback while video loads */
+
+.pcard-bg-video {
+  position: absolute;
+  inset: 0; width: 100%; height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.pcard-vid-fade {
+  position: absolute;
+  pointer-events: none;
+  z-index: 1;
+}
+.pcard-vid-fade-t {
+  top: 0; left: 0; right: 0; height: 60px;
+  background: linear-gradient(to bottom, var(--cream) 0%, transparent 100%);
+}
+.pcard-vid-fade-b {
+  bottom: 0; left: 0; right: 0; height: 60px;
+  background: linear-gradient(to top, var(--cream) 0%, transparent 100%);
+}
+.pcard-vid-fade-l {
+  top: 0; left: 0; bottom: 0; width: 48px;
+  background: linear-gradient(to right, var(--cream) 0%, transparent 100%);
+}
+.pcard-vid-fade-r {
+  top: 0; right: 0; bottom: 0; width: 48px;
+  background: linear-gradient(to left, var(--cream) 0%, transparent 100%);
+}
+
+.pcard-body { padding: 20px 22px; flex: 1; display: flex; flex-direction: column; }
+
+.pcard-tag {
+  position: absolute;
+  bottom: 12px; left: 14px;
+  z-index: 2;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.6rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  padding: 5px 12px; border-radius: 999px;
+  color: #fff;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+.c-play  .pcard-tag { background: rgba(184,50,103,0.45); }
+.c-light .pcard-tag { background: rgba(212,152,79,0.45); }
+.c-paper .pcard-tag { background: rgba(212,152,79,0.45); }
+
+.pcard-name {
+  font-family: 'Mont', sans-serif;
+  font-size: 1.05rem; font-weight: 700;
+  margin-bottom: 4px;
+}
+.pcard-tagline { font-size: 0.82rem; color: var(--ink2); line-height: 1.5; margin-bottom: 16px; }
+
+/* Pricing callout */
+.pcard-price {
+  border-radius: 8px; padding: 10px 14px;
+  margin-bottom: 14px; display: flex;
+  align-items: baseline; justify-content: space-between;
+  gap: 8px;
+}
+.c-play  .pcard-price { background: rgba(184,50,103,0.05); border: 1px solid rgba(184,50,103,0.12); }
+.c-light .pcard-price { background: rgba(212,152,79,0.05);  border: 1px solid rgba(212,152,79,0.12); }
+.c-paper .pcard-price { background: rgba(212,152,79,0.05); border: 1px solid rgba(212,152,79,0.12); }
+.pcard-price-label { font-size: 0.7rem; color: var(--ink3); }
+.pcard-price-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem; font-weight: 700;
+}
+.c-play  .pcard-price-val { color: var(--pink); }
+.c-light .pcard-price-val { color: var(--amber); }
+.c-paper .pcard-price-val { color: var(--orange); }
+.pcard-price-note { font-size: 0.64rem; color: var(--ink4); margin-top: 3px; }
+
+/* Mini feature list */
+.pcard-feats { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.pcard-feat {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 0.79rem; color: var(--ink2); line-height: 1.4;
+}
+.pcard-feat-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  flex-shrink: 0; margin-top: 6px;
+}
+.c-play  .pcard-feat-dot { background: var(--pink); }
+.c-light .pcard-feat-dot { background: var(--amber); }
+.c-paper .pcard-feat-dot { background: var(--orange); }
+
+.pcard-cta {
+  margin-top: auto; padding-top: 14px;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 0.78rem; font-weight: 700;
+  transition: gap 0.15s;
+}
+.c-play  .pcard-cta { color: var(--pink); }
+.c-light .pcard-cta { color: var(--amber); }
+.c-paper .pcard-cta { color: var(--orange); }
+.pcard:hover .pcard-cta { letter-spacing: 0.01em; }
+
+/* ── SMART GUIDE (discovery, not filter) ─────────────────── */
+/* ── SMART GUIDE (light theme, no wrap) ──────────────────── */
+.guide-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.gc {
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s, border-color 0.15s, transform 0.12s;
+  position: relative;
+}
+.gc:hover {
+  border-color: var(--border2);
+  background: var(--cream2);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow);
+}
+.gc.active {
+  border-color: var(--ink);
+  background: var(--cream2);
+}
+.gc.active::after {
+  content: '✓';
+  position: absolute; top: 8px; right: 10px;
+  font-size: 0.6rem; font-weight: 700;
+  background: var(--ink); color: #fff;
+  width: 18px; height: 18px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.gc-icon { font-size: 1rem; margin-bottom: 8px; display: block; color: var(--ink3); }
+.gc-title {
+  font-family: 'Mont', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  color: var(--ink); margin-bottom: 4px;
+}
+.gc-desc { font-size: 0.7rem; color: var(--ink3); line-height: 1.4; }
+
+/* Recommendations area */
+.guide-reco { display: none; margin-top: 24px; padding-top: 24px; }
+.guide-reco.visible { display: block; }
+.reco-label {
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--ink4); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.reco-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.reco-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+
+.reco-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 18px 20px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  text-decoration: none; color: inherit;
+  display: flex; flex-direction: column;
+}
+.reco-card:hover { border-color: var(--border2); box-shadow: var(--shadow); }
+.reco-card-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
+.reco-name { font-family: 'Mont', sans-serif; font-size: 0.9rem; font-weight: 700; color: var(--ink); }
+.reco-product {
+  font-size: 0.58rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.07em;
+  padding: 3px 9px; border-radius: 999px; flex-shrink: 0;
+}
+.rp-play  { background: rgba(184,50,103,0.1); color: var(--pink); }
+.rp-light { background: rgba(212,152,79,0.1); color: var(--amber); }
+.rp-paper { background: rgba(212,152,79,0.1); color: var(--orange); }
+.rp-multi { background: rgba(60,47,56,0.07); color: var(--ink3); }
+
+.reco-desc { font-size: 0.78rem; color: var(--ink2); line-height: 1.5; margin-bottom: 10px; flex: 1; }
+.reco-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: auto; }
+.reco-cost {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--ink3);
+  background: var(--cream2);
+  border: 1px solid var(--border);
+  border-radius: 5px; padding: 4px 9px;
+  display: inline-block;
+}
+.reco-link {
+  font-size: 0.72rem; font-weight: 700;
+  color: var(--ink4);
+  transition: color 0.15s;
+}
+.reco-card:hover .reco-link { color: var(--ink); }
+
+.guide-reset {
+  font-size: 0.72rem; color: var(--ink4);
+  cursor: pointer; text-decoration: underline;
+  background: none; border: none; font-family: inherit;
+  transition: color 0.15s;
+}
+.guide-reset:hover { color: var(--ink); }
+
+/* ── HOW IT WORKS ────────────────────────────────────────── */
+.flow-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.flow-step { padding: 28px 28px 24px; }
+.flow-step:nth-child(2), .flow-step:nth-child(4) { padding: 0; display: flex; align-items: center; }
+.flow-arrow-col {
+  padding: 0 4px;
+  color: var(--ink4); font-size: 1.2rem;
+}
+.flow-step-num {
+  font-family: 'Mont', sans-serif;
+  font-size: 2rem; font-weight: 900;
+  color: var(--cream2);
+  -webkit-text-stroke: 1.5px var(--border2);
+  display: block; line-height: 1; margin-bottom: 12px;
+}
+.flow-step-title {
+  font-family: 'Mont', sans-serif;
+  font-size: 0.92rem; font-weight: 700;
+  margin-bottom: 6px;
+}
+.flow-step-body { font-size: 0.8rem; color: var(--ink2); line-height: 1.55; }
+.flow-step-body strong { color: var(--ink); }
+
+/* ── PRICING TRUTH ───────────────────────────────────────── */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: stretch;
+}
+.pricing-col {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 28px 30px;
+  display: flex;
+  flex-direction: column;
+}
+.pricing-col.free-col {
+  border-left: 3px solid var(--green);
+}
+.pricing-col.paid-col {
+  border-left: 3px solid var(--orange);
+}
+.pricing-col-label {
+  font-size: 0.65rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  margin-bottom: 6px; display: block;
+}
+.free-col .pricing-col-label { color: var(--green); }
+.paid-col .pricing-col-label { color: var(--orange); }
+.pricing-col-title {
+  font-family: 'Mont', sans-serif;
+  font-size: 1.1rem; font-weight: 700;
+  margin-bottom: 4px;
+}
+.pricing-col-sub { font-size: 0.8rem; color: var(--ink3); margin-bottom: 18px; }
+.pricing-items { display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.pricing-item { display: flex; align-items: flex-start; gap: 12px; }
+.pricing-item-icon {
+  width: 28px; height: 28px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem; flex-shrink: 0;
+}
+.free-col .pricing-item-icon { background: rgba(212,152,79,0.1); }
+.paid-col .pricing-item-icon { background: rgba(212,152,79,0.1); }
+.pricing-item-name { font-size: 0.82rem; font-weight: 700; margin-bottom: 1px; }
+.pricing-item-cost {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem; color: var(--ink3);
+}
+.pricing-item-note { font-size: 0.7rem; color: var(--ink4); }
+.pricing-item-inline-cost {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.68rem; font-weight: 700;
+  color: var(--ink3);
+  background: var(--cream2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: 1px 7px;
+  margin-left: 6px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.pricing-item-inline-free {
+  color: var(--amber);
+  background: rgba(212,152,79,0.08);
+  border-color: rgba(212,152,79,0.2);
+}
+
+/* ── FAQ ─────────────────────────────────────────────────── */
+.faq-list {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-item:last-child { border-bottom: none; }
+.faq-q {
+  width: 100%; text-align: left;
+  padding: 18px 22px;
+  font-family: 'Mont', sans-serif;
+  font-size: 0.88rem; font-weight: 700;
+  color: var(--ink);
+  background: none; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; user-select: none;
+  transition: background 0.12s;
+}
+.faq-q:hover { background: var(--cream2); }
+.faq-icon { font-size: 1rem; font-weight: 300; color: var(--ink4); flex-shrink: 0; transition: transform 0.2s; }
+.faq-item.open .faq-icon { transform: rotate(45deg); }
+.faq-a {
+  display: none; padding: 0 22px 18px;
+  font-size: 0.83rem; color: var(--ink2); line-height: 1.7;
+}
+.faq-a a { color: var(--orange); }
+.faq-item.open .faq-a { display: block; }
+
+/* ── CTA BAND ────────────────────────────────────────────── */
+.cta-band {
+  background: var(--ink);
+  border-radius: 20px;
+  padding: 52px 56px;
+  display: flex; align-items: center;
+  justify-content: space-between; gap: 32px;
+  position: relative; overflow: hidden;
+}
+.cta-band::before {
+  content: '';
+  position: absolute; top: 0; right: 0;
+  width: 360px; height: 100%;
+  background: radial-gradient(ellipse at right, rgba(212,152,79,0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-band-text h2 {
+  font-family: 'Mont', sans-serif;
+  font-size: 1.7rem; font-weight: 900;
+  color: #fff; line-height: 1.2;
+  margin-bottom: 10px;
+}
+.cta-band-text p { font-size: 0.88rem; color: rgba(255,255,255,0.55); }
+.cta-band-actions { display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
+.cta-btn-primary {
+  font-family: 'Mont', sans-serif;
+  font-size: 0.88rem; font-weight: 700;
+  padding: 13px 28px; border-radius: 10px;
+  background: #fff; color: var(--ink);
+  text-decoration: none; text-align: center;
+  transition: opacity 0.15s; display: block;
+  white-space: nowrap;
+}
+.cta-btn-primary:hover { opacity: 0.9; }
+.cta-btn-ghost {
+  font-family: 'Mont', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  padding: 11px 24px; border-radius: 10px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  color: rgba(255,255,255,0.85);
+  text-decoration: none; text-align: center;
+  transition: background 0.15s; display: block;
+  white-space: nowrap;
+}
+.cta-btn-ghost:hover { background: rgba(255,255,255,0.14); }
+
+/* ── FOOTER ───────────────────────────────────────────────── */
+.footer {
+  padding: 28px 0; text-align: center;
+  font-size: 0.7rem; color: var(--ink4);
+  line-height: 1.9;
+}
+.footer a { color: var(--ink3); text-decoration: none; }
+.footer a:hover { color: var(--ink); }
+
+/* ── TRACK CARDS ─────────────────────────────────────────── */
+.track-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--border2);
+}
+
+
+.reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── RESPONSIVE ───────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .wrap { padding: 0 20px; }
+  .section { padding: 48px 0; }
+  .section-title { font-size: 1.55rem; }
+  .nav-links { display: none; }
+
+  /* Hero — stack vertically, centre content */
+  .hero { grid-template-columns: 1fr; gap: 40px; padding: 48px 0 40px; text-align: center; }
+  .hero-left { display: flex; flex-direction: column; align-items: center; }
+  .hero-eyebrow { justify-content: center; }
+  .hero-sub { text-align: left; max-width: 100%; }
+  .hero-ctas { justify-content: center; }
+  .btn-primary, .btn-ghost { flex: 1; min-width: 0; text-align: center; }
+
+  /* Rings scale from --stage only — no individual overrides needed */
+  .puzzle-stage { --stage: 240px; }
+
+  /* Explainer — single column with border dividers */
+  .explainer { grid-template-columns: 1fr; gap: 0; }
+  .exp-col { border-right: none; border-bottom: 1px solid var(--border); }
+  .exp-col:last-child { border-bottom: none; }
+
+  /* Cards → single column */
+  .products-grid { grid-template-columns: 1fr; }
+  .pricing-grid  { grid-template-columns: 1fr; }
+  .tracks-grid   { grid-template-columns: 1fr !important; }
+
+  /* Flow row — vertical stack, hide arrows */
+  .flow-row { display: flex; flex-direction: column; }
+  .flow-step:nth-child(2), .flow-step:nth-child(4) { display: none; }
+  .flow-step { border-bottom: 1px solid var(--border); }
+  .flow-step:last-child { border-bottom: none; }
+
+  /* Guide */
+  .guide-cards { grid-template-columns: repeat(2, 1fr); }
+  .reco-grid { grid-template-columns: 1fr; }
+
+  /* CTA band */
+  .cta-band { flex-direction: column; padding: 36px 28px; border-radius: 14px; text-align: center; }
+  .cta-band-actions { width: 100%; }
+  .cta-btn-primary, .cta-btn-ghost { width: 100%; display: block; }
+
+  /* Module legend — collapse to 1 col on mobile */
+  .module-legend { grid-template-columns: 1fr !important; }
+  .pricing-col { padding: 22px 20px; }
+
+  /* Daily puzzle embed — fit to screen, keep square */
+  .puzzle-demo { overflow: hidden; max-width: 100%; }
+  .puzzle-demo > div { max-width: 100%; }
+  stakco-daily-embed {
+    max-width: 100% !important;
+    max-height: calc(100vw - 40px) !important;
+    aspect-ratio: 1 / 1;
+    display: block;
+  }
+
+  /* Create-track nudge card — stack on mobile */
+  .create-track-nudge { flex-direction: column !important; text-align: center; }
+  .create-track-nudge a { width: 100%; text-align: center; }
+}
+
+@media (max-width: 480px) {
+  .hero h1 { font-size: 2.1rem; }
+  .puzzle-stage { --stage: 200px; }
+  .hero-ctas { flex-direction: column; width: 100%; }
+  .btn-primary, .btn-ghost { width: 100%; flex: none; }
+  .guide-cards { gap: 8px; }
+  .gc { padding: 12px 14px; }
+  .gc-icon { font-size: 1.1rem; margin-bottom: 6px; }
+  .gc-title { font-size: 0.75rem; }
+  .gc-desc { font-size: 0.65rem; }
+}
+
+@media print {
+  .site-nav, .cta-band, .footer { display: none; }
+  body { background: #fff; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══════════════════════════════════════════════════════ -->
+<!-- ══ UNIFIED SITE NAV ══════════════════════════════════════ -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <span>Stakco</span>
+    </a>
+    <div class="site-nav-links">
+      <a href="/products/" class="sn-active">Products</a>
+      <a href="/pricing/">Pricing</a>
+      <a href="/case-studies/">Case Studies</a>
+      <a href="/research/">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+    </div>
+  </div>
+</nav>
+
+
+<div class="wrap">
+
+<!-- ══ HERO ═════════════════════════════════════════════════════ -->
+<div class="hero section" id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      Rotating puzzle platform
+    </div>
+
+    <h1>A puzzle you<br>hold — and <span class="accent">turn.</span></h1>
+
+    <p class="hero-sub">
+      Stakco is a circular puzzle — made of rotating rings that each turn independently. Solve it by lining up the image across all the layers.<br><br>You can play puzzles for free, or create your own and deliver it as a printed disc, a website link, or a physical display in your space.
+    </p>
+
+    <div class="pricing-promise">
+      <span class="pp-free">Free to explore &amp; play.</span>
+      <span class="pp-sep"> </span>
+      Pay once when you're ready to make something.
+    </div>
+
+    <div class="hero-ctas">
+      <a href="https://play.stakcos.com" class="btn-primary">Explore free tracks</a>
+      <a href="https://studio.stakcos.com" class="btn-ghost">Create your own</a>
+    </div>
+  </div>
+
+  <div class="puzzle-demo">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;">
+      <stakco-daily-embed size="440px" interactive controls="rings"></stakco-daily-embed>
+      <div class="demo-hint">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M9 12l2 2 4-4"/></svg>
+        Drag the rings to solve &mdash; it&rsquo;s interactive
+      </div>
+      <div class="demo-caption">Today&rsquo;s puzzle &middot; <a href="https://play.stakcos.com" target="_blank" rel="noopener" style="color:var(--orange);text-decoration:none;font-weight:600;">Full experience at play.stakcos.com &rarr;</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LIVE TRACKS ═══════════════════════════════════════════════ -->
+
+<!-- ══ PARTNER STRIP ══════════════════════════════════════════ -->
+<div class="partner-strip">
+  <div class="partner-strip-label">Trusted by</div>
+  <div class="partner-logos">
+    <a class="partner-logo" href="https://www.sgenable.sg" target="_blank" rel="noopener" title="SG Enable">
+      <img src="https://cdn.stakcos.com/media/partners/sgenable.png" alt="SG Enable">
+    </a>
+    <a class="partner-logo" href="https://www.awwa.org.sg" target="_blank" rel="noopener" title="AWWA">
+      <img src="https://cdn.stakcos.com/media/partners/awwa.png" alt="AWWA">
+    </a>
+    <a class="partner-logo" href="https://nus.edu.sg" target="_blank" rel="noopener" title="National University of Singapore">
+      <img src="https://cdn.stakcos.com/media/partners/nus.png" alt="NUS">
+    </a>
+    <a class="partner-logo" href="https://ahlab.org" target="_blank" rel="noopener" title="AHLab">
+      <img src="https://cdn.stakcos.com/media/partners/ahlab.png" alt="AHLab">
+    </a>
+  </div>
+</div>
+
+<div class="section" id="live-tracks">
+  <span class="section-label">Free to explore</span>
+  <h2 class="section-title">Try a live puzzle track</h2>
+  <p class="section-sub">These are real Stakco Play experiences — no account, no payment. Open any track, solve puzzles, get a feel for the format.</p>
+
+  <div class="tracks-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;">
+
+    <!-- Central / Science track -->
+    <a href="https://play.stakcos.com" target="_blank" class="track-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:box-shadow 0.18s,transform 0.15s;">
+      <div style="padding:20px 22px 0;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(223,172,109,0.15),rgba(223,172,109,0.3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;"><i class="fa-solid fa-flask"></i></div>
+          <div>
+            <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;line-height:1.2;">Science Daily</div>
+            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--cyan);">Always on · managed by Stakco</div>
+          </div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">AI-generated science puzzles, refreshed daily. Managed by Stakco. A new discovery to solve every day.</div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">play.stakcos.com ↗</span>
+      </div>
+      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--cyan);display:flex;align-items:center;justify-content:space-between;">
+        Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
+      </div>
+    </a>
+
+    <!-- Lunar New Year seasonal track -->
+    <a href="https://lunar.play.stakcos.com" target="_blank" class="track-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:box-shadow 0.18s,transform 0.15s;">
+      <div style="padding:20px 22px 0;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(212,152,79,0.15),rgba(212,152,79,0.3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;"><i class="fa-solid fa-moon"></i></div>
+          <div>
+            <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;line-height:1.2;">Lunar New Year</div>
+            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--orange);">Seasonal track</div>
+          </div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">AI-generated daily puzzles celebrating Chinese New Year. A themed seasonal experience built on Stakco Play.</div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">lunar.play.stakcos.com ↗</span>
+      </div>
+      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--orange);display:flex;align-items:center;justify-content:space-between;">
+        Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
+      </div>
+    </a>
+
+    <!-- NUS 120 celebration track -->
+    <a href="https://nus120.play.stakcos.com" target="_blank" class="track-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:box-shadow 0.18s,transform 0.15s;">
+      <div style="padding:20px 22px 0;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(184,50,103,0.15),rgba(184,50,103,0.3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div>
+            <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;line-height:1.2;">NUS 120</div>
+            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);">Celebration track</div>
+          </div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">A puzzle experience created for NUS's 120th anniversary. A example of a branded institutional track on Stakco Play.</div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">nus120.play.stakcos.com ↗</span>
+      </div>
+      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--purple);display:flex;align-items:center;justify-content:space-between;">
+        Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- "Want to create your own?" nudge -->
+  <div class="create-track-nudge" style="background:linear-gradient(135deg,rgba(212,152,79,0.06),rgba(184,50,103,0.04));border:1px solid var(--border2);border-radius:12px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
+    <div style="flex:1;min-width:0;">
+      <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:3px;">Want to create a track like these?</div>
+      <div style="font-size:0.8rem;color:var(--ink3);">A Play track is your own puzzle collection on a dedicated web address — science, seasonal, branded, or anything you imagine. Your audience plays for free. Starts from S$13 + Play module.</div>
+    </div>
+    <a href="https://studio.stakcos.com" style="font-size:0.8rem;font-weight:700;padding:10px 22px;border-radius:9px;background:var(--ink);color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:opacity 0.15s;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">Start in Studio</a>
+  </div>
+</div>
+
+<!-- ══ WHAT IS IT ════════════════════════════════════════════════ -->
+<div class="section" id="what-is">
+  <div class="explainer reveal">
+    <div class="exp-col">
+      <div class="exp-num">01</div>
+      <div class="exp-title">What it is</div>
+      <div class="exp-body">A circular puzzle with 2–4 rings, each one rotating independently. Turn the rings until the picture lines up — that's it. No loose pieces. No instructions needed. Anyone can pick it up and understand it in seconds.</div>
+    </div>
+    <div class="exp-col">
+      <div class="exp-num">02</div>
+      <div class="exp-title">Three ways to use it</div>
+      <div class="exp-body">The same puzzle can be a <strong>physical disc</strong> you hand someone, a <strong>web link</strong> you send by message, or a <strong>large display</strong> installed in your lobby or venue. You design it once — then choose the format.</div>
+    </div>
+    <div class="exp-col">
+      <div class="exp-num">03</div>
+      <div class="exp-title">You design it in minutes</div>
+      <div class="exp-body">Open Stakco Studio in your browser — no software to install. Upload a photo or logo, pick your ring layout, and see your puzzle instantly. No design experience needed. If you don't have an image, describe it and AI will create one. Starts from S$13, once.</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══ SOCIAL PROOF ══════════════════════════════════════════════ -->
+<div style="padding:20px 0 8px;">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+    <span style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink4);">Trusted in the field</span>
+    <div style="flex:1;height:1px;background:var(--border);"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;flex:1;min-width:260px;">
+      <div style="width:38px;height:38px;border-radius:9px;background:rgba(212,152,79,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="fa-solid fa-heart" style="color:var(--amber);font-size:1rem;"></i>
+      </div>
+      <div>
+        <div style="font-family:'Mont',sans-serif;font-size:0.82rem;font-weight:700;color:var(--ink);margin-bottom:2px;">AWWA School, Bedok</div>
+        <div style="font-size:0.72rem;color:var(--ink3);line-height:1.4;">Stakco Light's first installation — a sensory puzzle experience for students with autism. Used daily as a tactile engagement and focus activity.</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;flex:1;min-width:260px;">
+      <div style="width:38px;height:38px;border-radius:9px;background:rgba(184,50,103,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="fa-solid fa-graduation-cap" style="color:var(--pink);font-size:1rem;"></i>
+      </div>
+      <div>
+        <div style="font-family:'Mont',sans-serif;font-size:0.82rem;font-weight:700;color:var(--ink);margin-bottom:2px;">NUS 120th Anniversary</div>
+        <div style="font-size:0.72rem;color:var(--ink3);line-height:1.4;">A dedicated puzzle track created for the National University of Singapore's 120th anniversary celebration — branded, interactive, and open to all visitors.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ THREE PRODUCTS ════════════════════════════════════════════ -->
+<div class="section" id="products">
+  <span class="section-label">Three formats</span>
+  <h2 class="section-title">Pick your format</h2>
+  <p class="section-sub">Same puzzle. Three ways to experience it. Start with whatever fits your goal.</p>
+
+  <div class="products-grid">
+
+    <!-- PLAY -->
+    <a href="stakco-play.html" class="pcard c-play reveal">
+      <div class="pcard-stripe"></div>
+      <div class="pcard-vis pcard-vis-video">
+        <video class="pcard-bg-video" autoplay muted loop playsinline>
+          <source src="https://cdn.stakcos.com/media/play.mp4" type="video/mp4">
+        </video>
+        <div class="pcard-vid-fade pcard-vid-fade-t"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-b"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-l"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-r"></div>
+        <span class="pcard-tag">Digital</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-name">Stakco Play</div>
+        <div class="pcard-tagline">Publish puzzles online — players open a link and solve in their browser. No app. No account.</div>
+        <div class="pcard-price">
+          <div>
+            <div class="pcard-price-label">Players pay</div>
+            <div class="pcard-price-val">Free</div>
+          </div>
+          <div style="text-align:right">
+            <div class="pcard-price-label">Publisher plan</div>
+            <div class="pcard-price-val" data-price="PLAY.monthly" data-price-prefix="S$" data-price-suffix="/mo">S$21/mo</div>
+          </div>
+        </div>
+        <div class="pcard-feats">
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Share via link — works on phone, tablet, desktop</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Custom subdomain (yourname.play.stakcos.com)</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Analytics — completion rates, time spent</div>
+        </div>
+        <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.65;"></i></div>
+      </div>
+    </a>
+
+    <!-- LIGHT -->
+    <a href="stakco-light.html" class="pcard c-light reveal">
+      <div class="pcard-stripe"></div>
+      <div class="pcard-vis pcard-vis-video">
+        <video class="pcard-bg-video" autoplay muted loop playsinline>
+          <source src="https://cdn.stakcos.com/media/light.mp4" type="video/mp4">
+        </video>
+        <div class="pcard-vid-fade pcard-vid-fade-t"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-b"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-l"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-r"></div>
+        <span class="pcard-tag">Optical</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-name">Stakco Light</div>
+        <div class="pcard-tagline">Physical rotating rings mounted in your space, with a projected puzzle image on top.</div>
+        <div class="pcard-price">
+          <div>
+            <div class="pcard-price-label">Complete installation</div>
+            <div class="pcard-price-val">S$29,000</div>
+
+          </div>
+        </div>
+        <div class="pcard-feats">
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Keeps guests and visitors engaged longer — tactile, unplugged, no instructions needed</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Run seasonal themes or branded content — change it from your desk, no technician</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Installed in sensory classrooms, hotel lobbies, museums, and therapy spaces</div>
+        </div>
+        <div style="font-size:0.68rem;color:var(--ink4);margin-top:8px;padding:7px 10px;background:rgba(212,152,79,0.06);border-radius:7px;border-left:2px solid var(--amber);">First installation at <strong style="color:var(--ink3);">AWWA School Bedok</strong> — used daily with students with autism.</div>
+        <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.65;"></i></div>
+      </div>
+    </a>
+
+    <!-- PAPER -->
+    <a href="stakco-paper.html" class="pcard c-paper reveal">
+      <div class="pcard-stripe"></div>
+      <div class="pcard-vis pcard-vis-video">
+        <video class="pcard-bg-video" autoplay muted loop playsinline>
+          <source src="https://cdn.stakcos.com/media/paper.mp4" type="video/mp4">
+        </video>
+        <div class="pcard-vid-fade pcard-vid-fade-t"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-b"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-l"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-r"></div>
+        <span class="pcard-tag">Physical</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-name">Stakco Paper</div>
+        <div class="pcard-tagline">A printed rotating puzzle disc on laminated matte board — portable, durable, no power.</div>
+        <div class="pcard-price">
+          <div>
+            <div class="pcard-price-label">From (retail)</div>
+            <div class="pcard-price-val">S$20/unit</div>
+          </div>
+          <div style="text-align:right">
+            <div class="pcard-price-label">Bulk 1,000+</div>
+            <div class="pcard-price-val">S$8/unit</div>
+          </div>
+        </div>
+        <div style="font-size:0.68rem;color:var(--ink4);margin-top:6px;">Min. 50 units · samples available · ~7 day lead time</div>
+        <div class="pcard-feats">
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Fully custom artwork — your branding on the surface</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>~7 day lead time for professional printing</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Printed on laminated matte board — durable, portable, ready to gift or brand</div>
+        </div>
+        <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.65;"></i></div>
+      </div>
+    </a>
+
+  </div>
+</div>
+
+<!-- ══ SMART GUIDE ═══════════════════════════════════════════════ -->
+<div class="section" id="find-your-fit">
+  <span class="section-label">Find your fit</span>
+  <h2 class="section-title">What are you making?</h2>
+  <p class="section-sub">Pick what describes your goal — we'll show the most relevant format and entry point immediately.</p>
+
+  <div class="guide-cards" id="guideCards">
+
+        <div class="gc" data-segment="personal" onclick="gcToggle(this)">
+          <span class="gc-icon"><i class="fa-solid fa-gift"></i></span>
+          <div class="gc-title">A gift or personal project</div>
+          <div class="gc-desc">Party favors, family puzzles, mindfulness activity</div>
+        </div>
+
+        <div class="gc" data-segment="creator" onclick="gcToggle(this)">
+          <span class="gc-icon"><i class="fa-solid fa-paintbrush"></i></span>
+          <div class="gc-title">My own puzzle designs</div>
+          <div class="gc-desc">Publish, sell, or share my artwork as puzzles</div>
+        </div>
+
+        <div class="gc" data-segment="education" onclick="gcToggle(this)">
+          <span class="gc-icon"><i class="fa-solid fa-book-open"></i></span>
+          <div class="gc-title">Teaching or therapy</div>
+          <div class="gc-desc">Classroom, therapy sessions, cognitive exercises</div>
+        </div>
+
+        <div class="gc" data-segment="business" onclick="gcToggle(this)">
+          <span class="gc-icon"><i class="fa-solid fa-building"></i></span>
+          <div class="gc-title">Branded merch or campaigns</div>
+          <div class="gc-desc">Corporate gifts, events, marketing activations</div>
+        </div>
+
+        <div class="gc" data-segment="venue" onclick="gcToggle(this)">
+          <span class="gc-icon"><i class="fa-solid fa-landmark"></i></span>
+          <div class="gc-title">A venue installation</div>
+          <div class="gc-desc">Museum, hotel lobby, hospital, therapy centre</div>
+        </div>
+
+        <div class="gc" data-segment="creator" onclick="gcToggle(this)">
+          <span class="gc-icon"><i class="fa-solid fa-store"></i></span>
+          <div class="gc-title">Sell puzzles online</div>
+          <div class="gc-desc">List my designs on the Stakco marketplace</div>
+        </div>
+
+        <div class="gc" data-segment="dev" onclick="gcToggle(this)">
+          <span class="gc-icon"><i class="fa-solid fa-code"></i></span>
+          <div class="gc-title">Add puzzles to my web app</div>
+          <div class="gc-desc">Embed via API, widgets, or a daily puzzle feature</div>
+        </div>
+
+        <div class="gc" data-segment="luxury" onclick="gcToggle(this)">
+          <span class="gc-icon"><i class="fa-solid fa-gem"></i></span>
+          <div class="gc-title">Luxury or premium brand</div>
+          <div class="gc-desc">VIP gifting, flagship installation, collectibles</div>
+        </div>
+
+      </div>
+
+      <!-- Instant recommendations (no submit button) -->
+      <div class="guide-reco" id="guideReco">
+        <div class="reco-label">Recommended for you</div>
+        <div class="reco-grid" id="recoGrid"></div>
+        <div style="margin-top:14px;display:flex;align-items:center;gap:16px;">
+          <button class="guide-reset" onclick="gcReset()"><i class="fa-solid fa-rotate-left" style="font-size:0.65rem;margin-right:4px;"></i> Start over</button>
+        </div>
+      </div>
+
+</div>
+
+<!-- ══ HOW IT WORKS ══════════════════════════════════════════════ -->
+<div class="section" id="how-it-works">
+  <span class="section-label">The process</span>
+  <h2 class="section-title">How it works</h2>
+  <p class="section-sub">Free to explore public tracks. Pay once when you're ready to make something.</p>
+
+  <div class="flow-row reveal">
+    <div class="flow-step">
+      <span class="flow-step-num">1</span>
+      <div class="flow-step-title">Create in Studio</div>
+      <div class="flow-step-body">Open <strong>Stakco Studio</strong> in your browser. Upload your artwork, choose 2–4 rotating rings, preview your puzzle instantly. From S$13 one-time base licence — no subscription.</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-arrow-col">→</div>
+    </div>
+    <div class="flow-step">
+      <span class="flow-step-num">2</span>
+      <div class="flow-step-title">Choose how to deliver it</div>
+      <div class="flow-step-body">Pick what you want to do with your puzzle. <strong>Print it</strong> as a physical disc. <strong>Share it online</strong> as a link anyone can open. Or <strong>display it in your venue</strong> on a projection installation. You only pay for the delivery format you choose.</div>
+    </div>
+    <div class="flow-step">
+      <div class="flow-arrow-col">→</div>
+    </div>
+    <div class="flow-step">
+      <span class="flow-step-num">3</span>
+      <div class="flow-step-title">Deliver</div>
+      <div class="flow-step-body">Print it yourself or order through our print partners. Share a link. Or have us install the projection hardware at your venue. Update content anytime from Studio.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PRICING TRUTH ═════════════════════════════════════════════ -->
+<div class="section" id="pricing-truth">
+  <span class="section-label">What things cost</span>
+  <h2 class="section-title">How pricing works</h2>
+  <p class="section-sub" style="max-width:none;">Explore and play for free. Pay once when you're ready to make something — and only for what you actually need.</p>
+
+  <!-- 4-module legend: 2×2 grid -->
+  <div class="module-legend" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:28px;">
+    <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:0.78rem;">
+      <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--orange);flex-shrink:0;min-width:46px;">Print</span>
+      <span><span style="color:var(--ink3);">export printable layers, assemble a paper puzzle</span><span style="display:block;font-size:0.7rem;color:var(--ink4);margin-top:1px;">Make a physical puzzle you can hold</span></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:0.78rem;">
+      <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--pink);flex-shrink:0;min-width:46px;">Play</span>
+      <span><span style="color:var(--ink3);">distribute digital puzzles via subdomain &amp; albums</span><span style="display:block;font-size:0.7rem;color:var(--ink4);margin-top:1px;">Share your puzzle online — anyone can play</span></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:0.78rem;">
+      <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--green);flex-shrink:0;min-width:46px;">Publish</span>
+      <span><span style="color:var(--ink3);">sell your puzzles &amp; stencils on the marketplace</span><span style="display:block;font-size:0.7rem;color:var(--ink4);margin-top:1px;">List your designs for others to buy · you keep 75%</span></span>
+    </div>
+    <div style="display:flex;align-items:center;gap:9px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 14px;font-size:0.78rem;">
+      <span style="font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--amber);flex-shrink:0;min-width:46px;">Light</span>
+      <span><span style="color:var(--ink3);">manage puzzle content on a Stakco Light installation</span><span style="display:block;font-size:0.7rem;color:var(--ink4);margin-top:1px;">Run puzzles on a display in your venue</span></span>
+    </div>
+  </div>
+
+  <div class="pricing-grid reveal">
+    <div class="pricing-col free-col">
+      <span class="pricing-col-label">Always free</span>
+      <div class="pricing-col-title">Explore &amp; play</div>
+      <div class="pricing-col-sub">No account. No card. Explore public puzzle tracks and solve any shared puzzle for free.</div>
+      <div class="pricing-items">
+        <div class="pricing-item">
+          <div class="pricing-item-icon"><i class="fa-solid fa-circle-play"></i></div>
+          <div>
+            <div class="pricing-item-name">Public puzzle tracks <span class="pricing-item-inline-cost pricing-item-inline-free">Free to explore</span></div>
+            <div class="pricing-item-note">play.stakcos.com · seasonal tracks · celebration tracks</div>
+          </div>
+        </div>
+        <div class="pricing-item">
+          <div class="pricing-item-icon"><i class="fa-solid fa-link"></i></div>
+          <div>
+            <div class="pricing-item-name">Solve any shared puzzle <span class="pricing-item-inline-cost pricing-item-inline-free">Free for players</span></div>
+            <div class="pricing-item-note">No account needed to open and solve a shared puzzle link</div>
+          </div>
+        </div>
+        <div class="pricing-item">
+          <div class="pricing-item-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <div>
+            <div class="pricing-item-name">Browse the Shop &amp; marketplace <span class="pricing-item-inline-cost pricing-item-inline-free">Free to browse</span></div>
+            <div class="pricing-item-note">Explore stencils, puzzle designs, and creator content</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pricing-col paid-col">
+      <span class="pricing-col-label">Pay when you're ready to make something</span>
+      <div class="pricing-col-title">Modules & production</div>
+      <div class="pricing-col-sub">Add exactly what you need. Nothing you don't.</div>
+      <div class="pricing-items">
+        <div class="pricing-item">
+          <div class="pricing-item-icon"><i class="fa-solid fa-print"></i></div>
+          <div>
+            <div class="pricing-item-name">Print module <span class="pricing-item-inline-cost">S$89 one-time</span></div>
+            <div class="pricing-item-note">Export print-ready files. Order via partners from S$8–20/unit.</div>
+          </div>
+        </div>
+        <div class="pricing-item">
+          <div class="pricing-item-icon"><i class="fa-solid fa-globe"></i></div>
+          <div>
+            <div class="pricing-item-name">Play module <span class="pricing-item-inline-cost" data-price="PLAY.monthly" data-price-prefix="S$" data-price-suffix="/mo">S$21/mo</span></div>
+            <div class="pricing-item-note">Publish online. Players always free.</div>
+          </div>
+        </div>
+        <div class="pricing-item">
+          <div class="pricing-item-icon"><i class="fa-solid fa-circle-dot"></i></div>
+          <div>
+            <div class="pricing-item-name">Light installation <span class="pricing-item-inline-cost">S$29,000 or lease</span></div>
+            <div class="pricing-item-note">For venues. Hardware + install + 1yr warranty included. Leasing enquiries welcome.</div>
+          </div>
+        </div>
+        <div class="pricing-item">
+          <div class="pricing-item-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+          <div>
+            <div class="pricing-item-name">AI generation <span class="pricing-item-inline-cost" data-price="AI.monthly" data-price-prefix="S$" data-price-suffix="/mo">S$21/mo</span></div>
+            <div class="pricing-item-note">Generate puzzle artwork from text — no design skills needed.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ FAQ ════════════════════════════════════════════════════════ -->
+<div class="section" id="faq">
+  <span class="section-label">Common questions</span>
+  <h2 class="section-title" style="margin-bottom:28px;">Things people ask</h2>
+
+  <div class="faq-list reveal">
+
+    <div class="faq-item">
+      <button class="faq-q">What exactly does the puzzle look like? <span class="faq-icon">+</span></button>
+      <div class="faq-a">A Stakco puzzle is a flat circular disc — typically 20cm across — made of 2–4 concentric layers. Each layer is a separate ring that rotates independently over the others. When scrambled, the rings are misaligned. Solving it means rotating the rings until the image on the surface connects and completes. <a href="https://play.stakcos.com">Try one at play.stakcos.com <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;"></i></a></div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Do I need design skills to make a puzzle? <span class="faq-icon">+</span></button>
+      <div class="faq-a">No. You upload any image (a photo, a logo, an illustration) and Studio wraps it around the ring structure. If you don't have artwork, the AI generation module creates it from a text description. Most people have their first puzzle designed in under 2 minutes.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Can I try the puzzle experience before buying anything? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Yes. Visit <a href="https://play.stakcos.com">play.stakcos.com</a> to solve puzzles right now — no account, no payment. Public tracks are always free to explore. To create your own puzzles and output them, Stakco Studio starts from S$13 (one-time base licence).</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">I want to order printed puzzles with my company logo. How does that work? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Buy the Studio base licence (S$13 one-time) and the Print module (S$89 one-time). Upload your logo and artwork in Studio, design the puzzle, export a high-resolution print-ready file. Then either print it yourself or order through our print partners — from around S$8–20 per unit depending on quantity and material. Lead time is approximately 7 days for professional printing.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">What is the Light installation and who is it for? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Stakco Light is a physical installation for venues. It consists of a frame with tangible rotating rings — visitors physically turn the rings by hand — and a projector that displays the puzzle image onto the rings. The result is a hybrid tactile and visual experience. It's used in hotels, museums, therapy centres, hospitals, and event spaces. Content is managed remotely from Studio. Price is S$29,000 complete — hardware, installation, and a 1-year warranty included. Leasing options are available — contact <a href="mailto:hello@stakcos.com">hello@stakcos.com</a>.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Can I sell puzzles I design? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Yes. The Publish module lets you list your puzzle designs and stencils on the Stakco Shop marketplace. You set the price — you keep 75% of every sale, Stakco takes 25%. There's also a Dev module for embedding puzzles into external websites and apps via API.</div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-q">Can I use Stakco for team events or corporate gifting? <span class="faq-icon">+</span></button>
+      <div class="faq-a">Yes — this is one of the most common use cases. A Stakco puzzle is a gift people actually keep and use — not a tote bag they forget, not a pen they lose. Your logo is on every layer, visible as guests turn the rings. Design one with your company artwork, order in bulk (minimum 50 units, from S$8 per unit at 1,000+), and they're ready in about 7 days. No design experience needed. Samples available on request. <a href="mailto:hello@stakcos.com">Contact us for a bulk quote <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;"></i></a></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ CTA BAND ═══════════════════════════════════════════════════ -->
+<div class="section" style="padding-top: 0;">
+  <div class="cta-band">
+    <div class="cta-band-text">
+      <h2>Explore a track.<br>Then make your own.</h2>
+      <p>Public tracks are free to play. Creating your own starts from S$13.</p>
+    </div>
+    <div class="cta-band-actions">
+      <a href="https://play.stakcos.com" class="cta-btn-primary">Explore free tracks</a>
+      <a href="https://studio.stakcos.com" class="cta-btn-ghost">Create your own in Studio</a>
+      <a href="mailto:hello@stakcos.com?subject=Stakco enquiry" class="cta-btn-ghost" style="font-size:0.75rem;opacity:0.75;">Venue install or bulk order? Talk to us</a>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- ══ FOOTER ════════════════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="wrap">
+    Stakco · <a href="https://stakcos.com">stakcos.com</a> ·
+    <a href="https://play.stakcos.com">Play</a> ·
+    <a href="https://studio.stakcos.com">Studio</a> ·
+    <a href="https://shop.stakcos.com">Shop</a> ·
+    <a href="mailto:hello@stakcos.com">hello@stakcos.com</a><br>
+    Proprietary puzzle technology · exclusively licensed for commercial use ·
+    <a href="stakco-pricing-overview.html">B2B pricing <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.55rem;"></i></a>
+  </div>
+</footer>
+
+<script>
+(function() {
+
+  /* ── PRICING FETCH ─────────────────────────────────────── */
+  (async () => {
+    try {
+      const res = await fetch('https://storage.googleapis.com/stakco-images/platform.json?v=' + Date.now());
+      if (!res.ok) return;
+      const data = await res.json();
+      const mods = data.Products?.STAKCO_STUDIO?.Modules || {};
+      const pm = {};
+      Object.entries(mods).forEach(([k, m]) => {
+        if (m.Pricing?.Type === 'SUBSCRIPTION') pm[k + '.monthly'] = m.Pricing.MonthlyPrice || m.Price;
+        if (m.Price != null) pm[k + '.price'] = m.Price;
+      });
+      document.querySelectorAll('[data-price]').forEach(el => {
+        const v = pm[el.dataset.price];
+        if (v != null) el.textContent = (el.dataset.pricePrefix || 'S$') + v + (el.dataset.priceSuffix || '');
+      });
+    } catch (e) { /* keep fallback text */ }
+  })();
+
+  /* ── FAQ ACCORDION ─────────────────────────────────────── */
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.closest('.faq-item');
+      const wasOpen = item.classList.contains('open');
+      // close all
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  /* ── SMART GUIDE ───────────────────────────────────────── */
+  const RECO_DATA = {
+    personal: [
+      { name: 'Print at home or order',    product: 'paper', desc: 'Design your puzzle in Studio, export a print file, print on a standard printer or order professionally.', cost: 'S$13 + S$89 module · from S$20/unit printed', href: 'stakco-paper.html' },
+      { name: 'Share a digital puzzle',     product: 'play',  desc: 'Publish online — anyone opens a link and solves in their browser. Great for sharing with family or a community.', cost: 'S$13 + S$21/mo Play module', href: 'stakco-play.html' },
+    ],
+    creator: [
+      { name: 'Publish a puzzle series',    product: 'play',  desc: 'Create a collection of puzzles and publish them on your custom subdomain. Track engagement and completion.', cost: 'S$13 + S$21/mo Play module', href: 'stakco-play.html' },
+      { name: 'Sell on the marketplace',    product: 'multi', desc: 'List your puzzle designs or stencils on the Stakco Shop. Set your price — you keep 75% of every sale. Stakco takes 25%.', cost: 'Publish module — see Shop for pricing', href: 'https://shop.stakcos.com' },
+      { name: 'Produce physical puzzles',   product: 'paper', desc: 'Export print-ready files and order professionally. Sell through your own store or at events.', cost: 'S$13 + S$89 Print · from S$8/unit bulk', href: 'stakco-paper.html' },
+    ],
+    education: [
+      { name: 'Classroom handouts',         product: 'paper', desc: 'Printed rotating puzzles as physical learning tools. No power needed. Works for all ages.', cost: 'S$13 + S$89 Print · from S$12/unit (100+)', href: 'stakco-paper.html' },
+      { name: 'Digital puzzle activities',  product: 'play',  desc: 'Publish puzzles and share a link with students. Track completion and time spent.', cost: 'S$13 + S$21/mo Play module', href: 'stakco-play.html' },
+      { name: 'Sensory / therapy display',  product: 'light', desc: 'For special needs classrooms and therapy rooms — calming projected puzzle with tactile ring interaction.', cost: 'S$29,000 installed · leasing available', href: 'stakco-light.html' },
+    ],
+    business: [
+      { name: 'Branded corporate gifts',    product: 'paper', desc: 'Custom artwork printed on puzzle discs. Your logo, your design. Bulk pricing from 100 units.', cost: 'S$13 + S$89 Print · S$12/unit (100+)', href: 'stakco-paper.html' },
+      { name: 'Digital campaign puzzles',   product: 'play',  desc: 'Interactive puzzle experience for product launches, events, or loyalty campaigns. Share via link.', cost: 'S$13 + S$21/mo Play module', href: 'stakco-play.html' },
+      { name: 'Trade show installation',    product: 'light', desc: 'Eye-catching optical installation for your booth or flagship space. Draws crowds and dwell time.', cost: 'S$29,000 · leasing available for events', href: 'stakco-light.html' },
+    ],
+    venue: [
+      { name: 'Lobby or gallery install',   product: 'light', desc: 'Turnkey installation — physical rings + projector. Update content remotely. 1-year warranty included. Leasing available — email us for a monthly rate.', cost: 'S$29,000 complete · leasing available', href: 'stakco-light.html' },
+      { name: 'Therapy / sensory room',     product: 'light', desc: 'Calming projected puzzles with therapeutic audio. For hospitals, rehab centres, and aged care.', cost: 'S$29,000 installed · enquire for lease', href: 'stakco-light.html' },
+      { name: 'Takeaway paper puzzles',     product: 'paper', desc: 'Branded paper puzzles as visitor gifts or event giveaways. 7-day lead time.', cost: 'From S$8/unit (1,000+) · S$12/unit (100+)', href: 'stakco-paper.html' },
+    ],
+    dev: [
+      { name: 'Embed into a website',       product: 'play',  desc: 'Widget or iframe embed for any web page. No coding setup required — paste a snippet and it works. Daily puzzle, portfolio piece, or site feature.', cost: 'Dev module — see Shop for pricing', href: 'stakco-play.html' },
+      { name: 'Integrate via API',          product: 'play',  desc: 'Full API and SDK access for mobile or web apps. Gamification, mini-games, content features. Documentation at docs.stakcos.com.', cost: 'Dev module + API access — contact hello@stakcos.com', href: 'mailto:hello@stakcos.com' },
+    ],
+    luxury: [
+      { name: 'VIP client gifts',           product: 'paper', desc: 'Limited-edition puzzles in premium packaging. Fully custom artwork. Minimum run from 100 units.', cost: 'S$13 + S$89 Print · from S$12/unit', href: 'stakco-paper.html' },
+      { name: 'Flagship store installation',product: 'light', desc: 'Interactive optical installation for boutiques, showrooms, or fashion events. Content fully managed.', cost: 'S$29,000 complete — let\'s talk', href: 'mailto:hello@stakcos.com?subject=Stakco Light luxury enquiry' },
+      { name: 'Digital brand activation',   product: 'play',  desc: 'Interactive puzzle experience for product reveals, loyalty programmes, or campaign microsites.', cost: 'S$13 + S$21/mo + AI add-on', href: 'stakco-play.html' },
+    ],
+  };
+
+  const PRODUCT_CLASS = { paper: 'rp-paper', play: 'rp-play', light: 'rp-light', multi: 'rp-multi' };
+  const PRODUCT_LABEL = { paper: 'Paper', play: 'Play', light: 'Light', multi: 'Multiple' };
+
+  let activeSegs = new Set();
+
+  window.gcToggle = function(el) {
+    const seg = el.dataset.segment;
+    if (el.classList.contains('active')) {
+      el.classList.remove('active');
+      activeSegs.delete(seg);
+    } else {
+      el.classList.add('active');
+      activeSegs.add(seg);
+    }
+    renderReco();
+  };
+
+  window.gcReset = function() {
+    activeSegs.clear();
+    document.querySelectorAll('.gc.active').forEach(g => g.classList.remove('active'));
+    document.getElementById('guideReco').classList.remove('visible');
+    document.getElementById('recoGrid').innerHTML = '';
+  };
+
+  function renderReco() {
+    const reco = document.getElementById('guideReco');
+    const grid = document.getElementById('recoGrid');
+
+    if (activeSegs.size === 0) {
+      reco.classList.remove('visible');
+      grid.innerHTML = '';
+      return;
+    }
+
+    // Collect unique recs preserving order
+    const seen = new Set();
+    const items = [];
+    activeSegs.forEach(seg => {
+      (RECO_DATA[seg] || []).forEach(r => {
+        const key = r.name;
+        if (!seen.has(key)) { seen.add(key); items.push(r); }
+      });
+    });
+
+    grid.innerHTML = items.map(r => `
+      <a href="${r.href}" class="reco-card">
+        <div class="reco-card-top">
+          <div class="reco-name">${r.name}</div>
+          <span class="reco-product ${PRODUCT_CLASS[r.product]}">${PRODUCT_LABEL[r.product]}</span>
+        </div>
+        <div class="reco-desc">${r.desc}</div>
+        <div class="reco-bottom">
+          <span class="reco-cost">${r.cost}</span>
+          <span class="reco-link">See details <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.55rem;"></i></span>
+        </div>
+      </a>
+    `).join('');
+
+    reco.classList.add('visible');
+    reco.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  /* ── SCROLL REVEAL ─────────────────────────────────────── */
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+})();
+</script>
+
+<!-- ══ STAKCO PARTICLES ══════════════════════════════════════ -->
+<script>
+window.StakcoParticlesConfig = {
+  count: 38,
+  opacity: 0.3,
+  speed: 0.85,
+  fixed: true,
+  zIndex: 0,
+};
+</script>
+<script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+<script src="https://cdn.stakcos.com/components/stakco-daily-embed.js"></script>
+</body>
+</html>

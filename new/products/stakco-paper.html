@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<title>Stakco Paper &mdash; Printed Rotating Puzzles</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f6f9; --card: #ffffff; --hover: #f0f0f5;
+    --orange: #c87a1a; --orange-bg: rgba(200,122,26,0.06); --orange-border: rgba(200,122,26,0.2);
+    --green: #16805a; --green-bg: rgba(22,128,90,0.06); --green-border: rgba(22,128,90,0.18);
+    --purple: #6d4daa; --purple-bg: rgba(109,77,170,0.06); --purple-border: rgba(109,77,170,0.18);
+    --text: #1a1a2e; --text-sub: #444455; --text-muted: #8888a0;
+    --border: rgba(0,0,0,0.07); --border-strong: rgba(0,0,0,0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+
+  .hero-video-wrap { position: relative; width: 100%; height: 480px; overflow: hidden; background: #140d04; }
+  .hero-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.88; pointer-events: none; }
+  .hero-fade-t { position: absolute; top: 0; left: 0; right: 0; height: 90px; background: linear-gradient(to bottom, rgba(20,13,4,0.65) 0%, transparent 100%); pointer-events: none; }
+  .hero-fade-b { position: absolute; bottom: 0; left: 0; right: 0; height: 200px; background: linear-gradient(to top, var(--bg) 0%, transparent 100%); pointer-events: none; }
+  .hero-nav { position: absolute; top: 22px; left: 28px; right: 28px; z-index: 10; display: flex; align-items: center; justify-content: space-between; }
+  .hero-corner-tag { display: inline-block; font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 12px; border-radius: 999px; background: var(--orange); color: #fff; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 600; color: rgba(255,255,255,0.78); text-decoration: none; transition: color 0.15s; text-shadow: 0 1px 3px rgba(0,0,0,0.9), 0 2px 8px rgba(0,0,0,0.5); }
+  .back-link:hover { color: #fff; }
+  .back-link svg { width: 14px; height: 14px; }
+  .hero-content { position: absolute; bottom: 44px; left: 0; right: 0; padding: 0 32px; z-index: 2; }
+  .hero-badge { display: inline-block; font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 4px 12px; border-radius: 999px; background: var(--orange); color: #fff; margin-bottom: 10px; }
+  .hero-title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+  .hero-title-row img { width: 40px; height: auto; flex-shrink: 0; filter: drop-shadow(0 1px 4px rgba(0,0,0,0.6)); }
+  .hero-title { font-size: 2.2rem; font-weight: 700; color: #fff; line-height: 1.15; text-shadow: 0 1px 0 rgba(0,0,0,0.9), 0 2px 16px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.3); }
+  .hero-tagline { font-size: 1rem; color: rgba(255,255,255,0.82); max-width: 520px; line-height: 1.5; text-shadow: 0 1px 0 rgba(0,0,0,0.8), 0 2px 10px rgba(0,0,0,0.5); }
+  .hero-pills { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+  .hero-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 0.68rem; font-weight: 600; color: rgba(255,255,255,0.9); background: rgba(0,0,0,0.45); border: 1px solid rgba(255,255,255,0.15); padding: 4px 11px; border-radius: 999px; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
+  .hero-pill i { font-size: 0.6rem; opacity: 0.8; }
+
+  .container { max-width: 800px; margin: 0 auto; padding: 0 32px 72px; }
+  .section { margin-bottom: 36px; }
+  .section-label { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 12px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 22px 24px; margin-bottom: 12px; }
+  .card p { color: var(--text-sub); font-size: 0.87rem; line-height: 1.65; }
+  .card p + p { margin-top: 10px; }
+  .card strong { color: var(--text); }
+
+  .signal-bar { display: flex; gap: 10px; flex-wrap: wrap; margin: 28px 0 36px; }
+  .signal-chip { display: inline-flex; align-items: center; gap: 8px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 10px 14px; flex: 1; min-width: 160px; }
+  .signal-chip i { color: var(--orange); font-size: 0.85rem; flex-shrink: 0; }
+  .signal-chip-text { font-size: 0.78rem; color: var(--text-sub); line-height: 1.3; }
+  .signal-chip-text strong { color: var(--text); display: block; font-size: 0.82rem; }
+
+  .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .what-half { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
+  .what-half-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--orange); margin-bottom: 6px; }
+  .what-half p { font-size: 0.84rem; color: var(--text-sub); line-height: 1.6; }
+  .what-half strong { color: var(--text); }
+  .what-summary { background: var(--orange-bg); border: 1px solid var(--orange-border); border-radius: 10px; padding: 16px 20px; font-size: 0.84rem; color: var(--text-sub); line-height: 1.6; }
+  .what-summary strong { color: var(--text); }
+
+  .specs-table { width: 100%; border-collapse: collapse; background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+  .specs-table tr { border-bottom: 1px solid rgba(0,0,0,0.04); }
+  .specs-table tr:last-child { border-bottom: none; }
+  .specs-table tr:hover { background: rgba(0,0,0,0.012); }
+  .specs-table td { padding: 10px 18px; font-size: 0.82rem; vertical-align: top; }
+  .specs-table td:first-child { color: var(--text-muted); font-size: 0.74rem; width: 40%; }
+  .specs-table td:last-child { color: var(--text-sub); font-weight: 500; }
+  .specs-table td strong { color: var(--text); }
+
+  .outcomes-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+  .outcome-chip { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 14px; }
+  .oc-head { font-size: 0.8rem; font-weight: 700; color: var(--orange); margin-bottom: 4px; }
+  .oc-label { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+
+  .flow-steps { display: flex; flex-direction: column; }
+  .flow-step { display: flex; gap: 16px; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .flow-step:last-child { border-bottom: none; }
+  .flow-num { width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0; background: var(--orange-bg); border: 1px solid var(--orange-border); font-size: 0.7rem; font-weight: 700; color: var(--orange); display: flex; align-items: center; justify-content: center; margin-top: 2px; }
+  .flow-step-title { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .flow-step-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+
+  .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .feature-item { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; }
+  .ft-header { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+  .ft-icon { font-size: 0.9rem; color: var(--orange); flex-shrink: 0; }
+  .ft-title { font-size: 0.82rem; font-weight: 700; color: var(--text); }
+  .ft-desc { font-size: 0.74rem; color: var(--text-muted); line-height: 1.45; }
+
+  .pricing-tiers { background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin-bottom: 12px; }
+  .pt-header { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; background: rgba(0,0,0,0.025); border-bottom: 1px solid var(--border); padding: 10px 18px; }
+  .pt-header span { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+  .pt-header span:not(:first-child) { text-align: right; }
+  .pt-row { display: grid; grid-template-columns: 1.2fr 1fr 1fr 1fr; padding: 11px 18px; border-bottom: 1px solid rgba(0,0,0,0.04); align-items: center; }
+  .pt-row:last-child { border-bottom: none; }
+  .pt-row:hover { background: rgba(0,0,0,0.012); }
+  .pt-row.highlight { background: var(--orange-bg); }
+  .pt-tier { font-size: 0.82rem; font-weight: 600; color: var(--text-sub); }
+  .pt-qty { font-size: 0.74rem; color: var(--text-muted); text-align: right; }
+  .pt-price { font-family: 'JetBrains Mono', monospace; font-size: 0.88rem; font-weight: 700; color: var(--text-sub); text-align: right; }
+  .pt-row.highlight .pt-price { color: var(--orange); }
+  .pt-lead { font-size: 0.72rem; color: var(--text-muted); text-align: right; }
+  .pricing-note { background: var(--orange-bg); border: 1px solid var(--orange-border); border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; font-size: 0.74rem; color: var(--text-sub); line-height: 1.6; }
+  .pricing-note strong { color: var(--text); }
+  .pricing-note a { color: var(--orange); text-decoration: none; }
+  .pricing-note a:hover { text-decoration: underline; }
+
+  .bulk-callout { background: linear-gradient(135deg, rgba(200,122,26,0.06), rgba(200,122,26,0.02)); border: 1px solid var(--orange-border); border-radius: 10px; padding: 20px 22px; }
+  .bulk-callout-head { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--orange); margin-bottom: 10px; }
+  .bulk-specs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  .bulk-spec-chip { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+  .bulk-spec-chip strong { color: var(--text); display: block; font-size: 0.78rem; margin-bottom: 1px; }
+  .bulk-callout p { font-size: 0.82rem; color: var(--text-sub); line-height: 1.55; }
+  .bulk-callout p + p { margin-top: 8px; }
+  .bulk-callout strong { color: var(--text); }
+  .bulk-callout a { color: var(--orange); text-decoration: none; }
+  .bulk-callout a:hover { text-decoration: underline; }
+
+  .creator-callout { background: linear-gradient(135deg, rgba(109,77,170,0.07), rgba(109,77,170,0.03)); border: 1px solid var(--purple-border); border-radius: 10px; padding: 20px 24px; }
+  .creator-callout-head { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--purple); margin-bottom: 10px; }
+  .creator-split { display: flex; gap: 10px; margin-bottom: 12px; }
+  .creator-split-block { flex: 1; border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .creator-split-block.yours { background: var(--purple-bg); border: 1px solid var(--purple-border); }
+  .creator-split-block.platform { background: rgba(0,0,0,0.03); border: 1px solid var(--border); }
+  .creator-split-num { font-family: 'JetBrains Mono', monospace; font-size: 1.4rem; font-weight: 700; display: block; margin-bottom: 2px; }
+  .creator-split-block.yours .creator-split-num { color: var(--purple); }
+  .creator-split-block.platform .creator-split-num { color: var(--text-muted); }
+  .creator-split-label { font-size: 0.7rem; color: var(--text-muted); }
+  .creator-callout p { font-size: 0.82rem; color: var(--text-sub); line-height: 1.55; }
+  .creator-callout strong { color: var(--text); }
+
+  .audience-list { display: flex; flex-direction: column; gap: 8px; }
+  .aud-row { display: flex; align-items: flex-start; gap: 14px; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 13px 16px; }
+  .aud-icon { font-size: 1rem; flex-shrink: 0; margin-top: 3px; width: 20px; text-align: center; color: var(--orange); opacity: 0.8; }
+  .aud-name { font-size: 0.85rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+  .aud-use { font-size: 0.75rem; color: var(--text-muted); line-height: 1.45; }
+
+  .therapy-callout { background: linear-gradient(135deg, rgba(22,128,90,0.05), rgba(22,128,90,0.02)); border: 1px solid rgba(22,128,90,0.18); border-radius: 10px; padding: 16px 20px; margin-top: 8px; }
+  .tc-head { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green); margin-bottom: 7px; }
+  .therapy-callout p { font-size: 0.82rem; color: var(--text-sub); line-height: 1.6; }
+  .therapy-callout strong { color: var(--text); }
+  .therapy-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .therapy-tag { font-size: 0.68rem; font-weight: 600; color: var(--green); background: var(--green-bg); border: 1px solid rgba(22,128,90,0.15); padding: 3px 10px; border-radius: 999px; }
+
+  .faq-section .faq-item { border-bottom: 1px solid var(--border); }
+  .faq-section .faq-item:last-child { border-bottom: none; }
+  .faq-q { display: flex; align-items: center; justify-content: space-between; font-size: 0.85rem; font-weight: 600; color: var(--text-sub); padding: 13px 0; cursor: pointer; user-select: none; gap: 12px; }
+  .faq-q:hover { color: var(--text); }
+  .faq-arrow { width: 15px; height: 15px; flex-shrink: 0; color: var(--text-muted); transition: transform 0.2s ease; }
+  .faq-item.open .faq-arrow { transform: rotate(90deg); }
+  .faq-item.open .faq-q { color: var(--text); }
+  .faq-a { display: none; font-size: 0.82rem; color: var(--text-muted); line-height: 1.65; padding: 0 4px 14px 0; }
+  .faq-item.open .faq-a { display: block; }
+
+  .cta-section { background: linear-gradient(135deg, rgba(200,122,26,0.07), rgba(200,122,26,0.02)); border: 1px solid var(--orange-border); border-radius: 12px; padding: 28px 28px; text-align: center; }
+  .cta-section h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; }
+  .cta-section p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.55; max-width: 460px; margin-left: auto; margin-right: auto; }
+  .cta-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .cta-btn { display: inline-block; font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600; padding: 12px 26px; border-radius: 8px; text-decoration: none; transition: opacity 0.15s; }
+  .cta-btn:hover { text-decoration: none; opacity: 0.88; }
+  .cta-primary { background: var(--orange); color: #fff; }
+  .cta-secondary { background: var(--card); color: var(--text-sub); border: 1px solid var(--border-strong); }
+  .cta-secondary:hover { background: var(--hover); }
+  .cta-ghost { background: transparent; color: var(--text-muted); border: 1px solid var(--border); font-size: 0.78rem; padding: 10px 20px; }
+  .cta-reassure { margin-top: 12px; font-size: 0.7rem; color: var(--text-muted); font-style: italic; }
+
+  .footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--border); font-size: 0.71rem; color: var(--text-muted); text-align: center; line-height: 1.9; }
+  .footer a { color: var(--text-muted); text-decoration: none; }
+  .footer a:hover { color: var(--text-sub); }
+
+  .hero-content-mobile { display: none; }
+
+  @media (max-width: 640px) {
+    .hero-video-wrap { height: 300px; overflow: hidden; }
+    .hero-title { font-size: 1.5rem; }
+    .hero-content { display: none; }
+    .hero-content-mobile {
+      display: block;
+      margin-top: -48px;
+      padding: 0 18px;
+      position: relative; z-index: 3;
+    }
+    .hero-content-mobile .hero-tagline { font-size: 0.9rem; color: var(--text); text-shadow: none; }
+    .hero-content-mobile .hero-title { color: var(--text); text-shadow: none; }
+    .container { padding: 0 16px 56px; }
+    .what-grid, .features-grid, .outcomes-grid { grid-template-columns: 1fr; }
+    .pt-header, .pt-row { grid-template-columns: 1fr 1fr; }
+    .pt-header span:nth-child(3), .pt-header span:nth-child(4),
+    .pt-row .pt-qty, .pt-row .pt-lead { display: none; }
+    .creator-split { flex-direction: column; }
+    .cta-section { padding: 20px 18px; }
+    .signal-chip { min-width: 100%; }
+  }
+
+/* ── UNIFIED SITE NAV ────────────────────────────────────── */
+.site-nav {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(250,248,244,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(60,47,56,0.08);
+  padding: 0 40px;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-inner {
+  max-width: 1080px; margin: 0 auto;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.site-nav-brand {
+  display: flex; align-items: center; gap: 9px;
+  text-decoration: none; color: #3C2F38;
+}
+.site-nav-brand img { width: 26px; height: auto; }
+.site-nav-brand span {
+  font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.site-nav-links { display: flex; align-items: center; gap: 28px; }
+.site-nav-links a {
+  font-size: 0.8rem; color: #8a7e85;
+  text-decoration: none; transition: color 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-links a:hover { color: #3C2F38; }
+.site-nav-links a.sn-active { color: #3C2F38; font-weight: 700; }
+.site-nav-cta {
+  font-size: 0.78rem; font-weight: 700;
+  padding: 8px 20px; border-radius: 8px;
+  background: #3C2F38; color: #fff;
+  text-decoration: none; transition: opacity 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-cta:hover { opacity: 0.82; }
+@media (max-width: 900px) {
+  .site-nav { padding: 0 20px; }
+  .site-nav-links { display: none; }
+}
+
+</style>
+</head>
+<body>
+<!-- ══ UNIFIED SITE NAV ══════════════════════════════════════ -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <span>Stakco</span>
+    </a>
+    <div class="site-nav-links">
+      <a href="/products/" class="sn-active">Products</a>
+      <a href="/pricing/">Pricing</a>
+      <a href="/case-studies/">Case Studies</a>
+      <a href="/research/">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="hero-video-wrap">
+  <video class="hero-video" autoplay muted loop playsinline>
+    <source src="https://cdn.stakcos.com/media/paper.mp4" type="video/mp4">
+  </video>
+  <div class="hero-fade-t"></div>
+  <div class="hero-fade-b"></div>
+  <div class="hero-nav">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      All products
+    </a>
+    <span class="hero-corner-tag">Physical</span>
+  </div>
+  <div class="hero-content">
+    <div class="hero-title-row">
+      <h1 class="hero-title">Stakco Paper</h1>
+    </div>
+    <p class="hero-tagline">A rotating ring puzzle you can hold, give, and keep. Printed, physical, no power needed.</p>
+  </div>
+</div>
+
+<!-- Mobile-only hero content -->
+<div class="hero-content-mobile">
+  <div class="hero-title-row">
+    <h1 class="hero-title">Stakco Paper</h1>
+  </div>
+  <p class="hero-tagline">A rotating ring puzzle you can hold, give, and keep. Printed, physical, no power needed.</p>
+</div>
+
+<div class="container">
+
+  <div class="signal-bar">
+    <div class="signal-chip">
+      <i class="fa-solid fa-ruler"></i>
+      <div class="signal-chip-text"><strong>20 cm standard diameter</strong>Compact enough to post, substantial enough to gift</div>
+    </div>
+    <div class="signal-chip">
+      <i class="fa-solid fa-layer-group"></i>
+      <div class="signal-chip-text"><strong>From S$8/unit at volume</strong>Retail S$34 &middot; 100+ units S$13 &middot; 1,000+ S$8 &middot; before GST</div>
+    </div>
+    <div class="signal-chip">
+      <i class="fa-solid fa-clock"></i>
+      <div class="signal-chip-text"><strong>~1 week lead time</strong>5&ndash;7 days production for standard orders</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">What is Stakco Paper?</div>
+    <div class="what-grid">
+      <div class="what-half">
+        <div class="what-half-label">The physical object</div>
+        <p>A <strong>flat disc, 20 cm across</strong>, made of laminated matte board with transparent rotary layers joined by a central eyelet. Each layer turns independently &mdash; users rotate them to align the image and solve the puzzle. No batteries, no screen, no app.</p>
+      </div>
+      <div class="what-half">
+        <div class="what-half-label">The design &amp; print process</div>
+        <p>Design in <strong>Stakco Studio</strong> (free, browser-based). Add the Print module to export a print-ready file. Then choose production: print at home on card stock, or order professionally printed, packaged units through Stakco&rsquo;s print partners.</p>
+      </div>
+    </div>
+    <div class="what-summary">
+      Think of it as <strong>a puzzle you can hand to someone</strong> &mdash; a gift, a giveaway, a classroom handout, a branded keepsake. It works anywhere. It needs nothing. It lasts.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Physical specifications</div>
+    <table class="specs-table">
+      <tr><td>Standard diameter</td><td><strong>20 cm</strong> &nbsp;&middot;&nbsp; custom sizes on request</td></tr>
+      <tr><td>Profile</td><td>Thin flat disc &mdash; fits in a standard padded envelope or A4 mailer</td></tr>
+      <tr><td>Materials</td><td>Laminated matte board backplate &nbsp;&middot;&nbsp; transparent rotary layers</td></tr>
+      <tr><td>Construction</td><td>Concentric plate cuts joined with a <strong>durable eyelet</strong> &mdash; no loose parts</td></tr>
+      <tr><td>Packaging</td><td>Clear sleeve (standard) &nbsp;&middot;&nbsp; Branded box (premium) &nbsp;&middot;&nbsp; Unpackaged (bulk carton)</td></tr>
+      <tr><td>Durability</td><td>Laminated finish handles regular, repeated use &mdash; suitable for classroom and retail</td></tr>
+      <tr><td>Child safety</td><td>No sharp edges &nbsp;&middot;&nbsp; No detachable small parts &nbsp;&middot;&nbsp; Flush-set eyelet &nbsp;&middot;&nbsp; Ages 5+</td></tr>
+      <tr><td>Home print option</td><td>Standard card stock &nbsp;&middot;&nbsp; scissors, card, paper fastener &nbsp;&middot;&nbsp; ~10 min assembly</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Why businesses and creators order it</div>
+    <div class="outcomes-grid">
+      <div class="outcome-chip">
+        <div class="oc-head">Brand recall</div>
+        <div class="oc-label">People keep puzzles &mdash; your branding stays in their hands, not in the bin</div>
+      </div>
+      <div class="outcome-chip">
+        <div class="oc-head">Scales with volume</div>
+        <div class="oc-label">S$8/unit at 1,000+ &mdash; competitive with standard branded merchandise</div>
+      </div>
+      <div class="outcome-chip">
+        <div class="oc-head">Zero ongoing cost</div>
+        <div class="oc-label">One-time order, no subscriptions, no hardware, no maintenance</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">How it works</div>
+    <div class="card">
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-num">1</div>
+          <div>
+            <div class="flow-step-title">Design in Stakco Studio &mdash; free</div>
+            <div class="flow-step-desc">Free, browser-based design tool. Upload your image, choose a ring layout template (called a stencil &mdash; it sets how many layers and how they cut), adjust difficulty and colour. No design experience needed.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">2</div>
+          <div>
+            <div class="flow-step-title">Export with the Print module</div>
+            <div class="flow-step-desc">The Print module is a one-time add-on in Studio that unlocks high-resolution export. You receive a print-ready file package with cutting guides and assembly instructions, formatted for both home and professional printing.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">3</div>
+          <div>
+            <div class="flow-step-title">Choose how to produce it</div>
+            <div class="flow-step-desc">Print at home on card stock for quick single runs (scissors, card, paper fastener &mdash; about 10 minutes to assemble). Or order professionally through Stakco&rsquo;s print partners for finished, packaged units starting from a single unit with no minimum order.</div>
+          </div>
+        </div>
+        <div class="flow-step">
+          <div class="flow-num">4</div>
+          <div>
+            <div class="flow-step-title">Receive &amp; distribute</div>
+            <div class="flow-step-desc">Professional orders ship within 5&ndash;14 days depending on quantity and packaging choice. Bulk orders arrive in cartons. Individually packaged units come in clear sleeves or branded boxes, ready for gifting, retail, or events.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">What&rsquo;s included</div>
+    <div class="features-grid">
+      <div class="feature-item">
+        <div class="ft-header"><i class="ft-icon fa-solid fa-file-export"></i><div class="ft-title">Print-ready export files</div></div>
+        <div class="ft-desc">High-resolution PDF with cutting guides and assembly instructions. Formatted for home and professional printing.</div>
+      </div>
+      <div class="feature-item">
+        <div class="ft-header"><i class="ft-icon fa-solid fa-swatchbook"></i><div class="ft-title">Material options</div></div>
+        <div class="ft-desc">Standard card stock for home printing. Laminated matte board, recycled paper, or specialty card for professional production.</div>
+      </div>
+      <div class="feature-item">
+        <div class="ft-header"><i class="ft-icon fa-solid fa-maximize"></i><div class="ft-title">Flexible sizing</div></div>
+        <div class="ft-desc">Standard 20 cm diameter fits in an envelope. Custom sizes available on request &mdash; from pocket inserts to large event pieces.</div>
+      </div>
+      <div class="feature-item">
+        <div class="ft-header"><i class="ft-icon fa-solid fa-bolt"></i><div class="ft-title">No power, no app</div></div>
+        <div class="ft-desc">Fully self-contained. Works anywhere &mdash; classroom, hospital, field, home. Nothing to charge, connect, or download.</div>
+      </div>
+      <div class="feature-item">
+        <div class="ft-header"><i class="ft-icon fa-solid fa-box-open"></i><div class="ft-title">Packaging choices</div></div>
+        <div class="ft-desc">Clear plastic sleeve (standard), branded gift box (premium), or unpackaged in bulk cartons. White-label packaging available.</div>
+      </div>
+      <div class="feature-item">
+        <div class="ft-header"><i class="ft-icon fa-solid fa-palette"></i><div class="ft-title">Full custom branding</div></div>
+        <div class="ft-desc">Your artwork, your logo, your colours on the puzzle surface. White-label available &mdash; Stakco branding removed on request.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Pricing</div>
+    <div class="pricing-tiers">
+      <div class="pt-header">
+        <span>Tier</span><span style="text-align:right">Quantity</span><span style="text-align:right">Unit price</span><span style="text-align:right">Lead time</span>
+      </div>
+      <div class="pt-row">
+        <span class="pt-tier">Retail / single</span>
+        <span class="pt-qty">1 unit</span>
+        <span class="pt-price">S$34</span>
+        <span class="pt-lead">5&ndash;7 days</span>
+      </div>
+      <div class="pt-row">
+        <span class="pt-tier">Small batch</span>
+        <span class="pt-qty">10&ndash;99 units</span>
+        <span class="pt-price">S$21</span>
+        <span class="pt-lead">7&ndash;10 days</span>
+      </div>
+      <div class="pt-row highlight">
+        <span class="pt-tier">Bulk</span>
+        <span class="pt-qty">100&ndash;999 units</span>
+        <span class="pt-price">S$13</span>
+        <span class="pt-lead">10&ndash;14 days</span>
+      </div>
+      <div class="pt-row">
+        <span class="pt-tier">High volume</span>
+        <span class="pt-qty">1,000+ units</span>
+        <span class="pt-price">S$8</span>
+        <span class="pt-lead">2&ndash;3 weeks</span>
+      </div>
+    </div>
+    <div class="pricing-note">
+      Prices per unit, standard 20 cm, laminated, clear sleeve. <strong>Premium packaging</strong> (branded gift box) adds ~S$8/unit. All prices in SGD, <strong>before GST</strong> (9% GST added at checkout). Shipping excluded &mdash; costs vary by destination and urgency, quoted at order confirmation.<br>
+      The <strong>Print module</strong> is a one-time Studio add-on required to export print files &mdash; see <a href="../pricing/stakco-paper-pricing.html">full pricing page</a> for module costs.
+      Bulk &amp; custom quotes: <a href="mailto:partnerships@stakcos.com">partnerships@stakcos.com</a>.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Bulk &amp; corporate orders</div>
+    <div class="bulk-callout">
+      <div class="bulk-callout-head">For events, gifting &amp; merchandise runs</div>
+      <div class="bulk-specs">
+        <div class="bulk-spec-chip"><strong>No minimum order</strong>Start from 1 unit</div>
+        <div class="bulk-spec-chip"><strong>White-label available</strong>Stakco branding removed</div>
+        <div class="bulk-spec-chip"><strong>Custom artwork</strong>Your image &amp; logo</div>
+        <div class="bulk-spec-chip"><strong>From S$8/unit</strong>At 1,000+ units</div>
+        <div class="bulk-spec-chip"><strong>~S$4&ndash;6 COGS</strong>At 1,000+ units</div>
+      </div>
+      <p>Used as <strong>trade show giveaways, corporate gifts, event souvenirs, retail merchandise, and school sets</strong>. Ships in bulk cartons or individually packaged &mdash; your choice. Hard event deadlines accommodated &mdash; confirm your date when enquiring.</p>
+      <p>For orders above 100 units: <a href="mailto:partnerships@stakcos.com"><strong>partnerships@stakcos.com</strong></a></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Creator marketplace</div>
+    <div class="creator-callout">
+      <div class="creator-callout-head">Sell your puzzle designs &mdash; keep the majority</div>
+      <div class="creator-split">
+        <div class="creator-split-block yours"><span class="creator-split-num">75%</span><span class="creator-split-label">goes to you</span></div>
+        <div class="creator-split-block platform"><span class="creator-split-num">25%</span><span class="creator-split-label">platform fee</span></div>
+      </div>
+      <p>List your puzzle designs on the <strong>Stakco Shop marketplace</strong>. Buyers purchase your design as a digital file to print themselves, or order a professionally printed unit. You keep 75% of every sale &mdash; no storefront to manage, no inventory to hold.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Who is it for?</div>
+    <div class="audience-list">
+      <div class="aud-row">
+        <span class="aud-icon"><i class="fa-solid fa-briefcase"></i></span>
+        <div>
+          <div class="aud-name">Businesses &amp; corporate teams</div>
+          <div class="aud-use">Branded puzzles as trade show giveaways, conference gifts, or onboarding packs. Custom artwork, white-label packaging, bulk pricing from S$8/unit (excl. GST &amp; shipping).</div>
+        </div>
+      </div>
+      <div class="aud-row">
+        <span class="aud-icon"><i class="fa-solid fa-chalkboard-user"></i></span>
+        <div>
+          <div class="aud-name">Educators &amp; schools</div>
+          <div class="aud-use">Classroom handout sets with custom subject imagery. Laminated for durability and reuse. No devices, no logins &mdash; just hand it out.</div>
+        </div>
+      </div>
+      <div class="aud-row">
+        <span class="aud-icon"><i class="fa-solid fa-heart"></i></span>
+        <div>
+          <div class="aud-name">Hobbyists &amp; families</div>
+          <div class="aud-use">Make a puzzle from a family photo or custom artwork. Print at home for a quick copy, or order a professional print as a thoughtful gift.</div>
+        </div>
+      </div>
+      <div class="aud-row">
+        <span class="aud-icon"><i class="fa-solid fa-store"></i></span>
+        <div>
+          <div class="aud-name">Retailers &amp; resellers</div>
+          <div class="aud-use">Stock Stakco Paper as a retail product &mdash; custom designs for your store or market. Reseller terms available with volume commitments.</div>
+        </div>
+      </div>
+      <div class="aud-row">
+        <span class="aud-icon"><i class="fa-solid fa-camera-retro"></i></span>
+        <div>
+          <div class="aud-name">Designers &amp; creators</div>
+          <div class="aud-use">Create puzzle designs, list on the Stakco marketplace, earn 75% of every sale. Your art, your price &mdash; no fulfilment required.</div>
+        </div>
+      </div>
+    </div>
+    <div class="therapy-callout">
+      <div class="tc-head">Therapy &amp; occupational health</div>
+      <p>The rotating ring format supports <strong>fine motor skill exercises, sensory engagement, and cognitive stimulation</strong>. Because it requires no power or device, it suits clinical, care, and home therapy settings. The laminated surface is easy to clean and handles repeated use.</p>
+      <div class="therapy-tags">
+        <span class="therapy-tag">Fine motor skills</span>
+        <span class="therapy-tag">Sensory engagement</span>
+        <span class="therapy-tag">Cognitive stimulation</span>
+        <span class="therapy-tag">No power required</span>
+        <span class="therapy-tag">Easy to clean</span>
+        <span class="therapy-tag">Child-safe construction</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Frequently asked questions</div>
+    <div class="card faq-section">
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is a &ldquo;stencil&rdquo; and do I need design experience?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="faq-a">A stencil is a ring layout template &mdash; it defines how many concentric layers your puzzle has and how they cut. You choose one from a library in Studio; the software maps your image to the ring structure automatically. No design experience needed.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the Print module and is it a subscription?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="faq-a">The Print module is a one-time add-on you activate in Stakco Studio &mdash; not a subscription. It unlocks high-resolution export of your puzzle as a print-ready file. You purchase it once and it remains active. See the <a href="../pricing/stakco-paper-pricing.html" style="color:var(--orange)">Paper pricing page</a> for the current price.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How difficult is home assembly?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="faq-a">Straightforward. The export includes cutting lines and step-by-step instructions. You need scissors (or a craft knife), card stock, and a paper fastener. Most people finish in 10&ndash;15 minutes. Laminating the sheets before cutting significantly improves durability and feel.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is it safe for children?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="faq-a">Professionally printed units have no sharp edges, no detachable small parts, and a flush-set eyelet. Layers rotate with smooth, low-resistance motion. Designed for ages 5 and up. For children under 3, the eyelet fastener is not recommended.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the minimum order for professional printing?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="faq-a">No minimum. You can order a single professionally printed unit. Volume pricing applies at 10, 100, and 1,000 units. For bulk orders with hard event deadlines, contact partnerships@stakcos.com early &mdash; we&rsquo;ll confirm feasibility based on your date.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I remove Stakco branding?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="faq-a">Yes. White-label options are available for professional print orders &mdash; the puzzle surface and packaging carry only your branding. Available for qualifying orders. Contact partnerships@stakcos.com to discuss.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Who does the professional printing?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="faq-a">Professional printing is coordinated through Stakco&rsquo;s print partners in Singapore. Stakco manages the order, quality, and delivery &mdash; you don&rsquo;t contact the printer directly. For large or time-sensitive orders, we communicate lead times and constraints upfront before you confirm.</div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I sell puzzles I design?
+          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
+        <div class="faq-a">Yes. With the Publish module add-on, list your designs on the Stakco Shop marketplace. Buyers can purchase as a digital file to print themselves, or as a professionally printed unit. You keep 75% of every sale &mdash; Stakco takes 25%.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <h3>Ready to make your first puzzle?</h3>
+    <p>Design for free in Stakco Studio. Add the Print module when you&rsquo;re ready to export and produce. No minimum order, no design experience needed.</p>
+    <div class="cta-row">
+      <a href="https://studio.stakcos.com" class="cta-btn cta-primary">Start Creating Free</a>
+      <a href="https://shop.stakcos.com" class="cta-btn cta-secondary">Browse the Shop</a>
+      <a href="mailto:partnerships@stakcos.com?subject=Stakco%20Paper%20%E2%80%94%20bulk%20order%20enquiry" class="cta-btn cta-ghost">Get a bulk quote</a>
+    </div>
+    <div class="cta-reassure">Free to design. One-time Print module fee. No minimum order for professional printing.</div>
+  </div>
+
+  <div class="footer">
+    Stakco Paper is part of the Stakco platform. Design free in Studio &mdash; add the Print module to export for production.<br>
+    <a href="https://stakcos.com">stakcos.com</a> &nbsp;&middot;&nbsp;
+    <a href="https://shop.stakcos.com">shop.stakcos.com</a> &nbsp;&middot;&nbsp;
+    <a href="mailto:partnerships@stakcos.com">partnerships@stakcos.com</a> &nbsp;&middot;&nbsp;
+    Stakco Pte. Ltd. &nbsp;&middot;&nbsp; Singapore &nbsp;&middot;&nbsp; 2026
+  </div>
+
+</div>
+
+<script>
+window.StakcoParticlesConfig = { 
+  count: 38, 
+  opacity: 0.3, 
+  speed: 0.85, 
+  fixed: true, 
+  zIndex: 0 
+};
+</script>
+<script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+</body>
+</html>

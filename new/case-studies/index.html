@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<title>Case Studies — Stakco</title>
+<link rel="stylesheet" href="/stakco-site.css">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { overflow-x:hidden; }
+:root {
+  --cream:#FDFAF6; --cream2:#f2ece4; --ink:#3C2F38; --ink2:#4a3c44;
+  --ink3:#8a7e85; --ink4:#b8a8b0; --card:#ffffff; --pink:#B83267;
+  --amber:#D4984F; --orange:#D4984F; --border:rgba(60,47,56,0.08);
+  --border2:rgba(60,47,56,0.13); --r:14px;
+  --shadow:0 2px 16px rgba(60,47,56,0.07); --shadow-md:0 6px 28px rgba(60,47,56,0.1);
+}
+body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink); line-height:1.6; font-size:16px; -webkit-font-smoothing:antialiased; }
+
+/* Layout */
+.wrap { max-width:1080px; margin:0 auto; padding:0 40px; }
+.section { padding:72px 0; }
+.section-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink4); margin-bottom:8px; display:block; }
+.section-title { font-size:1.9rem; font-weight:900; line-height:1.15; letter-spacing:-0.01em; margin-bottom:8px; }
+.section-sub { font-size:0.95rem; color:var(--ink2); line-height:1.6; max-width:600px; margin-bottom:36px; }
+
+/* Page header */
+.page-header { padding:80px 0 48px; }
+.page-header h1 { font-size:2.8rem; font-weight:900; line-height:1.1; letter-spacing:-0.02em; margin-bottom:14px; }
+.page-header h1 .accent { color:var(--amber); }
+.page-header .lead { font-size:1.05rem; color:var(--ink2); max-width:560px; line-height:1.65; }
+
+/* Case study card */
+.case-study {
+  background:var(--card); border:1px solid var(--border); border-radius:var(--r);
+  padding:36px 40px; margin-bottom:28px; position:relative;
+  scroll-margin-top:80px;
+}
+.case-study::before {
+  content:''; position:absolute; top:0; left:0; right:0; height:4px;
+  border-radius:var(--r) var(--r) 0 0;
+}
+.case-study.cs-light::before { background:linear-gradient(90deg,var(--amber),#D4984F); }
+.case-study.cs-paper::before { background:linear-gradient(90deg,var(--orange),#D4984F); }
+.case-study.cs-play::before  { background:linear-gradient(90deg,var(--pink),#c83870); }
+
+.cs-product-tag {
+  font-size:0.6rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.08em; padding:4px 12px; border-radius:999px;
+  display:inline-block; margin-bottom:16px;
+}
+.cs-light .cs-product-tag { background:rgba(212,152,79,0.1); color:var(--amber); }
+.cs-paper .cs-product-tag { background:rgba(212,152,79,0.1); color:var(--orange); }
+.cs-play  .cs-product-tag { background:rgba(184,50,103,0.1); color:var(--pink); }
+
+.cs-title { font-size:1.4rem; font-weight:900; line-height:1.2; margin-bottom:12px; }
+.cs-body { font-size:0.9rem; color:var(--ink2); line-height:1.7; margin-bottom:14px; }
+.cs-body strong { color:var(--ink); }
+.cs-subtitle { font-size:0.95rem; font-weight:700; margin:20px 0 8px; color:var(--ink); }
+
+.cs-stats {
+  display:flex; gap:18px; flex-wrap:wrap; margin:20px 0;
+  padding:16px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+}
+.cs-stat { display:flex; flex-direction:column; min-width:100px; }
+.cs-stat-val {
+  font-family:'JetBrains Mono',monospace; font-size:1.3rem; font-weight:700;
+  color:var(--ink); line-height:1.2;
+}
+.cs-stat-label { font-size:0.7rem; color:var(--ink3); margin-top:2px; }
+
+.cs-tech { display:flex; flex-wrap:wrap; gap:6px; margin:14px 0; }
+.cs-tech span {
+  font-size:0.68rem; font-weight:700; padding:4px 12px;
+  border-radius:999px; background:var(--cream2);
+  border:1px solid var(--border2); color:var(--ink3);
+}
+
+.cs-quote {
+  background:var(--cream2); border-radius:10px; padding:20px 24px;
+  margin:20px 0; border-left:3px solid var(--amber);
+}
+.cs-quote p { font-size:0.88rem; color:var(--ink2); font-style:italic; line-height:1.65; margin-bottom:8px; }
+.cs-quote cite { font-size:0.75rem; font-weight:700; color:var(--ink3); font-style:normal; }
+
+/* CTA band */
+.cta-band { background:var(--ink); border-radius:20px; padding:52px 56px; display:flex; align-items:center; justify-content:space-between; gap:32px; position:relative; overflow:hidden; }
+.cta-band::before { content:''; position:absolute; top:0; right:0; width:360px; height:100%; background:radial-gradient(ellipse at right,rgba(212,152,79,0.15) 0%,transparent 70%); pointer-events:none; }
+.cta-band-text h2 { font-size:1.7rem; font-weight:900; color:#fff; line-height:1.2; margin-bottom:10px; }
+.cta-band-text p { font-size:0.88rem; color:rgba(255,255,255,0.55); }
+.cta-band-actions { display:flex; flex-direction:column; gap:10px; flex-shrink:0; }
+.cta-btn-primary { font-family:'Mont',sans-serif; font-size:0.88rem; font-weight:700; padding:13px 28px; border-radius:10px; background:#fff; color:var(--ink); text-decoration:none; text-align:center; transition:opacity 0.15s; display:block; white-space:nowrap; }
+.cta-btn-primary:hover { opacity:0.9; }
+.cta-btn-ghost { font-family:'Mont',sans-serif; font-size:0.82rem; font-weight:700; padding:11px 24px; border-radius:10px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:rgba(255,255,255,0.85); text-decoration:none; text-align:center; transition:background 0.15s; display:block; white-space:nowrap; }
+.cta-btn-ghost:hover { background:rgba(255,255,255,0.14); }
+
+/* Footer */
+.footer { padding:28px 0; text-align:center; font-size:0.7rem; color:var(--ink4); line-height:1.9; }
+.footer a { color:var(--ink3); text-decoration:none; }
+.footer a:hover { color:var(--ink); }
+
+/* Reveal */
+.reveal { opacity:0; transform:translateY(16px); transition:opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity:1; transform:none; }
+
+@media (max-width:900px) {
+  .wrap { padding:0 20px; }
+  .section { padding:48px 0; }
+  .site-nav { padding:0 20px; }
+  .site-nav-links { display:none; }
+  .page-header h1 { font-size:2rem; }
+  .case-study { padding:28px 24px; }
+  .cs-title { font-size:1.2rem; }
+  .cs-stats { gap:14px; }
+  .cta-band { flex-direction:column; padding:36px 28px; border-radius:14px; text-align:center; }
+  .cta-band-actions { width:100%; }
+  .cta-btn-primary,.cta-btn-ghost { width:100%; display:block; }
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Nav -->
+<!-- ══ UNIFIED SITE NAV ══════════════════════════════════════ -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <span>Stakco</span>
+    </a>
+    <div class="site-nav-links">
+      <a href="/products/">Products</a>
+      <a href="/pricing/">Pricing</a>
+      <a href="/case-studies/" class="sn-active">Case Studies</a>
+      <a href="/research/">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- Page Header -->
+<div class="page-header">
+  <span class="section-label">Case Studies</span>
+  <h1>Stakco in the <span class="accent">real world</span></h1>
+  <p class="lead">From therapeutic installations for children with autism to large-scale custom wedding gifts — these are real deployments of Stakco technology.</p>
+</div>
+
+<!-- ═══ AWWA CASE STUDY ═══════════════════════════════════════ -->
+<div class="case-study cs-light reveal" id="awwa">
+  <span class="cs-product-tag">Stakco Light</span>
+  <h2 class="cs-title">Sensory puzzle room at AWWA School</h2>
+
+  <p class="cs-body">
+    In collaboration with <strong>AWWA School</strong> in Singapore and guided by their therapists' feedback, we developed a specialised <strong>Stakco Light</strong> installation tailored for students with autism. The system was set up in the school's multi-sensory room to provide a calming, tactile, and interactive experience.
+  </p>
+
+  <div class="cs-stats">
+    <div class="cs-stat">
+      <div class="cs-stat-val">1</div>
+      <div class="cs-stat-label">Installation</div>
+    </div>
+    <div class="cs-stat">
+      <div class="cs-stat-val">Daily</div>
+      <div class="cs-stat-label">Usage frequency</div>
+    </div>
+    <div class="cs-stat">
+      <div class="cs-stat-val">Autism</div>
+      <div class="cs-stat-label">Primary focus</div>
+    </div>
+    <div class="cs-stat">
+      <div class="cs-stat-val">300W</div>
+      <div class="cs-stat-label">Power consumption</div>
+    </div>
+  </div>
+
+  <h3 class="cs-subtitle">From concept to classroom</h3>
+  <p class="cs-body">
+    The installation features physical nested ring plates on railing tracks with grab handles — designed for accessibility. Students physically rotate the plates while a projector maps the corresponding digital puzzle layers onto the structure in real time, creating a seamless blend of physical and digital interaction.
+  </p>
+
+  <h3 class="cs-subtitle">Designed for teachers, inspired by students</h3>
+  <p class="cs-body">
+    Teachers create curated puzzles using <strong>Stakco Studio</strong>, tailoring content to fit their curriculum or individual student needs. Puzzles sync automatically to the display, and teachers can switch between puzzles, mix pieces, or solve them via a simple interface. The experience is enhanced with <strong>therapeutic audio</strong>, fostering a soothing and sensory-friendly environment.
+  </p>
+
+  <div class="cs-tech">
+    <span>Projection Mapping</span>
+    <span>Nested Ring Plates</span>
+    <span>Railing Tracks</span>
+    <span>Grab Handles</span>
+    <span>Therapeutic Audio</span>
+    <span>Stakco Studio</span>
+    <span>Remote Content Sync</span>
+  </div>
+
+  <div class="cs-quote">
+    <p>"Appreciate your work, and we were quite excited as we believe it is an opportunity for our students to work on their upper body while engaged in this puzzle play."</p>
+    <cite>— Gunalan Nalini, Physiotherapist, AWWA School, Singapore</cite>
+  </div>
+</div>
+
+<!-- ═══ WEDDING CASE STUDY ════════════════════════════════════ -->
+<div class="case-study cs-paper reveal" id="wedding">
+  <span class="cs-product-tag">Stakco Paper</span>
+  <h2 class="cs-title">84 custom puzzles for a wedding in India</h2>
+
+  <p class="cs-body">
+    For a client's wedding celebration in India, we produced <strong>84 individual Stakco Paper puzzles</strong>, each featuring a unique custom image from the couple's memories. All puzzles were designed, printed, assembled by hand, and shipped from our studio in Singapore to the event venue.
+  </p>
+
+  <div class="cs-stats">
+    <div class="cs-stat">
+      <div class="cs-stat-val">84</div>
+      <div class="cs-stat-label">Custom puzzles</div>
+    </div>
+    <div class="cs-stat">
+      <div class="cs-stat-val">100%</div>
+      <div class="cs-stat-label">Handcrafted</div>
+    </div>
+    <div class="cs-stat">
+      <div class="cs-stat-val">India</div>
+      <div class="cs-stat-label">Delivery destination</div>
+    </div>
+  </div>
+
+  <h3 class="cs-subtitle">Automation meets craft</h3>
+  <p class="cs-body">
+    Our in-house <strong>Stakco CLI tool</strong> automated the entire pipeline — from image cropping and layer generation to printable PDF export. A post-processing script compiled all 84 puzzle assets in one pass.
+  </p>
+
+  <h3 class="cs-subtitle">Precision printing and assembly</h3>
+  <p class="cs-body">
+    Transparent layers and cardboard backplates were produced by a professional printing supplier. Every puzzle was then <strong>assembled by hand</strong> at our workspace — each layer manually fed through the cutting machine, precisely aligned, and secured with eyelet pressing.
+  </p>
+
+  <div class="cs-tech">
+    <span>Stakco CLI</span>
+    <span>Automated PDF Generation</span>
+    <span>Precision Printing</span>
+    <span>Manual Assembly</span>
+    <span>Eyelet Pressing</span>
+    <span>Quality Control</span>
+  </div>
+
+  <div class="cs-quote">
+    <p>"Being able to convert a memory into an actual physical gift while also being a fun and intuitive activity for friends and family of all ages — Stakcos were a perfect fit!"</p>
+    <cite>— Soundarya Ramesh, Research Engineer, National University of Singapore</cite>
+  </div>
+</div>
+
+<!-- ═══ COMMUNITY ENGAGEMENT ══════════════════════════════════ -->
+<div class="case-study cs-paper reveal" id="engagement">
+  <span class="cs-product-tag">Stakco Paper</span>
+  <h2 class="cs-title">Interactive engagement at community events</h2>
+
+  <p class="cs-body">
+    We deployed printed Stakco puzzles during community gatherings and business events. The puzzles proved to be effective <strong>ice breakers and entertainment pieces</strong> — not just a game, but a medium that carries a message, a story, or a brand.
+  </p>
+
+  <h3 class="cs-subtitle">Beyond entertainment</h3>
+  <p class="cs-body">
+    Participants naturally engaged with the tactile rotating mechanism, sparking conversation and connection. Organisations have used branded puzzles for product launches, team-building activities, and visitor giveaways. The format works across ages and requires no technology — just pick it up and start turning.
+  </p>
+</div>
+
+<!-- ═══ COGNITIVE TRAINING ════════════════════════════════════ -->
+<div class="case-study cs-play reveal" id="cognitive">
+  <span class="cs-product-tag">Stakco Play</span>
+  <h2 class="cs-title">Cognitive training with Video Stakco</h2>
+
+  <p class="cs-body">
+    <strong>Video Stakcos</strong> extend the puzzle concept from static images to dynamic video content. Because the puzzle changes every second, users must stay focused, anticipate motion, and adapt in real time — exercising memory, attention, and coordination simultaneously.
+  </p>
+
+  <h3 class="cs-subtitle">Potential for neuro-rehabilitation</h3>
+  <p class="cs-body">
+    Early research suggests video puzzles demand significantly higher mental engagement than static formats. This makes them a promising tool for <strong>cognitive training</strong>, particularly for individuals with attention difficulties or those undergoing neuro-rehabilitation. The format transforms playful interaction into measurable cognitive exercise.
+  </p>
+
+  <div class="cs-quote">
+    <p>"It is exciting to explore Stakco's multi-layered design. It certainly provides visual-spatial challenges that have the potential to support discovery in play."</p>
+    <cite>— Jochen Huber, Professor, Furtwangen University, Germany</cite>
+  </div>
+
+  <a href="https://stakcos.com/video/" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;font-size:0.82rem;font-weight:700;color:var(--pink);text-decoration:none;transition:opacity 0.15s;"><i class="fa-solid fa-play" style="font-size:0.65rem;"></i> Try the live Video Stakco demo →</a>
+</div>
+
+<!-- CTA -->
+<div class="section">
+  <div class="cta-band reveal">
+    <div class="cta-band-text">
+      <h2>Have a project in mind?</h2>
+      <p>From educational installations to custom event puzzles — let's talk.</p>
+    </div>
+    <div class="cta-band-actions">
+      <a href="/contact/" class="cta-btn-primary">Get in touch</a>
+      <a href="/products/" class="cta-btn-ghost">Explore products</a>
+    </div>
+  </div>
+</div>
+
+</div><!-- /wrap -->
+
+<footer class="footer">
+  <div class="wrap">
+    Stakco · <a href="https://stakcos.com">stakcos.com</a> ·
+    <a href="/products/">Products</a> · <a href="/pricing/">Pricing</a> ·
+    <a href="/case-studies/">Case Studies</a> · <a href="/research/">Research</a> ·
+    <a href="/contact/">Contact</a><br>
+    <a href="https://play.stakcos.com">Play</a> · <a href="https://studio.stakcos.com">Studio</a> ·
+    <a href="https://shop.stakcos.com">Shop</a> · <a href="mailto:hello@stakcos.com">hello@stakcos.com</a><br>
+    Proprietary puzzle technology · Patent pending (SG 10202302289U)
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+<script>window.StakcoParticlesConfig = { count: 38, opacity: 0.3, speed: 0.85, fixed: true, zIndex: 0 };</script>
+<script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+</body>
+</html>

@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<title>Stakco Play — Commercial Pricing & Revenue Model</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f6f9; --card: #ffffff;
+    --orange: #c87a1a; --pink: #be3070; --amber: #9a7209;
+    --text: #1a1a2e; --text-sub: #444455; --text-muted: #8888a0;
+    --border: rgba(0,0,0,0.07); --border-strong: rgba(0,0,0,0.12);
+    --accent: var(--pink); --accent-bg: rgba(190,48,112,0.04); --accent-border: rgba(190,48,112,0.12);
+    --green: #16805a; --green-bg: rgba(22,128,90,0.06);
+    --red: #c0392b; --red-bg: rgba(192,57,43,0.04);
+    --purple: #6d4daa; --purple-bg: rgba(109,77,170,0.06);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  .page-layout { display:grid; grid-template-columns:220px 1fr; max-width:1120px; margin:0 auto; min-height:100vh; }
+
+  .side-nav { position:sticky; top:0; height:100vh; padding:24px 0 24px 20px; overflow-y:auto; border-right:1px solid var(--border); }
+
+  /* ===== Product Nav Cards (side pane) ===== */
+  .pn-cards { display:flex; flex-direction:column; gap:3px; margin-bottom:14px; padding-right:16px; }
+  .pn-cards a {
+    display:flex; align-items:center; gap:8px;
+    padding:7px 10px; border-radius:6px; text-decoration:none;
+    border:1px solid transparent; transition:all 0.12s;
+  }
+  .pn-cards a:hover { background:rgba(0,0,0,0.03); }
+  .pn-cards a img { width:18px; height:18px; object-fit:contain; flex-shrink:0; opacity:0.45; transition:opacity 0.12s; }
+  .pn-cards a:hover img { opacity:0.7; }
+  .pn-cards .pn-info { min-width:0; }
+  .pn-cards .pn-name { font-size:0.7rem; font-weight:600; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:color 0.12s; }
+  .pn-cards a:hover .pn-name { color:var(--text-sub); }
+  .pn-cards .pn-tag { font-size:0.52rem; color:var(--text-muted); font-weight:500; text-transform:uppercase; letter-spacing:0.04em; opacity:0.7; }
+  .pn-cards a.pn-active { pointer-events:none; background:var(--accent); border-color:var(--accent); }
+  .pn-cards a.pn-active img { opacity:1; }
+  .pn-cards a.pn-active .pn-name { color:#fff; font-weight:700; }
+  .pn-cards a.pn-active .pn-tag { color:rgba(255,255,255,0.7); }
+  .pn-cards a.pn-overview.pn-active { background:#6d4daa; border-color:#6d4daa; }
+  .pn-cards a.pn-overview.pn-active .pn-name { color:#fff; }
+  .pn-cards a.pn-overview.pn-active .pn-tag { color:rgba(255,255,255,0.7); }
+  .pn-cards a.pn-play:not(.pn-active):hover .pn-name { color:#be3070; }
+  .pn-cards a.pn-light:not(.pn-active):hover .pn-name { color:#9a7209; }
+  .pn-cards a.pn-paper:not(.pn-active):hover .pn-name { color:#c87a1a; }
+  .pn-cards a.pn-overview:not(.pn-active):hover .pn-name { color:#6d4daa; }
+  .pn-divider { height:1px; background:var(--border); margin:0 16px 12px 0; }
+  .side-nav-list { list-style:none; }
+  .side-nav-list li { margin-bottom:1px; }
+  .side-nav-list a {
+    display:block; padding:7px 12px; font-size:0.78rem; font-weight:500; color:var(--text-muted);
+    text-decoration:none; border-radius:6px; transition:all 0.12s; border-left:2px solid transparent; line-height:1.4;
+  }
+  .side-nav-list a:hover { color:var(--text-sub); background:rgba(0,0,0,0.03); }
+  .side-nav-list a.active { color:var(--accent); border-left-color:var(--accent); background:var(--accent-bg); font-weight:600; }
+  .side-nav-actions { margin-top:16px; padding-top:14px; border-top:1px solid var(--border); padding-right:16px; }
+  .print-btn {
+    display:flex; align-items:center; justify-content:center; gap:6px; width:100%;
+    padding:8px 12px; font-family:'DM Sans',sans-serif; font-size:0.75rem; font-weight:600;
+    color:var(--text-sub); background:var(--card); border:1px solid var(--border); border-radius:6px;
+    cursor:pointer; transition:all 0.12s;
+  }
+  .print-btn:hover { background:var(--bg); border-color:var(--border-strong); }
+
+  .container { max-width:900px; padding:28px 40px 48px; }
+
+  .doc-header { margin-bottom:24px; padding-bottom:16px; border-bottom:2px solid var(--border-strong); }
+  .doc-header .brand { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .doc-header .brand img { width:28px; height:auto; }
+  .doc-header .brand span { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); }
+  .doc-header h1 { font-size:1.6rem; font-weight:700; margin-bottom:4px; }
+  .doc-header .subtitle { font-size:0.92rem; color:var(--text-sub); }
+  .doc-meta { display:flex; gap:24px; margin-top:16px; font-size:0.72rem; color:var(--text-muted); }
+  .doc-meta span { display:flex; align-items:center; gap:4px; }
+
+  .section { margin-bottom:24px; }
+  .section-title { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:10px; padding-bottom:5px; border-bottom:1px solid var(--accent-border); }
+  .section-note { font-size:0.75rem; color:var(--text-muted); line-height:1.5; margin-bottom:12px; font-style:italic; }
+
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px 22px; margin-bottom:10px; }
+  .card p { font-size:0.85rem; color:var(--text-sub); line-height:1.6; }
+
+  table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:10px; font-size:0.82rem; }
+  thead th { padding:10px 16px; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); background:#f2f2f6; border-bottom:1px solid var(--border); text-align:left; }
+  tbody td { padding:10px 16px; border-bottom:1px solid rgba(0,0,0,0.03); color:var(--text-sub); vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:hover { background:rgba(0,0,0,0.015); }
+
+  .row-total td { font-weight:700; color:var(--text); border-top:2px solid var(--border-strong); background:#fafafa; }
+  .row-highlight td { background:var(--accent-bg); }
+
+  .num { text-align:right; font-family:'JetBrains Mono',monospace; font-size:0.78rem; white-space:nowrap; }
+  .num-accent { color:var(--accent); font-weight:700; }
+  .num-green { color:var(--green); }
+  .num-muted { color:var(--text-muted); }
+
+  .label-included { font-size:0.65rem; font-weight:600; color:var(--green); background:var(--green-bg); padding:2px 8px; border-radius:4px; }
+  .label-optional { font-size:0.65rem; font-weight:600; color:var(--text-muted); background:rgba(0,0,0,0.04); padding:2px 8px; border-radius:4px; }
+  .label-recurring { font-size:0.65rem; font-weight:600; color:var(--accent); background:var(--accent-bg); padding:2px 8px; border-radius:4px; }
+  .label-free { font-size:0.65rem; font-weight:600; color:var(--green); background:var(--green-bg); padding:2px 8px; border-radius:4px; }
+
+  .summary-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:14px; }
+  .summary-box { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px 16px; text-align:center; }
+  .summary-box .sb-value { font-family:'JetBrains Mono',monospace; font-size:1.1rem; font-weight:700; color:var(--accent); margin-bottom:2px; }
+  .summary-box .sb-label { font-size:0.65rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
+
+  .footnotes { margin-top:20px; padding-top:16px; border-top:1px solid var(--border); }
+  .footnotes p { font-size:0.7rem; color:var(--text-muted); line-height:1.5; margin-bottom:4px; }
+  .fn-ref { font-size:0.6rem; vertical-align:super; color:var(--accent); font-weight:700; }
+
+  @media print {
+    .page-layout { display:block; }
+    .side-nav { display:none; }
+    body { background:#fff; }
+    .container { padding:24px; max-width:100%; }
+    .section { page-break-inside:avoid; break-inside:avoid; }
+    table { page-break-inside:avoid; break-inside:avoid; }
+    .section-title { break-after:avoid; page-break-after:avoid; }
+    .doc-header { break-after:avoid; page-break-after:avoid; }
+    .summary-grid { break-inside:avoid; page-break-inside:avoid; }
+  }
+  @media (max-width:900px) {
+    .page-layout { grid-template-columns:1fr; }
+    .side-nav { display:none; }
+    .container { padding:24px 16px 48px; }
+    .summary-grid { grid-template-columns:repeat(2,1fr); }
+    .doc-meta { flex-direction:column; gap:6px; }
+  }
+
+  .ip-note {
+    display:inline-flex; align-items:center; gap:6px;
+    margin-top:10px; font-size:0.68rem; font-weight:500;
+    color:var(--text-muted); 
+    padding:4px 10px; border-radius:5px;
+    background:rgba(0,0,0,0.03); border:1px solid var(--border);
+  }
+  .ip-note::before { content:'⚖'; font-size:0.72rem; }
+
+@font-face { font-family:'Mont'; src:url('https://cdn.stakcos.com/fonts/MONT-REGULAR.TTF') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Mont'; src:url('https://cdn.stakcos.com/fonts/MONT-BOLD.TTF') format('truetype'); font-weight:700; font-style:normal; font-display:swap; }
+
+/* ── UNIFIED SITE NAV ────────────────────────────────────── */
+.site-nav {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(250,248,244,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(60,47,56,0.08);
+  padding: 0 40px;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-inner {
+  max-width: 1080px; margin: 0 auto;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.site-nav-brand {
+  display: flex; align-items: center; gap: 9px;
+  text-decoration: none; color: #3C2F38;
+}
+.site-nav-brand img { width: 26px; height: auto; }
+.site-nav-brand span {
+  font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.site-nav-links { display: flex; align-items: center; gap: 28px; }
+.site-nav-links a {
+  font-size: 0.8rem; color: #8a7e85;
+  text-decoration: none; transition: color 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-links a:hover { color: #3C2F38; }
+.site-nav-links a.sn-active { color: #3C2F38; font-weight: 700; }
+.site-nav-cta {
+  font-size: 0.78rem; font-weight: 700;
+  padding: 8px 20px; border-radius: 8px;
+  background: #3C2F38; color: #fff;
+  text-decoration: none; transition: opacity 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-cta:hover { opacity: 0.82; }
+@media (max-width: 900px) {
+  .site-nav { padding: 0 20px; }
+  .site-nav-links { display: none; }
+}
+
+</style>
+</head>
+<body>
+<!-- ══ UNIFIED SITE NAV ══════════════════════════════════════ -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <span>Stakco</span>
+    </a>
+    <div class="site-nav-links">
+      <a href="/products/">Products</a>
+      <a href="/pricing/" class="sn-active">Pricing</a>
+      <a href="/case-studies/">Case Studies</a>
+      <a href="/research/">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-layout">
+
+<nav class="side-nav">
+  <div class="pn-cards">
+    <a href="index.html" class="pn-overview">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Overview</div><div class="pn-tag">All Products</div></div>
+    </a>
+    <a href="stakco-play-pricing.html" class="pn-play pn-active">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Stakco Play</div><div class="pn-tag">Digital</div></div>
+    </a>
+    <a href="stakco-light-pricing.html" class="pn-light">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Stakco Light</div><div class="pn-tag">Projection</div></div>
+    </a>
+    <a href="stakco-paper-pricing.html" class="pn-paper">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Stakco Paper</div><div class="pn-tag">Physical</div></div>
+    </a>
+  </div>
+  <div class="pn-divider"></div>
+  <ul class="side-nav-list">
+    <li><a href="#summary" class="active">Summary</a></li>
+    <li><a href="#business-model">1. Business Model</a></li>
+    <li><a href="#play-module">2. Play Module</a></li>
+    <li><a href="#album-types">3. Album Types</a></li>
+    <li><a href="#add-on-modules">4. Add-On Modules</a></li>
+    <li><a href="#platform-features">5. Platform Features</a></li>
+    <li><a href="#user-costs">6. User Cost Summary</a></li>
+    <li><a href="#revenue-streams">7. Revenue Streams</a></li>
+    <li><a href="#reseller">8. Partner & Reseller</a></li>
+    <li><a href="#comparison">9. Comparison</a></li>
+  </ul>
+  <div class="side-nav-actions">
+    <button class="print-btn" onclick="window.print()">🖨 Print / Save PDF</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ===== HEADER ===== -->
+<div class="doc-header">
+  <h1>Stakco Play — Commercial Pricing & Revenue Model</h1>
+  <div class="subtitle">Recurring revenue from digital puzzle publishing — module subscriptions, add-ons, and platform economics</div>
+  <div class="ip-note">Proprietary puzzle technology · exclusively licensed for commercial use</div>
+</div>
+
+<!-- ===== EXECUTIVE SUMMARY ===== -->
+<div class="section" id="summary">
+  <div class="section-title">Executive Summary</div>
+  <div class="card">
+    <p>Stakco Play is the digital player platform for Stakco puzzles. Players access puzzles for free via the browser — the revenue model is built around <strong>creators who publish</strong>, not players who consume. Creators purchase the Studio Play module (subscription) to deploy interactive puzzle albums to their custom subdomain. Additional modules (AI, Dev, Publish) create layered upsell opportunities.</p>
+  </div>
+  <div class="summary-grid">
+    <div class="summary-box">
+      <div class="sb-value">Free</div>
+      <div class="sb-label">For players</div>
+    </div>
+    <div class="summary-box">
+      <div class="sb-value" data-price="PLAY.monthly" data-price-suffix="/mo">##</div>
+      <div class="sb-label">Play module</div>
+    </div>
+    <div class="summary-box">
+      <div class="sb-value">$0 → $40+</div>
+      <div class="sb-label">Monthly per user</div>
+    </div>
+    <div class="summary-box">
+      <div class="sb-value">Recurring</div>
+      <div class="sb-label">Revenue model</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 1. BUSINESS MODEL ===== -->
+<div class="section" id="business-model">
+  <div class="section-title">1. Business Model Overview</div>
+  <div class="card">
+    <p>Stakco Play follows a <strong>creator-pays, player-free</strong> model. The platform earns recurring revenue from creators who need the Play module to publish puzzle albums. Players never pay — they access puzzles via a link in any browser. This creates a flywheel: more creators → more content → more players → more creators.</p>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:25%">User type</th>
+        <th style="width:25%">Pays?</th>
+        <th style="width:50%">What they get</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Player</strong></td>
+        <td><span class="label-free">Free forever</span></td>
+        <td>Solve puzzles via link — no account, no app, no install</td>
+      </tr>
+      <tr>
+        <td><strong>Creator (free)</strong></td>
+        <td><span class="label-free">Free</span></td>
+        <td>Design puzzles in Stakco Studio — limited creation, no publishing</td>
+      </tr>
+      <tr class="row-highlight">
+        <td><strong>Creator (publisher)</strong></td>
+        <td><span class="label-recurring">Subscription</span></td>
+        <td>Play module unlocks publishing: albums, subdomain, analytics, all play types</td>
+      </tr>
+      <tr>
+        <td><strong>Creator (power user)</strong></td>
+        <td><span class="label-recurring">Multiple subs</span></td>
+        <td>Play + AI + Dev + Publish — full platform access for content businesses</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 2. PLAY MODULE PRICING ===== -->
+<div class="section" id="play-module">
+  <div class="section-title">2. Studio Play Module Pricing</div>
+  <div class="section-note">The Play module is the core revenue driver — required for any creator who wants to publish puzzles online.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%">Plan</th>
+        <th class="num" style="width:20%">Monthly</th>
+        <th class="num" style="width:20%">Annual</th>
+        <th style="width:30%">Savings</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="row-highlight">
+        <td><strong>Play module</strong></td>
+        <td class="num num-accent" data-price="PLAY.monthly" data-price-suffix="/mo">##</td>
+        <td class="num" data-price="PLAY.annual" data-price-suffix="/yr">##</td>
+        <td><span style="font-size:0.75rem;color:var(--green);font-weight:600">~17% off with annual</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50%">What the Play module unlocks</th>
+        <th style="width:50%">Detail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Custom subdomain</strong></td>
+        <td>yourname.play.stakcos.com — branded puzzle destination</td>
+      </tr>
+      <tr>
+        <td><strong>All album play types</strong></td>
+        <td>Time-driven, day-driven, sequential, and free-play modes</td>
+      </tr>
+      <tr>
+        <td><strong>Engagement analytics</strong></td>
+        <td>Completion rates, time spent, popular puzzles, player counts</td>
+      </tr>
+      <tr>
+        <td><strong>Shareable links</strong></td>
+        <td>Instant access for players — no sign-up or download required</td>
+      </tr>
+      <tr>
+        <td><strong>Dynamic content updates</strong></td>
+        <td>Add, remove, or reorder puzzles in live albums anytime</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 3. ALBUM TYPES ===== -->
+<div class="section" id="album-types">
+  <div class="section-title">3. Album Play Types</div>
+  <div class="section-note">All play types are included with the Play module — no per-type charges. These drive creator engagement and retention.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:22%">Play type</th>
+        <th style="width:40%">How it works</th>
+        <th style="width:38%">Use case</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Free-play</strong></td>
+        <td>All puzzles in the album are available immediately. Players choose freely.</td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Portfolios, galleries, browse-and-solve collections</span></td>
+      </tr>
+      <tr>
+        <td><strong>Sequential</strong></td>
+        <td>Puzzles unlock one after another. Player must solve each to proceed.</td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Courses, story-driven series, progressive difficulty</span></td>
+      </tr>
+      <tr>
+        <td><strong>Day-driven</strong></td>
+        <td>A new puzzle unlocks each day. Players return daily to see the next one.</td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Advent calendars, daily challenges, drip content</span></td>
+      </tr>
+      <tr>
+        <td><strong>Time-driven</strong></td>
+        <td>Puzzles become available at specific scheduled times.</td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Event countdowns, timed campaigns, live competitions</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 4. ADD-ON MODULES ===== -->
+<div class="section" id="add-on-modules">
+  <div class="section-title">4. Add-On Modules (Upsell Opportunities)</div>
+  <div class="section-note">Each module is independently purchasable. Creators typically start with Play and add others as their needs grow.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:20%">Module</th>
+        <th style="width:30%">What it does</th>
+        <th style="width:15%">Type</th>
+        <th class="num" style="width:15%">Monthly</th>
+        <th class="num" style="width:20%">Annual</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="row-highlight">
+        <td><strong>Play</strong></td>
+        <td>Publish albums to custom subdomain</td>
+        <td><span class="label-recurring">Subscription</span></td>
+        <td class="num num-accent" data-price="PLAY.monthly">##</td>
+        <td class="num" data-price="PLAY.annual" data-price-suffix="/yr">##</td>
+      </tr>
+      <tr>
+        <td><strong>AI</strong></td>
+        <td>Generate puzzle artwork from text prompts</td>
+        <td><span class="label-recurring">Subscription</span></td>
+        <td class="num" data-price="AI.monthly">##</td>
+        <td class="num" data-price="AI.annual" data-price-suffix="/yr">##</td>
+      </tr>
+      <tr>
+        <td><strong>Print</strong></td>
+        <td>High-res exports for physical printing</td>
+        <td><span style="font-size:0.65rem;font-weight:600;color:var(--text-muted)">One-time</span></td>
+        <td class="num">—</td>
+        <td class="num">$29.99</td>
+      </tr>
+      <tr>
+        <td><strong>Publish</strong></td>
+        <td>Sell designs on Stakco marketplace</td>
+        <td><span style="font-size:0.65rem;font-weight:600;color:var(--text-muted)">One-time</span></td>
+        <td class="num">—</td>
+        <td class="num">$19.99</td>
+      </tr>
+      <tr>
+        <td><strong>Dev</strong></td>
+        <td>SDK & API for embedding puzzles</td>
+        <td><span style="font-size:0.65rem;font-weight:600;color:var(--text-muted)">One-time</span></td>
+        <td class="num">—</td>
+        <td class="num" data-price="DEV.price">##</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 5. PLATFORM FEATURES ===== -->
+<div class="section" id="platform-features">
+  <div class="section-title">5. Platform Features (Included with Play)</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%">Feature</th>
+        <th style="width:45%">Detail</th>
+        <th style="width:25%">Requires</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Custom subdomain</strong></td>
+        <td>yourname.play.stakcos.com — instant activation</td>
+        <td><span class="label-recurring">Play</span></td>
+      </tr>
+      <tr>
+        <td><strong>Engagement analytics</strong></td>
+        <td>Per-album and per-puzzle stats: plays, completions, time, retention</td>
+        <td><span class="label-recurring">Play</span></td>
+      </tr>
+      <tr>
+        <td><strong>Embed widgets</strong></td>
+        <td>Embed interactive puzzles on any external website</td>
+        <td><span class="label-optional">Dev</span></td>
+      </tr>
+      <tr>
+        <td><strong>AI generation</strong></td>
+        <td>Text-to-artwork puzzle generation — automate content production</td>
+        <td><span class="label-optional">AI</span></td>
+      </tr>
+      <tr>
+        <td><strong>Marketplace selling</strong></td>
+        <td>List puzzle designs for sale on the Stakco Shop</td>
+        <td><span class="label-optional">Publish</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 6. USER COST SUMMARY ===== -->
+<div class="section" id="user-costs">
+  <div class="section-title">6. What Users Actually Pay (Monthly Scenarios)</div>
+  <div class="section-note">Stakco Studio is always free. Revenue comes from module subscriptions. These scenarios show typical monthly spend by user type.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:25%">User profile</th>
+        <th style="width:35%">Modules</th>
+        <th class="num" style="width:20%">Monthly (SGD)</th>
+        <th class="num" style="width:20%">Annual (SGD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Casual creator</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Studio only (no publishing)</span></td>
+        <td class="num num-green">$0</td>
+        <td class="num num-green">$0</td>
+      </tr>
+      <tr>
+        <td><strong>Hobby publisher</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Play</span></td>
+        <td class="num" data-price="PLAY.monthly">##</td>
+        <td class="num" data-price="PLAY.annual">##</td>
+      </tr>
+      <tr class="row-highlight">
+        <td><strong>Content creator</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Play + AI</span></td>
+        <td class="num num-accent" data-price-sum="PLAY.monthly+AI.monthly">##</td>
+        <td class="num" data-price-sum="PLAY.annual+AI.annual">##</td>
+      </tr>
+      <tr>
+        <td><strong>Educator / business</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Play + AI + Print</span></td>
+        <td class="num">$19.80 + $29.99<span class="fn-ref"> 1</span></td>
+        <td class="num">$228</td>
+      </tr>
+      <tr>
+        <td><strong>Developer / SaaS</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Play + AI + Dev</span></td>
+        <td class="num">$39.70</td>
+        <td class="num">$397</td>
+      </tr>
+      <tr>
+        <td><strong>Full platform</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Play + AI + Dev + Print + Publish</span></td>
+        <td class="num">$39.70 + $49.98<span class="fn-ref"> 1</span></td>
+        <td class="num">$447</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note"><span class="fn-ref">1</span> Print ($29.99) and Publish ($19.99) are one-time purchases, not recurring. Shown as first-month cost only.</div>
+</div>
+
+<!-- ===== 7. REVENUE STREAMS ===== -->
+<div class="section" id="revenue-streams">
+  <div class="section-title">7. Revenue Streams</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:25%">Stream</th>
+        <th style="width:15%">Type</th>
+        <th style="width:35%">Description</th>
+        <th style="width:25%">Margin profile</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="row-highlight">
+        <td><strong>Play module subs</strong></td>
+        <td><span class="label-recurring">Recurring</span></td>
+        <td>Core revenue — every publisher pays monthly/annually</td>
+        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600">High margin (digital)</span></td>
+      </tr>
+      <tr>
+        <td><strong>AI module subs</strong></td>
+        <td><span class="label-recurring">Recurring</span></td>
+        <td>Content generation add-on — high attach rate with Play</td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Medium (API costs)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Dev module subs</strong></td>
+        <td><span class="label-recurring">Recurring</span></td>
+        <td>SDK access for developers embedding puzzles</td>
+        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600">High margin (digital)</span></td>
+      </tr>
+      <tr>
+        <td><strong>One-time modules</strong></td>
+        <td><span style="font-size:0.65rem;font-weight:600;color:var(--text-muted)">One-time</span></td>
+        <td>Print + Publish module purchases</td>
+        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600">High margin (digital)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Stencil sales</strong></td>
+        <td><span style="font-size:0.65rem;font-weight:600;color:var(--text-muted)">Per item</span></td>
+        <td>Premium stencil templates ($0–15 each)</td>
+        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600">High margin (digital)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Marketplace commission</strong></td>
+        <td><span style="font-size:0.65rem;font-weight:600;color:var(--text-muted)">% of sale</span></td>
+        <td>Revenue share on community-created content sold via Shop</td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Medium (split with creator)</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 8. PARTNER & RESELLER ===== -->
+<div class="section" id="reseller">
+  <div class="section-title">8. Partner & Reseller Opportunities</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:25%">Partner type</th>
+        <th style="width:40%">Model</th>
+        <th style="width:35%">Terms</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Content partner</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Brands or creators who publish puzzles as engagement tools — we provide white-label subdomain</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Standard Play subscription + optional custom branding package</span></td>
+      </tr>
+      <tr>
+        <td><strong>Education reseller</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Schools and institutions using Play for curriculum delivery — bundled with AI for auto-generation</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Volume licensing from $7/mo per seat (10+ seats)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Platform integrator</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">SaaS products embedding puzzles via Dev module API — gamification, engagement, rewards</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Dev module subscription + usage-based API pricing at scale</span></td>
+      </tr>
+      <tr>
+        <td><strong>Agency / studio</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Design agencies creating puzzle campaigns for clients</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Multi-seat licensing, bulk subdomain provisioning</span></td>
+      </tr>
+      <tr>
+        <td><strong>Sales / BD partner</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Source and close subscription deals — earn ongoing royalty on referred accounts</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">20% recurring royalty on subscription revenue from sourced accounts</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">All partner terms negotiated individually. Contact hello@stakcos.com for enterprise and volume discussions.</div>
+</div>
+
+<!-- ===== 9. COMPARISON ===== -->
+<div class="section" id="comparison">
+  <div class="section-title">9. How Stakco Play Compares</div>
+  <div class="section-note">Stakco Play occupies a unique niche — there are no direct competitors for interactive rotating puzzle publishing. Nearest comparisons are general interactive content platforms.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:22%">Attribute</th>
+        <th style="width:26%">Stakco Play</th>
+        <th style="width:26%">Generic quiz platforms</th>
+        <th style="width:26%">Custom game dev</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Setup cost</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600" data-price="PLAY.monthly" data-price-suffix="/mo">##</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">$20–100/mo</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">$5,000–50,000+</span></td>
+      </tr>
+      <tr>
+        <td><strong>Time to launch</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600">Minutes</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Hours</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Weeks–months</span></td>
+      </tr>
+      <tr>
+        <td><strong>Content type</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Unique rotating puzzles</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Quizzes, polls, forms</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Custom games</span></td>
+      </tr>
+      <tr>
+        <td><strong>Physical + digital</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600">Yes (with Print module)</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-muted)">No</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-muted)">Rare</span></td>
+      </tr>
+      <tr>
+        <td><strong>AI content gen</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600">Yes (AI module)</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-muted)">Some</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-muted)">Custom build</span></td>
+      </tr>
+      <tr>
+        <td><strong>Embeddable</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--green);font-weight:600">Yes (Dev module)</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Usually</span></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Depends</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== FOOTNOTES ===== -->
+<div class="footnotes">
+  <p>All prices in Singapore Dollars (SGD). Subscription pricing billed monthly or annually. Prices are subject to change.</p>
+  <p>This document is for informational purposes and does not constitute a binding offer.</p>
+  <p>Players never pay. All revenue is from creators/publishers purchasing Studio modules and add-ons.</p>
+  <p style="margin-top:12px;color:var(--text-sub);font-weight:600;">Contact: hello@stakcos.com · stakcos.com</p>
+</div>
+
+</div>
+</div><!-- /page-layout -->
+
+<script>
+(function() {
+  const links = document.querySelectorAll('.side-nav-list a');
+  const sections = [];
+  links.forEach(link => {
+    const id = link.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) sections.push({ id, el, link });
+  });
+
+  function updateActive() {
+    let current = sections[0];
+    const offset = 80;
+    for (const s of sections) {
+      if (s.el.getBoundingClientRect().top <= offset) current = s;
+    }
+    links.forEach(l => l.classList.remove('active'));
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const PLATFORM_URL = 'https://storage.googleapis.com/stakco-images/platform.json?v=' + Date.now();
+
+  async function loadPlatformPricing() {
+    try {
+      const res = await fetch(PLATFORM_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const mods = data.Products?.STAKCO_STUDIO?.Modules || {};
+
+      // Build a flat price map from platform config
+      const priceMap = {};
+      Object.entries(mods).forEach(([key, mod]) => {
+        const p = mod.Pricing;
+        const price = mod.Price;
+        if (p && p.Type === 'SUBSCRIPTION') {
+          priceMap[key + '.monthly'] = p.MonthlyPrice || price;
+          priceMap[key + '.annual'] = p.AnnualPrice || (price * 10);
+        } else if (p && p.Type === 'ONE_TIME') {
+          priceMap[key + '.price'] = price;
+        }
+        // Always set .price as fallback
+        if (price != null) priceMap[key + '.price'] = price;
+      });
+
+      // Update single-price elements: data-price="PLAY.monthly"
+      document.querySelectorAll('[data-price]').forEach(el => {
+        const key = el.dataset.price;
+        const val = priceMap[key];
+        if (val != null) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          el.textContent = prefix + val + suffix;
+        }
+      });
+
+      // Update sum elements: data-price-sum="PLAY.monthly+AI.monthly"
+      document.querySelectorAll('[data-price-sum]').forEach(el => {
+        const keys = el.dataset.priceSum.split('+');
+        let total = 0;
+        let allFound = true;
+        keys.forEach(k => {
+          const v = priceMap[k.trim()];
+          if (v != null) total += v;
+          else allFound = false;
+        });
+        if (allFound) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          const formatted = total % 1 === 0 ? total : total.toFixed(2);
+          el.textContent = prefix + formatted + suffix;
+        }
+      });
+
+    } catch (e) {
+      console.warn('Stakco pricing fetch failed:', e);
+    }
+  }
+
+  loadPlatformPricing();
+})();
+</script>
+<script>
+window.StakcoParticlesConfig = { count: 38, opacity: 0.3, speed: 0.85, fixed: true, zIndex: 0 };
+</script>
+<script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+</body>
+</html>

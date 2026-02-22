@@ -1,0 +1,93 @@
+/* ══ STAKCO SITE — SHARED STYLES ════════════════════════════
+   Loaded by all pages for unified navigation, fonts, and base.
+   CDN path: https://cdn.stakcos.com/css/stakco-site.css
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── FONTS ─────────────────────────────────────────────────── */
+@font-face { font-family:'Mont'; src:url('https://cdn.stakcos.com/fonts/MONT-LIGHT.TTF') format('truetype'); font-weight:300; font-style:normal; font-display:swap; }
+@font-face { font-family:'Mont'; src:url('https://cdn.stakcos.com/fonts/MONT-REGULAR.TTF') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Mont'; src:url('https://cdn.stakcos.com/fonts/MONT-BOLD.TTF') format('truetype'); font-weight:700; font-style:normal; font-display:swap; }
+@font-face { font-family:'Mont'; src:url('https://cdn.stakcos.com/fonts/MONT-HEAVY.TTF') format('truetype'); font-weight:900; font-style:normal; font-display:swap; }
+
+/* ── UNIFIED SITE NAV ────────────────────────────────────── */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(253,250,246,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(60,47,56,0.08);
+  padding: 0 40px;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.site-nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  text-decoration: none;
+  color: #3C2F38;
+}
+.site-nav-brand img { width: 26px; height: auto; }
+.site-nav-brand span {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.site-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+.site-nav-links a {
+  font-size: 0.8rem;
+  color: #8a7e85;
+  text-decoration: none;
+  transition: color 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-links a:hover { color: #3C2F38; }
+.site-nav-links a.sn-active { color: #3C2F38; font-weight: 700; }
+.site-nav-links .site-nav-cta {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 8px 20px;
+  border-radius: 8px;
+  background: #3C2F38;
+  color: #fff !important;
+  text-decoration: none;
+  transition: opacity 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-links .site-nav-cta:hover { opacity: 0.82; }
+
+/* ── FOOTER ──────────────────────────────────────────────── */
+.site-footer {
+  padding: 28px 0;
+  text-align: center;
+  font-size: 0.7rem;
+  color: #b8a8b0;
+  line-height: 1.9;
+  font-family: 'Mont', sans-serif;
+}
+.site-footer a { color: #8a7e85; text-decoration: none; }
+.site-footer a:hover { color: #3C2F38; }
+
+/* ── RESPONSIVE ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .site-nav { padding: 0 20px; }
+  .site-nav-links { display: none; }
+}
+
+@media print {
+  .site-nav { display: none; }
+  .site-footer { display: none; }
+}
