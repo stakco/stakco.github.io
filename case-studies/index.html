@@ -101,6 +101,17 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 .footer a { color:var(--ink3); text-decoration:none; }
 .footer a:hover { color:var(--ink); }
 
+
+/* Featured case study image */
+.cs-featured-img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 16px 0 24px;
+  display: block;
+  border: 1px solid var(--border);
+}
 /* Reveal */
 .reveal { opacity:0; transform:translateY(16px); transition:opacity 0.5s ease, transform 0.5s ease; }
 .reveal.visible { opacity:1; transform:none; }
@@ -133,7 +144,6 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
     </a>
     <div class="site-nav-links">
       <a href="/products/">Products</a>
-      <a href="/pricing/">Pricing</a>
       <a href="/case-studies/" class="sn-active">Case Studies</a>
       <a href="/research/">Research</a>
       <a href="/contact/">Contact</a>
@@ -155,6 +165,8 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 <div class="case-study cs-light reveal" id="awwa">
   <span class="cs-product-tag">Stakco Light</span>
   <h2 class="cs-title">Sensory puzzle room at AWWA School @ Bedok</h2>
+  <img src="https://cdn.stakcos.com/media/case-study/awwa_case_study.jpg" alt="AWWA School sensory room installation" class="cs-featured-img">
+
 
   <p class="cs-body">
     In collaboration with <strong>AWWA School @ Bedok</strong> in Singapore, a special education school for students aged 7 to 18 with autism, we developed a specialised <strong>Stakco Light</strong> installation guided by their therapists' feedback. The system was set up in the school's multi-sensory room to provide a calming, tactile, and interactive experience.
@@ -214,6 +226,8 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 <div class="case-study cs-paper reveal" id="wedding">
   <span class="cs-product-tag">Stakco Paper</span>
   <h2 class="cs-title">84 custom puzzles for a wedding in India</h2>
+  <img src="https://cdn.stakcos.com/media/case-study/wedding_case_study.jpg" alt="84 custom wedding puzzles" class="cs-featured-img">
+
 
   <p class="cs-body">
     For a client's wedding celebration in India, we produced <strong>84 individual Stakco Paper puzzles</strong>, each featuring a unique custom image from the couple's memories. All puzzles were designed, printed, assembled by hand, and shipped from our studio in Singapore to the event venue.
@@ -315,7 +329,7 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 <footer class="footer">
   <div class="wrap">
     Stakco · <a href="https://stakcos.com">stakcos.com</a> ·
-    <a href="/products/">Products</a> · <a href="/pricing/">Pricing</a> ·
+    <a href="/products/">Products</a> · ·
     <a href="/case-studies/">Case Studies</a> · <a href="/research/">Research</a> ·
     <a href="/contact/">Contact</a><br>
     <a href="https://play.stakcos.com">Play</a> · <a href="https://studio.stakcos.com">Studio</a> ·
