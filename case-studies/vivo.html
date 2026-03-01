@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<title>VivoCity Showcase — Case Study — Stakco</title>
+<link rel="stylesheet" href="/stakco-site.css">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { overflow-x:hidden; }
+:root {
+  --cream:#FDFAF6; --cream2:#f2ece4; --ink:#3C2F38; --ink2:#4a3c44;
+  --ink3:#8a7e85; --ink4:#b8a8b0; --card:#ffffff; --pink:#B83267;
+  --amber:#D4984F; --orange:#D4984F; --border:rgba(60,47,56,0.08);
+  --border2:rgba(60,47,56,0.13); --r:14px;
+  --shadow:0 2px 16px rgba(60,47,56,0.07); --shadow-md:0 6px 28px rgba(60,47,56,0.1);
+  --accent:#c87a1a;
+}
+body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink); line-height:1.6; font-size:16px; -webkit-font-smoothing:antialiased; }
+
+/* ── Layout ──────────────────────────────────────────────── */
+.page-wrap { max-width:1180px; margin:0 auto; padding:0 40px; display:grid; grid-template-columns:200px 1fr; gap:48px; }
+.side-pane { position:sticky; top:76px; align-self:start; padding-top:32px; }
+.main-col { max-width:780px; }
+
+/* ── Side pane nav ───────────────────────────────────────── */
+.side-nav { list-style:none; }
+.side-nav li { margin-bottom:2px; }
+.side-nav a {
+  display:block; padding:7px 14px; font-size:0.75rem; color:var(--ink3);
+  text-decoration:none; border-radius:8px; border-left:2px solid transparent;
+  transition:all 0.15s; line-height:1.4;
+}
+.side-nav a:hover { color:var(--ink); background:rgba(60,47,56,0.03); }
+.side-nav a.active { color:var(--accent); border-left-color:var(--accent); background:rgba(200,122,26,0.05); font-weight:700; }
+.side-nav-label {
+  font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em;
+  color:var(--ink4); padding:0 14px; margin-bottom:10px; display:block;
+}
+.side-nav-back {
+  display:inline-flex; align-items:center; gap:6px; font-size:0.72rem; font-weight:700;
+  color:var(--ink3); text-decoration:none; padding:0 14px; margin-bottom:20px;
+  transition:color 0.15s;
+}
+.side-nav-back:hover { color:var(--ink); }
+.side-nav-back i { font-size:0.6rem; }
+
+/* ── Breadcrumb ──────────────────────────────────────────── */
+.breadcrumb { padding:20px 0 0; font-size:0.72rem; color:var(--ink4); }
+.breadcrumb a { color:var(--ink3); text-decoration:none; }
+.breadcrumb a:hover { color:var(--ink); }
+.breadcrumb span { margin:0 6px; }
+
+/* ── Page header ─────────────────────────────────────────── */
+.cs-header { padding:28px 0 0; }
+.cs-product-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:0.62rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.08em; padding:5px 14px; border-radius:999px;
+  margin-bottom:16px;
+  background:rgba(200,122,26,0.1); color:var(--accent);
+}
+.cs-header h1 {
+  font-size:2.2rem; font-weight:900; line-height:1.15;
+  letter-spacing:-0.01em; margin-bottom:12px;
+}
+.cs-header .lead {
+  font-size:0.95rem; color:var(--ink2); line-height:1.65; max-width:600px; margin-bottom:24px;
+}
+.cs-date { font-size:0.72rem; color:var(--ink4); margin-bottom:24px; display:block; }
+
+/* ── Hero image ──────────────────────────────────────────── */
+.cs-hero {
+  width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:12px;
+  margin-bottom:40px; border:1px solid var(--border);
+}
+
+/* ── Hero placeholder ────────────────────────────────────── */
+.cs-hero-placeholder {
+  width:100%; aspect-ratio:16/9; border-radius:12px;
+  margin-bottom:40px; border:2px dashed var(--border2);
+  background:var(--cream2);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px;
+}
+.cs-hero-placeholder i { font-size:2rem; color:var(--ink4); }
+.cs-hero-placeholder span { font-size:0.78rem; color:var(--ink3); font-weight:700; }
+
+/* ── Section styles ──────────────────────────────────────── */
+.cs-section { margin-bottom:40px; scroll-margin-top:80px; }
+.cs-section h2 {
+  font-size:1.15rem; font-weight:900; margin-bottom:12px; line-height:1.3;
+}
+.cs-section p {
+  font-size:0.9rem; color:var(--ink2); line-height:1.7; margin-bottom:14px;
+}
+.cs-section p strong { color:var(--ink); }
+
+/* ── Stats row ───────────────────────────────────────────── */
+.cs-stats {
+  display:flex; gap:18px; flex-wrap:wrap; margin:24px 0;
+  padding:18px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+}
+.cs-stat { display:flex; flex-direction:column; min-width:100px; }
+.cs-stat-val {
+  font-family:'JetBrains Mono',monospace; font-size:1.3rem; font-weight:700;
+  color:var(--ink); line-height:1.2;
+}
+.cs-stat-label { font-size:0.7rem; color:var(--ink3); margin-top:2px; }
+
+/* ── Tech tags ───────────────────────────────────────────── */
+.cs-tech { display:flex; flex-wrap:wrap; gap:6px; margin:18px 0; }
+.cs-tech span {
+  font-size:0.68rem; font-weight:700; padding:4px 12px;
+  border-radius:999px; background:var(--cream2);
+  border:1px solid var(--border2); color:var(--ink3);
+}
+
+/* ── Pilot badge ─────────────────────────────────────────── */
+.cs-pilot {
+  margin-top:16px; padding:14px 18px;
+  background:linear-gradient(135deg,rgba(200,122,26,0.05),rgba(200,122,26,0.02));
+  border:1px solid rgba(200,122,26,0.15); border-radius:10px;
+}
+.cs-pilot-label { font-size:0.75rem; font-weight:700; color:var(--accent); margin-bottom:4px; }
+.cs-pilot p { font-size:0.8rem; color:#555; line-height:1.55; margin:0; }
+
+/* ── Prev / Next navigation ──────────────────────────────── */
+.cs-prev-next {
+  display:grid; grid-template-columns:1fr 1fr; gap:16px;
+  margin:48px 0 40px; padding-top:32px; border-top:1px solid var(--border);
+}
+.cs-pn-card {
+  display:flex; flex-direction:column; padding:20px 22px;
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  text-decoration:none; color:inherit; transition:border-color 0.15s, box-shadow 0.15s;
+}
+.cs-pn-card:hover { border-color:var(--border2); box-shadow:var(--shadow); }
+.cs-pn-card.next { text-align:right; }
+.cs-pn-dir { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink4); margin-bottom:6px; }
+.cs-pn-title { font-size:0.88rem; font-weight:700; color:var(--ink); line-height:1.3; }
+.cs-pn-product { font-size:0.68rem; color:var(--ink3); margin-top:4px; }
+.cs-pn-card.placeholder { pointer-events:none; opacity:0; }
+
+/* ── CTA band ────────────────────────────────────────────── */
+.cta-band { background:var(--ink); border-radius:20px; padding:52px 56px; display:flex; align-items:center; justify-content:space-between; gap:32px; position:relative; overflow:hidden; margin-bottom:40px; }
+.cta-band::before { content:''; position:absolute; top:0; right:0; width:360px; height:100%; background:radial-gradient(ellipse at right,rgba(212,152,79,0.15) 0%,transparent 70%); pointer-events:none; }
+.cta-band-text h2 { font-size:1.7rem; font-weight:900; color:#fff; line-height:1.2; margin-bottom:10px; }
+.cta-band-text p { font-size:0.88rem; color:rgba(255,255,255,0.55); }
+.cta-band-actions { display:flex; flex-direction:column; gap:10px; flex-shrink:0; }
+.cta-btn-primary { font-family:'Mont',sans-serif; font-size:0.88rem; font-weight:700; padding:13px 28px; border-radius:10px; background:#fff; color:var(--ink); text-decoration:none; text-align:center; transition:opacity 0.15s; display:block; white-space:nowrap; }
+.cta-btn-primary:hover { opacity:0.9; }
+.cta-btn-ghost { font-family:'Mont',sans-serif; font-size:0.82rem; font-weight:700; padding:11px 24px; border-radius:10px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:rgba(255,255,255,0.85); text-decoration:none; text-align:center; transition:background 0.15s; display:block; white-space:nowrap; }
+.cta-btn-ghost:hover { background:rgba(255,255,255,0.14); }
+
+/* ── Footer ──────────────────────────────────────────────── */
+.footer { padding:28px 0; text-align:center; font-size:0.7rem; color:var(--ink4); line-height:1.9; }
+.footer a { color:var(--ink3); text-decoration:none; }
+.footer a:hover { color:var(--ink); }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width:900px) {
+  .page-wrap { grid-template-columns:1fr; gap:0; padding:0 20px; }
+  .side-pane { display:none; }
+  .cs-header h1 { font-size:1.7rem; }
+  .cs-prev-next { grid-template-columns:1fr; }
+  .cs-pn-card.next { text-align:left; }
+  .cta-band { flex-direction:column; padding:36px 28px; border-radius:14px; text-align:center; }
+  .cta-band-actions { width:100%; }
+  .cta-btn-primary,.cta-btn-ghost { width:100%; display:block; }
+}
+
+@media print {
+  .side-pane, .cs-prev-next, .cta-band { display:none; }
+  .page-wrap { grid-template-columns:1fr; }
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <span>Stakco</span>
+    </a>
+    <div class="site-nav-links">
+      <a href="/products/">Products</a>
+      <a href="/case-studies/" class="sn-active">Case Studies</a>
+      <a href="/research/">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- ═══ SIDE PANE ═══════════════════════════════════════════ -->
+  <aside class="side-pane">
+    <a href="/case-studies/" class="side-nav-back"><i class="fa-solid fa-arrow-left"></i> All case studies</a>
+    <span class="side-nav-label">On this page</span>
+    <ul class="side-nav">
+      <li><a href="#overview" class="active">Overview</a></li>
+      <li><a href="#concept">The concept</a></li>
+      <li><a href="#execution">Booth execution</a></li>
+      <li><a href="#technology">Technology</a></li>
+      <li><a href="#pilot">Pilot results</a></li>
+    </ul>
+  </aside>
+
+  <!-- ═══ MAIN CONTENT ═══════════════════════════════════════ -->
+  <div class="main-col">
+
+    <nav class="breadcrumb">
+      <a href="/">Stakco</a><span>›</span>
+      <a href="/case-studies/">Case Studies</a><span>›</span>
+      Vivo Asia &times; OGA 2023
+    </nav>
+
+    <div class="cs-header">
+      <span class="cs-product-badge"><i class="fa-solid fa-circle" style="font-size:0.4rem;"></i> Stakco Paper</span>
+      <h1>Puzzle-driven booth engagement at OGA 2023</h1>
+      <p class="lead">Vivo Asia Engineering used custom Stakco Paper puzzles at their exhibition booth to drive visitor engagement — each puzzle featured their products and revealed a QR code linking to their website upon solving.</p>
+      <span class="cs-date"><i class="fa-regular fa-calendar"></i> &ensp;September 2023 · KLCC, Kuala Lumpur, Malaysia</span>
+    </div>
+
+    <div class="cs-hero-placeholder">
+      <i class="fa-regular fa-image"></i>
+      <span>Photo coming soon</span>
+    </div>
+
+    <!-- Stats -->
+    <div class="cs-stats reveal" id="overview">
+      <div class="cs-stat">
+        <div class="cs-stat-val">OGA 2023</div>
+        <div class="cs-stat-label">Exhibition</div>
+      </div>
+      <div class="cs-stat">
+        <div class="cs-stat-val">3 days</div>
+        <div class="cs-stat-label">Duration</div>
+      </div>
+      <div class="cs-stat">
+        <div class="cs-stat-val">Pilot</div>
+        <div class="cs-stat-label">Engagement trial</div>
+      </div>
+      <div class="cs-stat">
+        <div class="cs-stat-val">QR</div>
+        <div class="cs-stat-label">Hidden reveal</div>
+      </div>
+    </div>
+
+    <!-- Section: Concept -->
+    <div class="cs-section reveal" id="concept">
+      <h2>The concept</h2>
+      <p>
+        <strong>Vivo Asia Engineering &amp; Trading</strong>, a Singapore-based telecom, IT, and ELV systems integrator, participated in the <strong>19th Oil, Gas and Petrochemical Engineering Exhibition (OGA 2023)</strong> held from 13–15 September at the Kuala Lumpur Convention Centre, under the Singapore Pavilion. The exhibition attracted hundreds of industry professionals over three days.
+      </p>
+      <p>
+        To stand out among traditional exhibition booths, Vivo Asia deployed custom <strong>Stakco Paper puzzles</strong> as an interactive engagement tool. Rather than relying solely on brochures and presentations, the puzzles gave visitors a reason to stop, interact, and spend time at the booth.
+      </p>
+    </div>
+
+    <!-- Section: Execution -->
+    <div class="cs-section reveal" id="execution">
+      <h2>Booth execution</h2>
+      <p>
+        Each puzzle was custom-designed to feature <strong>Vivo Asia's products and systems</strong> — including maritime communication equipment, CCTV systems, and engineering services. The concentric rotating layers of each puzzle showcased different aspects of their offering.
+      </p>
+      <p>
+        The key interaction mechanic: solving a puzzle <strong>revealed a hidden QR code</strong> at the centre, leading directly to Vivo Asia's website. This turned a simple booth giveaway into an active discovery experience — visitors had to engage with the product imagery to unlock the digital link.
+      </p>
+    </div>
+
+    <!-- Section: Technology -->
+    <div class="cs-section reveal" id="technology">
+      <h2>Technology</h2>
+      <div class="cs-tech">
+        <span>Stakco Paper</span>
+        <span>Custom Product Imagery</span>
+        <span>Hidden QR Code Reveal</span>
+        <span>Stakco CLI</span>
+        <span>Booth Engagement</span>
+        <span>Lead Generation</span>
+      </div>
+    </div>
+
+    <!-- Section: Pilot -->
+    <div class="cs-section reveal" id="pilot">
+      <h2>Pilot results</h2>
+      <p>
+        This deployment was run as a <strong>pilot to measure user engagement</strong> at trade shows. The puzzles successfully attracted visitors to the booth, extended dwell time, and created a memorable interaction compared to conventional print materials.
+      </p>
+      <div class="cs-pilot">
+        <div class="cs-pilot-label">Engagement pilot &mdash; 2023</div>
+        <p>This was Stakco's first trade show deployment as a booth engagement tool. The format proved effective for drawing foot traffic and creating a tactile, memorable brand interaction in a professional B2B setting.</p>
+      </div>
+    </div>
+
+    <!-- ═══ PREV / NEXT ════════════════════════════════════════ -->
+    <div class="cs-prev-next">
+      <a href="wedding.html" class="cs-pn-card prev">
+        <span class="cs-pn-dir">← Previous case study</span>
+        <span class="cs-pn-title">84 custom puzzles for a wedding in India</span>
+        <span class="cs-pn-product">Stakco Paper</span>
+      </a>
+      <div class="cs-pn-card placeholder"></div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-band">
+      <div class="cta-band-text">
+        <h2>Have a project in mind?</h2>
+        <p>From educational installations to custom event puzzles — let's talk.</p>
+      </div>
+      <div class="cta-band-actions">
+        <a href="/contact/" class="cta-btn-primary">Get in touch</a>
+        <a href="/products/" class="cta-btn-ghost">Explore products</a>
+      </div>
+    </div>
+
+  </div><!-- /main-col -->
+</div><!-- /page-wrap -->
+
+<footer class="footer">
+  <div style="max-width:1080px;margin:0 auto;padding:0 40px;">
+    Stakco · <a href="https://stakcos.com">stakcos.com</a> ·
+    <a href="/products/">Products</a> ·
+    <a href="/case-studies/">Case Studies</a> · <a href="/research/">Research</a> ·
+    <a href="/contact/">Contact</a><br>
+    <a href="https://play.stakcos.com">Play</a> · <a href="https://studio.stakcos.com">Studio</a> ·
+    <a href="https://shop.stakcos.com">Shop</a> · <a href="mailto:hello@stakcos.com">hello@stakcos.com</a><br>
+    Proprietary puzzle technology · Patent pending (SG 10202302289U)
+  </div>
+</footer>
+
+<script>
+// Reveal on scroll
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+// Side nav active state on scroll
+const sections = document.querySelectorAll('.cs-section, .cs-stats');
+const navLinks = document.querySelectorAll('.side-nav a');
+const sectionObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const id = e.target.id;
+      const link = document.querySelector(`.side-nav a[href="#${id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.3, rootMargin: '-80px 0px -50% 0px' });
+sections.forEach(s => { if (s.id) sectionObs.observe(s); });
+</script>
+<script>window.StakcoParticlesConfig = { count: 38, opacity: 0.3, speed: 0.85, fixed: true, zIndex: 0 };</script>
+<script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+</body>
+</html>

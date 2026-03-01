@@ -74,9 +74,13 @@ body {
 
 /* ── HERO ─────────────────────────────────────────────────── */
 .hero {
-  padding: 80px 0 40px;
-  text-align: center;
+  padding: 80px 0 72px;
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  gap: 48px;
+  align-items: center;
 }
+.hero-left { display: flex; flex-direction: column; }
 .hero-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 0.72rem; font-weight: 700;
@@ -95,18 +99,27 @@ body {
 }
 .hero h1 {
   font-family: 'Mont', sans-serif;
-  font-size: 3.6rem; font-weight: 900;
-  line-height: 1.08; letter-spacing: -0.025em;
+  font-size: 3.4rem; font-weight: 900;
+  line-height: 1.08; letter-spacing: -0.02em;
   margin-bottom: 22px;
-  max-width: 700px; margin-left: auto; margin-right: auto;
 }
 .hero h1 .accent { color: var(--orange); }
 .hero-sub {
   font-size: 1.05rem; color: var(--ink2);
-  line-height: 1.7; max-width: 580px;
-  margin: 0 auto 32px;
+  line-height: 1.65; max-width: 480px;
+  margin-bottom: 14px;
 }
-.hero-ctas { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.pricing-promise {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.82rem; color: var(--ink3);
+  background: var(--cream2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 8px 14px;
+  margin-bottom: 30px;
+}
+.pricing-promise .pp-free { font-weight: 700; color: var(--orange); }
+.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
 .btn-primary {
   font-family: 'Mont', sans-serif;
   font-size: 0.9rem; font-weight: 700;
@@ -129,20 +142,27 @@ body {
 }
 .btn-ghost:hover { border-color: var(--ink); background: var(--cream2); }
 
-/* ── VIDEO ─────────────────────────────────────────────────── */
-.video-wrap {
-  max-width: 820px; margin: 0 auto;
-  border-radius: 16px; overflow: hidden;
-  border: 1px solid var(--border2);
-  box-shadow: var(--shadow-md);
-  background: #000;
-  aspect-ratio: 16/9;
-  position: relative;
+/* ── PUZZLE DEMO (interactive embed) ─────────────────────── */
+.puzzle-demo {
+  display: flex; align-items: flex-start; justify-content: center;
+  position: relative; padding-top: 8px;
+  max-width: 100%; overflow: hidden;
 }
-.video-wrap iframe {
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 100%; border: none;
+.demo-hint {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 0.68rem; font-weight: 600; color: var(--ink3);
+  background: var(--cream2); border: 1px solid var(--border2);
+  padding: 5px 12px; border-radius: 999px;
 }
+.demo-hint svg { color: var(--orange); flex-shrink: 0; }
+.demo-caption {
+  font-size: 0.7rem; color: var(--ink4);
+  text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: 5px;
+  margin-top: 10px;
+}
+.demo-caption::before { content: ''; width: 20px; height: 1px; background: var(--ink4); }
+.demo-caption::after  { content: ''; width: 20px; height: 1px; background: var(--ink4); }
 
 /* ── EXPLAINER ─────────────────────────────────────────────── */
 .explainer {
@@ -270,7 +290,7 @@ body {
 .partner-logo:hover img { filter: grayscale(0%) opacity(0.9); }
 
 /* ── USE CASES ────────────────────────────────────────────── */
-.cases-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; }
+.cases-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
 .case-card {
   background: var(--card); border: 1px solid var(--border);
   border-radius: var(--r); padding: 24px 26px;
@@ -362,9 +382,20 @@ body {
   .section-title { font-size: 1.55rem; }
   .site-nav { padding: 0 20px; }
   .site-nav-links { display: none; }
-  .hero { padding: 48px 0 32px; }
-  .hero h1 { font-size: 2.4rem; }
-  .hero-sub { font-size: 0.95rem; }
+  .hero { grid-template-columns: 1fr; gap: 40px; padding: 48px 0 40px; text-align: center; }
+  .hero-left { align-items: center; }
+  .hero-eyebrow { justify-content: center; }
+  .hero-sub { text-align: left; max-width: 100%; }
+  .hero-ctas { justify-content: center; }
+  .btn-primary, .btn-ghost { flex: 1; min-width: 0; text-align: center; }
+  .puzzle-demo { overflow: hidden; max-width: 100%; }
+  .puzzle-demo > div { max-width: 100%; }
+  stakco-daily-embed {
+    max-width: 100% !important;
+    max-height: calc(100vw - 40px) !important;
+    aspect-ratio: 1 / 1;
+    display: block;
+  }
   .explainer { grid-template-columns: 1fr; gap: 0; }
   .exp-col { border-bottom: 1px solid var(--border); }
   .exp-col:last-child { border-bottom: none; }
@@ -378,7 +409,7 @@ body {
   .partner-logo img { height: 26px; }
 }
 @media (max-width: 480px) {
-  .hero h1 { font-size: 2rem; }
+  .hero h1 { font-size: 2.1rem; }
   .hero-ctas { flex-direction: column; width: 100%; }
   .btn-primary, .btn-ghost { width: 100%; flex: none; text-align: center; }
 }
@@ -412,31 +443,38 @@ body {
 
 <!-- ══ HERO ═════════════════════════════════════════════════════ -->
 <div class="hero section">
-  <div class="hero-eyebrow">
-    <span class="hero-eyebrow-dot"></span>
-    Rotating ring puzzles
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <span class="hero-eyebrow-dot"></span>
+      Rotating ring puzzles
+    </div>
+
+    <h1>A puzzle you<br>hold — and <span class="accent">turn.</span></h1>
+
+    <p class="hero-sub">
+      Stakco is a circular puzzle — made of rotating rings that each turn independently. Solve it by lining up the image across all the layers.<br><br>Play puzzles for free, or create your own and deliver it as a printed disc, a website link, or a physical display in your space.
+    </p>
+
+    <div class="pricing-promise">
+      <span class="pp-free">Free to explore &amp; play.</span>
+      Pay once when you're ready to make something.
+    </div>
+
+    <div class="hero-ctas">
+      <a href="https://play.stakcos.com" class="btn-primary">Play free puzzles</a>
+      <a href="/products/" class="btn-ghost">Explore products</a>
+    </div>
   </div>
 
-  <h1>A puzzle you hold,<br><span class="accent">turn</span>, and solve.</h1>
-
-  <p class="hero-sub">
-    Stakco is a circular puzzle made of concentric rotating rings. Line up the image across the layers to solve it. Play it on a screen, print it on paper, or install it in your space.
-  </p>
-
-  <div class="hero-ctas">
-    <a href="https://play.stakcos.com" class="btn-primary">Play free puzzles</a>
-    <a href="/products/" class="btn-ghost">Explore products</a>
-  </div>
-</div>
-
-<!-- ══ VIDEO DEMO ══════════════════════════════════════════════ -->
-<div class="section" style="padding-top:0;">
-  <div class="video-wrap reveal">
-    <iframe
-      src="https://www.youtube.com/embed/YmCMtQ8BqS8"
-      title="Stakco Demo"
-      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-      allowfullscreen></iframe>
+  <div class="puzzle-demo">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;">
+      <stakco-daily-embed size="440px" interactive controls="rings"></stakco-daily-embed>
+      <div class="demo-hint">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M9 12l2 2 4-4"/></svg>
+        Drag the rings to solve &mdash; it&rsquo;s interactive
+      </div>
+      <div class="demo-caption">Today&rsquo;s puzzle &middot; <a href="https://play.stakcos.com" target="_blank" rel="noopener" style="color:var(--orange);text-decoration:none;font-weight:600;">Full experience at play.stakcos.com &rarr;</a></div>
+    </div>
   </div>
 </div>
 
@@ -553,30 +591,27 @@ body {
   <p class="section-sub">Real deployments across education, therapy, events, and gifting.</p>
 
   <div class="cases-grid">
-    <a href="/case-studies/#awwa" class="case-card reveal">
+    <a href="/case-studies/awwa.html" class="case-card reveal">
       <span class="case-tag t-light">Stakco Light</span>
       <div class="case-name">Sensory room for autism therapy</div>
-      <div class="case-desc">A Stakco Light installation at AWWA School @ Bedok in Singapore, a special education school for students aged 7 to 18 with autism. Physical rotating rings with projected puzzles and therapeutic audio. Used daily for sensory engagement and upper-body movement.</div>
+      <div class="case-desc">A Stakco Light installation at AWWA School @ Bedok — a special education school for students with autism. Physical rotating rings with projected puzzles and therapeutic audio, used daily.</div>
       <span class="case-link">Read the case study →</span>
     </a>
-    <a href="/case-studies/#wedding" class="case-card reveal">
+    <a href="/case-studies/wedding.html" class="case-card reveal">
       <span class="case-tag t-paper">Stakco Paper</span>
       <div class="case-name">84 custom wedding puzzles</div>
-      <div class="case-desc">A commission of 84 unique Stakco Paper puzzles for a wedding celebration in India. Each puzzle featured a custom image from the couple's memories, printed, assembled, and shipped from Singapore.</div>
+      <div class="case-desc">84 unique Stakco Paper puzzles for a wedding in India. Each featured a custom image from the couple's memories — designed, handcrafted, and shipped from Singapore.</div>
       <span class="case-link">Read the case study →</span>
     </a>
-    <a href="/case-studies/#engagement" class="case-card reveal">
+    <a href="/case-studies/vivo.html" class="case-card reveal">
       <span class="case-tag t-paper">Stakco Paper</span>
-      <div class="case-name">Community engagement events</div>
-      <div class="case-desc">Printed puzzles deployed at community and business events as interactive icebreakers. They carry a message, a story, or a brand — far more than just a puzzle.</div>
+      <div class="case-name">Booth engagement at OGA 2023</div>
+      <div class="case-desc">Vivo Asia used custom Stakco Paper puzzles at their exhibition booth in Kuala Lumpur — each featuring their products, with a hidden QR code revealed upon solving.</div>
       <span class="case-link">Read the case study →</span>
     </a>
-    <a href="/case-studies/#cognitive" class="case-card reveal">
-      <span class="case-tag t-play">Stakco Play</span>
-      <div class="case-name">Cognitive training &amp; neuro-rehab</div>
-      <div class="case-desc">Video Stakco — puzzles with moving video content — demands real-time attention, coordination, and pattern recognition. A promising format for cognitive training and rehabilitation.</div>
-      <span class="case-link">Read the case study →</span>
-    </a>
+  </div>
+  <div style="text-align:center;margin-top:20px;">
+    <a href="/case-studies/" style="font-size:0.82rem;font-weight:700;color:var(--ink3);text-decoration:none;transition:color 0.15s;">View all case studies →</a>
   </div>
 </div>
 
@@ -650,6 +685,8 @@ document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 window.StakcoParticlesConfig = { count: 38, opacity: 0.3, speed: 0.85, fixed: true, zIndex: 0 };
 </script>
 <script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+
+<script src="https://cdn.stakcos.com/components/stakco-daily-embed.js"></script>
 
 </body>
 </html>

@@ -141,68 +141,7 @@ body {
 .wrap { max-width: 1080px; margin: 0 auto; padding: 0 40px; }
 .section { padding: 72px 0; }
 
-/* ── HERO ────────────────────────────────────────────────────── */
-.hero {
-  padding: 80px 0 72px;
-  display: grid;
-  grid-template-columns: 1fr 480px;
-  gap: 48px;
-  align-items: center;
-}
-
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0.72rem; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 0.1em;
-  color: var(--orange);
-  margin-bottom: 22px;
-}
-.hero-eyebrow-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--orange);
-  animation: pulse 2.4s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
-}
-
-.hero h1 {
-  font-family: 'Mont', sans-serif;
-  font-size: 3.4rem;
-  font-weight: 900;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
-  margin-bottom: 22px;
-  color: var(--ink);
-}
-.hero h1 .accent { color: var(--orange); }
-
-.hero-sub {
-  font-size: 1.05rem;
-  color: var(--ink2);
-  line-height: 1.65;
-  max-width: 480px;
-  margin-bottom: 14px;
-}
-
-.pricing-promise {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 0.82rem; color: var(--ink3);
-  background: var(--cream2);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  padding: 8px 14px;
-  margin-bottom: 30px;
-}
-.pricing-promise .pp-free {
-  font-weight: 700; color: var(--green);
-}
-.pricing-promise .pp-sep {
-  color: var(--ink4); margin: 0 2px;
-}
-
-.hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+/* ── BUTTONS ─────────────────────────────────────────────────── */
 .btn-primary {
   font-family: 'Mont', sans-serif;
   font-size: 0.9rem; font-weight: 700;
@@ -224,125 +163,6 @@ body {
   display: inline-block;
 }
 .btn-ghost:hover { border-color: var(--ink); background: var(--cream2); }
-
-/* ── PUZZLE DEMO (CSS animated rings) ────────────────────────── */
-.puzzle-demo {
-  display: flex; align-items: flex-start; justify-content: center;
-  position: relative;
-  padding-top: 8px;
-  max-width: 100%;
-  overflow: hidden;
-}
-.puzzle-stage {
-  --stage: 300px;
-  width: var(--stage); height: var(--stage);
-  position: relative;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-
-/* Glow background */
-.puzzle-stage::before {
-  content: '';
-  position: absolute;
-  width: 80%; height: 80%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(212,152,79,0.12) 0%, rgba(184,50,103,0.06) 60%, transparent 80%);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.ring {
-  position: absolute;
-  border-radius: 50%;
-  top: 50%; left: 50%;
-}
-
-/* Outer ring — 93% of stage */
-.ring-1 {
-  width: calc(var(--stage) * 0.93); height: calc(var(--stage) * 0.93);
-  border: calc(var(--stage) * 0.08) solid transparent;
-  border-top-color: var(--orange);
-  border-right-color: #e8d4a8;
-  border-bottom-color: #DFAC6D;
-  border-left-color: var(--orange);
-  transform: translate(-50%, -50%);
-  animation: spin-slow 18s linear infinite;
-  filter: drop-shadow(0 4px 12px rgba(212,152,79,0.25));
-}
-
-/* Middle ring — 70% of stage */
-.ring-2 {
-  width: calc(var(--stage) * 0.70); height: calc(var(--stage) * 0.70);
-  border: calc(var(--stage) * 0.065) solid transparent;
-  border-top-color: #f5e8d0;
-  border-right-color: var(--pink);
-  border-bottom-color: var(--pink);
-  border-left-color: #daa8b0;
-  transform: translate(-50%, -50%);
-  animation: spin-slow 12s linear infinite reverse;
-  filter: drop-shadow(0 3px 8px rgba(184,50,103,0.2));
-}
-
-/* Inner ring — 50% of stage */
-.ring-3 {
-  width: calc(var(--stage) * 0.50); height: calc(var(--stage) * 0.50);
-  border: calc(var(--stage) * 0.055) solid transparent;
-  border-top-color: var(--amber);
-  border-right-color: var(--amber);
-  border-bottom-color: #DFAC6D;
-  border-left-color: #f0e0a0;
-  transform: translate(-50%, -50%);
-  animation: spin-slow 8s linear infinite;
-  filter: drop-shadow(0 2px 6px rgba(212,152,79,0.25));
-}
-
-/* Centre disc — 29% of stage */
-.ring-center {
-  position: absolute;
-  width: calc(var(--stage) * 0.29); height: calc(var(--stage) * 0.29);
-  background: var(--cream);
-  border-radius: 50%;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: inset 0 2px 8px rgba(60,47,56,0.08);
-}
-.ring-center img { width: 38%; height: auto; opacity: 0.7; }
-
-@keyframes spin-slow {
-  from { transform: translate(-50%,-50%) rotate(0deg); }
-  to   { transform: translate(-50%,-50%) rotate(360deg); }
-}
-
-/* Demo hint */
-.demo-hint {
-  display: inline-flex; align-items: center; gap: 5px;
-  font-size: 0.68rem; font-weight: 600; color: var(--ink3);
-  background: var(--cream2); border: 1px solid var(--border2);
-  padding: 5px 12px; border-radius: 999px;
-}
-.demo-hint svg { color: var(--orange); flex-shrink: 0; }
-
-/* Demo caption */
-.demo-caption {
-  font-size: 0.7rem; color: var(--ink4);
-  text-align: center;
-  display: flex; align-items: center; justify-content: center; gap: 5px;
-  margin-top: 10px;
-}
-.demo-caption::before { content: ''; width: 20px; height: 1px; background: var(--ink4); }
-.demo-caption::after  { content: ''; width: 20px; height: 1px; background: var(--ink4); }
-
-/* Demo try link */
-.demo-try {
-  display: block; text-align: center;
-  font-size: 0.72rem; font-weight: 700;
-  color: var(--orange); text-decoration: none;
-  margin-top: 6px;
-  transition: opacity 0.15s;
-}
-.demo-try:hover { opacity: 0.75; }
 
 /* ── WHAT IS IT (3-col explainer) ─────────────────────────── */
 .explainer {
@@ -867,18 +687,6 @@ body {
   .wrap { padding: 0 20px; }
   .section { padding: 48px 0; }
   .section-title { font-size: 1.55rem; }
-  .nav-links { display: none; }
-
-  /* Hero — stack vertically, centre content */
-  .hero { grid-template-columns: 1fr; gap: 40px; padding: 48px 0 40px; text-align: center; }
-  .hero-left { display: flex; flex-direction: column; align-items: center; }
-  .hero-eyebrow { justify-content: center; }
-  .hero-sub { text-align: left; max-width: 100%; }
-  .hero-ctas { justify-content: center; }
-  .btn-primary, .btn-ghost { flex: 1; min-width: 0; text-align: center; }
-
-  /* Rings scale from --stage only — no individual overrides needed */
-  .puzzle-stage { --stage: 240px; }
 
   /* Explainer — single column with border dividers */
   .explainer { grid-template-columns: 1fr; gap: 0; }
@@ -909,24 +717,12 @@ body {
   .module-legend { grid-template-columns: 1fr !important; }
   .pricing-col { padding: 22px 20px; }
 
-  /* Daily puzzle embed — fit to screen, keep square */
-  .puzzle-demo { overflow: hidden; max-width: 100%; }
-  .puzzle-demo > div { max-width: 100%; }
-  stakco-daily-embed {
-    max-width: 100% !important;
-    max-height: calc(100vw - 40px) !important;
-    aspect-ratio: 1 / 1;
-    display: block;
-  }
-
   /* Create-track nudge card — stack on mobile */
   .create-track-nudge { flex-direction: column !important; text-align: center; }
   .create-track-nudge a { width: 100%; text-align: center; }
 }
 
 @media (max-width: 480px) {
-  .hero h1 { font-size: 2.1rem; }
-  .puzzle-stage { --stage: 200px; }
   .hero-ctas { flex-direction: column; width: 100%; }
   .btn-primary, .btn-ghost { width: 100%; flex: none; }
   .guide-cards { gap: 8px; }
@@ -966,193 +762,11 @@ body {
 
 <div class="wrap">
 
-<!-- ══ HERO ═════════════════════════════════════════════════════ -->
-<div class="hero section" id="hero">
-  <div class="hero-left">
-    <div class="hero-eyebrow">
-      <span class="hero-eyebrow-dot"></span>
-      Rotating puzzle platform
-    </div>
-
-    <h1>A puzzle you<br>hold — and <span class="accent">turn.</span></h1>
-
-    <p class="hero-sub">
-      Stakco is a circular puzzle — made of rotating rings that each turn independently. Solve it by lining up the image across all the layers.<br><br>You can play puzzles for free, or create your own and deliver it as a printed disc, a website link, or a physical display in your space.
-    </p>
-
-    <div class="pricing-promise">
-      <span class="pp-free">Free to explore &amp; play.</span>
-      <span class="pp-sep"> </span>
-      Pay once when you're ready to make something.
-    </div>
-
-    <div class="hero-ctas">
-      <a href="https://play.stakcos.com" class="btn-primary">Explore free tracks</a>
-      <a href="https://studio.stakcos.com" class="btn-ghost">Create your own</a>
-    </div>
-  </div>
-
-  <div class="puzzle-demo">
-    <div style="display:flex;flex-direction:column;align-items:center;gap:10px;width:100%;">
-      <stakco-daily-embed size="440px" interactive controls="rings"></stakco-daily-embed>
-      <div class="demo-hint">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2z"/><path d="M9 12l2 2 4-4"/></svg>
-        Drag the rings to solve &mdash; it&rsquo;s interactive
-      </div>
-      <div class="demo-caption">Today&rsquo;s puzzle &middot; <a href="https://play.stakcos.com" target="_blank" rel="noopener" style="color:var(--orange);text-decoration:none;font-weight:600;">Full experience at play.stakcos.com &rarr;</a></div>
-    </div>
-  </div>
-</div>
-
-<!-- ══ LIVE TRACKS ═══════════════════════════════════════════════ -->
-
-<!-- ══ PARTNER STRIP ══════════════════════════════════════════ -->
-<div class="partner-strip">
-  <div class="partner-strip-label">Trusted by</div>
-  <div class="partner-logos">
-    <a class="partner-logo" href="https://www.sgenable.sg" target="_blank" rel="noopener" title="SG Enable">
-      <img src="https://cdn.stakcos.com/media/partners/sgenable.png" alt="SG Enable">
-    </a>
-    <a class="partner-logo" href="https://www.awwa.org.sg" target="_blank" rel="noopener" title="AWWA">
-      <img src="https://cdn.stakcos.com/media/partners/awwa.png" alt="AWWA">
-    </a>
-    <a class="partner-logo" href="https://nus.edu.sg" target="_blank" rel="noopener" title="National University of Singapore">
-      <img src="https://cdn.stakcos.com/media/partners/nus.png" alt="NUS">
-    </a>
-    <a class="partner-logo" href="https://ahlab.org" target="_blank" rel="noopener" title="AHLab">
-      <img src="https://cdn.stakcos.com/media/partners/ahlab.png" alt="AHLab">
-    </a>
-  </div>
-</div>
-
-<div class="section" id="live-tracks">
-  <span class="section-label">Free to explore</span>
-  <h2 class="section-title">Try a live puzzle track</h2>
-  <p class="section-sub">These are real Stakco Play experiences — no account, no payment. Open any track, solve puzzles, get a feel for the format.</p>
-
-  <div class="tracks-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;">
-
-    <!-- Central / Science track -->
-    <a href="https://play.stakcos.com" target="_blank" class="track-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:box-shadow 0.18s,transform 0.15s;">
-      <div style="padding:20px 22px 0;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-          <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(223,172,109,0.15),rgba(223,172,109,0.3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;"><i class="fa-solid fa-flask"></i></div>
-          <div>
-            <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;line-height:1.2;">Science Daily</div>
-            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--cyan);">Always on · managed by Stakco</div>
-          </div>
-        </div>
-        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">AI-generated science puzzles, refreshed daily. Managed by Stakco. A new discovery to solve every day.</div>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">play.stakcos.com ↗</span>
-      </div>
-      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--cyan);display:flex;align-items:center;justify-content:space-between;">
-        Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
-      </div>
-    </a>
-
-    <!-- Lunar New Year seasonal track -->
-    <a href="https://lunar.play.stakcos.com" target="_blank" class="track-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:box-shadow 0.18s,transform 0.15s;">
-      <div style="padding:20px 22px 0;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-          <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(212,152,79,0.15),rgba(212,152,79,0.3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;"><i class="fa-solid fa-moon"></i></div>
-          <div>
-            <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;line-height:1.2;">Lunar New Year</div>
-            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--orange);">Seasonal track</div>
-          </div>
-        </div>
-        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">AI-generated daily puzzles celebrating Chinese New Year. A themed seasonal experience built on Stakco Play.</div>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">lunar.play.stakcos.com ↗</span>
-      </div>
-      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--orange);display:flex;align-items:center;justify-content:space-between;">
-        Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
-      </div>
-    </a>
-
-    <!-- NUS 120 celebration track -->
-    <a href="https://nus120.play.stakcos.com" target="_blank" class="track-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:box-shadow 0.18s,transform 0.15s;">
-      <div style="padding:20px 22px 0;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
-          <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(184,50,103,0.15),rgba(184,50,103,0.3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;"><i class="fa-solid fa-graduation-cap"></i></div>
-          <div>
-            <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;line-height:1.2;">NUS 120</div>
-            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);">Celebration track</div>
-          </div>
-        </div>
-        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">A puzzle experience created for NUS's 120th anniversary. A example of a branded institutional track on Stakco Play.</div>
-        <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">nus120.play.stakcos.com ↗</span>
-      </div>
-      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--purple);display:flex;align-items:center;justify-content:space-between;">
-        Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- "Want to create your own?" nudge -->
-  <div class="create-track-nudge" style="background:linear-gradient(135deg,rgba(212,152,79,0.06),rgba(184,50,103,0.04));border:1px solid var(--border2);border-radius:12px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
-    <div style="flex:1;min-width:0;">
-      <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:3px;">Want to create a track like these?</div>
-      <div style="font-size:0.8rem;color:var(--ink3);">A Play track is your own puzzle collection on a dedicated web address — science, seasonal, branded, or anything you imagine. Your audience plays for free. Starts from S$13 + Play module.</div>
-    </div>
-    <a href="https://studio.stakcos.com" style="font-size:0.8rem;font-weight:700;padding:10px 22px;border-radius:9px;background:var(--ink);color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:opacity 0.15s;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">Start in Studio</a>
-  </div>
-</div>
-
-<!-- ══ WHAT IS IT ════════════════════════════════════════════════ -->
-<div class="section" id="what-is">
-  <div class="explainer reveal">
-    <div class="exp-col">
-      <div class="exp-num">01</div>
-      <div class="exp-title">What it is</div>
-      <div class="exp-body">A circular puzzle with 2–4 rings, each one rotating independently. Turn the rings until the picture lines up — that's it. No loose pieces. No instructions needed. Anyone can pick it up and understand it in seconds.</div>
-    </div>
-    <div class="exp-col">
-      <div class="exp-num">02</div>
-      <div class="exp-title">Three ways to use it</div>
-      <div class="exp-body">The same puzzle can be a <strong>physical disc</strong> you hand someone, a <strong>web link</strong> you send by message, or a <strong>large display</strong> installed in your lobby or venue. You design it once — then choose the format.</div>
-    </div>
-    <div class="exp-col">
-      <div class="exp-num">03</div>
-      <div class="exp-title">You design it in minutes</div>
-      <div class="exp-body">Open Stakco Studio in your browser — no software to install. Upload a photo or logo, pick your ring layout, and see your puzzle instantly. No design experience needed. If you don't have an image, describe it and AI will create one. Starts from S$13, once.</div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ══ SOCIAL PROOF ══════════════════════════════════════════════ -->
-<div style="padding:20px 0 8px;">
-  <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
-    <span style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink4);">Trusted in the field</span>
-    <div style="flex:1;height:1px;background:var(--border);"></div>
-  </div>
-  <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
-    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;flex:1;min-width:260px;">
-      <div style="width:38px;height:38px;border-radius:9px;background:rgba(212,152,79,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-        <i class="fa-solid fa-heart" style="color:var(--amber);font-size:1rem;"></i>
-      </div>
-      <div>
-        <div style="font-family:'Mont',sans-serif;font-size:0.82rem;font-weight:700;color:var(--ink);margin-bottom:2px;">AWWA School @ Bedok</div>
-        <div style="font-size:0.72rem;color:var(--ink3);line-height:1.4;">Stakco Light's first installation — a sensory puzzle experience for students with autism. Used daily as a tactile engagement and focus activity.</div>
-      </div>
-    </div>
-    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;flex:1;min-width:260px;">
-      <div style="width:38px;height:38px;border-radius:9px;background:rgba(184,50,103,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-        <i class="fa-solid fa-graduation-cap" style="color:var(--pink);font-size:1rem;"></i>
-      </div>
-      <div>
-        <div style="font-family:'Mont',sans-serif;font-size:0.82rem;font-weight:700;color:var(--ink);margin-bottom:2px;">NUS 120th Anniversary</div>
-        <div style="font-size:0.72rem;color:var(--ink3);line-height:1.4;">A dedicated puzzle track created for the National University of Singapore's 120th anniversary celebration — branded, interactive, and open to all visitors.</div>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- ══ THREE PRODUCTS ════════════════════════════════════════════ -->
-<div class="section" id="products">
-  <span class="section-label">Three formats</span>
-  <h2 class="section-title">Pick your format</h2>
-  <p class="section-sub">Same puzzle. Three ways to experience it. Start with whatever fits your goal.</p>
+<div class="section" id="products" style="padding-top:80px;">
+  <span class="section-label">Products</span>
+  <h2 class="section-title" style="font-size:2.4rem;letter-spacing:-0.02em;">Three formats, one puzzle engine</h2>
+  <p class="section-sub">Design a puzzle once in Stakco Studio — then deliver it as a printed disc, a browser link, or a physical installation. Pick the format that fits your goal.</p>
 
   <div class="products-grid">
 
@@ -1260,6 +874,148 @@ body {
       </div>
     </a>
 
+  </div>
+</div>
+
+<!-- ══ WHAT IS IT ════════════════════════════════════════════════ -->
+<div class="section" id="what-is">
+  <div class="explainer reveal">
+    <div class="exp-col">
+      <div class="exp-num">01</div>
+      <div class="exp-title">What it is</div>
+      <div class="exp-body">A circular puzzle with 2–4 rings, each one rotating independently. Turn the rings until the picture lines up — that's it. No loose pieces. No instructions needed. Anyone can pick it up and understand it in seconds.</div>
+    </div>
+    <div class="exp-col">
+      <div class="exp-num">02</div>
+      <div class="exp-title">Three ways to use it</div>
+      <div class="exp-body">The same puzzle can be a <strong>physical disc</strong> you hand someone, a <strong>web link</strong> you send by message, or a <strong>large display</strong> installed in your lobby or venue. You design it once — then choose the format.</div>
+    </div>
+    <div class="exp-col">
+      <div class="exp-num">03</div>
+      <div class="exp-title">You design it in minutes</div>
+      <div class="exp-body">Open Stakco Studio in your browser — no software to install. Upload a photo or logo, pick your ring layout, and see your puzzle instantly. No design experience needed. If you don't have an image, describe it and AI will create one. Starts from S$13, once.</div>
+    </div>
+  </div>
+</div>
+
+
+<div class="section" id="live-tracks">
+  <span class="section-label">Free to explore</span>
+  <h2 class="section-title">Try a live puzzle track</h2>
+  <p class="section-sub">These are real Stakco Play experiences — no account, no payment. Open any track, solve puzzles, get a feel for the format.</p>
+
+  <div class="tracks-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px;">
+
+    <!-- Central / Science track -->
+    <a href="https://play.stakcos.com" target="_blank" class="track-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:box-shadow 0.18s,transform 0.15s;">
+      <div style="padding:20px 22px 0;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(223,172,109,0.15),rgba(223,172,109,0.3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;"><i class="fa-solid fa-flask"></i></div>
+          <div>
+            <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;line-height:1.2;">Science Daily</div>
+            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--cyan);">Always on · managed by Stakco</div>
+          </div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">AI-generated science puzzles, refreshed daily. Managed by Stakco. A new discovery to solve every day.</div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">play.stakcos.com ↗</span>
+      </div>
+      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--cyan);display:flex;align-items:center;justify-content:space-between;">
+        Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
+      </div>
+    </a>
+
+    <!-- Lunar New Year seasonal track -->
+    <a href="https://lunar.play.stakcos.com" target="_blank" class="track-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:box-shadow 0.18s,transform 0.15s;">
+      <div style="padding:20px 22px 0;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(212,152,79,0.15),rgba(212,152,79,0.3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;"><i class="fa-solid fa-moon"></i></div>
+          <div>
+            <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;line-height:1.2;">Lunar New Year</div>
+            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--orange);">Seasonal track</div>
+          </div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">AI-generated daily puzzles celebrating Chinese New Year. A themed seasonal experience built on Stakco Play.</div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">lunar.play.stakcos.com ↗</span>
+      </div>
+      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--orange);display:flex;align-items:center;justify-content:space-between;">
+        Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
+      </div>
+    </a>
+
+    <!-- NUS 120 celebration track -->
+    <a href="https://nus120.play.stakcos.com" target="_blank" class="track-card" style="background:var(--card);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;text-decoration:none;color:inherit;display:flex;flex-direction:column;transition:box-shadow 0.18s,transform 0.15s;">
+      <div style="padding:20px 22px 0;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;">
+          <div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,rgba(184,50,103,0.15),rgba(184,50,103,0.3));display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;"><i class="fa-solid fa-graduation-cap"></i></div>
+          <div>
+            <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;line-height:1.2;">NUS 120</div>
+            <div style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--purple);">Celebration track</div>
+          </div>
+        </div>
+        <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">A puzzle experience created for NUS's 120th anniversary. A example of a branded institutional track on Stakco Play.</div>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">nus120.play.stakcos.com ↗</span>
+      </div>
+      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--purple);display:flex;align-items:center;justify-content:space-between;">
+        Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- "Want to create your own?" nudge -->
+  <div class="create-track-nudge" style="background:linear-gradient(135deg,rgba(212,152,79,0.06),rgba(184,50,103,0.04));border:1px solid var(--border2);border-radius:12px;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:24px;">
+    <div style="flex:1;min-width:0;">
+      <div style="font-family:'Mont',sans-serif;font-size:0.9rem;font-weight:700;margin-bottom:3px;">Want to create a track like these?</div>
+      <div style="font-size:0.8rem;color:var(--ink3);">A Play track is your own puzzle collection on a dedicated web address — science, seasonal, branded, or anything you imagine. Your audience plays for free. Starts from S$13 + Play module.</div>
+    </div>
+    <a href="https://studio.stakcos.com" style="font-size:0.8rem;font-weight:700;padding:10px 22px;border-radius:9px;background:var(--ink);color:#fff;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:opacity 0.15s;" onmouseover="this.style.opacity='.82'" onmouseout="this.style.opacity='1'">Start in Studio</a>
+  </div>
+</div>
+
+<!-- ══ SOCIAL PROOF ══════════════════════════════════════════════ -->
+<div style="padding:20px 0 8px;">
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+    <span style="font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--ink4);">Trusted in the field</span>
+    <div style="flex:1;height:1px;background:var(--border);"></div>
+  </div>
+  <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap;">
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;flex:1;min-width:260px;">
+      <div style="width:38px;height:38px;border-radius:9px;background:rgba(212,152,79,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="fa-solid fa-heart" style="color:var(--amber);font-size:1rem;"></i>
+      </div>
+      <div>
+        <div style="font-family:'Mont',sans-serif;font-size:0.82rem;font-weight:700;color:var(--ink);margin-bottom:2px;">AWWA School @ Bedok</div>
+        <div style="font-size:0.72rem;color:var(--ink3);line-height:1.4;">Stakco Light's first installation — a sensory puzzle experience for students with autism. Used daily as a tactile engagement and focus activity.</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;flex:1;min-width:260px;">
+      <div style="width:38px;height:38px;border-radius:9px;background:rgba(184,50,103,0.1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <i class="fa-solid fa-graduation-cap" style="color:var(--pink);font-size:1rem;"></i>
+      </div>
+      <div>
+        <div style="font-family:'Mont',sans-serif;font-size:0.82rem;font-weight:700;color:var(--ink);margin-bottom:2px;">NUS 120th Anniversary</div>
+        <div style="font-size:0.72rem;color:var(--ink3);line-height:1.4;">A dedicated puzzle track created for the National University of Singapore's 120th anniversary celebration — branded, interactive, and open to all visitors.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PARTNER STRIP ══════════════════════════════════════════ -->
+<div class="partner-strip" style="margin-bottom:32px;">
+  <div class="partner-strip-label">Trusted by</div>
+  <div class="partner-logos">
+    <a class="partner-logo" href="https://www.sgenable.sg" target="_blank" rel="noopener" title="SG Enable">
+      <img src="https://cdn.stakcos.com/media/partners/sgenable.png" alt="SG Enable">
+    </a>
+    <a class="partner-logo" href="https://www.awwa.org.sg" target="_blank" rel="noopener" title="AWWA">
+      <img src="https://cdn.stakcos.com/media/partners/awwa.png" alt="AWWA">
+    </a>
+    <a class="partner-logo" href="https://nus.edu.sg" target="_blank" rel="noopener" title="National University of Singapore">
+      <img src="https://cdn.stakcos.com/media/partners/nus.png" alt="NUS">
+    </a>
+    <a class="partner-logo" href="https://ahlab.org" target="_blank" rel="noopener" title="AHLab">
+      <img src="https://cdn.stakcos.com/media/partners/ahlab.png" alt="AHLab">
+    </a>
   </div>
 </div>
 
@@ -1684,6 +1440,5 @@ window.StakcoParticlesConfig = {
 };
 </script>
 <script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
-<script src="https://cdn.stakcos.com/components/stakco-daily-embed.js"></script>
 </body>
 </html>

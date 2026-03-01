@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<title>Wedding Puzzles — Case Study — Stakco</title>
+<link rel="stylesheet" href="/stakco-site.css">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html, body { overflow-x:hidden; }
+:root {
+  --cream:#FDFAF6; --cream2:#f2ece4; --ink:#3C2F38; --ink2:#4a3c44;
+  --ink3:#8a7e85; --ink4:#b8a8b0; --card:#ffffff; --pink:#B83267;
+  --amber:#D4984F; --orange:#D4984F; --border:rgba(60,47,56,0.08);
+  --border2:rgba(60,47,56,0.13); --r:14px;
+  --shadow:0 2px 16px rgba(60,47,56,0.07); --shadow-md:0 6px 28px rgba(60,47,56,0.1);
+  --accent:#c87a1a;
+}
+body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink); line-height:1.6; font-size:16px; -webkit-font-smoothing:antialiased; }
+
+/* ── Layout ──────────────────────────────────────────────── */
+.page-wrap { max-width:1180px; margin:0 auto; padding:0 40px; display:grid; grid-template-columns:200px 1fr; gap:48px; }
+.side-pane { position:sticky; top:76px; align-self:start; padding-top:32px; }
+.main-col { max-width:780px; }
+
+/* ── Side pane nav ───────────────────────────────────────── */
+.side-nav { list-style:none; }
+.side-nav li { margin-bottom:2px; }
+.side-nav a {
+  display:block; padding:7px 14px; font-size:0.75rem; color:var(--ink3);
+  text-decoration:none; border-radius:8px; border-left:2px solid transparent;
+  transition:all 0.15s; line-height:1.4;
+}
+.side-nav a:hover { color:var(--ink); background:rgba(60,47,56,0.03); }
+.side-nav a.active { color:var(--accent); border-left-color:var(--accent); background:rgba(200,122,26,0.05); font-weight:700; }
+.side-nav-label {
+  font-size:0.6rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em;
+  color:var(--ink4); padding:0 14px; margin-bottom:10px; display:block;
+}
+.side-nav-back {
+  display:inline-flex; align-items:center; gap:6px; font-size:0.72rem; font-weight:700;
+  color:var(--ink3); text-decoration:none; padding:0 14px; margin-bottom:20px;
+  transition:color 0.15s;
+}
+.side-nav-back:hover { color:var(--ink); }
+.side-nav-back i { font-size:0.6rem; }
+
+/* ── Breadcrumb ──────────────────────────────────────────── */
+.breadcrumb { padding:20px 0 0; font-size:0.72rem; color:var(--ink4); }
+.breadcrumb a { color:var(--ink3); text-decoration:none; }
+.breadcrumb a:hover { color:var(--ink); }
+.breadcrumb span { margin:0 6px; }
+
+/* ── Page header ─────────────────────────────────────────── */
+.cs-header { padding:28px 0 0; }
+.cs-product-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:0.62rem; font-weight:700; text-transform:uppercase;
+  letter-spacing:0.08em; padding:5px 14px; border-radius:999px;
+  margin-bottom:16px;
+  background:rgba(200,122,26,0.1); color:var(--accent);
+}
+.cs-header h1 {
+  font-size:2.2rem; font-weight:900; line-height:1.15;
+  letter-spacing:-0.01em; margin-bottom:12px;
+}
+.cs-header .lead {
+  font-size:0.95rem; color:var(--ink2); line-height:1.65; max-width:600px; margin-bottom:24px;
+}
+.cs-date { font-size:0.72rem; color:var(--ink4); margin-bottom:24px; display:block; }
+
+/* ── Hero image ──────────────────────────────────────────── */
+.cs-hero {
+  width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:12px;
+  margin-bottom:40px; border:1px solid var(--border);
+}
+
+/* ── Section styles ──────────────────────────────────────── */
+.cs-section { margin-bottom:40px; scroll-margin-top:80px; }
+.cs-section h2 {
+  font-size:1.15rem; font-weight:900; margin-bottom:12px; line-height:1.3;
+}
+.cs-section p {
+  font-size:0.9rem; color:var(--ink2); line-height:1.7; margin-bottom:14px;
+}
+.cs-section p strong { color:var(--ink); }
+
+/* ── Stats row ───────────────────────────────────────────── */
+.cs-stats {
+  display:flex; gap:18px; flex-wrap:wrap; margin:24px 0;
+  padding:18px 0; border-top:1px solid var(--border); border-bottom:1px solid var(--border);
+}
+.cs-stat { display:flex; flex-direction:column; min-width:100px; }
+.cs-stat-val {
+  font-family:'JetBrains Mono',monospace; font-size:1.3rem; font-weight:700;
+  color:var(--ink); line-height:1.2;
+}
+.cs-stat-label { font-size:0.7rem; color:var(--ink3); margin-top:2px; }
+
+/* ── Tech tags ───────────────────────────────────────────── */
+.cs-tech { display:flex; flex-wrap:wrap; gap:6px; margin:18px 0; }
+.cs-tech span {
+  font-size:0.68rem; font-weight:700; padding:4px 12px;
+  border-radius:999px; background:var(--cream2);
+  border:1px solid var(--border2); color:var(--ink3);
+}
+
+/* ── Quote ────────────────────────────────────────────────── */
+.cs-quote {
+  background:var(--cream2); border-radius:10px; padding:20px 24px;
+  margin:24px 0; border-left:3px solid var(--accent);
+}
+.cs-quote p { font-size:0.88rem; color:var(--ink2); font-style:italic; line-height:1.65; margin-bottom:8px; }
+.cs-quote cite { font-size:0.75rem; font-weight:700; color:var(--ink3); font-style:normal; }
+
+/* ── Prev / Next navigation ──────────────────────────────── */
+.cs-prev-next {
+  display:grid; grid-template-columns:1fr 1fr; gap:16px;
+  margin:48px 0 40px; padding-top:32px; border-top:1px solid var(--border);
+}
+.cs-pn-card {
+  display:flex; flex-direction:column; padding:20px 22px;
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  text-decoration:none; color:inherit; transition:border-color 0.15s, box-shadow 0.15s;
+}
+.cs-pn-card:hover { border-color:var(--border2); box-shadow:var(--shadow); }
+.cs-pn-card.next { text-align:right; }
+.cs-pn-dir { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--ink4); margin-bottom:6px; }
+.cs-pn-title { font-size:0.88rem; font-weight:700; color:var(--ink); line-height:1.3; }
+.cs-pn-product { font-size:0.68rem; color:var(--ink3); margin-top:4px; }
+
+/* ── CTA band ────────────────────────────────────────────── */
+.cta-band { background:var(--ink); border-radius:20px; padding:52px 56px; display:flex; align-items:center; justify-content:space-between; gap:32px; position:relative; overflow:hidden; margin-bottom:40px; }
+.cta-band::before { content:''; position:absolute; top:0; right:0; width:360px; height:100%; background:radial-gradient(ellipse at right,rgba(212,152,79,0.15) 0%,transparent 70%); pointer-events:none; }
+.cta-band-text h2 { font-size:1.7rem; font-weight:900; color:#fff; line-height:1.2; margin-bottom:10px; }
+.cta-band-text p { font-size:0.88rem; color:rgba(255,255,255,0.55); }
+.cta-band-actions { display:flex; flex-direction:column; gap:10px; flex-shrink:0; }
+.cta-btn-primary { font-family:'Mont',sans-serif; font-size:0.88rem; font-weight:700; padding:13px 28px; border-radius:10px; background:#fff; color:var(--ink); text-decoration:none; text-align:center; transition:opacity 0.15s; display:block; white-space:nowrap; }
+.cta-btn-primary:hover { opacity:0.9; }
+.cta-btn-ghost { font-family:'Mont',sans-serif; font-size:0.82rem; font-weight:700; padding:11px 24px; border-radius:10px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:rgba(255,255,255,0.85); text-decoration:none; text-align:center; transition:background 0.15s; display:block; white-space:nowrap; }
+.cta-btn-ghost:hover { background:rgba(255,255,255,0.14); }
+
+/* ── Footer ──────────────────────────────────────────────── */
+.footer { padding:28px 0; text-align:center; font-size:0.7rem; color:var(--ink4); line-height:1.9; }
+.footer a { color:var(--ink3); text-decoration:none; }
+.footer a:hover { color:var(--ink); }
+
+/* ── Reveal ──────────────────────────────────────────────── */
+.reveal { opacity:0; transform:translateY(16px); transition:opacity 0.5s ease, transform 0.5s ease; }
+.reveal.visible { opacity:1; transform:none; }
+
+/* ── Responsive ──────────────────────────────────────────── */
+@media (max-width:900px) {
+  .page-wrap { grid-template-columns:1fr; gap:0; padding:0 20px; }
+  .side-pane { display:none; }
+  .cs-header h1 { font-size:1.7rem; }
+  .cs-stats { gap:14px; }
+  .cs-prev-next { grid-template-columns:1fr; }
+  .cs-pn-card.next { text-align:left; }
+  .cta-band { flex-direction:column; padding:36px 28px; border-radius:14px; text-align:center; }
+  .cta-band-actions { width:100%; }
+  .cta-btn-primary,.cta-btn-ghost { width:100%; display:block; }
+}
+
+@media print {
+  .side-pane, .cs-prev-next, .cta-band { display:none; }
+  .page-wrap { grid-template-columns:1fr; }
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Nav -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <span>Stakco</span>
+    </a>
+    <div class="site-nav-links">
+      <a href="/products/">Products</a>
+      <a href="/case-studies/" class="sn-active">Case Studies</a>
+      <a href="/research/">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-wrap">
+
+  <!-- ═══ SIDE PANE ═══════════════════════════════════════════ -->
+  <aside class="side-pane">
+    <a href="/case-studies/" class="side-nav-back"><i class="fa-solid fa-arrow-left"></i> All case studies</a>
+    <span class="side-nav-label">On this page</span>
+    <ul class="side-nav">
+      <li><a href="#overview" class="active">Overview</a></li>
+      <li><a href="#automation">Automation meets craft</a></li>
+      <li><a href="#printing">Printing &amp; assembly</a></li>
+      <li><a href="#technology">Technology</a></li>
+      <li><a href="#feedback">Feedback</a></li>
+    </ul>
+  </aside>
+
+  <!-- ═══ MAIN CONTENT ═══════════════════════════════════════ -->
+  <div class="main-col">
+
+    <nav class="breadcrumb">
+      <a href="/">Stakco</a><span>›</span>
+      <a href="/case-studies/">Case Studies</a><span>›</span>
+      Wedding Puzzles
+    </nav>
+
+    <div class="cs-header">
+      <span class="cs-product-badge"><i class="fa-solid fa-circle" style="font-size:0.4rem;"></i> Stakco Paper</span>
+      <h1>84 custom puzzles for a wedding in India</h1>
+      <p class="lead">For a client's wedding celebration, we produced 84 individual Stakco Paper puzzles — each featuring a unique custom image from the couple's memories — designed, printed, assembled by hand, and shipped from Singapore to India.</p>
+      <span class="cs-date"><i class="fa-regular fa-calendar"></i> &ensp;2024 · Singapore → India</span>
+    </div>
+
+    <img src="https://cdn.stakcos.com/media/case-study/wedding_case_study.jpg" alt="84 custom wedding puzzles" class="cs-hero reveal">
+
+    <!-- Stats -->
+    <div class="cs-stats reveal" id="overview">
+      <div class="cs-stat">
+        <div class="cs-stat-val">84</div>
+        <div class="cs-stat-label">Custom puzzles</div>
+      </div>
+      <div class="cs-stat">
+        <div class="cs-stat-val">100%</div>
+        <div class="cs-stat-label">Handcrafted</div>
+      </div>
+      <div class="cs-stat">
+        <div class="cs-stat-val">India</div>
+        <div class="cs-stat-label">Delivery destination</div>
+      </div>
+    </div>
+
+    <!-- Section: Automation -->
+    <div class="cs-section reveal" id="automation">
+      <h2>Automation meets craft</h2>
+      <p>
+        Our in-house <strong>Stakco CLI tool</strong> automated the entire pipeline — from image cropping and layer generation to printable PDF export. A post-processing script compiled all 84 puzzle assets in one pass.
+      </p>
+    </div>
+
+    <!-- Section: Printing -->
+    <div class="cs-section reveal" id="printing">
+      <h2>Precision printing and assembly</h2>
+      <p>
+        Transparent layers and cardboard backplates were produced by a professional printing supplier. Every puzzle was then <strong>assembled by hand</strong> at our workspace — each layer manually fed through the cutting machine, precisely aligned, and secured with eyelet pressing.
+      </p>
+    </div>
+
+    <!-- Section: Technology -->
+    <div class="cs-section reveal" id="technology">
+      <h2>Technology stack</h2>
+      <div class="cs-tech">
+        <span>Stakco CLI</span>
+        <span>Automated PDF Generation</span>
+        <span>Precision Printing</span>
+        <span>Manual Assembly</span>
+        <span>Eyelet Pressing</span>
+        <span>Quality Control</span>
+      </div>
+    </div>
+
+    <!-- Section: Feedback -->
+    <div class="cs-section reveal" id="feedback">
+      <h2>Client feedback</h2>
+      <div class="cs-quote">
+        <p>"Being able to convert a memory into an actual physical gift while also being a fun and intuitive activity for friends and family of all ages — Stakcos were a perfect fit!"</p>
+        <cite>— Soundarya Ramesh, Research Engineer, National University of Singapore</cite>
+      </div>
+    </div>
+
+    <!-- ═══ PREV / NEXT ════════════════════════════════════════ -->
+    <div class="cs-prev-next">
+      <a href="awwa.html" class="cs-pn-card prev">
+        <span class="cs-pn-dir">← Previous case study</span>
+        <span class="cs-pn-title">Sensory puzzle room at AWWA School</span>
+        <span class="cs-pn-product">Stakco Light</span>
+      </a>
+      <a href="vivo.html" class="cs-pn-card next">
+        <span class="cs-pn-dir">Next case study →</span>
+        <span class="cs-pn-title">Interactive puzzle showcase at VivoCity</span>
+        <span class="cs-pn-product">Stakco Paper</span>
+      </a>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-band reveal">
+      <div class="cta-band-text">
+        <h2>Have a project in mind?</h2>
+        <p>From educational installations to custom event puzzles — let's talk.</p>
+      </div>
+      <div class="cta-band-actions">
+        <a href="/contact/" class="cta-btn-primary">Get in touch</a>
+        <a href="/products/" class="cta-btn-ghost">Explore products</a>
+      </div>
+    </div>
+
+  </div><!-- /main-col -->
+</div><!-- /page-wrap -->
+
+<footer class="footer">
+  <div style="max-width:1080px;margin:0 auto;padding:0 40px;">
+    Stakco · <a href="https://stakcos.com">stakcos.com</a> ·
+    <a href="/products/">Products</a> ·
+    <a href="/case-studies/">Case Studies</a> · <a href="/research/">Research</a> ·
+    <a href="/contact/">Contact</a><br>
+    <a href="https://play.stakcos.com">Play</a> · <a href="https://studio.stakcos.com">Studio</a> ·
+    <a href="https://shop.stakcos.com">Shop</a> · <a href="mailto:hello@stakcos.com">hello@stakcos.com</a><br>
+    Proprietary puzzle technology · Patent pending (SG 10202302289U)
+  </div>
+</footer>
+
+<script>
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+const sections = document.querySelectorAll('.cs-section, .cs-stats');
+const navLinks = document.querySelectorAll('.side-nav a');
+const sectionObs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(a => a.classList.remove('active'));
+      const id = e.target.id;
+      const link = document.querySelector(`.side-nav a[href="#${id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { threshold: 0.3, rootMargin: '-80px 0px -50% 0px' });
+sections.forEach(s => { if (s.id) sectionObs.observe(s); });
+</script>
+<script>window.StakcoParticlesConfig = { count: 38, opacity: 0.3, speed: 0.85, fixed: true, zIndex: 0 };</script>
+<script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+</body>
+</html>
