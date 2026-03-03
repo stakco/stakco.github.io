@@ -236,6 +236,33 @@
   .creator-callout strong { color: var(--text); }
 
   /* ── PRICING ──────────────────────────────────────────────── */
+
+  /* -- SERVICES ------------------------------------------------ */
+  .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .service-card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 8px; padding: 16px 18px;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .service-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(190,48,112,0.08); color: var(--pink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; flex-shrink: 0;
+  }
+  .service-body { flex: 1; }
+  .service-title { font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .service-desc { font-size: 0.74rem; color: var(--text-muted); line-height: 1.5; }
+  .service-desc strong { color: var(--text-sub); }
+  .service-price {
+    margin-top: 6px; font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; font-weight: 600; color: var(--pink);
+  }
+  .services-note {
+    font-size: 0.74rem; color: var(--text-muted); margin-top: 10px; line-height: 1.5;
+  }
+  .services-note a { color: var(--pink); }
+
   .pricing-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .price-card {
     border-radius: 10px; padding: 20px 22px;
@@ -378,7 +405,7 @@
     .hero-content-mobile .hero-title { color: var(--text); text-shadow: none; }
     .hero-content-mobile .hero-pills { margin-top: 10px; }
     .container { padding: 0 16px 56px; }
-    .what-grid, .features-grid, .outcomes-grid, .pricing-grid { grid-template-columns: 1fr; }
+    .what-grid, .features-grid, .outcomes-grid, .pricing-grid, .services-grid { grid-template-columns: 1fr; }
     .creator-split { flex-direction: column; }
     .cta-section { padding: 20px 18px; }
     .signal-chip { min-width: 100%; }
@@ -417,14 +444,14 @@
 }
 .site-nav-links a:hover { color: #3C2F38; }
 .site-nav-links a.sn-active { color: #3C2F38; font-weight: 700; }
-.site-nav-cta {
+.site-nav-links a.site-nav-links a.site-nav-cta {
   font-size: 0.78rem; font-weight: 700;
   padding: 8px 20px; border-radius: 8px;
   background: #3C2F38; color: #fff;
   text-decoration: none; transition: opacity 0.15s;
   font-family: 'Mont', sans-serif;
 }
-.site-nav-cta:hover { opacity: 0.82; }
+.site-nav-links a.site-nav-cta:hover { color: #fff; opacity: 0.82; }
 @media (max-width: 900px) {
   .site-nav { padding: 0 20px; }
   .site-nav-links { display: none; }
@@ -470,7 +497,7 @@
     <div class="hero-title-row">
       <h1 class="hero-title">Stakco Play</h1>
     </div>
-    <p class="hero-tagline">Publish your rotating ring puzzles online.<br>Players solve them in any browser.<br><span style="opacity:0.65">&mdash; no account, no app, no friction.</span></p>
+    <p class="hero-tagline">Share your rotating ring puzzles online.<br>Players solve them in any browser.<br><span style="opacity:0.65">&mdash; no account, no app, no friction.</span></p>
 
   </div>
 </div>
@@ -480,7 +507,7 @@
   <div class="hero-title-row">
     <h1 class="hero-title">Stakco Play</h1>
   </div>
-  <p class="hero-tagline">Publish your rotating ring puzzles online.<br>Players solve them in any browser.<br><span style="opacity:0.65">&mdash; no account, no app, no friction.</span></p>
+  <p class="hero-tagline">Share your rotating ring puzzles online.<br>Players solve them in any browser.<br><span style="opacity:0.65">&mdash; no account, no app, no friction.</span></p>
 
 </div>
 
@@ -498,17 +525,17 @@
       </div>
     </div>
     <div class="signal-chip">
-      <i class="fa-solid fa-percent"></i>
+      <i class="fa-solid fa-globe"></i>
       <div class="signal-chip-text">
-        <strong>75% revenue to creators</strong>
-        Sell your puzzles on the marketplace
+        <strong>Your own puzzle channel</strong>
+        Custom subdomain &amp; branded albums
       </div>
     </div>
     <div class="signal-chip">
       <i class="fa-solid fa-pen-nib"></i>
       <div class="signal-chip-text">
         <strong>Free to start</strong>
-        Design in Studio, publish when ready
+        Design in Studio, share when ready
       </div>
     </div>
   </div>
@@ -523,15 +550,15 @@
       </div>
       <div class="what-half">
         <div class="what-half-label">The creation tool</div>
-        <p><strong>Stakco Studio</strong> is the free design tool where you build puzzles. Choose your image, set the ring layout, configure difficulty. When you&rsquo;re ready, the Play module publishes it online instantly.</p>
+        <p><strong>Stakco Studio</strong> is the free design tool where you build puzzles. Choose your image, set the ring layout, configure difficulty. When you&rsquo;re ready, the Play module makes it available online instantly.</p>
       </div>
       <div class="what-half">
         <div class="what-half-label">The platform</div>
-        <p>Published puzzles live at <strong>play.stakcos.com</strong> or your own branded subdomain. Organise them into albums, track engagement, update content anytime &mdash; all from Studio.</p>
+        <p>Distributed puzzles live at <strong>play.stakcos.com</strong> or your own branded subdomain. Organise them into albums, track engagement, update content anytime &mdash; all from Studio.</p>
       </div>
     </div>
     <div class="what-summary">
-      Think of it as <strong>your own puzzle channel</strong> &mdash; create, publish, and share interactive rotating puzzles with anyone in the world, via a simple link. No installation, no accounts for your audience, no technical setup.
+      Think of it as <strong>your own puzzle channel</strong> &mdash; create and share interactive rotating puzzles with anyone in the world, via a simple link. No installation, no accounts for your audience, no technical setup.
     </div>
   </div>
 
@@ -548,8 +575,8 @@
         <div class="oc-label">No sign-up friction. A link is all it takes to get someone playing</div>
       </div>
       <div class="outcome-chip">
-        <div class="oc-head">Earn from content</div>
-        <div class="oc-label">List puzzle designs on the marketplace &mdash; you keep 75% of every sale</div>
+        <div class="oc-head">Brand your channel</div>
+        <div class="oc-label">Your own subdomain, your albums, your audience &mdash; build a puzzle presence under your name</div>
       </div>
     </div>
   </div>
@@ -569,8 +596,8 @@
         <div class="flow-step">
           <div class="flow-num">2</div>
           <div>
-            <div class="flow-step-title">Add the Play module to publish</div>
-            <div class="flow-step-desc">The Play module is the subscription that lets you publish puzzles online. Add it to your Studio account when you&rsquo;re ready to go live. Your puzzles appear at play.stakcos.com or your custom subdomain.</div>
+            <div class="flow-step-title">Add the Play module to distribute</div>
+            <div class="flow-step-desc">The Play module is the subscription that lets you distribute puzzles online. Add it to your Studio account when you&rsquo;re ready to go live. Your puzzles go live at play.stakcos.com or your custom subdomain.</div>
           </div>
         </div>
         <div class="flow-step">
@@ -584,7 +611,7 @@
           <div class="flow-num">4</div>
           <div>
             <div class="flow-step-title">Track, update, grow</div>
-            <div class="flow-step-desc">Monitor completions, time-on-puzzle, and popular content from Studio. Update or replace published puzzles at any time without breaking existing links. Build albums, run series, schedule releases.</div>
+            <div class="flow-step-desc">Monitor completions, time-on-puzzle, and popular content from Studio. Update or replace distributed puzzles at any time without breaking existing links. Build albums, run series, schedule releases.</div>
           </div>
         </div>
       </div>
@@ -613,41 +640,35 @@
       </div>
       <div class="feature-item">
         <div class="ft-header"><i class="fa-solid fa-pen-to-square"></i><div class="ft-title">Live content updates</div></div>
-        <div class="ft-desc">Edit, replace, or reorder published puzzles at any time from Studio. Existing links continue to work &mdash; no republishing needed.</div>
+        <div class="ft-desc">Edit, replace, or reorder distributed puzzles at any time from Studio. Existing links continue to work &mdash; no re-sharing needed.</div>
       </div>
       <div class="feature-item">
         <div class="ft-header"><i class="fa-solid fa-mobile-screen-button"></i><div class="ft-title">Any device, any browser</div></div>
         <div class="ft-desc">Desktop, tablet, phone, Chromebook &mdash; responsive by default. Works on Chrome, Safari, Firefox, and Edge without plugins or downloads.</div>
       </div>
     </div>
-
-    <!-- Embed highlight -->
-    <div class="embed-highlight" style="margin-top:12px;">
-      <div class="embed-icon"><i class="fa-solid fa-code"></i></div>
-      <div class="embed-body">
-        <div class="embed-title">Embed puzzles on your own website</div>
-        <div class="embed-desc">With the Dev module, you can embed any published puzzle as a widget on your website, app, or learning platform &mdash; a single line of code. Ideal for brands, educators, and developers building custom experiences.</div>
-        <span class="embed-tag">Dev module add-on</span>
-      </div>
-    </div>
   </div>
 
-  <!-- Creator economy -->
+  <!-- Other Stakco services -->
   <div class="section">
-    <div class="section-label">Creator marketplace</div>
-    <div class="creator-callout">
-      <div class="creator-callout-head">Sell your puzzle designs &mdash; keep the majority</div>
-      <div class="creator-split">
-        <div class="creator-split-block yours">
-          <span class="creator-split-num">75%</span>
-          <span class="creator-split-label">goes to you</span>
-        </div>
-        <div class="creator-split-block platform">
-          <span class="creator-split-num">25%</span>
-          <span class="creator-split-label">platform fee</span>
+    <div class="section-label">Other Stakco services</div>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-code"></i></div>
+        <div class="service-body">
+          <div class="service-title">Dev module</div>
+          <div class="service-desc">Embed any distributed puzzle as a widget on your website, app, or learning platform — a single line of code. Ideal for brands, educators, and developers.</div>
+          <div class="service-price"><span data-price="DEV.price" data-price-prefix="S$" data-price-suffix=" one-time">...</span></div>
         </div>
       </div>
-      <p>List your puzzle designs and stencils on the <strong>Stakco Shop marketplace</strong>. Set your own price. Anyone who purchases gets access to your puzzle &mdash; you earn 75% of every sale, automatically. No storefronts to manage, no payment processing to set up.</p>
+      <div class="service-card">
+        <div class="service-icon"><i class="fa-solid fa-store"></i></div>
+        <div class="service-body">
+          <div class="service-title">Publish module</div>
+          <div class="service-desc">Sell your puzzle designs on the <strong>Stakco Shop</strong> marketplace. Set your own price — you keep 75% of every sale. No storefronts to manage.</div>
+          <div class="service-price"><span data-price="PUBLISH.price" data-price-prefix="S$" data-price-suffix=" one-time">...</span></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -662,29 +683,25 @@
           <span class="price-value">Free</span>
         </div>
         <ul class="price-includes">
-          <li>Play any published puzzle</li>
+          <li>Play any shared puzzle</li>
           <li>No account required to play</li>
-          <li>Stakco Studio design tool</li>
-          <li>Unlimited puzzle creation</li>
         </ul>
       </div>
       <div class="price-card creator">
-        <div class="price-tier-label">Publishing</div>
+        <div class="price-tier-label">Distribution</div>
         <div class="price-main-row">
           <span class="price-label">Play module</span>
-          <span class="price-value" style="font-size:1rem;color:var(--pink);">See pricing page</span>
+          <span class="price-value" data-price="PLAY.monthly" data-price-suffix="/mo" style="font-size:1rem;color:var(--pink);">...</span>
         </div>
         <ul class="price-includes">
-          <li>Publish puzzles online</li>
+          <li>Distribute puzzles online</li>
           <li>Custom branded subdomain</li>
           <li>Puzzle albums &amp; series</li>
-          <li>Engagement analytics</li>
-          <li>Marketplace listing</li>
         </ul>
       </div>
     </div>
     <div class="price-note-full">
-      Full pricing detail including monthly vs. annual rates, AI module add-on, and Dev module for embedding: <a href="../pricing/stakco-play-pricing.html">view the Play pricing page</a>. For business or volume enquiries, contact <a href="mailto:partnerships@stakcos.com">partnerships@stakcos.com</a>.
+      For business or volume enquiries, contact <a href="/cdn-cgi/l/email-protection#c8b8a9babca6adbabba0a1b8bb88bbbca9a3aba7bbe6aba7a5"><span class="__cf_email__" data-cfemail="d4a4b5a6a0bab1a6a7bcbda4a794a7a0b5bfb7bba7fab7bbb9">[email&#160;protected]</span></a>.
     </div>
   </div>
 
@@ -696,7 +713,7 @@
         <span class="aud-icon"><i class="fa-solid fa-camera-retro"></i></span>
         <div>
           <div class="aud-name">Content creators</div>
-          <div class="aud-use">Build a puzzle series, share with your audience, earn from your designs on the marketplace. Your puzzles, your brand, your revenue.</div>
+          <div class="aud-use">Build a puzzle series and share with your audience. Your own subdomain, your albums, your brand.</div>
         </div>
       </div>
       <div class="aud-row">
@@ -748,7 +765,7 @@
           What is Stakco Studio and do I need to pay for it?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">Stakco Studio is the browser-based tool where you design puzzles. It is free to use &mdash; create as many puzzles as you like at no cost. You only need a paid module (like Play) when you want to publish them online or add advanced features.</div>
+        <div class="faq-a">Stakco Studio is the browser-based tool where you design puzzles. It is free to use &mdash; create as many puzzles as you like at no cost. You only need a paid module (like Play) when you want to distribute them online or add advanced features.</div>
       </div>
 
       <div class="faq-item">
@@ -756,7 +773,7 @@
           What is a "module" and what does the Play module include?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">A module is an add-on you activate within your Studio account to unlock specific capabilities. The Play module unlocks online publishing: your puzzles go live at play.stakcos.com or your custom subdomain, with albums, analytics, and marketplace listing included.</div>
+        <div class="faq-a">A module is an add-on you activate within your Studio account to unlock specific capabilities. The Play module unlocks online distribution: your puzzles go live at play.stakcos.com or your custom subdomain, with albums and analytics included.</div>
       </div>
 
       <div class="faq-item">
@@ -772,7 +789,7 @@
           Can I embed puzzles on my own website?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">Yes. With the Dev module add-on, you can embed any published puzzle as an interactive widget on any website, learning platform, or app. This uses a standard embed snippet &mdash; one line of code. The Dev module is separate from the Play module and priced on the pricing page.</div>
+        <div class="faq-a">Yes. With the Dev module add-on, you can embed any distributed puzzle as an interactive widget on any website, learning platform, or app. This uses a standard embed snippet &mdash; one line of code. The Dev module is separate from the Play module. Contact <a href="/cdn-cgi/l/email-protection#1f6f7e6d6b717a6d6c77766f6c5f6c6b7e747c706c317c7072"><span class="__cf_email__" data-cfemail="70001102041e15020318190003300304111b131f035e131f1d">[email&#160;protected]</span></a> for details.</div>
       </div>
 
       <div class="faq-item">
@@ -788,15 +805,15 @@
           Is player data collected? Is it PDPA / GDPR compliant?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">Players do not create accounts and are not required to provide personal information to play. Analytics visible to creators cover aggregate engagement metrics (completion rates, time-on-puzzle) &mdash; not individually identifiable data. For specific data handling documentation for institutional or educational use, contact hello@stakcos.com.</div>
+        <div class="faq-a">Players do not create accounts and are not required to provide personal information to play. Analytics visible to creators cover aggregate engagement metrics (completion rates, time-on-puzzle) &mdash; not individually identifiable data. For specific data handling documentation for institutional or educational use, contact <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e68e838a8a89a69592878d858995c885898b">[email&#160;protected]</a>.</div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Can I update or change a puzzle after publishing?
+          Can I update or change a puzzle after sharing?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">Yes. Published puzzles can be edited, replaced, or reordered at any time from Studio. Existing share links continue to work &mdash; players visiting the old link will see the updated version automatically.</div>
+        <div class="faq-a">Yes. Distributed puzzles can be edited, replaced, or reordered at any time from Studio. Existing share links continue to work &mdash; players visiting the old link will see the updated version automatically.</div>
       </div>
 
     </div>
@@ -804,28 +821,28 @@
 
   <!-- CTA -->
   <div class="cta-section">
-    <h3>Ready to start publishing?</h3>
-    <p>Design your first puzzle for free in Stakco Studio. Add the Play module when you&rsquo;re ready to publish and share.</p>
+    <h3>Ready to start sharing?</h3>
+    <p>Design your first puzzle for free in Stakco Studio. Add the Play module when you&rsquo;re ready to share with the world.</p>
     <div class="cta-row">
       <a href="https://studio.stakcos.com" class="cta-btn cta-primary">Start Creating Free</a>
       <a href="https://play.stakcos.com" class="cta-btn cta-secondary">Try Stakco Play</a>
-      <a href="mailto:partnerships@stakcos.com?subject=Stakco%20Play%20%E2%80%94%20business%20enquiry" class="cta-btn cta-ghost">Business enquiry</a>
+      <a href="/cdn-cgi/l/email-protection#91e1f0e3e5fff4e3e2f9f8e1e2d1e2e5f0faf2fee2bff2fefcaee2e4f3fbf4f2e5acc2e5f0faf2feb4a3a1c1fdf0e8b4a3a1b4d4a3b4a9a1b4a8a5b4a3a1f3e4e2f8fff4e2e2b4a3a1f4ffe0e4f8e3e8" class="cta-btn cta-ghost">Business enquiry</a>
     </div>
     <div class="cta-reassure">Free to design. No credit card needed to start.</div>
   </div>
 
   <div class="footer">
-    Stakco Play is part of the Stakco platform. Start free in Studio &mdash; add the Play module when you&rsquo;re ready to publish.<br>
+    Stakco Play is part of the Stakco platform. Start free in Studio &mdash; add the Play module when you&rsquo;re ready to share.<br>
     <a href="https://stakcos.com">stakcos.com</a> &nbsp;&middot;&nbsp;
     <a href="https://studio.stakcos.com">studio.stakcos.com</a> &nbsp;&middot;&nbsp;
-    <a href="mailto:hello@stakcos.com">hello@stakcos.com</a> &nbsp;&middot;&nbsp;
+    <a href="/cdn-cgi/l/email-protection#83ebe6efefecc3f0f7e2e8e0ecf0ade0ecee"><span class="__cf_email__" data-cfemail="6b030e0707042b181f0a0008041845080406">[email&#160;protected]</span></a> &nbsp;&middot;&nbsp;
     Stakco Pte. Ltd. &nbsp;&middot;&nbsp; Singapore &nbsp;&middot;&nbsp; 2026
   </div>
 
 </div><!-- /container -->
 
 <!-- ══ STAKCO PARTICLES ════════════════════════════════════════ -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 window.StakcoParticlesConfig = {
   count: 38,
   opacity: 0.3,
@@ -835,6 +852,50 @@ window.StakcoParticlesConfig = {
 };
 </script>
 <script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+
+<!-- == PLATFORM PRICING FETCH == -->
+<script>
+(function(){
+  const PLATFORM_URL = 'https://storage.googleapis.com/stakco-images/platform.json?v=' + Date.now();
+
+  async function loadPlatformPricing() {
+    try {
+      const res = await fetch(PLATFORM_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const mods = data.Products?.STAKCO_STUDIO?.Modules || {};
+
+      const priceMap = {};
+      Object.entries(mods).forEach(([key, mod]) => {
+        const p = mod.Pricing;
+        const price = mod.Price;
+        if (p && p.Type === 'SUBSCRIPTION') {
+          priceMap[key + '.monthly'] = p.MonthlyPrice || price;
+          priceMap[key + '.annual'] = p.AnnualPrice || (price * 10);
+        } else if (p && p.Type === 'ONE_TIME') {
+          priceMap[key + '.price'] = price;
+        }
+        if (price != null) priceMap[key + '.price'] = price;
+      });
+
+      document.querySelectorAll('[data-price]').forEach(el => {
+        const key = el.dataset.price;
+        const val = priceMap[key];
+        if (val != null) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          el.textContent = prefix + val + suffix;
+        }
+      });
+
+    } catch (e) {
+      console.warn('Stakco pricing fetch failed:', e);
+    }
+  }
+
+  loadPlatformPricing();
+})();
+</script>
 
 </body>
 </html>

@@ -174,9 +174,9 @@
     background: var(--card); border: 1px solid var(--border);
     border-radius: 8px; padding: 14px 16px;
   }
-  .ft-icon { font-size: 1.1rem; margin-bottom: 6px; display: block; }
-  .ft-title { font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 3px; }
-  .ft-desc { font-size: 0.74rem; color: var(--text-muted); line-height: 1.45; }
+  .ft-icon { font-size: 1.1rem; display: inline; margin-right: 6px; vertical-align: middle; }
+  .ft-title { font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 3px; display: inline; vertical-align: middle; }
+  .ft-desc { font-size: 0.74rem; color: var(--text-muted); line-height: 1.45; margin-top: 4px; }
 
   /* ── SPECS ────────────────────────────────────────────────── */
   .specs-table {
@@ -382,14 +382,14 @@
 }
 .site-nav-links a:hover { color: #3C2F38; }
 .site-nav-links a.sn-active { color: #3C2F38; font-weight: 700; }
-.site-nav-cta {
+.site-nav-links a.site-nav-cta {
   font-size: 0.78rem; font-weight: 700;
   padding: 8px 20px; border-radius: 8px;
   background: #3C2F38; color: #fff;
   text-decoration: none; transition: opacity 0.15s;
   font-family: 'Mont', sans-serif;
 }
-.site-nav-cta:hover { opacity: 0.82; }
+.site-nav-links a.site-nav-cta:hover { color: #fff; opacity: 0.82; }
 @media (max-width: 900px) {
   .site-nav { padding: 0 20px; }
   .site-nav-links { display: none; }
@@ -733,7 +733,7 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Can we update content ourselves? Do we need Stakco each time?
+          Can we change puzzle content ourselves?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
         <div class="faq-a">You manage all content through Stakco Studio &mdash; a browser-based dashboard. Change puzzle themes, schedule content rotations, and adjust audio from any device, at any time. No technical background needed. Stakco is not involved in day-to-day content changes.</div>
@@ -781,7 +781,7 @@
     <div class="cta-row">
       <a href="mailto:partnerships@stakcos.com?subject=Stakco%20Light%20%E2%80%94%20site%20enquiry" class="cta-btn cta-primary">Email partnerships@stakcos.com</a>
     </div>
-    <div class="cta-reassure">No commitment required. We respond within one business day.</div>
+    <div class="cta-reassure">We respond within one business day.</div>
   </div>
 
   <div class="footer">

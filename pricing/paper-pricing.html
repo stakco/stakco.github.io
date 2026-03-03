@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
+<title>Stakco Paper — Commercial Pricing & Cost Structure</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f6f6f9; --card: #ffffff;
+    --orange: #c87a1a; --amber: #9a7209;
+    --text: #1a1a2e; --text-sub: #444455; --text-muted: #8888a0;
+    --border: rgba(0,0,0,0.07); --border-strong: rgba(0,0,0,0.12);
+    --accent: var(--orange); --accent-bg: rgba(200,122,26,0.04); --accent-border: rgba(200,122,26,0.12);
+    --green: #16805a; --green-bg: rgba(22,128,90,0.06);
+    --red: #c0392b; --red-bg: rgba(192,57,43,0.04);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.6; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+
+  /* Layout: side nav + main content */
+  .page-layout { display:grid; grid-template-columns:220px 1fr; max-width:1120px; margin:0 auto; min-height:100vh; }
+
+  /* Side nav */
+  .side-nav { position:sticky; top:0; height:100vh; padding:24px 0 24px 20px; overflow-y:auto; border-right:1px solid var(--border); }
+
+  /* ===== Product Nav Cards (side pane) ===== */
+  .pn-cards { display:flex; flex-direction:column; gap:3px; margin-bottom:14px; padding-right:16px; }
+  .pn-cards a {
+    display:flex; align-items:center; gap:8px;
+    padding:7px 10px; border-radius:6px; text-decoration:none;
+    border:1px solid transparent; transition:all 0.12s;
+  }
+  .pn-cards a:hover { background:rgba(0,0,0,0.03); }
+  .pn-cards a img { width:18px; height:18px; object-fit:contain; flex-shrink:0; opacity:0.45; transition:opacity 0.12s; }
+  .pn-cards a:hover img { opacity:0.7; }
+  .pn-cards .pn-info { min-width:0; }
+  .pn-cards .pn-name { font-size:0.7rem; font-weight:600; color:var(--text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; transition:color 0.12s; }
+  .pn-cards a:hover .pn-name { color:var(--text-sub); }
+  .pn-cards .pn-tag { font-size:0.52rem; color:var(--text-muted); font-weight:500; text-transform:uppercase; letter-spacing:0.04em; opacity:0.7; }
+  .pn-cards a.pn-active { pointer-events:none; background:var(--accent); border-color:var(--accent); }
+  .pn-cards a.pn-active img { opacity:1; }
+  .pn-cards a.pn-active .pn-name { color:#fff; font-weight:700; }
+  .pn-cards a.pn-active .pn-tag { color:rgba(255,255,255,0.7); }
+  .pn-cards a.pn-overview.pn-active { background:#6d4daa; border-color:#6d4daa; }
+  .pn-cards a.pn-overview.pn-active .pn-name { color:#fff; }
+  .pn-cards a.pn-overview.pn-active .pn-tag { color:rgba(255,255,255,0.7); }
+  .pn-cards a.pn-play:not(.pn-active):hover .pn-name { color:#be3070; }
+  .pn-cards a.pn-light:not(.pn-active):hover .pn-name { color:#9a7209; }
+  .pn-cards a.pn-paper:not(.pn-active):hover .pn-name { color:#c87a1a; }
+  .pn-cards a.pn-overview:not(.pn-active):hover .pn-name { color:#6d4daa; }
+  .pn-divider { height:1px; background:var(--border); margin:0 16px 12px 0; }
+  .side-nav-list { list-style:none; }
+  .side-nav-list li { margin-bottom:1px; }
+  .side-nav-list a {
+    display:block; padding:7px 12px; font-size:0.78rem; font-weight:500; color:var(--text-muted);
+    text-decoration:none; border-radius:6px; transition:all 0.12s; border-left:2px solid transparent; line-height:1.4;
+  }
+  .side-nav-list a:hover { color:var(--text-sub); background:rgba(0,0,0,0.03); }
+  .side-nav-list a.active { color:var(--accent); border-left-color:var(--accent); background:var(--accent-bg); font-weight:600; }
+  .side-nav-actions { margin-top:16px; padding-top:14px; border-top:1px solid var(--border); padding-right:16px; }
+  .print-btn {
+    display:flex; align-items:center; justify-content:center; gap:6px; width:100%;
+    padding:8px 12px; font-family:'DM Sans',sans-serif; font-size:0.75rem; font-weight:600;
+    color:var(--text-sub); background:var(--card); border:1px solid var(--border); border-radius:6px;
+    cursor:pointer; transition:all 0.12s;
+  }
+  .print-btn:hover { background:var(--bg); border-color:var(--border-strong); }
+
+  .container { max-width:900px; padding:28px 40px 48px; }
+
+  /* Hide side nav on print */
+  @media print {
+    .page-layout { display:block; }
+    .side-nav { display:none; }
+    body { background:#fff; }
+    .container { padding:24px; max-width:100%; }
+    .section { page-break-inside:avoid; break-inside:avoid; }
+    table { page-break-inside:avoid; break-inside:avoid; }
+    .section-title { break-after:avoid; page-break-after:avoid; }
+    .doc-header { break-after:avoid; page-break-after:avoid; }
+    .summary-grid { break-inside:avoid; page-break-inside:avoid; }
+  }
+  @media (max-width:900px) {
+    .page-layout { grid-template-columns:1fr; }
+    .side-nav { display:none; }
+    .container { padding:24px 16px 48px; }
+    .summary-grid { grid-template-columns:1fr; }
+    .doc-meta { flex-direction:column; gap:6px; }
+  }
+  .doc-header .brand { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .doc-header .brand img { width:28px; height:auto; }
+  .doc-header .brand span { font-size:0.72rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--text-muted); }
+  .doc-header h1 { font-size:1.6rem; font-weight:700; margin-bottom:4px; }
+  .doc-header .subtitle { font-size:0.92rem; color:var(--text-sub); }
+  .doc-meta { display:flex; gap:24px; margin-top:16px; font-size:0.72rem; color:var(--text-muted); }
+  .doc-meta span { display:flex; align-items:center; gap:4px; }
+
+  .section { margin-bottom:24px; }
+  .section-title { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--accent); margin-bottom:10px; padding-bottom:5px; border-bottom:1px solid var(--accent-border); }
+  .section-note { font-size:0.75rem; color:var(--text-muted); line-height:1.5; margin-bottom:16px; font-style:italic; }
+
+  .card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:16px 22px; margin-bottom:10px; }
+  .card p { font-size:0.85rem; color:var(--text-sub); line-height:1.6; }
+
+  table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:10px; font-size:0.82rem; }
+  thead th { padding:10px 16px; font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.08em; color:var(--text-muted); background:#f2f2f6; border-bottom:1px solid var(--border); text-align:left; }
+  tbody td { padding:10px 16px; border-bottom:1px solid rgba(0,0,0,0.03); color:var(--text-sub); vertical-align:top; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:hover { background:rgba(0,0,0,0.015); }
+
+  .row-total td { font-weight:700; color:var(--text); border-top:2px solid var(--border-strong); background:#fafafa; }
+  .row-highlight td { background:var(--accent-bg); }
+
+  .num { text-align:right; font-family:'JetBrains Mono',monospace; font-size:0.78rem; white-space:nowrap; }
+  .num-accent { color:var(--accent); font-weight:700; }
+  .num-green { color:var(--green); }
+  .num-muted { color:var(--text-muted); }
+
+  .label-included { font-size:0.65rem; font-weight:600; color:var(--green); background:var(--green-bg); padding:2px 8px; border-radius:4px; }
+  .label-optional { font-size:0.65rem; font-weight:600; color:var(--text-muted); background:rgba(0,0,0,0.04); padding:2px 8px; border-radius:4px; }
+  .label-estimate { font-size:0.65rem; font-weight:600; color:var(--amber); background:rgba(154,114,9,0.06); padding:2px 8px; border-radius:4px; }
+  .label-popular { font-size:0.65rem; font-weight:600; color:var(--orange); background:rgba(200,122,26,0.08); padding:2px 8px; border-radius:4px; }
+
+  .summary-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:14px; }
+  .summary-box { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:12px 16px; text-align:center; }
+  .summary-box .sb-value { font-family:'JetBrains Mono',monospace; font-size:1.2rem; font-weight:700; color:var(--accent); margin-bottom:2px; }
+  .summary-box .sb-label { font-size:0.68rem; color:var(--text-muted); font-weight:600; text-transform:uppercase; letter-spacing:0.06em; }
+
+  .footnotes { margin-top:20px; padding-top:16px; border-top:1px solid var(--border); }
+  .footnotes p { font-size:0.7rem; color:var(--text-muted); line-height:1.5; margin-bottom:4px; }
+  .fn-ref { font-size:0.6rem; vertical-align:super; color:var(--accent); font-weight:700; }
+
+
+@font-face { font-family:'Mont'; src:url('https://cdn.stakcos.com/fonts/MONT-REGULAR.TTF') format('truetype'); font-weight:400; font-style:normal; font-display:swap; }
+@font-face { font-family:'Mont'; src:url('https://cdn.stakcos.com/fonts/MONT-BOLD.TTF') format('truetype'); font-weight:700; font-style:normal; font-display:swap; }
+
+/* ── UNIFIED SITE NAV ────────────────────────────────────── */
+.site-nav {
+  position: sticky; top: 0; z-index: 1000;
+  background: rgba(250,248,244,0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(60,47,56,0.08);
+  padding: 0 40px;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-inner {
+  max-width: 1080px; margin: 0 auto;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.site-nav-brand {
+  display: flex; align-items: center; gap: 9px;
+  text-decoration: none; color: #3C2F38;
+}
+.site-nav-brand img { width: 26px; height: auto; }
+.site-nav-brand span {
+  font-size: 0.95rem; font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.site-nav-links { display: flex; align-items: center; gap: 28px; }
+.site-nav-links a {
+  font-size: 0.8rem; color: #8a7e85;
+  text-decoration: none; transition: color 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-links a:hover { color: #3C2F38; }
+.site-nav-links a.sn-active { color: #3C2F38; font-weight: 700; }
+.site-nav-cta {
+  font-size: 0.78rem; font-weight: 700;
+  padding: 8px 20px; border-radius: 8px;
+  background: #3C2F38; color: #fff;
+  text-decoration: none; transition: opacity 0.15s;
+  font-family: 'Mont', sans-serif;
+}
+.site-nav-cta:hover { opacity: 0.82; }
+@media (max-width: 900px) {
+  .site-nav { padding: 0 20px; }
+  .site-nav-links { display: none; }
+}
+
+</style>
+</head>
+<body>
+<!-- ══ UNIFIED SITE NAV ══════════════════════════════════════ -->
+<nav class="site-nav">
+  <div class="site-nav-inner">
+    <a href="/" class="site-nav-brand">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <span>Stakco</span>
+    </a>
+    <div class="site-nav-links">
+      <a href="/products/">Products</a>
+      <a href="/case-studies/">Case Studies</a>
+      <a href="/research/">Research</a>
+      <a href="/contact/">Contact</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-layout">
+
+<!-- Side Navigation -->
+<nav class="side-nav">
+  <div class="pn-cards">
+    <a href="index.html" class="pn-overview">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Overview</div><div class="pn-tag">All Products</div></div>
+    </a>
+    <a href="play-pricing.html" class="pn-play">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Stakco Play</div><div class="pn-tag">Digital</div></div>
+    </a>
+    <a href="light-pricing.html" class="pn-light">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Stakco Light</div><div class="pn-tag">Projection</div></div>
+    </a>
+    <a href="paper-pricing.html" class="pn-paper pn-active">
+      <img src="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png" alt="Stakco">
+      <div class="pn-info"><div class="pn-name">Stakco Paper</div><div class="pn-tag">Physical</div></div>
+    </a>
+  </div>
+  <div class="pn-divider"></div>
+  <ul class="side-nav-list">
+    <li><a href="#summary" class="active">Summary</a></li>
+    <li><a href="#product">1. Product</a></li>
+    <li><a href="#retail-pricing">2. Retail Pricing</a></li>
+    <li><a href="#bulk-pricing">3. Bulk Pricing</a></li>
+    <li><a href="#cost-breakdown">4. Cost Breakdown</a></li>
+    <li><a href="#software-costs">5. Software Costs</a></li>
+    <li><a href="#packaging">6. Packaging</a></li>
+    <li><a href="#reseller">7. Reseller Terms</a></li>
+    <li><a href="#use-cases">8. Use Cases</a></li>
+    <li><a href="#lead-times">9. Lead Times</a></li>
+    <li><a href="#payment">10. Payment Terms</a></li>
+  </ul>
+  <div class="side-nav-actions">
+    <button class="print-btn" onclick="window.print()">🖨 Print / Save PDF</button>
+  </div>
+</nav>
+
+<div class="container">
+
+<!-- ===== HEADER ===== -->
+<div class="doc-header">
+  <h1>Stakco Paper — Commercial Pricing & Cost Structure</h1>
+  <div class="subtitle">Per-unit pricing, bulk tiers, and reseller terms for printed Stakco puzzles</div>
+</div>
+
+<!-- ===== EXECUTIVE SUMMARY ===== -->
+<div class="section" id="summary">
+  <div class="section-title">Executive Summary</div>
+  <div class="card">
+    <p>Stakco Paper is a physical rotating puzzle product — printed concentric layers that users physically turn to solve. Puzzles are designed digitally in Stakco Studio, then produced via professional printing. This document details per-unit costs, bulk pricing, and reseller terms.</p>
+  </div>
+  <div class="summary-grid">
+    <div class="summary-box">
+      <div class="sb-value">From $20</div>
+      <div class="sb-label">Per unit (retail)</div>
+    </div>
+    <div class="summary-box">
+      <div class="sb-value">From $8</div>
+      <div class="sb-label">Per unit (bulk 100+)</div>
+    </div>
+    <div class="summary-box">
+      <div class="sb-value">~1 week</div>
+      <div class="sb-label">Lead time</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 1. PRODUCT OVERVIEW ===== -->
+<div class="section" id="product">
+  <div class="section-title">1. Product Description</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%">Attribute</th>
+        <th style="width:70%">Detail</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Form factor</strong></td>
+        <td>Flat disc with 2–3 concentric rotating layers. Thin profile (&lt;1 mm assembled)</td>
+      </tr>
+      <tr>
+        <td><strong>How it works</strong></td>
+        <td>Each plate layer rotates independently. The user aligns the layers to complete the image or pattern</td>
+      </tr>
+      <tr>
+        <td><strong>Standard sizes</strong></td>
+        <td>20 cm width (standard). Custom sizes available on request</td>
+      </tr>
+      <tr>
+        <td><strong>Materials</strong></td>
+        <td>Laminated matte board backplate, transparent rotary layers, joined with a durable eyelet</td>
+      </tr>
+      <tr>
+        <td><strong>Packaging</strong></td>
+        <td>Clear sleeve (standard), branded box (premium), or unpackaged (bulk)</td>
+      </tr>
+      <tr>
+        <td><strong>Shelf life</strong></td>
+        <td>Unlimited — no batteries, no expiry. Laminated versions are reusable</td>
+      </tr>
+      <tr>
+        <td><strong>Weight</strong></td>
+        <td>~15–40 g depending on size and material</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 2. RETAIL PRICING (PER UNIT) ===== -->
+<div class="section" id="retail-pricing">
+  <div class="section-title">2. Retail Pricing (Per Unit)</div>
+  <div class="section-note">Prices include printing, assembly, and standard packaging. Design is created separately in Stakco Studio.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:25%">Size</th>
+        <th style="width:25%">Material</th>
+        <th class="num" style="width:25%">Price (SGD)</th>
+        <th style="width:25%">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Small</strong> (10 cm)</td>
+        <td>Standard card</td>
+        <td class="num">$20</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">2–3 layers</span></td>
+      </tr>
+      <tr>
+        <td><strong>Small</strong> (10 cm)</td>
+        <td>Laminated</td>
+        <td class="num">$25</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Reusable, durable</span></td>
+      </tr>
+      <tr class="row-highlight">
+        <td><strong>Medium</strong> (15 cm)</td>
+        <td>Standard card</td>
+        <td class="num num-accent">$28</td>
+        <td><span class="label-popular">Most popular</span></td>
+      </tr>
+      <tr>
+        <td><strong>Medium</strong> (15 cm)</td>
+        <td>Laminated</td>
+        <td class="num">$35</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Reusable, durable</span></td>
+      </tr>
+      <tr>
+        <td><strong>Medium</strong> (15 cm)</td>
+        <td>Premium coated</td>
+        <td class="num">$42</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">High-end finish</span></td>
+      </tr>
+      <tr>
+        <td><strong>Large — Standard</strong> (20 cm)</td>
+        <td>Standard card</td>
+        <td class="num">$38</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">2–3 layers</span></td>
+      </tr>
+      <tr>
+        <td><strong>Large — Standard</strong> (20 cm)</td>
+        <td>Laminated</td>
+        <td class="num">$48</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Reusable, durable</span></td>
+      </tr>
+      <tr>
+        <td><strong>Large — Standard</strong> (20 cm)</td>
+        <td>Premium coated</td>
+        <td class="num">$58</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">High-end finish</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">20 cm is the standard size. Small and Medium are custom sizes quoted on request.</div>
+</div>
+
+<!-- ===== 3. BULK PRICING ===== -->
+<div class="section" id="bulk-pricing">
+  <div class="section-title">3. Bulk Order Pricing</div>
+  <div class="section-note">Based on Medium (15 cm) standard card as baseline. Percentage discount applies across all sizes and materials.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:25%">Quantity</th>
+        <th class="num" style="width:20%">Unit Price (SGD)</th>
+        <th class="num" style="width:15%">Discount</th>
+        <th class="num" style="width:20%">Order Total</th>
+        <th style="width:20%">Lead time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1–9 units</td>
+        <td class="num">$28</td>
+        <td class="num num-muted">—</td>
+        <td class="num">$28–252</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">5–7 days</span></td>
+      </tr>
+      <tr>
+        <td>10–49 units</td>
+        <td class="num">$22</td>
+        <td class="num num-green">~20%</td>
+        <td class="num">$220–1,078</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">5–7 days</span></td>
+      </tr>
+      <tr>
+        <td>50–99 units</td>
+        <td class="num">$16</td>
+        <td class="num num-green">~43%</td>
+        <td class="num">$800–1,584</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">7–10 days</span></td>
+      </tr>
+      <tr class="row-highlight">
+        <td>100–499 units</td>
+        <td class="num num-accent">$12</td>
+        <td class="num num-green">~57%</td>
+        <td class="num">$1,200–5,988</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">10–14 days</span></td>
+      </tr>
+      <tr>
+        <td>500–999 units</td>
+        <td class="num">$9</td>
+        <td class="num num-green">~68%</td>
+        <td class="num">$4,500–8,991</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">2–3 weeks</span></td>
+      </tr>
+      <tr>
+        <td>1,000+ units</td>
+        <td class="num">$8</td>
+        <td class="num num-green">~71%</td>
+        <td class="num">From $8,000</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">3–4 weeks</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">Bulk orders use a single design or a set of designs (up to 10 unique designs at no extra charge). More than 10 unique designs may incur a setup fee.</div>
+</div>
+
+<!-- ===== 4. COST BREAKDOWN ===== -->
+<div class="section" id="cost-breakdown">
+  <div class="section-title">4. Cost Breakdown (Per Unit)</div>
+  <div class="section-note">Indicative cost structure for a Medium (15 cm) standard card puzzle at retail quantity.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:45%">Component</th>
+        <th class="num" style="width:25%">Cost (SGD)</th>
+        <th style="width:30%">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Printing</strong></td>
+        <td class="num">~$4–6</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Full-colour, high-res, both sides</span></td>
+      </tr>
+      <tr>
+        <td><strong>Material (card stock)</strong></td>
+        <td class="num">~$2–3</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">300 gsm standard</span></td>
+      </tr>
+      <tr>
+        <td><strong>Die-cutting & assembly</strong></td>
+        <td class="num">~$3–5</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Concentric plate cuts, eyelet assembly</span></td>
+      </tr>
+      <tr>
+        <td><strong>Packaging</strong></td>
+        <td class="num">~$1–2</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Clear sleeve (standard)</span></td>
+      </tr>
+      <tr>
+        <td><strong>Quality control</strong></td>
+        <td class="num">~$1</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Rotation test, print check</span></td>
+      </tr>
+      <tr class="row-total">
+        <td>Estimated production cost</td>
+        <td class="num num-accent">~$11–17</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">Production cost drops significantly at scale due to die-cutting efficiencies and material bulk pricing. At 1,000+ units, per-unit production cost is approximately $4–6.</div>
+</div>
+
+<!-- ===== 5. DESIGN & SOFTWARE COSTS ===== -->
+<div class="section" id="software-costs">
+  <div class="section-title">5. Design & Software Costs</div>
+  <div class="section-note">One-time and recurring costs for puzzle creation using Stakco Studio.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:40%">Item</th>
+        <th style="width:25%">Type</th>
+        <th class="num" style="width:35%">Cost (SGD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <strong>Stakco Studio account</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Puzzle design tool — web-based</span>
+        </td>
+        <td><span class="label-included">Free</span></td>
+        <td class="num num-green">$0</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Print module</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">High-res export for professional printing</span>
+        </td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">One-time</span></td>
+        <td class="num" data-price="PRINT.price">##</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Stencils</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Layer structure templates — free and premium available</span>
+        </td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Per stencil</span></td>
+        <td class="num">$0–15</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>AI generation module</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Generate puzzle artwork from text prompts</span>
+        </td>
+        <td><span class="label-optional">Optional</span></td>
+        <td class="num" data-price="AI.monthly" data-price-suffix="/mo">##</td>
+      </tr>
+      <tr>
+        <td>
+          <strong>Publish module</strong><br>
+          <span style="font-size:0.75rem;color:var(--text-muted)">Sell your designs on the Stakco marketplace</span>
+        </td>
+        <td><span class="label-optional">Optional</span></td>
+        <td class="num" data-price="PUBLISH.price">##</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">A reseller only needs a Studio account + Print module (<span data-price="PRINT.price">##</span> one-time) to start producing puzzles. All design work is done in-browser — no additional software required.</div>
+</div>
+
+<!-- ===== 6. PACKAGING & BRANDING OPTIONS ===== -->
+<div class="section" id="packaging">
+  <div class="section-title">6. Packaging & Branding Options</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%">Option</th>
+        <th style="width:35%">Description</th>
+        <th class="num" style="width:15%">Add-on (SGD)</th>
+        <th style="width:20%">Min. order</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Clear sleeve</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Transparent plastic sleeve with backing card</span></td>
+        <td class="num num-green">Included</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">1 unit</span></td>
+      </tr>
+      <tr>
+        <td><strong>Branded backing card</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Custom-printed insert card with your logo and message</span></td>
+        <td class="num">+$2/unit</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">50 units</span></td>
+      </tr>
+      <tr>
+        <td><strong>Gift box</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Rigid box with magnetic closure, foam insert</span></td>
+        <td class="num">+$8/unit</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">25 units</span></td>
+      </tr>
+      <tr>
+        <td><strong>White-label packaging</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Fully branded packaging — your brand only, no Stakco branding</span></td>
+        <td class="num">+$5/unit</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">100 units</span></td>
+      </tr>
+      <tr>
+        <td><strong>Unpackaged (bulk)</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">No individual packaging — shipped in bulk cartons</span></td>
+        <td class="num num-green">–$1/unit</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">100 units</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 7. RESELLER & DISTRIBUTOR TERMS ===== -->
+<div class="section" id="reseller">
+  <div class="section-title">7. Reseller & Distributor Terms</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%">Tier</th>
+        <th style="width:25%">Annual volume</th>
+        <th class="num" style="width:20%">Base discount</th>
+        <th style="width:25%">Benefits</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Retail partner</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">50–199 units/year</span></td>
+        <td class="num">Bulk pricing</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Co-branded materials</span></td>
+      </tr>
+      <tr>
+        <td><strong>Authorised reseller</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">200–999 units/year</span></td>
+        <td class="num num-green">Bulk + 10%</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Priority fulfilment, marketing support</span></td>
+      </tr>
+      <tr class="row-highlight">
+        <td><strong>Distributor</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">1,000+ units/year</span></td>
+        <td class="num num-green">Bulk + 20%</td>
+        <td><span style="font-size:0.72rem;color:var(--text-muted)">Exclusive territory, white-label, dedicated support</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">Resellers set their own retail pricing. Stakco provides product images, descriptions, and marketing collateral. White-label is available at distributor tier — your brand, our product.</div>
+  <div class="section-note" style="font-style:normal;"><strong>Sales / BD partners:</strong> Earn S$1–2 per unit on referred orders + 15% recurring royalty on reorders from sourced accounts. No inventory required. Contact hello@stakcos.com.</div>
+</div>
+
+<!-- ===== 8. USE CASE EXAMPLES ===== -->
+<div class="section" id="use-cases">
+  <div class="section-title">8. Use Case Pricing Examples</div>
+  <div class="section-note">Illustrative scenarios showing total cost for common order types.</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%">Scenario</th>
+        <th style="width:25%">Specification</th>
+        <th class="num" style="width:15%">Qty</th>
+        <th class="num" style="width:15%">Unit</th>
+        <th class="num" style="width:15%">Total (SGD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Corporate gift</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Medium, laminated, gift box, branded</span></td>
+        <td class="num">100</td>
+        <td class="num">$25</td>
+        <td class="num"><strong>$2,500</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Event giveaway</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Small, standard card, clear sleeve</span></td>
+        <td class="num">500</td>
+        <td class="num">$7</td>
+        <td class="num"><strong>$3,500</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Retail shelf stock</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Medium, laminated, branded card</span></td>
+        <td class="num">200</td>
+        <td class="num">$16</td>
+        <td class="num"><strong>$3,200</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Classroom set</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Medium, standard card, unpackaged</span></td>
+        <td class="num">30</td>
+        <td class="num">$20</td>
+        <td class="num"><strong>$600</strong></td>
+      </tr>
+      <tr>
+        <td><strong>Therapy clinic supply</strong></td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Large, laminated (durable for repeated use)</span></td>
+        <td class="num">20</td>
+        <td class="num">$42</td>
+        <td class="num"><strong>$840</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== 9. LEAD TIMES ===== -->
+<div class="section" id="lead-times">
+  <div class="section-title">9. Lead Times & Delivery</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:35%">Order size</th>
+        <th style="width:25%">Production</th>
+        <th style="width:20%">Shipping (SG)</th>
+        <th style="width:20%">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1–49 units</td>
+        <td>3–5 days</td>
+        <td>1–2 days</td>
+        <td><strong>5–7 days</strong></td>
+      </tr>
+      <tr>
+        <td>50–499 units</td>
+        <td>7–10 days</td>
+        <td>1–3 days</td>
+        <td><strong>10–14 days</strong></td>
+      </tr>
+      <tr>
+        <td>500–999 units</td>
+        <td>2–3 weeks</td>
+        <td>2–4 days</td>
+        <td><strong>2–3 weeks</strong></td>
+      </tr>
+      <tr>
+        <td>1,000+ units</td>
+        <td>3–4 weeks</td>
+        <td>3–5 days</td>
+        <td><strong>3–4 weeks</strong></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="section-note">International shipping available — delivery time and cost quoted per order. Rush production available for small orders at +30% surcharge.</div>
+</div>
+
+<!-- ===== 10. PAYMENT TERMS ===== -->
+<div class="section" id="payment">
+  <div class="section-title">10. Payment Terms</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:35%">Order size</th>
+        <th style="width:30%">Terms</th>
+        <th style="width:35%">Method</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Under $500</td>
+        <td>Full payment upfront</td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Card, bank transfer, PayNow</span></td>
+      </tr>
+      <tr>
+        <td>$500–5,000</td>
+        <td>50% deposit, 50% on delivery</td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Bank transfer, PayNow</span></td>
+      </tr>
+      <tr>
+        <td>$5,000+</td>
+        <td>30% deposit, 70% Net 14</td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Bank transfer</span></td>
+      </tr>
+      <tr>
+        <td>Distributor (1,000+/yr)</td>
+        <td>Net 30 (credit approved)</td>
+        <td><span style="font-size:0.78rem;color:var(--text-sub)">Bank transfer</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===== FOOTNOTES ===== -->
+<div class="footnotes">
+  <p>All prices in Singapore Dollars (SGD). Prices are subject to change based on material costs and supplier availability.</p>
+  <p>This document is for informational purposes and does not constitute a binding offer. Final pricing confirmed upon order based on exact specifications.</p>
+  <p>Design and artwork are the responsibility of the buyer. Stakco provides the design tool (Studio) and printing service. Artwork review is included for orders of 50+ units.</p>
+  <p style="margin-top:12px;color:var(--text-sub);font-weight:600;">Contact: hello@stakcos.com · stakcos.com</p>
+</div>
+
+</div>
+</div><!-- /page-layout -->
+
+<script>
+(function() {
+  const links = document.querySelectorAll('.side-nav-list a');
+  const sections = [];
+  links.forEach(link => {
+    const id = link.getAttribute('href').slice(1);
+    const el = document.getElementById(id);
+    if (el) sections.push({ id, el, link });
+  });
+
+  function updateActive() {
+    let current = sections[0];
+    const offset = 80;
+    for (const s of sections) {
+      if (s.el.getBoundingClientRect().top <= offset) current = s;
+    }
+    links.forEach(l => l.classList.remove('active'));
+    if (current) current.link.classList.add('active');
+  }
+
+  window.addEventListener('scroll', updateActive, { passive: true });
+  updateActive();
+
+  // Smooth scroll
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const id = link.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+})();
+</script>
+
+<script>
+(function(){
+  const PLATFORM_URL = 'https://storage.googleapis.com/stakco-images/platform.json?v=' + Date.now();
+
+  async function loadPlatformPricing() {
+    try {
+      const res = await fetch(PLATFORM_URL);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = await res.json();
+      const mods = data.Products?.STAKCO_STUDIO?.Modules || {};
+
+      // Build a flat price map from platform config
+      const priceMap = {};
+      Object.entries(mods).forEach(([key, mod]) => {
+        const p = mod.Pricing;
+        const price = mod.Price;
+        if (p && p.Type === 'SUBSCRIPTION') {
+          priceMap[key + '.monthly'] = p.MonthlyPrice || price;
+          priceMap[key + '.annual'] = p.AnnualPrice || (price * 10);
+        } else if (p && p.Type === 'ONE_TIME') {
+          priceMap[key + '.price'] = price;
+        }
+        // Always set .price as fallback
+        if (price != null) priceMap[key + '.price'] = price;
+      });
+
+      // Update single-price elements: data-price="PLAY.monthly"
+      document.querySelectorAll('[data-price]').forEach(el => {
+        const key = el.dataset.price;
+        const val = priceMap[key];
+        if (val != null) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          el.textContent = prefix + val + suffix;
+        }
+      });
+
+      // Update sum elements: data-price-sum="PLAY.monthly+AI.monthly"
+      document.querySelectorAll('[data-price-sum]').forEach(el => {
+        const keys = el.dataset.priceSum.split('+');
+        let total = 0;
+        let allFound = true;
+        keys.forEach(k => {
+          const v = priceMap[k.trim()];
+          if (v != null) total += v;
+          else allFound = false;
+        });
+        if (allFound) {
+          const prefix = el.dataset.pricePrefix || '$';
+          const suffix = el.dataset.priceSuffix || '';
+          const formatted = total % 1 === 0 ? total : total.toFixed(2);
+          el.textContent = prefix + formatted + suffix;
+        }
+      });
+
+    } catch (e) {
+      console.warn('Stakco pricing fetch failed:', e);
+    }
+  }
+
+  loadPlatformPricing();
+})();
+</script>
+<script>
+window.StakcoParticlesConfig = { count: 38, opacity: 0.3, speed: 0.85, fixed: true, zIndex: 0 };
+</script>
+<script src="https://cdn.stakcos.com/js/stakco-particles.js"></script>
+</body>
+</html>
