@@ -115,44 +115,19 @@
            ============================================ */
         *, *::before, *::after { box-sizing: border-box; }
 
-        html {
+        html, body {
             margin: 0;
             padding: 0;
-            /* Fix html to the physical screen size — never changes on rotation */
-            width: 100vw;
-            height: 100vh;
+            height: 100%;
             overflow: hidden;
         }
 
         body {
-            margin: 0;
-            padding: 0;
             font-family: 'Inter', sans-serif;
             background: var(--bg-primary, #1a1218);
             display: flex;
             justify-content: center;
             align-items: center;
-
-            /* Portrait dimensions — always the physical portrait size */
-            width: var(--portrait-w, 100vw);
-            height: var(--portrait-h, 100vh);
-            overflow: hidden;
-
-            /* transform-origin stays at physical centre */
-            transform-origin: center center;
-        }
-
-        /*
-         * When the OS rotates to landscape we counter-rotate the body
-         * back to portrait. JS sets --portrait-w/h and the rotation.
-         * We also translate to keep it centred in the now-swapped viewport.
-         */
-        body.landscape-lock {
-            /* JS fills these in */
-            transform: var(--counter-rotate, none);
-            position: fixed;
-            top: var(--body-top, 0);
-            left: var(--body-left, 0);
         }
 
         /* ============================================
@@ -490,10 +465,8 @@
 
     <!-- ================================================
          Stakco CDN Components
-         NOTE: stakco-orientation-overlay is intentionally omitted.
-         Gyro mode works in any orientation — blocking landscape
-         breaks the tilt experience.
          ================================================ -->
+    <stakco-orientation-overlay></stakco-orientation-overlay>
     <stakco-countdown></stakco-countdown>
     <stakco-info-panel icon="fa-compass">
         <p>Initialising gyroscope…</p>
@@ -681,6 +654,7 @@
         const countdown          = document.querySelector('stakco-countdown');
         const infoPanel          = document.querySelector('stakco-info-panel');
         const shareWindow        = document.querySelector('stakco-share-window');
+        const orientationOverlay = document.querySelector('stakco-orientation-overlay');
         const branding           = document.querySelector('stakco-branding');
         const gyroInfo           = document.getElementById('gyro-info');
         const gimbalIndicator    = document.getElementById('gimbal-indicator');
@@ -729,10 +703,8 @@
         //   centered both axes
         // ============================================
         function positionCircleOverlays() {
-            // Always use portrait dimensions — even when OS has rotated to landscape,
-            // the body is counter-rotated back to portrait so we size against portraitW/H.
-            const vw   = portraitW || window.innerWidth;
-            const vh   = portraitH || window.innerHeight;
+            const vw   = window.innerWidth;
+            const vh   = window.innerHeight;
             const vmin = Math.min(vw, vh);
             const size = Math.min(vmin * 0.9, vw - 20, vh - 200);
             const left = Math.round((vw - size) / 2);
@@ -746,81 +718,8 @@
             });
         }
 
-        // ============================================
-        // Portrait Lock
-        //
-        // screen.orientation.lock() only works on Android Chrome in some
-        // contexts. For maximum compatibility we CSS-counter-rotate the body
-        // when the OS rotates to landscape, keeping the puzzle visually in
-        // portrait at its natural size.
-        //
-        // Strategy:
-        //   1. On first load (assumed portrait), record physical portrait W×H.
-        //   2. On any resize/orientationchange, if we detect landscape we:
-        //      - Set body to portrait dimensions (swapped from landscape vp)
-        //      - Apply a CSS counter-rotation of ±90° to body
-        //      - Translate body so it stays centred in the physical screen
-        //   3. On return to portrait, remove the transform.
-        //
-        // This means the puzzle and all overlays always think they're in a
-        // portrait viewport — sizes, vmin units, and circle positioning all
-        // stay correct.
-        // ============================================
-
-        // Capture portrait dimensions once (call before anything resizes)
-        let portraitW = window.innerWidth;
-        let portraitH = window.innerHeight;
-
-        // If page loaded in landscape (edge case), swap
-        if (portraitW > portraitH) { [portraitW, portraitH] = [portraitH, portraitW]; }
-
-        function applyPortraitLock() {
-            const vw = window.innerWidth;
-            const vh = window.innerHeight;
-            const isLandscape = vw > vh;
-
-            const body = document.body;
-            const root = document.documentElement;
-
-            if (isLandscape) {
-                // Landscape: counter-rotate -90deg (or +90 depending on physical rotation)
-                // We always use -90deg which maps landscape-left/right to portrait-up.
-                const angle = -90;
-
-                // After a -90deg rotation the body's visual width = portraitW, height = portraitH
-                // but in the rotated frame the body occupies portraitH × portraitW of screen space.
-                // Centre it: offset = (screen dimension - body dimension in that axis) / 2
-                const offsetTop  = (vh - portraitW) / 2;  // vh is landscape height (shorter)
-                const offsetLeft = (vw - portraitH) / 2;  // vw is landscape width  (longer)
-
-                root.style.setProperty('--portrait-w',      `${portraitW}px`);
-                root.style.setProperty('--portrait-h',      `${portraitH}px`);
-                root.style.setProperty('--counter-rotate',  `rotate(${angle}deg)`);
-                root.style.setProperty('--body-top',        `${offsetTop}px`);
-                root.style.setProperty('--body-left',       `${offsetLeft}px`);
-                body.classList.add('landscape-lock');
-            } else {
-                // Portrait: remove lock
-                root.style.removeProperty('--portrait-w');
-                root.style.removeProperty('--portrait-h');
-                root.style.removeProperty('--counter-rotate');
-                root.style.removeProperty('--body-top');
-                root.style.removeProperty('--body-left');
-                body.classList.remove('landscape-lock');
-
-                // Update portrait dimensions in case user re-sized browser
-                portraitW = vw;
-                portraitH = vh;
-            }
-
-            // Re-position circle overlays after layout changes
-            positionCircleOverlays();
-        }
-
-        window.addEventListener('resize',            applyPortraitLock);
-        window.addEventListener('orientationchange', applyPortraitLock);
-        // Run once on load (in case it loaded in landscape)
-        applyPortraitLock();
+        positionCircleOverlays();
+        window.addEventListener('resize', positionCircleOverlays);
 
         // ============================================
         // Loading / Error UI
@@ -907,22 +806,6 @@
         async function init() {
             console.log('[Gyro] init');
             StakcoUtils.preventZoom();
-
-            // Best-effort: lock to portrait so the OS doesn't auto-rotate.
-            // screen.orientation.lock() is only available in some browsers
-            // (Chrome Android, Samsung Internet) and requires a user gesture
-            // or fullscreen in some contexts — so we catch silently if it fails.
-            try {
-                if (screen.orientation && screen.orientation.lock) {
-                    await screen.orientation.lock('portrait');
-                    console.log('[Gyro] Screen locked to portrait');
-                }
-            } catch (e) {
-                // Not supported or not in fullscreen — gyro still works fine in landscape,
-                // we just won't show the blocking overlay.
-                console.log('[Gyro] screen.orientation.lock not available:', e.message);
-            }
-
             setupEventListeners();
 
             const subdomain = albumResolver.getSubdomain();
@@ -966,6 +849,10 @@
             }, 3000);
 
             puzzleContainer.addEventListener('puzzle-solved', () => onPuzzleSolved());
+
+            // Orientation overlay pause/resume countdown
+            orientationOverlay.addEventListener('blocked',   () => { if (countdown?.active)  countdown.pause(); });
+            orientationOverlay.addEventListener('unblocked', () => { if (countdown?.paused)  countdown.resume(); });
 
             // Solved overlay — share button
             solvedShareBtn.addEventListener('click', handleShare);
@@ -1103,7 +990,7 @@
         // Core Orientation Handler
         // ============================================
         function handleOrientation(event) {
-            if (puzzleContainer.isSolved) return;
+            if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
 
             const alpha = event.alpha ?? 0;
             const beta  = event.beta  ?? 0;
