@@ -465,8 +465,10 @@
 
     <!-- ================================================
          Stakco CDN Components
+         NOTE: stakco-orientation-overlay is intentionally omitted.
+         Gyro mode works in any orientation — blocking landscape
+         breaks the tilt experience.
          ================================================ -->
-    <stakco-orientation-overlay></stakco-orientation-overlay>
     <stakco-countdown></stakco-countdown>
     <stakco-info-panel icon="fa-compass">
         <p>Initialising gyroscope…</p>
@@ -654,7 +656,6 @@
         const countdown          = document.querySelector('stakco-countdown');
         const infoPanel          = document.querySelector('stakco-info-panel');
         const shareWindow        = document.querySelector('stakco-share-window');
-        const orientationOverlay = document.querySelector('stakco-orientation-overlay');
         const branding           = document.querySelector('stakco-branding');
         const gyroInfo           = document.getElementById('gyro-info');
         const gimbalIndicator    = document.getElementById('gimbal-indicator');
@@ -806,6 +807,22 @@
         async function init() {
             console.log('[Gyro] init');
             StakcoUtils.preventZoom();
+
+            // Best-effort: lock to portrait so the OS doesn't auto-rotate.
+            // screen.orientation.lock() is only available in some browsers
+            // (Chrome Android, Samsung Internet) and requires a user gesture
+            // or fullscreen in some contexts — so we catch silently if it fails.
+            try {
+                if (screen.orientation && screen.orientation.lock) {
+                    await screen.orientation.lock('portrait');
+                    console.log('[Gyro] Screen locked to portrait');
+                }
+            } catch (e) {
+                // Not supported or not in fullscreen — gyro still works fine in landscape,
+                // we just won't show the blocking overlay.
+                console.log('[Gyro] screen.orientation.lock not available:', e.message);
+            }
+
             setupEventListeners();
 
             const subdomain = albumResolver.getSubdomain();
@@ -849,10 +866,6 @@
             }, 3000);
 
             puzzleContainer.addEventListener('puzzle-solved', () => onPuzzleSolved());
-
-            // Orientation overlay pause/resume countdown
-            orientationOverlay.addEventListener('blocked',   () => { if (countdown?.active)  countdown.pause(); });
-            orientationOverlay.addEventListener('unblocked', () => { if (countdown?.paused)  countdown.resume(); });
 
             // Solved overlay — share button
             solvedShareBtn.addEventListener('click', handleShare);
@@ -990,7 +1003,7 @@
         // Core Orientation Handler
         // ============================================
         function handleOrientation(event) {
-            if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
+            if (puzzleContainer.isSolved) return;
 
             const alpha = event.alpha ?? 0;
             const beta  = event.beta  ?? 0;
