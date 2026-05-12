@@ -73,6 +73,19 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 .form-alert.success { display:block; background:rgba(58,138,92,0.08); color:var(--green); border:1px solid rgba(58,138,92,0.2); }
 .form-alert.error { display:block; background:rgba(184,50,103,0.06); color:var(--pink); border:1px solid rgba(184,50,103,0.15); }
 
+/* Success state — replaces the form after submit until page reload.
+   `:not([hidden])` so the `hidden` attribute on the element actually wins
+   (a class rule otherwise out-specifies the UA `[hidden]{display:none}`). */
+.form-success:not([hidden]) { display:flex; flex-direction:column; align-items:center; text-align:center; padding:18px 8px 6px; }
+.form-success-icon {
+  width:56px; height:56px; border-radius:50%;
+  background:rgba(58,138,92,0.1); color:var(--green);
+  display:flex; align-items:center; justify-content:center;
+  font-size:1.4rem; margin-bottom:18px;
+}
+.form-success-title { font-size:1.15rem; font-weight:800; letter-spacing:-0.01em; margin-bottom:8px; }
+.form-success-text  { font-size:0.88rem; color:var(--ink2); line-height:1.6; max-width:340px; }
+
 /* Sidebar */
 .sidebar-card {
   background:var(--card); border:1px solid var(--border);
@@ -125,6 +138,15 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 .newsletter-alert.success { display:block; background:rgba(58,138,92,0.15); color:#a0f0c0; }
 .newsletter-alert.error { display:block; background:rgba(184,50,103,0.15); color:#f0a0b0; }
 
+.newsletter-success:not([hidden]) { display:flex; align-items:flex-start; gap:12px; }
+.newsletter-success-icon {
+  width:34px; height:34px; border-radius:50%; flex-shrink:0;
+  background:rgba(160,240,192,0.18); color:#a0f0c0;
+  display:flex; align-items:center; justify-content:center; font-size:0.85rem;
+}
+.newsletter-success-title { font-size:0.92rem; font-weight:700; margin-bottom:4px; }
+.newsletter-success-text  { font-size:0.78rem; color:rgba(255,255,255,0.7); line-height:1.55; }
+
 .footer { padding:28px 0; text-align:center; font-size:0.7rem; color:var(--ink4); line-height:1.9; }
 .footer a { color:var(--ink3); text-decoration:none; }
 .footer a:hover { color:var(--ink); }
@@ -173,6 +195,12 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 
   <!-- Form -->
   <div class="form-card reveal">
+    <div id="contactSuccess" class="form-success" hidden>
+      <div class="form-success-icon"><i class="fa-solid fa-check"></i></div>
+      <div class="form-success-title">Message received</div>
+      <div class="form-success-text">Thanks for reaching out — we'll get back to you shortly. A copy of your message is on its way to your inbox.</div>
+    </div>
+    <div id="contactFormWrap">
     <div class="form-title">Send us a message</div>
     <form id="contactForm">
       <div class="form-row">
@@ -198,6 +226,7 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
       </button>
       <div class="form-alert" id="formAlert"></div>
     </form>
+    </div><!-- /#contactFormWrap -->
   </div>
 
   <!-- Sidebar -->
@@ -237,13 +266,22 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
     </div>
 
     <div class="newsletter-card reveal">
-      <div class="newsletter-title">Stay updated</div>
-      <div class="newsletter-desc">New products, research updates, and puzzle news. No spam.</div>
-      <form id="newsletterForm" class="newsletter-form">
-        <input class="newsletter-input" type="email" id="nlEmail" placeholder="Your email" required>
-        <button type="submit" class="newsletter-btn" id="nlBtn">Subscribe</button>
-      </form>
-      <div class="newsletter-alert" id="nlAlert"></div>
+      <div id="newsletterSuccess" class="newsletter-success" hidden>
+        <div class="newsletter-success-icon"><i class="fa-solid fa-check"></i></div>
+        <div>
+          <div class="newsletter-success-title">You're subscribed</div>
+          <div class="newsletter-success-text">Thanks! Look out for occasional updates — no spam.</div>
+        </div>
+      </div>
+      <div id="newsletterFormWrap">
+        <div class="newsletter-title">Stay updated</div>
+        <div class="newsletter-desc">New products, research updates, and puzzle news. No spam.</div>
+        <form id="newsletterForm" class="newsletter-form">
+          <input class="newsletter-input" type="email" id="nlEmail" placeholder="Your email" required>
+          <button type="submit" class="newsletter-btn" id="nlBtn">Subscribe</button>
+        </form>
+        <div class="newsletter-alert" id="nlAlert"></div>
+      </div>
     </div>
   </div>
 
@@ -270,88 +308,64 @@ const obs = new IntersectionObserver((entries) => {
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-/* Contact form */
-document.getElementById('contactForm').addEventListener('submit', async function(e) {
+/* Backend: stakco-mailing-list Apps Script project.
+   Content-Type text/plain dodges the CORS preflight that application/json
+   would trigger — Apps Script doesn't answer the OPTIONS request. */
+const MAILING_LIST_URL = 'https://script.google.com/macros/s/AKfycbxtgUTP6JBOGsv5FIi6Xr42FWn482n-JwcDjnEviKQlN8RxvaR_QuvYLmg1TNDtv0Pcjw/exec';
+
+async function postToMailingList(data) {
+  const res = await fetch(MAILING_LIST_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(data),
+    redirect: 'follow'
+  });
+  return res.json();
+}
+
+/* Optimistic submit: swap to the thank-you view immediately on click,
+   then send the request in the background. Apps Script's 302-redirect
+   chain adds 3-5s, which feels broken if we block on it.
+   Browser-side `required` + `type="email"` already rejects bad input
+   before this handler runs, so the only realistic background-failure
+   mode is a network drop — logged to console for diagnostics. */
+document.getElementById('contactForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  const btn = document.getElementById('submitBtn');
-  const alert = document.getElementById('formAlert');
-  const orig = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin" style="margin-right:6px;"></i>Sending...';
-  alert.className = 'form-alert';
-  alert.style.display = 'none';
 
   const data = {
     formType: 'contact',
     name: document.getElementById('name').value.trim(),
     email: document.getElementById('email').value.trim(),
     subject: document.getElementById('subject').value.trim(),
-    message: document.getElementById('message').value.trim()
+    message: document.getElementById('message').value.trim(),
+    userAgent: navigator.userAgent,
+    source: 'stakcos.com/contact'
   };
 
-  try {
-    /* Replace with your actual form endpoint */
-    const res = await fetch('https://api.stakcos.com/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    const result = await res.json();
-    if (result.success) {
-      alert.className = 'form-alert success';
-      alert.textContent = 'Message sent! We\'ll get back to you shortly.';
-      this.reset();
-    } else {
-      alert.className = 'form-alert error';
-      alert.textContent = result.message || 'Something went wrong. Please try again.';
-    }
-  } catch (err) {
-    alert.className = 'form-alert error';
-    alert.textContent = 'Network error. Please email hello@stakcos.com directly.';
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = orig;
-  }
+  document.getElementById('contactFormWrap').hidden = true;
+  document.getElementById('contactSuccess').hidden = false;
+
+  postToMailingList(data)
+    .then(r => { if (!r || !r.success) console.warn('[stakco contact] server returned:', r); })
+    .catch(err => { console.warn('[stakco contact] network error:', err); });
 });
 
-/* Newsletter form */
-document.getElementById('newsletterForm').addEventListener('submit', async function(e) {
+document.getElementById('newsletterForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  const btn = document.getElementById('nlBtn');
-  const alert = document.getElementById('nlAlert');
-  const orig = btn.textContent;
-  btn.disabled = true;
-  btn.textContent = '...';
-  alert.className = 'newsletter-alert';
-  alert.style.display = 'none';
 
   const data = {
     formType: 'subscribe',
-    email: document.getElementById('nlEmail').value.trim()
+    email: document.getElementById('nlEmail').value.trim(),
+    userAgent: navigator.userAgent,
+    source: 'stakcos.com/contact newsletter'
   };
 
-  try {
-    const res = await fetch('https://api.stakcos.com/contact', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    const result = await res.json();
-    if (result.success) {
-      alert.className = 'newsletter-alert success';
-      alert.textContent = 'Subscribed!';
-      this.reset();
-    } else {
-      alert.className = 'newsletter-alert error';
-      alert.textContent = result.message || 'Please try again.';
-    }
-  } catch (err) {
-    alert.className = 'newsletter-alert error';
-    alert.textContent = 'Error — email hello@stakcos.com.';
-  } finally {
-    btn.disabled = false;
-    btn.textContent = orig;
-  }
+  document.getElementById('newsletterFormWrap').hidden = true;
+  document.getElementById('newsletterSuccess').hidden = false;
+
+  postToMailingList(data)
+    .then(r => { if (!r || !r.success) console.warn('[stakco subscribe] server returned:', r); })
+    .catch(err => { console.warn('[stakco subscribe] network error:', err); });
 });
 </script>
 <script>window.StakcoParticlesConfig = { count: 38, opacity: 0.3, speed: 0.85, fixed: true, zIndex: 0 };</script>
