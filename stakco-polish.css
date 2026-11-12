@@ -1,0 +1,122 @@
+/* ══ STAKCO UI POLISH ════════════════════════════════════════
+   Site-wide layout and polish rules. Loaded LAST on every page so it
+   overrides the per-page inline styles. Rule numbers refer to the
+   ui-ux-style principles.
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── 14. No overscroll bounce, no white edge ────────────────── */
+html { background: #faf8f4; overscroll-behavior: none; }
+body { overscroll-behavior: none; }
+/* overflow-x: hidden on html/body turns body into its own scroll box,
+   which breaks the sticky app bar. clip hides sideways overflow without
+   creating a scroll container. */
+html, body { overflow: visible; overflow-x: clip; }
+
+/* ── 22. App bar marks the current page with a filled pill ──── */
+.site-nav-links { gap: 4px !important; }
+.site-nav-links a:not(.site-nav-cta) {
+  padding: 8px 14px; border-radius: 10px;
+  transition: background-color 0.2s, color 0.2s;
+}
+.site-nav-links a:not(.site-nav-cta):hover { background: rgba(60,47,56,0.06); color: #3C2F38; }
+.site-nav-links a.sn-active { background: rgba(60,47,56,0.10); color: #3C2F38; }
+.site-nav-links a.site-nav-cta { margin-left: 12px; }
+
+/* ── 7. No horizontal divider lines ─────────────────────────
+   Separate with spacing and surfaces instead. Tables get a faint
+   zebra fill in place of row rules. */
+.flow-step, .faq-section .faq-item, .specs-table tr, .sidebar-item, .exp-col,
+.pt-row, .pt-header, .bd-card .bd-row, .pf-row, tbody td, .row-total td,
+.footnotes, .side-nav-actions, .doc-header, .partner-strip, .footer,
+.price-main-row, .price-note, .glance-cta, .cs-stats, .cs-prev-next, .pcard-cta {
+  border-top: 0 !important; border-bottom: 0 !important;
+}
+.pn-divider { display: none; }
+tbody tr:nth-child(even) td,
+.specs-table tr:nth-child(even) td,
+.pt-row:nth-child(even) { background: rgba(60,47,56,0.025); }
+.faq-section .faq-item + .faq-item { margin-top: 4px; }
+.cs-stats { background: rgba(60,47,56,0.03); border-radius: 12px; padding: 16px 20px !important; }
+.price-note { margin-top: 18px !important; }
+
+/* ── 32. Side panes float like the app bar ──────────────────── */
+.side-pane,
+.page-layout > .side-nav,
+.readall-side {
+  top: 82px !important;
+  margin-top: 16px;
+  padding: 16px 10px !important;
+  border-radius: 14px;
+  background: rgba(250,248,244,0.6);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(255,255,255,0.5) !important;
+  box-shadow: 0 8px 28px rgba(30,20,28,0.10), 0 1px 0 rgba(60,47,56,0.05);
+}
+.page-layout > .side-nav {
+  height: auto !important;
+  max-height: calc(100vh - 100px);
+  margin-left: 12px;
+}
+/* Current item = filled pill, no coloured left stripe */
+.side-nav a, .side-nav-list a { border-left: 0 !important; }
+.side-nav a.active, .side-nav-list a.active { background: rgba(60,47,56,0.09) !important; }
+.side-nav-actions, .pn-cards { padding-right: 0 !important; }
+
+/* ── 18. Footer is one short line ───────────────────────────── */
+.sk-footer {
+  position: relative; z-index: 1;
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 4px 10px;
+  padding: 28px 16px;
+  font-family: 'Mont', 'DM Sans', sans-serif;
+  font-size: 0.78rem; color: #8a7e85; line-height: 1.4;
+}
+.sk-footer b { color: #3C2F38; font-weight: 700; }
+.sk-footer a { color: #6e6169; text-decoration: none; transition: color 0.15s; }
+.sk-footer a:hover { color: #3C2F38; }
+.sk-footer .sk-sep { opacity: 0.5; }
+.sk-info {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 22px; height: 22px; padding: 0; margin-left: 2px;
+  border: 0; border-radius: 50%; background: transparent; cursor: help;
+  color: #8a7e85; transition: color 0.15s, background-color 0.15s;
+}
+.sk-info:hover, .sk-info:focus-visible { color: #3C2F38; background: rgba(60,47,56,0.08); }
+.sk-info svg { width: 15px; height: 15px; }
+@media (max-width: 640px) {
+  .sk-footer { font-size: 0.72rem; gap: 4px 7px; }
+}
+
+/* Full-screen frosted overlay for the ⓘ note. The glass ignores the
+   pointer; only the ⓘ (re-drawn above the glass) stays interactive. */
+.sk-note-glass {
+  position: fixed; inset: 0; z-index: 3000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  background: rgba(250,248,244,0.62);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transition: opacity 0.45s ease, visibility 0s linear 0.45s;
+}
+.sk-note-glass.open { opacity: 1; visibility: visible; transition: opacity 0.45s ease; }
+.sk-note-glass .sk-note {
+  max-width: 560px; text-align: center;
+  font-family: 'Mont', 'DM Sans', sans-serif;
+  font-size: 1rem; line-height: 1.7; color: #3C2F38;
+}
+.sk-note-glass .sk-note p + p { margin-top: 10px; }
+.sk-info-float { position: fixed; z-index: 3001; background: rgba(60,47,56,0.08); color: #3C2F38; }
+
+/* ── 20 / 11. Cards hover by colour, never lift ─────────────── */
+.pcard:hover, .case-card:hover, .rcard:hover, .research-card:hover { transform: none !important; }
+
+/* ── 1 / 2 / 5. Home page: screen-fit groups ────────────────── */
+body.screen-fit .wrap > .section { box-sizing: border-box; }
+body.screen-fit .wrap > .section:not(.hero) {
+  display: flex; flex-direction: column; justify-content: center;
+}
+body.screen-fit .wrap > .section.hero { align-content: center; }
+/* The footer is the last group: its row sits on the bottom edge (rule 5). */
+body.screen-fit .sk-footer-group { align-content: flex-end; align-items: flex-end; box-sizing: border-box; }
