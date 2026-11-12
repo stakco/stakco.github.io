@@ -38,7 +38,6 @@
   /* ── PARTNER STRIP ────────────────────────────────────────── */
   .partner-strip {
     padding: 28px 0 0;
-    border-top: 1px solid var(--border);
     margin-top: 0;
   }
   .partner-strip-label {
@@ -365,7 +364,6 @@ body {
 
 .pcard-cta {
   margin-top: auto; padding-top: 14px;
-  border-top: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
   font-size: 0.78rem; font-weight: 700;
   transition: gap 0.15s;
@@ -585,8 +583,6 @@ body {
   border-radius: var(--r);
   overflow: hidden;
 }
-.faq-item { border-bottom: 1px solid var(--border); }
-.faq-item:last-child { border-bottom: none; }
 .faq-q {
   width: 100%; text-align: left;
   padding: 18px 22px;
@@ -688,10 +684,9 @@ body {
   .section { padding: 48px 0; }
   .section-title { font-size: 1.55rem; }
 
-  /* Explainer — single column with border dividers */
-  .explainer { grid-template-columns: 1fr; gap: 0; }
-  .exp-col { border-right: none; border-bottom: 1px solid var(--border); }
-  .exp-col:last-child { border-bottom: none; }
+  /* Explainer — single column on mobile */
+  .explainer { grid-template-columns: 1fr; gap: 12px; }
+  .exp-col { border-right: none; }
 
   /* Cards → single column */
   .products-grid { grid-template-columns: 1fr; }
@@ -701,8 +696,6 @@ body {
   /* Flow row — vertical stack, hide arrows */
   .flow-row { display: flex; flex-direction: column; }
   .flow-step:nth-child(2), .flow-step:nth-child(4) { display: none; }
-  .flow-step { border-bottom: 1px solid var(--border); }
-  .flow-step:last-child { border-bottom: none; }
 
   /* Guide */
   .guide-cards { grid-template-columns: repeat(2, 1fr); }
@@ -752,9 +745,8 @@ body {
     <div class="site-nav-links">
       <a href="/products/" class="sn-active">Products</a>
       <a href="/case-studies/">Case Studies</a>
-      <a href="/research/">Research</a>
       <a href="/contact/">Contact</a>
-      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Play free</a>
     </div>
   </div>
 </nav>
@@ -763,14 +755,13 @@ body {
 <div class="wrap">
 
 <!-- ══ THREE PRODUCTS ════════════════════════════════════════════ -->
-<div class="section" id="products" style="padding-top:80px;">
-  <span class="section-label">Products</span>
-  <h2 class="section-title" style="font-size:2.4rem;letter-spacing:-0.02em;">Three formats, one puzzle engine</h2>
-  <p class="section-sub">Design a puzzle once in Stakco Studio — then deliver it as a printed disc, a browser link, or a physical installation. Pick the format that fits your goal.</p>
+<div class="section" id="products" style="padding-top:40px;">
+  <h2 class="section-title" style="font-size:2.4rem;letter-spacing:-0.02em;">Free to play. Order what you love.</h2>
+  <p class="section-sub">Start free on <strong>Play</strong> &mdash; a new puzzle every day in your browser. When one stays with you, order it as a <strong>printed disc</strong>. Running a venue, school, or therapy space? Talk to us about <strong>Light</strong>, the room-scale install.</p>
 
   <div class="products-grid">
 
-    <!-- PLAY -->
+    <!-- PLAY (free funnel entry) -->
     <a href="stakco-play.html" class="pcard c-play reveal">
       <div class="pcard-stripe"></div>
       <div class="pcard-vis pcard-vis-video">
@@ -781,64 +772,31 @@ body {
         <div class="pcard-vid-fade pcard-vid-fade-b"></div>
         <div class="pcard-vid-fade pcard-vid-fade-l"></div>
         <div class="pcard-vid-fade pcard-vid-fade-r"></div>
-        <span class="pcard-tag">Digital</span>
+        <span class="pcard-tag">Free &middot; Daily</span>
       </div>
       <div class="pcard-body">
         <div class="pcard-name">Stakco Play</div>
-        <div class="pcard-tagline">Publish puzzles online — players open a link and solve in their browser. No app. No account.</div>
+        <div class="pcard-tagline">A new puzzle every day in your browser. Curated albums to explore. The free home for Stakco puzzles.</div>
         <div class="pcard-price">
           <div>
-            <div class="pcard-price-label">Players pay</div>
+            <div class="pcard-price-label">Play daily</div>
             <div class="pcard-price-val">Free</div>
           </div>
           <div style="text-align:right">
-            <div class="pcard-price-label">Publisher plan</div>
+            <div class="pcard-price-label">Publishers (B2B)</div>
             <div class="pcard-price-val" data-price="PLAY.monthly" data-price-prefix="S$" data-price-suffix="/mo">S$21/mo</div>
           </div>
         </div>
         <div class="pcard-feats">
-          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Share via link — works on phone, tablet, desktop</div>
-          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Custom subdomain (yourname.play.stakcos.com)</div>
-          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Analytics — completion rates, time spent</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>play.stakcos.com — no account, no app, no ads</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Daily puzzle + themed albums</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Brands &amp; educators: branded subdomain (by invitation)</div>
         </div>
         <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.65;"></i></div>
       </div>
     </a>
 
-    <!-- LIGHT -->
-    <a href="stakco-light.html" class="pcard c-light reveal">
-      <div class="pcard-stripe"></div>
-      <div class="pcard-vis pcard-vis-video">
-        <video class="pcard-bg-video" autoplay muted loop playsinline>
-          <source src="https://cdn.stakcos.com/media/light.mp4" type="video/mp4">
-        </video>
-        <div class="pcard-vid-fade pcard-vid-fade-t"></div>
-        <div class="pcard-vid-fade pcard-vid-fade-b"></div>
-        <div class="pcard-vid-fade pcard-vid-fade-l"></div>
-        <div class="pcard-vid-fade pcard-vid-fade-r"></div>
-        <span class="pcard-tag">Optical</span>
-      </div>
-      <div class="pcard-body">
-        <div class="pcard-name">Stakco Light</div>
-        <div class="pcard-tagline">Physical rotating rings mounted in your space, with a projected puzzle image on top.</div>
-        <div class="pcard-price">
-          <div>
-            <div class="pcard-price-label">Complete installation</div>
-            <div class="pcard-price-val">Contact for price</div>
-
-          </div>
-        </div>
-        <div class="pcard-feats">
-          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Keeps guests and visitors engaged longer — tactile, unplugged, no instructions needed</div>
-          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Run seasonal themes or branded content — change it from your desk, no technician</div>
-          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Installed in sensory classrooms, hotel lobbies, museums, and therapy spaces</div>
-        </div>
-        <div style="font-size:0.68rem;color:var(--ink4);margin-top:8px;padding:7px 10px;background:rgba(212,152,79,0.06);border-radius:7px;border-left:2px solid var(--amber);">First installation at <strong style="color:var(--ink3);">AWWA School @ Bedok</strong> — a special education school, used daily with students with autism.</div>
-        <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.65;"></i></div>
-      </div>
-    </a>
-
-    <!-- PAPER -->
+    <!-- PAPER (first paid step) -->
     <a href="stakco-paper.html" class="pcard c-paper reveal">
       <div class="pcard-stripe"></div>
       <div class="pcard-vis pcard-vis-video">
@@ -849,14 +807,14 @@ body {
         <div class="pcard-vid-fade pcard-vid-fade-b"></div>
         <div class="pcard-vid-fade pcard-vid-fade-l"></div>
         <div class="pcard-vid-fade pcard-vid-fade-r"></div>
-        <span class="pcard-tag">Physical</span>
+        <span class="pcard-tag">From S$13</span>
       </div>
       <div class="pcard-body">
         <div class="pcard-name">Stakco Paper</div>
-        <div class="pcard-tagline">A printed rotating puzzle disc on laminated matte board — portable, durable, no power.</div>
+        <div class="pcard-tagline">Loved a puzzle on Play? Order it as a printed disc &mdash; or commission a custom one from your own photo.</div>
         <div class="pcard-price">
           <div>
-            <div class="pcard-price-label">From (retail)</div>
+            <div class="pcard-price-label">Retail</div>
             <div class="pcard-price-val">S$20/unit</div>
           </div>
           <div style="text-align:right">
@@ -864,12 +822,44 @@ body {
             <div class="pcard-price-val">S$8/unit</div>
           </div>
         </div>
-        <div style="font-size:0.68rem;color:var(--ink4);margin-top:6px;">Min. 50 units · samples available · ~7 day lead time</div>
+        <div style="font-size:0.68rem;color:var(--ink4);margin-top:6px;">No minimum order &middot; samples available &middot; ~1 week lead time</div>
         <div class="pcard-feats">
-          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Fully custom artwork — your branding on the surface</div>
-          <div class="pcard-feat"><span class="pcard-feat-dot"></span>~7 day lead time for professional printing</div>
-          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Printed on laminated matte board — durable, portable, ready to gift or brand</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Fully custom artwork — your photo or branding</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Ships in an envelope, worldwide</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>From one wedding favour to 1,000 brand giveaways</div>
         </div>
+        <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.65;"></i></div>
+      </div>
+    </a>
+
+    <!-- LIGHT (enterprise / venue install) -->
+    <a href="stakco-light.html" class="pcard c-light reveal">
+      <div class="pcard-stripe"></div>
+      <div class="pcard-vis pcard-vis-video">
+        <video class="pcard-bg-video" autoplay muted loop playsinline>
+          <source src="https://cdn.stakcos.com/media/light.mp4" type="video/mp4">
+        </video>
+        <div class="pcard-vid-fade pcard-vid-fade-t"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-b"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-l"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-r"></div>
+        <span class="pcard-tag">For venues</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-name">Stakco Light</div>
+        <div class="pcard-tagline">A physical ring puzzle installed at your venue. People turn the rings; a projector responds in real time. Live at AWWA School for sensory therapy.</div>
+        <div class="pcard-price">
+          <div>
+            <div class="pcard-price-label">Complete installation</div>
+            <div class="pcard-price-val">Contact for price</div>
+          </div>
+        </div>
+        <div class="pcard-feats">
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Tactile, unplugged &mdash; no instructions, no screen</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Seasonal themes &amp; branded content, changed from your desk</div>
+          <div class="pcard-feat"><span class="pcard-feat-dot"></span>Sensory classrooms, hotel lobbies, museums, therapy spaces</div>
+        </div>
+        <div style="font-size:0.68rem;color:var(--ink4);margin-top:8px;padding:7px 10px;background:rgba(212,152,79,0.06);border-radius:7px;border-left:2px solid var(--amber);">First installation at <strong style="color:var(--ink3);">AWWA School @ Bedok</strong> &mdash; a special education school, used daily with students with autism.</div>
         <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;opacity:0.65;"></i></div>
       </div>
     </a>
@@ -882,18 +872,18 @@ body {
   <div class="explainer reveal">
     <div class="exp-col">
       <div class="exp-num">01</div>
-      <div class="exp-title">What it is</div>
-      <div class="exp-body">A circular puzzle with 2–4 rings, each one rotating independently. Turn the rings until the picture lines up — that's it. No loose pieces. No instructions needed. Anyone can pick it up and understand it in seconds.</div>
+      <div class="exp-title">A puzzle of rotating rings</div>
+      <div class="exp-body">2&ndash;4 concentric rings, each turning independently. Align them until the picture comes together. No loose pieces, no instructions &mdash; anyone gets it in seconds.</div>
     </div>
     <div class="exp-col">
       <div class="exp-num">02</div>
-      <div class="exp-title">Three ways to use it</div>
-      <div class="exp-body">The same puzzle can be a <strong>physical disc</strong> you hand someone, a <strong>web link</strong> you send by message, or a <strong>large display</strong> installed in your lobby or venue. You design it once — then choose the format.</div>
+      <div class="exp-title">Try it free, daily</div>
+      <div class="exp-body"><strong>play.stakcos.com</strong> is the free home &mdash; a new puzzle every day, plus curated albums. No account, no app. Bookmark it.</div>
     </div>
     <div class="exp-col">
       <div class="exp-num">03</div>
-      <div class="exp-title">You design it in minutes</div>
-      <div class="exp-body">Open Stakco Studio in your browser — no software to install. Upload a photo or logo, pick your ring layout, and see your puzzle instantly. No design experience needed. If you don't have an image, describe it and AI will create one. Starts from S$13, once.</div>
+      <div class="exp-title">Keep what stays with you</div>
+      <div class="exp-body">When a puzzle lingers, <strong>order it as a printed disc from S$13</strong>, or commission a custom one from your own photo. Running a venue? Talk to us about a Light install.</div>
     </div>
   </div>
 </div>
@@ -919,7 +909,7 @@ body {
         <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">AI-generated science puzzles, refreshed daily. Managed by Stakco. A new discovery to solve every day.</div>
         <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">play.stakcos.com ↗</span>
       </div>
-      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--cyan);display:flex;align-items:center;justify-content:space-between;">
+      <div style="margin-top:auto;padding:10px 22px;font-size:0.75rem;font-weight:700;color:var(--cyan);display:flex;align-items:center;justify-content:space-between;">
         Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
       </div>
     </a>
@@ -937,7 +927,7 @@ body {
         <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">AI-generated daily puzzles celebrating Chinese New Year. A themed seasonal experience built on Stakco Play.</div>
         <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">lunar.play.stakcos.com ↗</span>
       </div>
-      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--orange);display:flex;align-items:center;justify-content:space-between;">
+      <div style="margin-top:auto;padding:10px 22px;font-size:0.75rem;font-weight:700;color:var(--orange);display:flex;align-items:center;justify-content:space-between;">
         Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
       </div>
     </a>
@@ -955,7 +945,7 @@ body {
         <div style="font-size:0.8rem;color:var(--ink2);line-height:1.55;margin-bottom:14px;">A puzzle experience created for NUS's 120th anniversary. A example of a branded institutional track on Stakco Play.</div>
         <span style="font-family:'JetBrains Mono',monospace;font-size:0.68rem;color:var(--ink3);margin-bottom:16px;display:block;text-decoration:underline;text-underline-offset:3px;">nus120.play.stakcos.com ↗</span>
       </div>
-      <div style="margin-top:auto;padding:10px 22px;border-top:1px solid var(--border);font-size:0.75rem;font-weight:700;color:var(--purple);display:flex;align-items:center;justify-content:space-between;">
+      <div style="margin-top:auto;padding:10px 22px;font-size:0.75rem;font-weight:700;color:var(--purple);display:flex;align-items:center;justify-content:space-between;">
         Open track <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:0.6rem;margin-left:5px;opacity:0.7;"></i>
       </div>
     </a>

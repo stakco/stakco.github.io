@@ -181,6 +181,33 @@
   .site-nav-links { display: none; }
 }
 
+
+/* ── FLOATING GLASS NAV ──────────────────────────────────── */
+/* Rounded, frosted app bar floating 12px from the top and sides. */
+.site-nav {
+  position: sticky; top: 12px; z-index: 1000;
+  width: calc(100% - 24px); max-width: none;
+  margin: 12px auto 0;
+  padding: 0 22px;
+  border-radius: 16px;
+  background: rgba(250,248,244,0.55);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(255,255,255,0.45);
+  box-shadow: 0 8px 28px rgba(30,20,28,0.14), 0 1px 0 rgba(60,47,56,0.06);
+}
+.site-nav-inner { max-width: none; }
+.site-nav-brand span { font-size: 1.1rem; }
+.site-nav-brand img { width: 30px; }
+.site-nav-links { gap: 32px; }
+.site-nav-links a { font-size: 0.95rem; font-weight: 700; color: #5e5059; }
+.site-nav-links a.site-nav-cta {
+  font-size: 0.92rem; padding: 9px 22px; color: #fff;
+  background: #3C2F38; border-radius: 10px;
+}
+@media (max-width: 640px) {
+  .site-nav { width: calc(100% - 24px); margin-top: 10px; top: 10px; padding: 0 16px; }
+}
 </style>
 </head>
 <body>
@@ -194,9 +221,8 @@
     <div class="site-nav-links">
       <a href="/products/">Products</a>
       <a href="/case-studies/">Case Studies</a>
-      <a href="/research/">Research</a>
       <a href="/contact/">Contact</a>
-      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Play free</a>
     </div>
   </div>
 </nav>

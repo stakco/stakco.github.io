@@ -59,6 +59,29 @@
   .signal-chip-text { font-size: 0.78rem; color: var(--text-sub); line-height: 1.3; }
   .signal-chip-text strong { color: var(--text); display: block; font-size: 0.82rem; }
 
+  /* ── PAPER FUNNEL STRIP ────────────────────────────────────── */
+  .paper-funnel-strip {
+    margin: 28px 0 12px;
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 18px;
+  }
+  .paper-funnel-row {
+    display: flex; align-items: center; gap: 14px;
+    flex-wrap: wrap; justify-content: space-between;
+  }
+  .paper-funnel-step {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.8rem; color: var(--text-sub); line-height: 1.35;
+    flex: 1; min-width: 180px;
+  }
+  .paper-funnel-step i { color: var(--orange); font-size: 1rem; flex-shrink: 0; }
+  .paper-funnel-step strong { color: var(--text); display: block; font-size: 0.85rem; }
+  .paper-funnel-arrow { color: var(--text-muted); font-size: 0.8rem; opacity: 0.6; }
+  @media (max-width: 600px) {
+    .paper-funnel-arrow { display: none; }
+    .paper-funnel-step { width: 100%; }
+  }
+
   .what-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .what-half { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px; }
   .what-half-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--orange); margin-bottom: 6px; }
@@ -245,6 +268,52 @@
   .site-nav-links { display: none; }
 }
 
+
+/* ── FLOATING GLASS NAV OVER HERO VIDEO ──────────────────── */
+/* Rounded, frosted app bar floating above the hero; the video runs underneath it. */
+.site-nav {
+  top: 12px;
+  width: calc(100% - 24px); max-width: none;
+  margin: 12px auto 0;
+  padding: 0 22px;
+  border-radius: 16px;
+  background: rgba(250,248,244,0.55);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(255,255,255,0.45);
+  box-shadow: 0 8px 28px rgba(30,20,28,0.14), 0 1px 0 rgba(60,47,56,0.06);
+}
+/* Hero follows the video's own 16:9 shape — the full frame is shown, no crop.
+   Pulled up by the nav's height + float gap so it starts at the top of the page. */
+.hero-video-wrap {
+  margin-top: -70px; height: auto; aspect-ratio: 16 / 9;
+  background: transparent;
+}
+/* The video itself fades to transparent, so the bottom edge melts into the page. */
+.hero-video {
+  object-fit: contain; opacity: 1;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+}
+.site-nav-inner { max-width: none; }
+/* Larger, bold app bar items — readable on the frosted glass. */
+.site-nav-brand span { font-size: 1.1rem; }
+.site-nav-brand img { width: 30px; }
+.site-nav-links { gap: 32px; }
+.site-nav-links a { font-size: 0.95rem; font-weight: 700; color: #5e5059; }
+.site-nav-links a.site-nav-cta { font-size: 0.92rem; padding: 9px 22px; color: #fff; background: #3C2F38; border-radius: 10px; }
+.hero-fade-t, .hero-fade-b { display: none; }
+/* Title block sits at the very bottom, on the faded-out part, in dark text. */
+/* When the 16:9 hero is taller than the window, lift the text so it ends
+   inside the first screen instead of below the fold. */
+.hero-content { bottom: max(40px, calc(56.25vw - 100vh + 64px)); }
+.hero-content .hero-title { color: var(--text); text-shadow: 0 0 24px rgba(255,255,255,0.6); }
+.hero-content .hero-tagline { color: var(--text); text-shadow: 0 0 16px rgba(255,255,255,0.7); }
+@media (max-width: 640px) {
+  .site-nav { width: calc(100% - 24px); margin-top: 10px; top: 10px; padding: 0 16px; }
+  .hero-video-wrap { height: auto; margin-top: -68px; }
+  .hero-content-mobile { margin-top: -24px; }
+}
 </style>
 </head>
 <body>
@@ -258,9 +327,8 @@
     <div class="site-nav-links">
       <a href="/products/" class="sn-active">Products</a>
       <a href="/case-studies/">Case Studies</a>
-      <a href="/research/">Research</a>
       <a href="/contact/">Contact</a>
-      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Play free</a>
     </div>
   </div>
 </nav>
@@ -271,18 +339,11 @@
   </video>
   <div class="hero-fade-t"></div>
   <div class="hero-fade-b"></div>
-  <div class="hero-nav">
-    <a href="index.html" class="back-link">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      All products
-    </a>
-    <span class="hero-corner-tag">Physical</span>
-  </div>
   <div class="hero-content">
     <div class="hero-title-row">
       <h1 class="hero-title">Stakco Paper</h1>
     </div>
-    <p class="hero-tagline">A rotating ring puzzle you can hold, give, and keep. Printed, physical, no power needed.</p>
+    <p class="hero-tagline">Loved a puzzle on <strong>play.stakcos.com</strong>? Order it as a printed disc &mdash; or commission one from your own photo. Thin, durable, no battery. Ships in an envelope.</p>
   </div>
 </div>
 
@@ -291,10 +352,29 @@
   <div class="hero-title-row">
     <h1 class="hero-title">Stakco Paper</h1>
   </div>
-  <p class="hero-tagline">A rotating ring puzzle you can hold, give, and keep. Printed, physical, no power needed.</p>
+  <p class="hero-tagline">Loved a puzzle on play.stakcos.com? Order it as a printed disc &mdash; or commission one from your own photo. Thin, durable, no battery.</p>
 </div>
 
 <div class="container">
+
+  <div class="paper-funnel-strip">
+    <div class="paper-funnel-row">
+      <div class="paper-funnel-step">
+        <i class="fa-solid fa-play-circle"></i>
+        <div><strong>Solve free</strong> on play.stakcos.com</div>
+      </div>
+      <i class="fa-solid fa-arrow-right paper-funnel-arrow"></i>
+      <div class="paper-funnel-step">
+        <i class="fa-solid fa-image"></i>
+        <div><strong>Pick or upload</strong> the image you want</div>
+      </div>
+      <i class="fa-solid fa-arrow-right paper-funnel-arrow"></i>
+      <div class="paper-funnel-step">
+        <i class="fa-solid fa-envelope-open"></i>
+        <div><strong>Ships in ~1 week</strong> &mdash; from Singapore</div>
+      </div>
+    </div>
+  </div>
 
   <div class="signal-bar">
     <div class="signal-chip">
@@ -312,19 +392,19 @@
   </div>
 
   <div class="section">
-    <div class="section-label">What is Stakco Paper?</div>
+    <div class="section-label">What it is</div>
     <div class="what-grid">
       <div class="what-half">
-        <div class="what-half-label">The physical object</div>
-        <p>A <strong>flat disc, 20 cm across</strong>, made of laminated matte board with transparent rotary layers joined by a central eyelet. Each layer turns independently &mdash; users rotate them to align the image and solve the puzzle. No batteries, no screen, no app.</p>
+        <div class="what-half-label">The object</div>
+        <p>A flat disc, 20 cm across, laminated matte board with transparent rotary layers joined by a single eyelet. Turn the rings, align the image, solve. Under 1 mm thick &mdash; fits in an envelope.</p>
       </div>
       <div class="what-half">
-        <div class="what-half-label">The design &amp; print process</div>
-        <p>Design in <strong>Stakco Studio</strong> (free, browser-based). Add the Print module to export a print-ready file. Then choose production: print at home on card stock, or order professionally printed, packaged units through Stakco&rsquo;s print partners.</p>
+        <div class="what-half-label">From your photo</div>
+        <p>Design in <strong>Stakco Studio</strong> (free, browser). Order printed units from Singapore, or download the print-ready file and make it at home with card and scissors.</p>
       </div>
     </div>
     <div class="what-summary">
-      Think of it as <strong>a puzzle you can hand to someone</strong> &mdash; a gift, a giveaway, a classroom handout, a branded keepsake. It works anywhere. It needs nothing. It lasts.
+      One puzzle for a wedding favour. Eighty-four for a brand activation. A handful for a classroom. Order from one upwards &mdash; price drops sharply with volume.
     </div>
   </div>
 
@@ -550,65 +630,40 @@
     <div class="card faq-section">
 
       <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is a &ldquo;stencil&rdquo; and do I need design experience?
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What&rsquo;s the minimum order? What&rsquo;s the lead time?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-        <div class="faq-a">A stencil is a ring layout template &mdash; it defines how many concentric layers your puzzle has and how they cut. You choose one from a library in Studio; the software maps your image to the ring structure automatically. No design experience needed.</div>
+        <div class="faq-a">No minimum &mdash; you can order a single unit. Volume pricing kicks in at 10, 100, and 1,000. Standard production runs 5&ndash;7 days. For event-deadline orders, contact partnerships@stakcos.com early so we can confirm feasibility for your date.</div>
       </div>
 
       <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the Print module and is it a subscription?
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I print at home instead?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-        <div class="faq-a">The Print module is a one-time add-on you activate in Stakco Studio &mdash; not a subscription. It unlocks high-resolution export of your puzzle as a print-ready file. You purchase it once and it remains active. See the <a href="../pricing/paper-pricing.html" style="color:var(--orange)">Paper pricing page</a> for the current price.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">How difficult is home assembly?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-        <div class="faq-a">Straightforward. The export includes cutting lines and step-by-step instructions. You need scissors (or a craft knife), card stock, and a paper fastener. Most people finish in 10&ndash;15 minutes. Laminating the sheets before cutting significantly improves durability and feel.</div>
+        <div class="faq-a">Yes. Activate the Print module in Studio (a one-time fee) to download a print-ready file with cut lines and instructions. You&rsquo;ll need scissors, card stock, and a paper fastener &mdash; 10&ndash;15 minutes per puzzle. Laminating before cutting noticeably improves the feel.</div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Is it safe for children?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-        <div class="faq-a">Professionally printed units have no sharp edges, no detachable small parts, and a flush-set eyelet. Layers rotate with smooth, low-resistance motion. Designed for ages 5 and up. For children under 3, the eyelet fastener is not recommended.</div>
+        <div class="faq-a">Professionally printed units have no sharp edges, no detachable small parts, and a flush-set eyelet. Designed for ages 5 and up. Not recommended for children under 3 due to the eyelet fastener.</div>
       </div>
 
       <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">What is the minimum order for professional printing?
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I remove Stakco branding from bulk orders?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-        <div class="faq-a">No minimum. You can order a single professionally printed unit. Volume pricing applies at 10, 100, and 1,000 units. For bulk orders with hard event deadlines, contact partnerships@stakcos.com early &mdash; we&rsquo;ll confirm feasibility based on your date.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I remove Stakco branding?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-        <div class="faq-a">Yes. White-label options are available for professional print orders &mdash; the puzzle surface and packaging carry only your branding. Available for qualifying orders. Contact partnerships@stakcos.com to discuss.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Who does the professional printing?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-        <div class="faq-a">Professional printing is coordinated through Stakco&rsquo;s print partners in Singapore. Stakco manages the order, quality, and delivery &mdash; you don&rsquo;t contact the printer directly. For large or time-sensitive orders, we communicate lead times and constraints upfront before you confirm.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">Can I sell puzzles I design?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg></div>
-        <div class="faq-a">Yes. With the Publish module add-on, list your designs on the Stakco Shop marketplace. Buyers can purchase as a digital file to print themselves, or as a professionally printed unit. You keep 75% of every sale &mdash; Stakco takes 25%.</div>
+        <div class="faq-a">Yes. White-label is available for qualifying professional orders &mdash; the puzzle surface and packaging carry only your branding. Email partnerships@stakcos.com to discuss.</div>
       </div>
 
     </div>
   </div>
 
   <div class="cta-section">
-    <h3>Ready to make your first puzzle?</h3>
-    <p>Design for free in Stakco Studio. Add the Print module when you&rsquo;re ready to export and produce. No minimum order, no design experience needed.</p>
+    <h3>Make your first puzzle.</h3>
+    <p>Free to design in Studio. Order one printed unit, or eighty &mdash; same workflow.</p>
     <div class="cta-row">
-      <a href="https://studio.stakcos.com" class="cta-btn cta-primary">Start Creating Free</a>
-      <a href="https://shop.stakcos.com" class="cta-btn cta-secondary">Browse the Shop</a>
-      <a href="mailto:partnerships@stakcos.com?subject=Stakco%20Paper%20%E2%80%94%20bulk%20order%20enquiry" class="cta-btn cta-ghost">Get a bulk quote</a>
+      <a href="https://studio.stakcos.com" class="cta-btn cta-primary">Open Studio</a>
+      <a href="mailto:partnerships@stakcos.com?subject=Stakco%20Paper%20%E2%80%94%20bulk%20order%20enquiry" class="cta-btn cta-ghost">Bulk &amp; event quotes</a>
     </div>
-    <div class="cta-reassure">Free to design. One-time Print module fee. No minimum order for professional printing.</div>
+    <div class="cta-reassure">No minimum order. Ships from Singapore.</div>
   </div>
 
   <div class="footer">

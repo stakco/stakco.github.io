@@ -9,7 +9,7 @@
 
 <!-- OG -->
 <meta property="og:title" content="Stakco — Rotating Ring Puzzles">
-<meta property="og:description" content="A circular puzzle made of concentric rotating rings. Play it on screen, print it on paper, or install it in your space.">
+<meta property="og:description" content="Turn any photo into a circular puzzle of rotating rings. Give it as a printed disc, share a link, or install it in your space. From S$13.">
 <meta property="og:image" content="https://cdn.stakcos.com/images/main_icon_hexagon_1813x2085.png">
 <meta property="og:url" content="https://stakcos.com">
 <meta property="og:type" content="website">
@@ -74,7 +74,7 @@ body {
 
 /* ── HERO ─────────────────────────────────────────────────── */
 .hero {
-  padding: 80px 0 72px;
+  padding: 40px 0 72px;
   display: grid;
   grid-template-columns: 1fr 480px;
   gap: 48px;
@@ -120,6 +120,11 @@ body {
 }
 .pricing-promise .pp-free { font-weight: 700; color: var(--orange); }
 .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-trustline {
+  margin-top: 18px;
+  font-size: 0.72rem; font-weight: 600;
+  color: var(--ink4); letter-spacing: 0.02em;
+}
 .btn-primary {
   font-family: 'Mont', sans-serif;
   font-size: 0.9rem; font-weight: 700;
@@ -360,6 +365,35 @@ body {
 }
 .cta-btn-ghost:hover { background: rgba(255,255,255,0.14); }
 
+/* ── CREATOR / B2B BAND ──────────────────────────────────── */
+.creator-band {
+  background: var(--cream2);
+  border: 1px solid var(--border2);
+  border-radius: var(--r);
+  padding: 24px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 24px;
+}
+.creator-band-text { flex: 1; }
+.creator-band-title {
+  font-family: 'Mont', sans-serif;
+  font-size: 1rem; font-weight: 700; color: var(--ink);
+  margin-bottom: 4px;
+}
+.creator-band-desc { font-size: 0.82rem; color: var(--ink2); line-height: 1.55; max-width: 640px; }
+.creator-band-link {
+  font-size: 0.8rem; font-weight: 700; color: var(--ink);
+  text-decoration: none; padding: 10px 20px; border-radius: 9px;
+  border: 1.5px solid var(--border2); background: var(--card);
+  white-space: nowrap; flex-shrink: 0;
+  transition: border-color 0.15s, background 0.15s;
+}
+.creator-band-link:hover { border-color: var(--ink); background: var(--cream); }
+@media (max-width: 700px) {
+  .creator-band { flex-direction: column; align-items: flex-start; }
+  .creator-band-link { width: 100%; text-align: center; }
+}
+
 /* ── FOOTER ──────────────────────────────────────────────── */
 .footer {
   padding: 28px 0; text-align: center;
@@ -432,9 +466,8 @@ body {
     <div class="site-nav-links">
       <a href="/products/">Products</a>
       <a href="/case-studies/">Case Studies</a>
-      <a href="/research/">Research</a>
       <a href="/contact/">Contact</a>
-      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Play free</a>
     </div>
   </div>
 </nav>
@@ -446,18 +479,26 @@ body {
   <div class="hero-left">
     <div class="hero-eyebrow">
       <span class="hero-eyebrow-dot"></span>
-      Rotating ring puzzles
+      A new puzzle every day &middot; Free to play
     </div>
 
     <h1>A puzzle you<br>hold — and <span class="accent">turn.</span></h1>
 
     <p class="hero-sub">
-      Stakco is a circular puzzle — made of rotating rings that each turn independently. Solve it by lining up the image across all the layers.<br><br>Play puzzles for free, or create your own and deliver it as a printed disc, a website link, or a physical display in your space.
+      Stakco is a circular puzzle of rotating rings. A new one every day at play.stakcos.com &mdash; free, in your browser. Love one? Order it as a printed disc, or install the physical version at your venue.
     </p>
 
+    <div class="pricing-promise">
+      <span><span class="pp-free">Free</span> daily puzzles &middot; printed discs from S$13 &middot; venue installs on request</span>
+    </div>
+
     <div class="hero-ctas">
-      <a href="https://play.stakcos.com" class="btn-primary">Play free puzzles</a>
-      <a href="/products/" class="btn-ghost">Explore products</a>
+      <a href="https://play.stakcos.com" class="btn-primary">Play today&rsquo;s puzzle</a>
+      <a href="/products/" class="btn-ghost">Order or install</a>
+    </div>
+
+    <div class="hero-trustline">
+      Trusted by AWWA School, SG Enable, NUS &amp; AHLab
     </div>
   </div>
 
@@ -473,51 +514,41 @@ body {
   </div>
 </div>
 
-<!-- ══ PARTNER STRIP ══════════════════════════════════════════ -->
-<div class="partner-strip reveal">
-  <div class="partner-strip-label">Trusted by</div>
-  <div class="partner-logos">
-    <a class="partner-logo" href="https://www.sgenable.sg" target="_blank" rel="noopener" title="SG Enable">
-      <img src="https://cdn.stakcos.com/media/partners/sgenable.png" alt="SG Enable">
-    </a>
-    <a class="partner-logo" href="https://www.awwa.org.sg" target="_blank" rel="noopener" title="AWWA">
-      <img src="https://cdn.stakcos.com/media/partners/awwa.png" alt="AWWA">
-    </a>
-    <a class="partner-logo" href="https://nus.edu.sg" target="_blank" rel="noopener" title="National University of Singapore">
-      <img src="https://cdn.stakcos.com/media/partners/nus.png" alt="NUS">
-    </a>
-    <a class="partner-logo" href="https://ahlab.org" target="_blank" rel="noopener" title="AHLab">
-      <img src="https://cdn.stakcos.com/media/partners/ahlab.png" alt="AHLab">
-    </a>
-  </div>
-</div>
 
-<!-- ══ WHAT IS IT ═════════════════════════════════════════════ -->
+<!-- ══ WHAT'S ON PLAY (free funnel) ══════════════════════════ -->
 <div class="section">
+  <span class="section-label">Free, in your browser</span>
+  <h2 class="section-title">What you&rsquo;ll find on Play</h2>
+  <p class="section-sub">play.stakcos.com is the free home for Stakco puzzles. Open it any morning &mdash; no account, no app.</p>
+
   <div class="explainer reveal">
     <div class="exp-col">
       <div class="exp-num">01</div>
-      <div class="exp-title">Concentric rotating rings</div>
-      <div class="exp-body">Each ring turns independently. Rotate them until the image aligns across all layers. No loose pieces. No instructions needed. Anyone can pick it up.</div>
+      <div class="exp-title">A new puzzle daily</div>
+      <div class="exp-body">One fresh rotating-ring puzzle every day. Solve in under five minutes. Come back tomorrow for the next one.</div>
     </div>
     <div class="exp-col">
       <div class="exp-num">02</div>
-      <div class="exp-title">Three formats, one design</div>
-      <div class="exp-body">The same puzzle can be a <strong>printed disc</strong> you hand someone, a <strong>web link</strong> anyone opens in their browser, or a <strong>projection display</strong> installed in your space.</div>
+      <div class="exp-title">Albums to explore</div>
+      <div class="exp-body">Curated collections &mdash; landscapes, art, photography, themed series. Pick a mood, pick an album, solve at your pace.</div>
     </div>
     <div class="exp-col">
       <div class="exp-num">03</div>
-      <div class="exp-title">Create it in minutes</div>
-      <div class="exp-body">Open <strong>Stakco Studio</strong> in your browser. Upload a photo, pick your ring layout, and your puzzle is ready. No design experience needed. Starts from S$13.</div>
+      <div class="exp-title">Keep what you love</div>
+      <div class="exp-body">Found a puzzle that means something? <strong>Order it as a printed disc</strong> from S$13 &mdash; or <a href="/contact/" style="color:var(--orange);font-weight:700;text-decoration:none;">commission a custom one</a> from your own photo.</div>
     </div>
+  </div>
+
+  <div style="text-align:center;margin-top:28px;">
+    <a href="https://play.stakcos.com" class="btn-primary">Open Play &rarr;</a>
   </div>
 </div>
 
 <!-- ══ THREE PRODUCTS ════════════════════════════════════════ -->
 <div class="section" style="padding-top:0;">
   <span class="section-label">Three formats</span>
-  <h2 class="section-title">Pick your format</h2>
-  <p class="section-sub">Same puzzle engine. Three ways to deliver it.</p>
+  <h2 class="section-title">Free to play. Order what you love.</h2>
+  <p class="section-sub">Start free on Play. When a puzzle resonates &mdash; buy the printed disc, or commission the room-scale install.</p>
 
   <div class="products-grid">
     <a href="/products/stakco-play.html" class="pcard c-play reveal">
@@ -530,31 +561,12 @@ body {
         <div class="pcard-vid-fade pcard-vid-fade-b"></div>
         <div class="pcard-vid-fade pcard-vid-fade-l"></div>
         <div class="pcard-vid-fade pcard-vid-fade-r"></div>
-        <span class="pcard-tag">Digital</span>
+        <span class="pcard-tag">Free &middot; Daily</span>
       </div>
       <div class="pcard-body">
-        <div class="pcard-name">Stakco Play</div>
-        <div class="pcard-tagline">Publish puzzles online. Players open a link and solve in their browser. No app, no account needed.</div>
-        <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-right" style="font-size:0.6rem;opacity:0.65;"></i></div>
-      </div>
-    </a>
-
-    <a href="/products/stakco-light.html" class="pcard c-light reveal">
-      <div class="pcard-stripe"></div>
-      <div class="pcard-vis pcard-vis-video">
-        <video class="pcard-bg-video" autoplay muted loop playsinline>
-          <source src="https://cdn.stakcos.com/media/light.mp4" type="video/mp4">
-        </video>
-        <div class="pcard-vid-fade pcard-vid-fade-t"></div>
-        <div class="pcard-vid-fade pcard-vid-fade-b"></div>
-        <div class="pcard-vid-fade pcard-vid-fade-l"></div>
-        <div class="pcard-vid-fade pcard-vid-fade-r"></div>
-        <span class="pcard-tag">Optical</span>
-      </div>
-      <div class="pcard-body">
-        <div class="pcard-name">Stakco Light</div>
-        <div class="pcard-tagline">Physical rotating rings with a projected puzzle image. A tactile display for venues, therapy rooms, and events.</div>
-        <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-right" style="font-size:0.6rem;opacity:0.65;"></i></div>
+        <div class="pcard-name">Stakco Play <span style="font-size:0.65rem;color:var(--ink4);font-weight:500;">&middot; start here</span></div>
+        <div class="pcard-tagline">A new puzzle every day, in your browser. Albums to explore, no account, no app. The free home for Stakco puzzles.</div>
+        <div class="pcard-cta">Open Play <i class="fa-solid fa-arrow-right" style="font-size:0.6rem;opacity:0.65;"></i></div>
       </div>
     </a>
 
@@ -568,12 +580,31 @@ body {
         <div class="pcard-vid-fade pcard-vid-fade-b"></div>
         <div class="pcard-vid-fade pcard-vid-fade-l"></div>
         <div class="pcard-vid-fade pcard-vid-fade-r"></div>
-        <span class="pcard-tag">Physical</span>
+        <span class="pcard-tag">From S$13</span>
       </div>
       <div class="pcard-body">
-        <div class="pcard-name">Stakco Paper</div>
-        <div class="pcard-tagline">Printed rotating disc puzzles. Laminated matte board plates, under 1mm thick. Perfect for gifts, events, and classrooms.</div>
-        <div class="pcard-cta">Learn more <i class="fa-solid fa-arrow-right" style="font-size:0.6rem;opacity:0.65;"></i></div>
+        <div class="pcard-name">Stakco Paper <span style="font-size:0.65rem;color:var(--ink4);font-weight:500;">&middot; keep it forever</span></div>
+        <div class="pcard-tagline">Printed rotating disc &mdash; under 1mm thick, ships in an envelope. A favourite puzzle you can hold. From one wedding favour to 1,000 brand giveaways.</div>
+        <div class="pcard-cta">Order one <i class="fa-solid fa-arrow-right" style="font-size:0.6rem;opacity:0.65;"></i></div>
+      </div>
+    </a>
+
+    <a href="/products/stakco-light.html" class="pcard c-light reveal">
+      <div class="pcard-stripe"></div>
+      <div class="pcard-vis pcard-vis-video">
+        <video class="pcard-bg-video" autoplay muted loop playsinline>
+          <source src="https://cdn.stakcos.com/media/light.mp4" type="video/mp4">
+        </video>
+        <div class="pcard-vid-fade pcard-vid-fade-t"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-b"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-l"></div>
+        <div class="pcard-vid-fade pcard-vid-fade-r"></div>
+        <span class="pcard-tag">For venues</span>
+      </div>
+      <div class="pcard-body">
+        <div class="pcard-name">Stakco Light <span style="font-size:0.65rem;color:var(--ink4);font-weight:500;">&middot; install at scale</span></div>
+        <div class="pcard-tagline">A physical ring puzzle, projector-lit, installed at your venue. Live now at AWWA School for sensory therapy. For therapy centres, museums, hotels.</div>
+        <div class="pcard-cta">Talk to us <i class="fa-solid fa-arrow-right" style="font-size:0.6rem;opacity:0.65;"></i></div>
       </div>
     </a>
   </div>
@@ -610,10 +641,10 @@ body {
   </div>
 </div>
 
-<!-- ══ TESTIMONIALS ══════════════════════════════════════════ -->
+<!-- ══ TESTIMONIALS + PARTNERS ═══════════════════════════════ -->
 <div class="section" style="padding-top:24px;">
   <span class="section-label">What people say</span>
-  <h2 class="section-title" style="margin-bottom:28px;">Trusted by educators, researchers, and users</h2>
+  <h2 class="section-title" style="margin-bottom:28px;">From the people using it</h2>
 
   <div class="testimonials-grid">
     <div class="testimonial reveal">
@@ -622,14 +653,31 @@ body {
       <div class="testimonial-role">Research Engineer, National University of Singapore</div>
     </div>
     <div class="testimonial reveal">
-      <div class="testimonial-quote">"The combination of tactile interaction and visual feedback made it an engaging experience for students — the physical rotating mechanism kept them focused while supporting upper-body movement."</div>
+      <div class="testimonial-quote">"The rotating mechanism kept students focused while supporting upper-body movement. It became part of their daily sensory routine."</div>
       <div class="testimonial-author">Physiotherapist</div>
-      <div class="testimonial-role">Special Education School, Singapore</div>
+      <div class="testimonial-role">AWWA School @ Bedok, Singapore</div>
     </div>
     <div class="testimonial reveal">
-      <div class="testimonial-quote">"It is exciting to explore Stakco's multi-layered design. It certainly provides visual-spatial challenges that have the potential to support discovery in play."</div>
+      <div class="testimonial-quote">"It is exciting to explore Stakco's multi-layered design. It provides visual-spatial challenges that have the potential to support discovery in play."</div>
       <div class="testimonial-author">Jochen Huber</div>
       <div class="testimonial-role">Professor, Furtwangen University, Germany</div>
+    </div>
+  </div>
+
+  <div class="partner-strip reveal" style="margin-top:40px;">
+    <div class="partner-logos">
+      <a class="partner-logo" href="https://www.sgenable.sg" target="_blank" rel="noopener" title="SG Enable">
+        <img src="https://cdn.stakcos.com/media/partners/sgenable.png" alt="SG Enable">
+      </a>
+      <a class="partner-logo" href="https://www.awwa.org.sg" target="_blank" rel="noopener" title="AWWA">
+        <img src="https://cdn.stakcos.com/media/partners/awwa.png" alt="AWWA">
+      </a>
+      <a class="partner-logo" href="https://nus.edu.sg" target="_blank" rel="noopener" title="National University of Singapore">
+        <img src="https://cdn.stakcos.com/media/partners/nus.png" alt="NUS">
+      </a>
+      <a class="partner-logo" href="https://ahlab.org" target="_blank" rel="noopener" title="AHLab">
+        <img src="https://cdn.stakcos.com/media/partners/ahlab.png" alt="AHLab">
+      </a>
     </div>
   </div>
 </div>
@@ -638,14 +686,25 @@ body {
 <div class="section">
   <div class="cta-band reveal">
     <div class="cta-band-text">
-      <h2>Ready to try?</h2>
-      <p>Play free puzzles or start creating your own.</p>
+      <h2>Try today&rsquo;s puzzle.</h2>
+      <p>Free. In your browser. No account. A new one every day.</p>
     </div>
     <div class="cta-band-actions">
-      <a href="https://play.stakcos.com" class="cta-btn-primary">Explore free puzzles</a>
-      <a href="https://studio.stakcos.com" class="cta-btn-ghost">Create in Studio</a>
-      <a href="/contact/" class="cta-btn-ghost" style="font-size:0.75rem;opacity:0.75;">Venue install or bulk order? Talk to us</a>
+      <a href="https://play.stakcos.com" class="cta-btn-primary">Play now</a>
+      <a href="/contact/" class="cta-btn-ghost">Bulk order or venue install</a>
     </div>
+  </div>
+</div>
+
+<!-- ══ FOR CREATORS &amp; BUSINESSES ════════════════════════════ -->
+<div class="section" style="padding-top:0;">
+  <div class="creator-band reveal">
+    <div class="creator-band-text">
+      <span class="section-label" style="margin-bottom:6px;">For creators &amp; businesses</span>
+      <div class="creator-band-title">Run your own puzzle channel</div>
+      <div class="creator-band-desc">Stakco Studio is the content tool behind every venue install and bulk print order &mdash; for brands, educators, and partners who publish puzzles at scale. By invitation.</div>
+    </div>
+    <a href="/contact/?topic=studio" class="creator-band-link">Talk to us &rarr;</a>
   </div>
 </div>
 

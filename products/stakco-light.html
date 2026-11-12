@@ -395,6 +395,52 @@
   .site-nav-links { display: none; }
 }
 
+
+/* ── FLOATING GLASS NAV OVER HERO VIDEO ──────────────────── */
+/* Rounded, frosted app bar floating above the hero; the video runs underneath it. */
+.site-nav {
+  top: 12px;
+  width: calc(100% - 24px); max-width: none;
+  margin: 12px auto 0;
+  padding: 0 22px;
+  border-radius: 16px;
+  background: rgba(250,248,244,0.55);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(255,255,255,0.45);
+  box-shadow: 0 8px 28px rgba(30,20,28,0.14), 0 1px 0 rgba(60,47,56,0.06);
+}
+/* Hero follows the video's own 16:9 shape — the full frame is shown, no crop.
+   Pulled up by the nav's height + float gap so it starts at the top of the page. */
+.hero-video-wrap {
+  margin-top: -70px; height: auto; aspect-ratio: 16 / 9;
+  background: transparent;
+}
+/* The video itself fades to transparent, so the bottom edge melts into the page. */
+.hero-video {
+  object-fit: contain; opacity: 1;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+}
+.site-nav-inner { max-width: none; }
+/* Larger, bold app bar items — readable on the frosted glass. */
+.site-nav-brand span { font-size: 1.1rem; }
+.site-nav-brand img { width: 30px; }
+.site-nav-links { gap: 32px; }
+.site-nav-links a { font-size: 0.95rem; font-weight: 700; color: #5e5059; }
+.site-nav-links a.site-nav-cta { font-size: 0.92rem; padding: 9px 22px; color: #fff; background: #3C2F38; border-radius: 10px; }
+.hero-fade-t, .hero-fade-b { display: none; }
+/* Title block sits at the very bottom, on the faded-out part, in dark text. */
+/* When the 16:9 hero is taller than the window, lift the text so it ends
+   inside the first screen instead of below the fold. */
+.hero-content { bottom: max(40px, calc(56.25vw - 100vh + 64px)); }
+.hero-content .hero-title { color: var(--text); text-shadow: 0 0 24px rgba(255,255,255,0.6); }
+.hero-content .hero-tagline { color: var(--text); text-shadow: 0 0 16px rgba(255,255,255,0.7); }
+@media (max-width: 640px) {
+  .site-nav { width: calc(100% - 24px); margin-top: 10px; top: 10px; padding: 0 16px; }
+  .hero-video-wrap { height: auto; margin-top: -68px; }
+  .hero-content-mobile { margin-top: -24px; }
+}
 </style>
 </head>
 <body>
@@ -408,9 +454,8 @@
     <div class="site-nav-links">
       <a href="/products/" class="sn-active">Products</a>
       <a href="/case-studies/">Case Studies</a>
-      <a href="/research/">Research</a>
       <a href="/contact/">Contact</a>
-      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Play free</a>
     </div>
   </div>
 </nav>
@@ -423,19 +468,12 @@
   <div class="hero-fade-t"></div>
   <div class="hero-fade-b"></div>
 
-  <div class="hero-nav">
-    <a href="index.html" class="back-link">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      All products
-    </a>
-    <span class="hero-corner-tag">Projection</span>
-  </div>
 
   <div class="hero-content">
     <div style="display:flex;align-items:center;gap:12px;margin-bottom:0;">
       <h1 class="hero-title" style="margin-bottom:0;">Stakco Light</h1>
     </div>
-    <p class="hero-tagline">A rotating ring puzzle, physically installed at your venue. Users turn the rings &mdash; the projector responds in real time.</p>
+    <p class="hero-tagline">A physical rotating ring puzzle, installed at your venue. People turn the rings with their hands &mdash; a projector responds in real time. Live now at AWWA School in Singapore.</p>
   </div>
 </div>
 
@@ -455,31 +493,30 @@
   <div class="proof-bar">
     <div class="proof-dot"></div>
     <div class="proof-text">
-      <strong>Live installation: AWWA School @ Bedok, Singapore.</strong>
-      Stakco Light is in daily use at a school for children with autism &mdash; as a sensory engagement and focus activity.
-      The first installation of its kind, now available for venues, shopping malls, therapy centres, hotels, and institutions.
+      <strong>"The rotating mechanism kept students focused while supporting upper-body movement &mdash; it became part of their daily sensory routine."</strong>
+      &mdash; Physiotherapist, AWWA School @ Bedok. Stakco Light is in daily classroom use at a Singapore school for students with autism. Now opening for venues, therapy centres, hotels, and exhibitions.
     </div>
   </div>
 
   <!-- What is it -->
   <div class="section">
-    <div class="section-label">What is Stakco Light?</div>
+    <div class="section-label">What it is</div>
     <div class="what-grid">
       <div class="what-half">
-        <div class="what-half-label">The physical part</div>
-        <p><strong>Nested aluminium rings on smooth railing tracks</strong>, with grab handles. Users physically rotate each layer to solve the puzzle. No screen, no buttons &mdash; just hands and motion.</p>
+        <div class="what-half-label">Physical rings</div>
+        <p>Nested aluminium rings on smooth tracks, with grab handles. People rotate each layer with their hands. No screen, no buttons.</p>
       </div>
       <div class="what-half">
-        <div class="what-half-label">The electronic part</div>
-        <p>An <strong>ultra-short-throw projector</strong> maps puzzle imagery directly onto the ring surface. As rings rotate, the projected content responds in real time. A web camera tracks ring positions. Controlled locally via Android TV and a standard TV remote.</p>
+        <div class="what-half-label">Projected image</div>
+        <p>A short-throw projector paints the puzzle onto the rings. A camera tracks rotation, so the image responds the moment a hand moves. Runs on Android TV inside the projector &mdash; control it with a normal TV remote.</p>
       </div>
       <div class="what-half">
-        <div class="what-half-label">The software part</div>
-        <p><strong>Stakco Studio</strong> is the browser dashboard where you manage all content remotely &mdash; change puzzle themes, schedule rotations, adjust audio. No technician required. No site visit needed for updates.</p>
+        <div class="what-half-label">Remote dashboard</div>
+        <p>Change puzzles, swap audio, or schedule themes from any browser. No technician visit. No on-site update.</p>
       </div>
     </div>
     <div class="what-summary">
-      Think of it as a <strong>permanent interactive exhibit</strong> &mdash; not a screen, not a kiosk. Something visitors can touch, rotate, and return to. Calming enough for a therapy room. Striking enough for a hotel lobby. Meaningful enough for a museum floor.
+      Not a screen. Not a kiosk. A permanent thing people touch, turn, and come back to &mdash; calm enough for a therapy room, striking enough for a hotel lobby.
     </div>
   </div>
 
@@ -689,8 +726,8 @@
 
     <div class="therapy-callout">
       <div class="tc-head">Therapy &amp; special education</div>
-      <p>Stakco Light is already in daily use at <strong>AWWA School @ Bedok</strong> &mdash; a special education school in Singapore for students aged 7 to 18 with autism. The combination of slow rotational motion, gentle visual feedback, and therapeutic audio creates a sensory environment suited to clinical and educational use.</p>
-      <p>Schools, therapy centres, and occupational therapists can request documentation to support <strong>grant applications</strong> (MOE, SG Enable, and equivalent bodies). A structured classroom trial is underway at AWWA School @ Bedok from March to May 2026, evaluating learning outcomes and sensory engagement across selective classes.</p>
+      <p>Stakco Light is in daily classroom use at <strong>AWWA School @ Bedok</strong> &mdash; a Singapore school for students aged 7 to 18 with autism. Slow ring motion, soft visual feedback, and calming audio give students something to focus on, return to, and learn through.</p>
+      <p>We provide documentation to support <strong>grant applications</strong> (MOE, SG Enable, and equivalent bodies). A structured classroom trial is running at AWWA from March to May 2026, measuring engagement and learning outcomes.</p>
       <div class="therapy-tags">
         <span class="therapy-tag">Sensory regulation</span>
         <span class="therapy-tag">Fine motor skills</span>
@@ -725,50 +762,26 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Does it need internet? What happens if the connection drops?
+          Is it safe for unsupervised use by children?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">A stable broadband connection is required for content updates and remote management. If the connection drops temporarily, the installation continues running on the last-loaded content &mdash; it does not go blank or stop working. Reconnection restores remote control automatically.</div>
+        <div class="faq-a">Yes. The rings move on smooth tracks with no sharp edges or pinch points, and turn with light force. The AWWA School installation is in daily unsupervised classroom use with students aged 7 to 18.</div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Can we change puzzle content ourselves?
+          How do we change puzzles, audio, and branding after install?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">You manage all content through Stakco Studio &mdash; a browser-based dashboard. Change puzzle themes, schedule content rotations, and adjust audio from any device, at any time. No technical background needed. Stakco is not involved in day-to-day content changes.</div>
+        <div class="faq-a">Everything is managed through <strong>Stakco Studio</strong>, a browser dashboard. Upload your own imagery, schedule themes, swap audio tracks, set brand colours &mdash; from any device, any time. On the unit itself, users shuffle puzzles and adjust volume with a normal TV remote. White-label (full Stakco branding removed) available for qualifying partners.</div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          How do users control the volume and puzzle content?
+          What if the internet drops?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">Yes. Stakco Light runs on <strong>Android TV hardware</strong> built into the smart projector — included with every installation. Users can control the puzzle directly using a <strong>standard TV remote</strong>: shuffle puzzles, load the next track, and adjust or mute volume using the buttons they already know. No app download, no touchscreen, no setup. For deeper control — scheduling, theme changes, content uploads — the full Stakco Studio dashboard is available from any browser. Custom audio tracks can also be uploaded for branded or clinical environments.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Is it safe for children and unsupervised use?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </div>
-        <div class="faq-a">Yes. The rings move on smooth, low-resistance tracks with no sharp edges, no pinch points, and minimal force required to rotate. The installation at AWWA School @ Bedok is in daily unsupervised use with students. For clinical environments, we can discuss specific configuration requirements.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          What happens after the 1-year warranty?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </div>
-        <div class="faq-a">Extended service plans are available and quoted individually based on your usage and location. The hardware is designed for continuous operation with minimal maintenance. Contact partnerships@stakcos.com for service plan rates.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Can we use our own branding and puzzle designs?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </div>
-        <div class="faq-a">Yes. Puzzle content is fully customisable through Stakco Studio &mdash; upload your own imagery, set brand colours, and create puzzle tracks specific to your institution or campaign. White-label options (removing Stakco branding entirely) are available for qualifying partners.</div>
+        <div class="faq-a">It keeps running on the last-loaded content &mdash; it does not go blank. Broadband is only needed for remote updates; reconnection restores control automatically.</div>
       </div>
 
     </div>

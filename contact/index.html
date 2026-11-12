@@ -25,40 +25,42 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 .section { padding:72px 0; }
 .section-label { font-size:0.65rem; font-weight:700; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink4); margin-bottom:8px; display:block; }
 
-.page-header { padding:80px 0 48px; }
-.page-header h1 { font-size:2.8rem; font-weight:900; line-height:1.1; letter-spacing:-0.02em; margin-bottom:14px; }
-.page-header h1 .accent { color:var(--amber); }
-.page-header .lead { font-size:1.05rem; color:var(--ink2); max-width:540px; line-height:1.65; }
+/* Contact hero — text only */
+.contact-hero { padding:24px 0 24px; }
+.contact-hero h1 { font-size:2.2rem; font-weight:900; line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px; }
+.contact-hero h1 .accent { color:var(--amber); }
+.contact-hero .lead { font-size:0.95rem; color:var(--ink2); max-width:620px; line-height:1.55; }
 
-/* Contact layout */
-.contact-grid { display:grid; grid-template-columns:1fr 340px; gap:36px; align-items:start; }
+/* Contact layout — right column stretches to match form height */
+.contact-grid { display:grid; grid-template-columns:1fr 340px; gap:24px; align-items:stretch; }
+.contact-right { display:flex; flex-direction:column; gap:14px; }
 
 /* Form */
 .form-card {
   background:var(--card); border:1px solid var(--border);
-  border-radius:var(--r); padding:32px 36px;
+  border-radius:var(--r); padding:22px 26px;
 }
-.form-title { font-size:1.1rem; font-weight:700; margin-bottom:20px; }
-.form-group { margin-bottom:18px; }
+.form-title { font-size:1rem; font-weight:700; margin-bottom:14px; }
+.form-group { margin-bottom:12px; }
 .form-label {
-  display:block; font-size:0.75rem; font-weight:700;
+  display:block; font-size:0.7rem; font-weight:700;
   text-transform:uppercase; letter-spacing:0.06em;
-  color:var(--ink3); margin-bottom:6px;
+  color:var(--ink3); margin-bottom:5px;
 }
 .form-input, .form-textarea {
-  width:100%; font-family:'Mont',sans-serif; font-size:0.88rem;
-  padding:12px 16px; border:1.5px solid var(--border2);
+  width:100%; font-family:'Mont',sans-serif; font-size:0.85rem;
+  padding:10px 14px; border:1.5px solid var(--border2);
   border-radius:10px; background:var(--cream);
   color:var(--ink); transition:border-color 0.15s;
   outline:none;
 }
 .form-input:focus, .form-textarea:focus { border-color:var(--amber); }
-.form-textarea { resize:vertical; min-height:120px; }
-.form-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.form-textarea { resize:vertical; min-height:80px; }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
 
 .form-submit {
-  font-family:'Mont',sans-serif; font-size:0.88rem; font-weight:700;
-  padding:13px 30px; border-radius:10px;
+  font-family:'Mont',sans-serif; font-size:0.85rem; font-weight:700;
+  padding:11px 26px; border-radius:10px;
   background:var(--ink); color:#fff;
   border:none; cursor:pointer;
   transition:opacity 0.15s; width:100%;
@@ -89,32 +91,34 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 /* Sidebar */
 .sidebar-card {
   background:var(--card); border:1px solid var(--border);
-  border-radius:var(--r); padding:24px 26px; margin-bottom:18px;
+  border-radius:var(--r); padding:16px 18px;
+  flex-shrink:0;
 }
-.sidebar-title { font-size:0.92rem; font-weight:700; margin-bottom:12px; }
+.sidebar-title { font-size:0.85rem; font-weight:700; margin-bottom:8px; }
 .sidebar-item {
-  display:flex; align-items:flex-start; gap:12px;
-  padding:10px 0; border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:10px;
+  padding:6px 0; border-bottom:1px solid var(--border);
 }
 .sidebar-item:last-child { border-bottom:none; padding-bottom:0; }
 .sidebar-icon {
-  width:34px; height:34px; border-radius:9px;
+  width:28px; height:28px; border-radius:7px;
   background:rgba(212,152,79,0.1);
   display:flex; align-items:center; justify-content:center;
-  flex-shrink:0; font-size:0.9rem; color:var(--amber);
+  flex-shrink:0; font-size:0.78rem; color:var(--amber);
 }
-.sidebar-label { font-size:0.72rem; color:var(--ink3); }
-.sidebar-value { font-size:0.85rem; font-weight:700; color:var(--ink); }
+.sidebar-label { font-size:0.68rem; color:var(--ink3); line-height:1.3; }
+.sidebar-value { font-size:0.8rem; font-weight:700; color:var(--ink); line-height:1.35; }
 .sidebar-value a { color:var(--ink); text-decoration:none; }
 .sidebar-value a:hover { color:var(--amber); }
 
-/* Newsletter */
+/* Newsletter — second card in right column, fills remaining height */
 .newsletter-card {
   background:var(--ink); border-radius:var(--r);
-  padding:24px 26px; color:#fff;
+  padding:20px 22px; color:#fff;
+  flex:1; display:flex; flex-direction:column; justify-content:center;
 }
-.newsletter-title { font-size:0.92rem; font-weight:700; margin-bottom:6px; }
-.newsletter-desc { font-size:0.78rem; color:rgba(255,255,255,0.55); margin-bottom:14px; }
+.newsletter-title { font-size:0.92rem; font-weight:700; margin-bottom:5px; }
+.newsletter-desc { font-size:0.76rem; color:rgba(255,255,255,0.55); margin-bottom:12px; line-height:1.45; }
 .newsletter-form { display:flex; gap:8px; }
 .newsletter-input {
   flex:1; font-family:'Mont',sans-serif; font-size:0.82rem;
@@ -147,7 +151,7 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 .newsletter-success-title { font-size:0.92rem; font-weight:700; margin-bottom:4px; }
 .newsletter-success-text  { font-size:0.78rem; color:rgba(255,255,255,0.7); line-height:1.55; }
 
-.footer { padding:28px 0; text-align:center; font-size:0.7rem; color:var(--ink4); line-height:1.9; }
+.footer { padding:18px 0; text-align:center; font-size:0.68rem; color:var(--ink4); line-height:1.8; }
 .footer a { color:var(--ink3); text-decoration:none; }
 .footer a:hover { color:var(--ink); }
 
@@ -157,9 +161,12 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
 @media (max-width:900px) {
   .wrap { padding:0 20px; }
   .section { padding:48px 0; }
-  .page-header h1 { font-size:2rem; }
+  .contact-hero { padding:20px 0 16px; }
+  .contact-hero h1 { font-size:1.8rem; }
   .contact-grid { grid-template-columns:1fr; }
-  .form-card { padding:24px 22px; }
+  .contact-right { gap:14px; }
+  .newsletter-card { flex:none; }
+  .form-card { padding:20px 18px; }
   .form-row { grid-template-columns:1fr; }
 }
 </style>
@@ -176,19 +183,18 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
     <div class="site-nav-links">
       <a href="/products/">Products</a>
       <a href="/case-studies/">Case Studies</a>
-      <a href="/research/">Research</a>
       <a href="/contact/" class="sn-active">Contact</a>
-      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Play free</a>
     </div>
   </div>
 </nav>
 
 <div class="wrap">
 
-<div class="page-header">
-  <span class="section-label">Contact</span>
+<!-- Hero: text only -->
+<div class="contact-hero">
   <h1>Let's <span class="accent">talk</span></h1>
-  <p class="lead">Whether you're interested in a Stakco Light installation, a bulk Paper order, a partnership, or just want to learn more — we'd love to hear from you.</p>
+  <p class="lead">Whether you're interested in a Stakco Light installation, a bulk Paper order, a partnership, or just want to learn more &mdash; we'd love to hear from you.</p>
 </div>
 
 <div class="contact-grid">
@@ -198,7 +204,7 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
     <div id="contactSuccess" class="form-success" hidden>
       <div class="form-success-icon"><i class="fa-solid fa-check"></i></div>
       <div class="form-success-title">Message received</div>
-      <div class="form-success-text">Thanks for reaching out — we'll get back to you shortly. A copy of your message is on its way to your inbox.</div>
+      <div class="form-success-text">Thanks for reaching out &mdash; we'll get back to you shortly. A copy of your message is on its way to your inbox.</div>
     </div>
     <div id="contactFormWrap">
     <div class="form-title">Send us a message</div>
@@ -229,8 +235,8 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
     </div><!-- /#contactFormWrap -->
   </div>
 
-  <!-- Sidebar -->
-  <div>
+  <!-- Right column: contact info + newsletter, stretched to form height -->
+  <div class="contact-right">
     <div class="sidebar-card reveal">
       <div class="sidebar-title">Get in touch directly</div>
       <div class="sidebar-item">
@@ -251,17 +257,8 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
         <div class="sidebar-icon"><i class="fa-solid fa-location-dot"></i></div>
         <div>
           <div class="sidebar-label">Address</div>
-          <div class="sidebar-value">3 Research Link<br>Singapore 117602</div>
+          <div class="sidebar-value">3 Research Link, Singapore 117602</div>
         </div>
-      </div>
-    </div>
-
-    <div class="sidebar-card reveal">
-      <div class="sidebar-title">Quick links</div>
-      <div style="display:flex;flex-direction:column;gap:8px;">
-        <a href="/products/" style="font-size:0.82rem;color:var(--ink2);text-decoration:none;display:flex;align-items:center;gap:8px;"><i class="fa-solid fa-box" style="color:var(--ink4);width:16px;"></i> Product overview</a>
-        <a href="/case-studies/" style="font-size:0.82rem;color:var(--ink2);text-decoration:none;display:flex;align-items:center;gap:8px;"><i class="fa-solid fa-building" style="color:var(--ink4);width:16px;"></i> Case studies</a>
-        <a href="https://shop.stakcos.com" style="font-size:0.82rem;color:var(--ink2);text-decoration:none;display:flex;align-items:center;gap:8px;"><i class="fa-solid fa-cart-shopping" style="color:var(--ink4);width:16px;"></i> Shop</a>
       </div>
     </div>
 
@@ -270,12 +267,12 @@ body { font-family:'Mont',sans-serif; background:var(--cream); color:var(--ink);
         <div class="newsletter-success-icon"><i class="fa-solid fa-check"></i></div>
         <div>
           <div class="newsletter-success-title">You're subscribed</div>
-          <div class="newsletter-success-text">Thanks! Look out for occasional updates — no spam.</div>
+          <div class="newsletter-success-text">Thanks! Look out for occasional updates &mdash; no spam.</div>
         </div>
       </div>
       <div id="newsletterFormWrap">
         <div class="newsletter-title">Stay updated</div>
-        <div class="newsletter-desc">New products, research updates, and puzzle news. No spam.</div>
+        <div class="newsletter-desc">Product updates, research notes, puzzle news. No spam.</div>
         <form id="newsletterForm" class="newsletter-form">
           <input class="newsletter-input" type="email" id="nlEmail" placeholder="Your email" required>
           <button type="submit" class="newsletter-btn" id="nlBtn">Subscribe</button>

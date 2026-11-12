@@ -167,6 +167,21 @@
   }
   .what-summary strong { color: var(--text); }
 
+  /* ── B2B DIVIDER ──────────────────────────────────────────── */
+  .b2b-divider {
+    background: var(--pink-bg);
+    border: 1px solid var(--pink-border);
+    border-radius: 10px;
+    padding: 22px 26px;
+    margin: 8px 0;
+  }
+  .b2b-divider-title {
+    font-size: 1.05rem; font-weight: 700; color: var(--text);
+    margin-bottom: 6px;
+  }
+  .b2b-divider-desc { font-size: 0.85rem; color: var(--text-sub); line-height: 1.6; }
+  .b2b-divider-desc em { color: var(--text); font-style: normal; font-weight: 600; }
+
   /* ── BUSINESS OUTCOMES ────────────────────────────────────── */
   .outcomes-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
   .outcome-chip {
@@ -457,6 +472,52 @@
   .site-nav-links { display: none; }
 }
 
+
+/* ── FLOATING GLASS NAV OVER HERO VIDEO ──────────────────── */
+/* Rounded, frosted app bar floating above the hero; the video runs underneath it. */
+.site-nav {
+  top: 12px;
+  width: calc(100% - 24px); max-width: none;
+  margin: 12px auto 0;
+  padding: 0 22px;
+  border-radius: 16px;
+  background: rgba(250,248,244,0.55);
+  backdrop-filter: blur(18px) saturate(170%);
+  -webkit-backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(255,255,255,0.45);
+  box-shadow: 0 8px 28px rgba(30,20,28,0.14), 0 1px 0 rgba(60,47,56,0.06);
+}
+/* Hero follows the video's own 16:9 shape — the full frame is shown, no crop.
+   Pulled up by the nav's height + float gap so it starts at the top of the page. */
+.hero-video-wrap {
+  margin-top: -70px; height: auto; aspect-ratio: 16 / 9;
+  background: transparent;
+}
+/* The video itself fades to transparent, so the bottom edge melts into the page. */
+.hero-video {
+  object-fit: contain; opacity: 1;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+          mask-image: linear-gradient(to bottom, #000 0%, #000 65%, transparent 100%);
+}
+.site-nav-inner { max-width: none; }
+/* Larger, bold app bar items — readable on the frosted glass. */
+.site-nav-brand span { font-size: 1.1rem; }
+.site-nav-brand img { width: 30px; }
+.site-nav-links { gap: 32px; }
+.site-nav-links a { font-size: 0.95rem; font-weight: 700; color: #5e5059; }
+.site-nav-links a.site-nav-cta { font-size: 0.92rem; padding: 9px 22px; color: #fff; background: #3C2F38; border-radius: 10px; }
+.hero-fade-t, .hero-fade-b { display: none; }
+/* Title block sits at the very bottom, on the faded-out part, in dark text. */
+/* When the 16:9 hero is taller than the window, lift the text so it ends
+   inside the first screen instead of below the fold. */
+.hero-content { bottom: max(40px, calc(56.25vw - 100vh + 64px)); }
+.hero-content .hero-title { color: var(--text); text-shadow: 0 0 24px rgba(255,255,255,0.6); }
+.hero-content .hero-tagline { color: var(--text); text-shadow: 0 0 16px rgba(255,255,255,0.7); }
+@media (max-width: 640px) {
+  .site-nav { width: calc(100% - 24px); margin-top: 10px; top: 10px; padding: 0 16px; }
+  .hero-video-wrap { height: auto; margin-top: -68px; }
+  .hero-content-mobile { margin-top: -24px; }
+}
 </style>
 </head>
 <body>
@@ -470,9 +531,8 @@
     <div class="site-nav-links">
       <a href="/products/" class="sn-active">Products</a>
       <a href="/case-studies/">Case Studies</a>
-      <a href="/research/">Research</a>
       <a href="/contact/">Contact</a>
-      <a href="https://play.stakcos.com" class="site-nav-cta">Explore free</a>
+      <a href="https://play.stakcos.com" class="site-nav-cta">Play free</a>
     </div>
   </div>
 </nav>
@@ -485,19 +545,12 @@
   <div class="hero-fade-t"></div>
   <div class="hero-fade-b"></div>
 
-  <div class="hero-nav">
-    <a href="index.html" class="back-link">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
-      All products
-    </a>
-    <span class="hero-corner-tag">Digital</span>
-  </div>
 
   <div class="hero-content">
     <div class="hero-title-row">
       <h1 class="hero-title">Stakco Play</h1>
     </div>
-    <p class="hero-tagline">Share your rotating ring puzzles online.<br>Players solve them in any browser.<br><span style="opacity:0.65">&mdash; no account, no app, no friction.</span></p>
+    <p class="hero-tagline">The free home for Stakco puzzles. A new one every day, plus curated albums &mdash; open it in your browser, no account, no app. <strong>play.stakcos.com</strong></p>
 
   </div>
 </div>
@@ -507,7 +560,7 @@
   <div class="hero-title-row">
     <h1 class="hero-title">Stakco Play</h1>
   </div>
-  <p class="hero-tagline">Share your rotating ring puzzles online.<br>Players solve them in any browser.<br><span style="opacity:0.65">&mdash; no account, no app, no friction.</span></p>
+  <p class="hero-tagline">The free home for Stakco puzzles. A new one every day, plus curated albums &mdash; open it in your browser, no account, no app.</p>
 
 </div>
 
@@ -518,65 +571,76 @@
   <!-- Key signals -->
   <div class="signal-bar">
     <div class="signal-chip">
-      <i class="fa-solid fa-user-slash"></i>
+      <i class="fa-solid fa-calendar-day"></i>
       <div class="signal-chip-text">
-        <strong>No account needed to play</strong>
-        Share a link &mdash; anyone plays instantly
+        <strong>A new puzzle daily</strong>
+        Bookmark it &mdash; come back tomorrow
       </div>
     </div>
     <div class="signal-chip">
-      <i class="fa-solid fa-globe"></i>
+      <i class="fa-solid fa-layer-group"></i>
       <div class="signal-chip-text">
-        <strong>Your own puzzle channel</strong>
-        Custom subdomain &amp; branded albums
+        <strong>Curated albums</strong>
+        Themed collections to explore
       </div>
     </div>
     <div class="signal-chip">
-      <i class="fa-solid fa-pen-nib"></i>
+      <i class="fa-solid fa-bolt"></i>
       <div class="signal-chip-text">
-        <strong>Free to start</strong>
-        Design in Studio, share when ready
+        <strong>Zero friction</strong>
+        Browser only &mdash; no account, no app
       </div>
     </div>
   </div>
 
-  <!-- What is it -->
+  <!-- What it is (for players) -->
   <div class="section">
-    <div class="section-label">What is Stakco Play?</div>
+    <div class="section-label">For players &mdash; free, in your browser</div>
     <div class="what-grid">
       <div class="what-half">
-        <div class="what-half-label">The puzzle format</div>
-        <p><strong>Rotating concentric rings</strong> &mdash; each layer turns independently. Players rotate them to align the image and solve the puzzle. It's the core Stakco mechanic, running in any browser.</p>
+        <div class="what-half-label">Daily puzzle</div>
+        <p>A new rotating-ring puzzle every day. Solve in under five minutes. Come back tomorrow.</p>
       </div>
       <div class="what-half">
-        <div class="what-half-label">The creation tool</div>
-        <p><strong>Stakco Studio</strong> is the free design tool where you build puzzles. Choose your image, set the ring layout, configure difficulty. When you&rsquo;re ready, the Play module makes it available online instantly.</p>
+        <div class="what-half-label">Albums</div>
+        <p>Curated themed collections &mdash; landscapes, art, photography, special series. Pick a mood, solve at your pace.</p>
       </div>
       <div class="what-half">
-        <div class="what-half-label">The platform</div>
-        <p>Distributed puzzles live at <strong>play.stakcos.com</strong> or your own branded subdomain. Organise them into albums, track engagement, update content anytime &mdash; all from Studio.</p>
+        <div class="what-half-label">Order what you love</div>
+        <p>Found a puzzle that means something? <strong>Order it as a printed disc</strong> &mdash; or commission a custom one from your own photo.</p>
       </div>
     </div>
     <div class="what-summary">
-      Think of it as <strong>your own puzzle channel</strong> &mdash; create and share interactive rotating puzzles with anyone in the world, via a simple link. No installation, no accounts for your audience, no technical setup.
+      Stakco Play is free to use forever. There&rsquo;s no sign-up, no app, no upsell pop-up. Just a daily puzzle &mdash; with paid options when you want to keep one or hand one to someone.
     </div>
   </div>
 
-  <!-- Business outcomes -->
+  <!-- Why people return -->
   <div class="section">
-    <div class="section-label">Why creators and businesses use it</div>
+    <div class="section-label">Why people return</div>
     <div class="outcomes-grid">
       <div class="outcome-chip">
-        <div class="oc-head">High completion</div>
-        <div class="oc-label">The rotating ring mechanic is tactile and satisfying &mdash; players finish what they start</div>
+        <div class="oc-head">A five-minute habit</div>
+        <div class="oc-label">Like a daily crossword &mdash; finish, feel good, close the tab</div>
       </div>
       <div class="outcome-chip">
-        <div class="oc-head">Zero drop-off</div>
-        <div class="oc-label">No sign-up friction. A link is all it takes to get someone playing</div>
+        <div class="oc-head">Tactile, satisfying</div>
+        <div class="oc-label">The ring mechanic ends in a solve, not a tab close</div>
       </div>
       <div class="outcome-chip">
-        <div class="oc-head">Brand your channel</div>
-        <div class="oc-label">Your own subdomain, your albums, your audience &mdash; build a puzzle presence under your name</div>
+        <div class="oc-head">No noise</div>
+        <div class="oc-label">No ads, no notifications, no streak guilt. Just the puzzle</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- B2B divider banner -->
+  <div class="section">
+    <div class="b2b-divider">
+      <div class="b2b-divider-text">
+        <span class="section-label" style="color:var(--pink);">For brands, educators &amp; creators</span>
+        <div class="b2b-divider-title">Publish your own puzzles on Play</div>
+        <div class="b2b-divider-desc">Run a branded puzzle channel at <em>your-name</em>.play.stakcos.com. A daily series for your audience, a hidden puzzle in a marketing email, a take-home gift after a workshop. Built using Stakco Studio &mdash; by invitation.</div>
       </div>
     </div>
   </div>
@@ -677,26 +741,28 @@
     <div class="section-label">Pricing</div>
     <div class="pricing-grid">
       <div class="price-card free">
-        <div class="price-tier-label">Playing &amp; designing</div>
+        <div class="price-tier-label">Players</div>
         <div class="price-main-row">
-          <span class="price-label">For everyone</span>
+          <span class="price-label">play.stakcos.com</span>
           <span class="price-value">Free</span>
         </div>
         <ul class="price-includes">
-          <li>Play any shared puzzle</li>
-          <li>No account required to play</li>
+          <li>Daily puzzle, every day</li>
+          <li>All public albums</li>
+          <li>No account, no app, no ads</li>
         </ul>
       </div>
       <div class="price-card creator">
-        <div class="price-tier-label">Distribution</div>
+        <div class="price-tier-label">Publishers (B2B)</div>
         <div class="price-main-row">
           <span class="price-label">Play module</span>
           <span class="price-value" data-price="PLAY.monthly" data-price-suffix="/mo" style="font-size:1rem;color:var(--pink);">...</span>
         </div>
         <ul class="price-includes">
-          <li>Distribute puzzles online</li>
-          <li>Custom branded subdomain</li>
+          <li>Your own branded subdomain</li>
           <li>Puzzle albums &amp; series</li>
+          <li>Engagement analytics</li>
+          <li>Built with Stakco Studio (by invitation)</li>
         </ul>
       </div>
     </div>
@@ -754,66 +820,34 @@
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Do players need an account or app?
+          Is it really free to play? Where&rsquo;s the catch?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">No. Anyone with the link can play immediately &mdash; no sign-up, no download, no account required. This is by design: zero friction between sharing a puzzle and someone playing it.</div>
+        <div class="faq-a">play.stakcos.com is free forever &mdash; the daily puzzle, every album, no account, no app, no ads. We make money when someone falls in love with a puzzle and orders the <strong>printed disc</strong>, or when a venue books an installation. The free app is the front door, not a trial.</div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          What is Stakco Studio and do I need to pay for it?
+          Can I publish my own puzzles on Play?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">Stakco Studio is the browser-based tool where you design puzzles. It is free to use &mdash; create as many puzzles as you like at no cost. You only need a paid module (like Play) when you want to distribute them online or add advanced features.</div>
+        <div class="faq-a">Yes &mdash; for brands, educators, and creators, by invitation. Publishing uses Stakco Studio (our content tool) and the Play module subscription. You get your own branded subdomain (<em>your-name</em>.play.stakcos.com), albums, and engagement analytics. <a href="/contact/?topic=publisher">Tell us about your channel &rarr;</a></div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          What is a "module" and what does the Play module include?
+          Does it work on Chromebooks, iPads, and old phones?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">A module is an add-on you activate within your Studio account to unlock specific capabilities. The Play module unlocks online distribution: your puzzles go live at play.stakcos.com or your custom subdomain, with albums and analytics included.</div>
+        <div class="faq-a">Yes. If the browser can open a web page, it can run a puzzle. No plugins, no downloads. Chrome, Safari, Firefox, Edge &mdash; all fine. Tested on school Chromebooks, iPads, and standard Android phones.</div>
       </div>
 
       <div class="faq-item">
         <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          What does a custom subdomain mean?
+          Can I edit a puzzle after I&rsquo;ve shared the link?
           <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
         </div>
-        <div class="faq-a">It means your puzzles have their own branded web address. Instead of appearing at play.stakcos.com, they appear at <em>yourname</em>.play.stakcos.com &mdash; your name, your branding. No technical setup is required; it's configured automatically when you activate the Play module.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Can I embed puzzles on my own website?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </div>
-        <div class="faq-a">Yes. With the Dev module add-on, you can embed any distributed puzzle as an interactive widget on any website, learning platform, or app. This uses a standard embed snippet &mdash; one line of code. The Dev module is separate from the Play module. Contact <a href="/cdn-cgi/l/email-protection#1f6f7e6d6b717a6d6c77766f6c5f6c6b7e747c706c317c7072"><span class="__cf_email__" data-cfemail="70001102041e15020318190003300304111b131f035e131f1d">[email&#160;protected]</span></a> for details.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Does it work on school Chromebooks or older devices?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </div>
-        <div class="faq-a">Yes. Stakco Play runs in any modern browser without plugins or downloads &mdash; Chrome, Safari, Firefox, and Edge are all supported. It works on Chromebooks, iPads, Android tablets, and standard school-issued devices. If the browser can open a web page, it can run a Stakco puzzle.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Is player data collected? Is it PDPA / GDPR compliant?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </div>
-        <div class="faq-a">Players do not create accounts and are not required to provide personal information to play. Analytics visible to creators cover aggregate engagement metrics (completion rates, time-on-puzzle) &mdash; not individually identifiable data. For specific data handling documentation for institutional or educational use, contact <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e68e838a8a89a69592878d858995c885898b">[email&#160;protected]</a>.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
-          Can I update or change a puzzle after sharing?
-          <svg class="faq-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
-        </div>
-        <div class="faq-a">Yes. Distributed puzzles can be edited, replaced, or reordered at any time from Studio. Existing share links continue to work &mdash; players visiting the old link will see the updated version automatically.</div>
+        <div class="faq-a">Yes. Edit, replace, or reorder published puzzles any time from Studio. The link never changes &mdash; visitors see the updated version automatically.</div>
       </div>
 
     </div>
@@ -821,14 +855,13 @@
 
   <!-- CTA -->
   <div class="cta-section">
-    <h3>Ready to start sharing?</h3>
-    <p>Design your first puzzle for free in Stakco Studio. Add the Play module when you&rsquo;re ready to share with the world.</p>
+    <h3>Try today&rsquo;s puzzle.</h3>
+    <p>Free. In your browser. No account. A new one every day.</p>
     <div class="cta-row">
-      <a href="https://studio.stakcos.com" class="cta-btn cta-primary">Start Creating Free</a>
-      <a href="https://play.stakcos.com" class="cta-btn cta-secondary">Try Stakco Play</a>
-      <a href="/cdn-cgi/l/email-protection#91e1f0e3e5fff4e3e2f9f8e1e2d1e2e5f0faf2fee2bff2fefcaee2e4f3fbf4f2e5acc2e5f0faf2feb4a3a1c1fdf0e8b4a3a1b4d4a3b4a9a1b4a8a5b4a3a1f3e4e2f8fff4e2e2b4a3a1f4ffe0e4f8e3e8" class="cta-btn cta-ghost">Business enquiry</a>
+      <a href="https://play.stakcos.com" class="cta-btn cta-primary">Open play.stakcos.com</a>
+      <a href="/contact/?topic=publisher" class="cta-btn cta-ghost">Publishing for brands &amp; educators</a>
     </div>
-    <div class="cta-reassure">Free to design. No credit card needed to start.</div>
+    <div class="cta-reassure">Free forever to play. Publishing on Play is by invitation.</div>
   </div>
 
   <div class="footer">
