@@ -1,3 +1,6 @@
+<!-- stakco-play-html5 -->
+<!-- src/index.html -->
+ 
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,7 +9,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Brings life to papers with interactive Stakco puzzles.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+    <link rel="stylesheet" href="https://cdn.stakcos.com/theme.css">
+    <link rel="stylesheet" href="play.css">
 
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="Stakco Puzzle Systems">
@@ -35,21 +39,36 @@
 
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
+    <!-- Google Analytics 4 -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NN050DQ66X"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-NN050DQ66X');
+    </script>
+
+    <!-- Stakco Analytics -->
+    <script src="stakco-analytics.js"></script>
+
+    <!-- Game Data Manager -->
     <script src="gameManager.js"></script>
 
     <!-- Import Stakco Components - Phase 1 -->
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://cdn.stakcos.com/components/stakco-branding.js"></script>
+    <script type="module" src="https://cdn.stakcos.com/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://cdn.stakcos.com/components/stakco-info-panel.js"></script>
 
     <!-- Import Stakco Components - Phase 2 -->
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-orientation-overlay.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-countdown.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://cdn.stakcos.com/components/stakco-orientation-overlay.js"></script>
+    <script type="module" src="https://cdn.stakcos.com/components/stakco-countdown.js"></script>
+
 
     <!-- Import Stakco Components - Phase 3 -->
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+    <script type="module" src="https://cdn.stakcos.com/components/stakco-share-button.js"></script>
+    <script type="module" src="https://cdn.stakcos.com/components/stakco-share-window.js"></script>
+    <script type="module" src="https://cdn.stakcos.com/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://cdn.stakcos.com/components/stakco-how-to-play.js"></script>
 
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -71,123 +90,58 @@
     </script>
 
     <title>Stakco Play</title>
-    
-    <!-- Import Stakco Components -->
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-countdown.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-orientation-overlay.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
-
-    <style>
-        /* Apply Stakcos theme variables and override app-specific styles */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Inter', sans-serif;
-            background: var(--text-primary);
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        html, body {
-            margin: 0; 
-            height: 100%; 
-            overflow: hidden;
-        }
-
-        button {
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        #solve-button {
-            position: absolute;
-            top: 20px;
-            left: 50%;
-            height: 50px;
-            width: 100px;
-            transform: translateX(-50%);
-            background: var(--primary-gradient);
-            border: 2px solid var(--glass-border);
-            border-radius: 50px;
-            padding: 8px 20px;
-            font-family: 'Inter', sans-serif;
-            color: white;
-            text-align: center;
-            font-size: 18px;
-            font-weight: 600;
-            backdrop-filter: blur(10px);
-            box-shadow: var(--shadow-soft);
-            z-index: 800;
-            display: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        #solve-button.show {
-            display: block;
-            animation: slideDown 0.5s ease-out 0.2s both;
-        }
-
-        #solve-button:hover {
-            border-color: var(--primary-color);
-            color: var(--primary-color);
-            background: rgba(249, 167, 68, 0.1);
-            box-shadow: var(--shadow-glow);
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(-50%);
-            }
-        }
-
-        #replay-button {
-            position: absolute;
-            bottom: 20px;
-            background: var(--primary-gradient);
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            display: none;
-            transition: all 0.3s ease;
-            z-index: 1000;
-        }
-
-        #replay-button.show {
-            display: block;
-        }
-
-        #replay-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
-        }
-
-        /* Color transitions for countdown timer */
-        .countdown-green { color: white; }
-        .countdown-yellow { color: #ffc947; }
-        .countdown-orange { color: #ff9900; }
-        .countdown-red { color: #ff4444; }
-    </style>
 </head>
 
 <body>
+    <!-- Loading State - Full Screen Rotating Ring -->
+    <div id="loading-container">
+        <div class="loader-ring">
+            <div class="loader-ring-inner">
+                <i class="fas fa-puzzle-piece loader-ring-icon"></i>
+                <span class="loader-ring-text">Loading puzzle...</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="error-container">
+        <div class="error-inner">
+            <i class="fas fa-compass error-icon"></i>
+            <h2>Let's get you puzzling</h2>
+            <p id="error-message">This link doesn't have a puzzle set up yet.</p>
+            <a href="https://play.stakcos.com">Play Today's Puzzle</a>
+        </div>
+    </div>
+
+    <!-- Puzzle Info (for albums) - circular overlay shown on solve -->
+    <div id="puzzle-info">
+        <div id="puzzle-info-inner">
+            <h3 id="puzzle-title"></h3>
+            <p id="puzzle-description"></p>
+        </div>
+    </div>
+
+    <!-- Story/Puzzle Toggle button - single button that changes based on state -->
+    <button id="story-toggle-btn">
+        <i class="fas fa-book-open"></i>
+        <span>Story</span>
+    </button>
+
+    <!-- Floating Share button - visible in both puzzle and story view -->
+    <button id="floating-share-btn">
+        <i class="fas fa-share-alt"></i>
+        <span>Share</span>
+    </button>
+
+    <!-- Completion Modal (for sequential albums) -->
+    <div id="completion-modal" role="dialog" aria-labelledby="completion-title">
+        <div class="content">
+            <div class="completion-icon"><i class="fas fa-trophy"></i></div>
+            <h2 id="completion-title">Congratulations!</h2>
+            <p id="completion-message">You've completed all puzzles!</p>
+        </div>
+    </div>
+
     <!-- Components -->
     <stakco-orientation-overlay></stakco-orientation-overlay>
     
@@ -195,37 +149,53 @@
     
     <button id="solve-button">Solve</button>
     
-    <stakco-info-panel icon="fa-gamepad">
-        <p>Drag to rotate selected layer • Align all layers • Share</p>
+    <stakco-info-panel icon="fa-gamepad" icon-size="32px">
+        <p>Drag to rotate selected layer - Align all layers - Share</p>
     </stakco-info-panel>
+
+    <!-- How to Play overlay (auto-shows for first-time users) -->
+    <stakco-how-to-play auto-show="true" storage-key="stakco-play-tutorial-seen"></stakco-how-to-play>
 
     <stakco-branding 
         title="Stakco Play" 
-        version="v2.0.0" 
-        subtitle="Daily Puzzle">
+        version="v2.1.0" 
+        subtitle="Loading...">
     </stakco-branding>
 
     <stakco-products-panel></stakco-products-panel>
 
+    <!-- Tutorial blocker - prevents interaction with info/branding until tutorial dismissed -->
+    <div id="tutorial-blocker"></div>
+
+    <!-- Puzzle container starts hidden, attributes set by JavaScript -->
     <stakco-puzzle-container
-        layers="3"
-        user-id="109949450257686494443"
-        puzzle-id="A2A3_3"
-        puzzle-type="play"
+        class="loading"
         tolerance="2">
     </stakco-puzzle-container>
     
-    <stakco-layer-controls layers="3"></stakco-layer-controls>
 
-    <stakco-share-button label="Share Success!"></stakco-share-button>
+    <!-- Next Puzzle Countdown (for time-driven albums) -->
+    <div id="next-puzzle-countdown">
+        <i class="fas fa-clock"></i>
+        <span>Next in <span class="countdown-time">00:00</span></span>
+    </div>
 
     <stakco-share-window 
         title="Stakco Play"
-        share-url="https://stakcos.com/play/">
-        <div slot="text">Solved in 02:30 • First try today!</div>
+        share-url="https://play.stakcos.com">
+        <div slot="text">Solved in 02:30 - First try today!</div>
     </stakco-share-window>
 
     <button id="replay-button">Remix and try again</button>
+    <button id="next-puzzle-button">Next Puzzle</button>
+
+    <!-- Freeplay Navigation Buttons -->
+    <button id="prev-puzzle-btn" class="freeplay-nav" title="Previous Puzzle">
+        <i class="fas fa-chevron-left"></i>
+    </button>
+    <button id="next-puzzle-btn" class="freeplay-nav" title="Next Puzzle">
+        <i class="fas fa-chevron-right"></i>
+    </button>
 
     <script type="module">
         import { 
@@ -236,186 +206,1161 @@
             checkImageExists, 
             preventMobileZoom, 
             normalizeAngleDelta, 
-        } from 'https://stakcos.com/assets/1.0.0/utils.js';
+        } from 'https://cdn.stakcos.com/utils.js';
 
-        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+        import { StakcoUtils } from 'https://cdn.stakcos.com/components/stakco-utils.js';
+        
+        import { CONFIG, MESSAGES, TIME_DRIVEN_TYPES, isTimeDrivenAlbum } from './play-config.js';
 
-        // Simple Game Data Manager - Define class FIRST before using it
-        class GameDataManager {
-            constructor() {
-                this.storageKey = 'stakco-play-attempts';
+        // ============================================
+        // Utility Functions
+        // ============================================
+        
+        /**
+         * Format hour for display (e.g., "3 PM")
+         */
+        function formatHour(hour) {
+            const period = hour >= 12 ? 'PM' : 'AM';
+            const displayHour = hour % 12 || 12;
+            return `${displayHour} ${period}`;
+        }
+
+        /**
+         * Get day name
+         */
+        function getDayName(dayIndex) {
+            const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            return days[dayIndex];
+        }
+
+        /**
+         * Format date for display (e.g., "Dec 28")
+         */
+        function formatDate(date) {
+            const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            return `${months[date.getMonth()]} ${date.getDate()}`;
+        }
+
+        /**
+         * Convert time string "MM:SS" to seconds
+         */
+        function timeToSeconds(timeStr) {
+            if (!timeStr) return 0;
+            const parts = timeStr.split(':');
+            if (parts.length === 2) {
+                return parseInt(parts[0], 10) * 60 + parseInt(parts[1], 10);
             }
+            return 0;
+        }
 
-            loadAttempts(dateKey) {
-                try {
-                    const data = localStorage.getItem(this.storageKey);
-                    if (!data) return { attempts: [], solved: false };
-                    
-                    const allData = JSON.parse(data);
-                    return allData[dateKey] || { attempts: [], solved: false };
-                } catch (error) {
-                    console.error('Error loading attempts:', error);
-                    return { attempts: [], solved: false };
+        /**
+         * Generate share data object based on current puzzle context
+         */
+        function generateShareData() {
+            const finalTime = countdown.getTime();
+            const today = new Date();
+            
+            // Get puzzle image URL (layer 1) - try multiple access patterns
+            let puzzleImageUrl = '';
+            if (puzzleContainer.puzzleLayers) {
+                // Try numeric key first, then string key
+                const layer1 = puzzleContainer.puzzleLayers[1] || puzzleContainer.puzzleLayers['1'];
+                if (layer1 && layer1.url) {
+                    puzzleImageUrl = layer1.url;
+                } else {
+                    // Fallback: get first available layer
+                    const keys = Object.keys(puzzleContainer.puzzleLayers);
+                    if (keys.length > 0) {
+                        const firstLayer = puzzleContainer.puzzleLayers[keys[0]];
+                        if (firstLayer && firstLayer.url) {
+                            puzzleImageUrl = firstLayer.url;
+                        }
+                    }
+                }
+            }
+            
+            // Debug log
+            console.log('Share data - puzzleLayers:', puzzleContainer.puzzleLayers);
+            console.log('Share data - puzzleImageUrl:', puzzleImageUrl);
+
+            // Base share data
+            const shareData = {
+                puzzleImageUrl: puzzleImageUrl,
+                albumType: null,
+                albumName: null,
+                puzzleTitle: null,
+                solveTime: finalTime,
+                attemptCount: 1,
+                attemptPeriod: null,
+                progressIndex: 0,
+                totalPuzzles: 0,
+                comparison: null,
+                shareUrl: CONFIG.SHARE_URL,
+                dateContext: null,
+                isComplete: false,
+                completionMessage: null
+            };
+
+            // Get attempt data
+            const dayData = gameManager.loadAttempts(dateStr);
+            shareData.attemptCount = dayData.attempts ? dayData.attempts.length : 1;
+
+            // Calculate comparison if we have previous attempts
+            if (dayData.attempts && dayData.attempts.length > 1) {
+                const currentTimeSeconds = timeToSeconds(finalTime);
+                const lastAttempt = dayData.attempts[dayData.attempts.length - 2];
+                // Try to calculate diff if we have time data
+                if (lastAttempt && lastAttempt.time) {
+                    const lastTimeSeconds = timeToSeconds(lastAttempt.time);
+                    if (lastTimeSeconds > 0) {
+                        const diff = currentTimeSeconds - lastTimeSeconds;
+                        if (diff !== 0) {
+                            shareData.comparison = diff > 0 ? `+${diff}s` : `${diff}s`;
+                        }
+                    }
                 }
             }
 
-            saveAttempt(dateKey, solved, time) {
+            // Set context based on mode
+            if (isAlbumMode && currentAlbum) {
+                shareData.albumType = currentAlbum.Type;
+                shareData.albumName = currentAlbum.Name;
+                shareData.albumDescription = currentAlbum.Description || null;
+                shareData.progressIndex = currentPuzzleIndex;
+                shareData.totalPuzzles = currentAlbum.Puzzles.length;
+                shareData.completionMessage = currentAlbum.CompletionMessage || null;
+                shareData.puzzleTitle = currentPuzzleTitle || null;
+                
+                // Debug
+                console.log('Share data - currentPuzzleTitle:', currentPuzzleTitle);
+                console.log('Share data - shareData.puzzleTitle:', shareData.puzzleTitle);
+
+                // Set share URL for album
+                if (currentSubdomain) {
+                    if (currentSubdomain === '@') {
+                        shareData.shareUrl = 'https://play.stakcos.com';
+                    } else {
+                        shareData.shareUrl = `https://${currentSubdomain}.play.stakcos.com`;
+                    }
+                }
+
+                // Set date context based on album type
+                switch (currentAlbum.Type) {
+                    case 'HOUR_12':
+                        shareData.attemptPeriod = 'this hour';
+                        const h12 = today.getHours() % 12;
+                        const ampm = today.getHours() >= 12 ? 'PM' : 'AM';
+                        shareData.dateContext = `${h12 === 0 ? 12 : h12} ${ampm}`;
+                        break;
+                    case 'HOUR_OF_DAY':
+                        shareData.attemptPeriod = 'this hour';
+                        shareData.dateContext = formatHour(today.getHours());
+                        break;
+                    case 'DAY_OF_WEEK':
+                        shareData.attemptPeriod = 'today';
+                        shareData.dateContext = getDayName(today.getDay());
+                        break;
+                    case 'DAY_OF_MONTH':
+                    case 'DAY_OF_YEAR':
+                        shareData.attemptPeriod = 'today';
+                        shareData.dateContext = formatDate(today);
+                        break;
+                    case 'GENAI':
+                        shareData.attemptPeriod = 'today';
+                        shareData.dateContext = formatDate(today);
+                        break;
+                    case 'SEQUENTIAL':
+                        shareData.attemptPeriod = null; // No attempt tracking for sequential
+                        shareData.comparison = null;
+                        shareData.attemptCount = null;
+                        // Check if album is complete
+                        if (currentPuzzleIndex >= currentAlbum.Puzzles.length - 1) {
+                            shareData.isComplete = true;
+                        }
+                        break;
+                    case 'FREEPLAY':
+                        // Minimal data for freeplay
+                        shareData.solveTime = null;
+                        shareData.attemptCount = null;
+                        shareData.comparison = null;
+                        break;
+                }
+            } else if (hasUrlParams) {
+                // User puzzle via URL params - minimal data
+                shareData.albumType = null;
+                shareData.solveTime = null;
+                shareData.attemptCount = null;
+                shareData.comparison = null;
+                if (shareParams) {
+                    shareData.shareUrl = CONFIG.SHARE_URL + shareParams;
+                }
+            } else {
+                // Default daily puzzle
+                shareData.attemptPeriod = 'today';
+                shareData.dateContext = formatDate(today);
+            }
+
+            return shareData;
+        }
+
+        // ============================================
+        // Album Resolver (Direct GCS Access - No API calls)
+        // ============================================
+        class AlbumResolver {
+            constructor(gcsBaseUrl) {
+                this.gcsBaseUrl = gcsBaseUrl;
+            }
+
+            // Extract subdomain from hostname
+            getSubdomain() {
+                const hostname = window.location.hostname;
+                
+                // Handle localhost for testing
+                if (hostname === 'localhost' || hostname === '127.0.0.1') {
+                    // Check URL param for testing
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get('subdomain');
+                }
+
+                // Handle dplay.stakcos.com (test deployment)
+                // Use ?subdomain=xxx parameter for testing
+                if (hostname === 'dplay.stakcos.com') {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get('subdomain');
+                }
+
+                // Handle *.dplay.stakcos.com (test subdomains)
+                const parts = hostname.split('.');
+                if (parts.length >= 3 && parts[1] === 'dplay' && parts[2] === 'stakcos') {
+                    const subdomain = parts[0];
+                    if (subdomain === 'dplay') return null;
+                    return subdomain;
+                }
+
+                // Handle *.play.stakcos.com (production subdomains)
+                if (parts.length >= 3 && parts[1] === 'play' && parts[2] === 'stakcos') {
+                    const subdomain = parts[0];
+                    // 'play' alone means no subdomain
+                    if (subdomain === 'play') return null;
+                    return subdomain;
+                }
+
+                return null;
+            }
+
+            // Fetch JSON from GCS with cache-busting
+            async fetchConfig(path) {
+                const cacheBuster = `_t=${Date.now()}`;
+                const separator = path.includes('?') ? '&' : '?';
+                const url = `${this.gcsBaseUrl}/${path}${separator}${cacheBuster}`;
+                console.log(`Fetching config: ${url}`);
+                
+                const response = await fetch(url, {
+                    cache: 'no-store'
+                });
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch ${path}: ${response.status}`);
+                }
+                return await response.json();
+            }
+
+            // Resolve subdomain to album data using direct GCS access
+            async resolve(subdomain) {
                 try {
-                    const data = localStorage.getItem(this.storageKey);
-                    const allData = data ? JSON.parse(data) : {};
+                    // Step 1: Fetch play.json to get user_id
+                    const playConfig = await this.fetchConfig('play.json');
                     
-                    if (!allData[dateKey]) {
-                        allData[dateKey] = { attempts: [], solved: false };
+                    const subdomainEntry = playConfig[subdomain];
+                    if (!subdomainEntry) {
+                        throw new Error(MESSAGES.ERROR_NO_SUBDOMAIN);
                     }
                     
-                    allData[dateKey].attempts.push({ time, timestamp: Date.now() });
-                    allData[dateKey].solved = solved;
+                    const userId = subdomainEntry.user_id || subdomainEntry.UserId;
+                    if (!userId) {
+                        throw new Error(MESSAGES.ERROR_NO_USER);
+                    }
+
+                    // Step 2: Fetch user.config to get active_album
+                    const userConfig = await this.fetchConfig(`${userId}/user.config`);
                     
-                    localStorage.setItem(this.storageKey, JSON.stringify(allData));
+                    const activeAlbum = userConfig.active_album || userConfig.ActiveAlbum;
+                    if (!activeAlbum) {
+                        throw new Error(MESSAGES.ERROR_NO_ALBUM);
+                    }
+
+                    // Step 3: Fetch album config
+                    const album = await this.fetchConfig(`${userId}/${activeAlbum}.album.json`);
+
+                    return {
+                        userId: userId,
+                        subdomain: subdomain,
+                        album: album
+                    };
+
                 } catch (error) {
-                    console.error('Error saving attempt:', error);
+                    console.error('Error resolving subdomain:', error);
+                    throw error;
                 }
             }
 
-            generatePerformanceText(dateKey, time) {
-                const data = this.loadAttempts(dateKey);
-                const attemptCount = data.attempts.length;
-                
-                let text = '';
-                if (attemptCount === 1) {
-                    text = 'First try today!';
-                } else {
-                    text = `Attempt ${attemptCount} today`;
+            // Calculate puzzle index based on album type
+            calculatePuzzleIndex(album, progressIndex = 0) {
+                const now = new Date();
+                const puzzleCount = album.Puzzles.length;
+
+                switch (album.Type) {
+                    case 'SEQUENTIAL':
+                        return Math.min(progressIndex, puzzleCount - 1);
+
+                    case 'FREEPLAY':
+                        // For freeplay, use URL param or default to 0
+                        const urlParams = new URLSearchParams(window.location.search);
+                        const puzzleParam = urlParams.get('p');
+                        if (puzzleParam !== null) {
+                            const idx = parseInt(puzzleParam, 10);
+                            if (!isNaN(idx) && idx >= 0 && idx < puzzleCount) {
+                                return idx;
+                            }
+                        }
+                        return 0;
+
+                    case 'GENAI': {
+                        // Find today's puzzle by matching date prefix in puzzle ID
+                        const todayStr = now.toISOString().split('T')[0]; // "yyyy-MM-dd"
+                        const todayIndex = album.Puzzles.findIndex(p => {
+                            const pid = p.PuzzleId || p.puzzleId || '';
+                            return pid.startsWith(todayStr);
+                        });
+                        if (todayIndex >= 0) return todayIndex;
+                        
+                        // Fallback: find closest date that's not in the future
+                        let bestIndex = 0;
+                        let bestDate = '';
+                        album.Puzzles.forEach((p, i) => {
+                            const pid = p.PuzzleId || p.puzzleId || '';
+                            const dateStr = pid.substring(0, 10);
+                            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr) && dateStr <= todayStr && dateStr > bestDate) {
+                                bestDate = dateStr;
+                                bestIndex = i;
+                            }
+                        });
+                        return bestIndex;
+                    }
+
+                    case 'HOUR_12':
+                        // 12-hour clock: 12, 1, 2, ... 11 maps to index 0-11
+                        // getHours() returns 0-23, we convert to 12-hour format
+                        const hour24 = now.getHours();
+                        const hour12 = hour24 % 12; // 0-11 (0 = 12 o'clock)
+                        return hour12 % puzzleCount;
+
+                    case 'HOUR_OF_DAY':
+                        return now.getHours() % puzzleCount;
+
+                    case 'DAY_OF_WEEK':
+                        return now.getDay() % puzzleCount;
+
+                    case 'DAY_OF_MONTH':
+                        return (now.getDate() - 1) % puzzleCount;
+
+                    case 'DAY_OF_YEAR':
+                        const start = new Date(now.getFullYear(), 0, 0);
+                        const diff = now - start;
+                        const day = Math.floor(diff / (1000 * 60 * 60 * 24));
+                        return (day - 1) % puzzleCount;
+
+                    default:
+                        return 0;
                 }
-                
-                return text;
+            }
+
+            // Get type display name
+            getTypeDisplayName(type) {
+                const names = {
+                    'SEQUENTIAL': 'Sequential',
+                    'FREEPLAY': 'Free Play',
+                    'HOUR_12': '12-Hour',
+                    'HOUR_OF_DAY': 'Hourly',
+                    'DAY_OF_WEEK': 'Daily',
+                    'DAY_OF_MONTH': 'Monthly',
+                    'DAY_OF_YEAR': 'Yearly',
+                    'GENAI': 'Daily AI'
+                };
+                return names[type] || type;
             }
         }
 
-        // Get component references
+        // ============================================
+        // DOM Elements
+        // ============================================
         const puzzleContainer = document.querySelector('stakco-puzzle-container');
         const infoPanel = document.querySelector('stakco-info-panel');
         const branding = document.querySelector('stakco-branding');
         const productsPanel = document.querySelector('stakco-products-panel');
         const orientationOverlay = document.querySelector('stakco-orientation-overlay');
         const countdown = document.querySelector('stakco-countdown');
-        const layerControls = document.querySelector('stakco-layer-controls');
         const shareWindow = document.querySelector('stakco-share-window');
-        const shareButton = document.querySelector('stakco-share-button');
+        const howToPlay = document.querySelector('stakco-how-to-play');
+        const tutorialBlocker = document.getElementById('tutorial-blocker');
         const solveButton = document.getElementById('solve-button');
         const replayButton = document.getElementById('replay-button');
+        const nextPuzzleButton = document.getElementById('next-puzzle-button');
+        const loadingContainer = document.getElementById('loading-container');
+        const errorContainer = document.getElementById('error-container');
+        const errorMessage = document.getElementById('error-message');
+        const puzzleInfo = document.getElementById('puzzle-info');
+        const puzzleTitle = document.getElementById('puzzle-title');
+        const puzzleDescription = document.getElementById('puzzle-description');
+        const storyToggleBtn = document.getElementById('story-toggle-btn');
+        const storyToggleIcon = storyToggleBtn.querySelector('i');
+        const storyToggleText = storyToggleBtn.querySelector('span');
+        const floatingShareBtn = document.getElementById('floating-share-btn');
+        const completionModal = document.getElementById('completion-modal');
+        const completionMessage = document.getElementById('completion-message');
+        const prevPuzzleBtn = document.getElementById('prev-puzzle-btn');
+        const nextPuzzleBtn = document.getElementById('next-puzzle-btn');
+        const nextPuzzleCountdown = document.getElementById('next-puzzle-countdown');
+        const nextPuzzleCountdownTime = document.querySelector('#next-puzzle-countdown .countdown-time');
 
-        // Configuration constants
-        const CONFIG = {
-            DEFAULT_LAYERS: 3,
-            ROTATION_TOLERANCE: 1,
-            ROTATION_STEP_SMALL: 1,
-            ROTATION_STEP_LARGE: 5,
-            SOLVE_ANIMATION_DELAY: 500,
-            SOLVE_ANIMATION_DURATION: 4000,
-            DOUBLE_TAP_DELAY: 300,
-            VIBRATION_PATTERN: [200, 100, 300, 100, 200],
-            BASE_IMAGE_URL: 'https://storage.googleapis.com/stakco-images',
-            DEFAULT_USER_ID: '109949450257686494443',
-            DEFAULT_PUZZLE_ID: 'A2A3_3',
-            SHARE_URL: 'https://stakcos.com/play/',
-            COUNTDOWN_HIDE_DURATION: 2500
-        };
-
-        // UI text constants
-        const MESSAGES = {
-            LOADING_USER: 'Loading custom puzzle...',
-            LOADING_DAILY: 'Loading today\'s puzzle...',
-            INSTRUCTIONS: 'Drag to rotate selected layer • Align all layers • Share',
-            SHARE_TITLE: 'Stakco Puzzle',
-            SHARE_TEXT: "I just solved Stakco",
-            CLIPBOARD_MESSAGE: 'Link copied to clipboard: https://stakcos.com/play/'
-        };
-
-        // App state
+        // ============================================
+        // App State
+        // ============================================
         let totalLayers = CONFIG.DEFAULT_LAYERS;
         let firstInteractionOccurred = false;
         let isDragging = false;
+        let isDraggingIndicator = false; // True when an edge indicator is being dragged (prevents double-rotation on touch)
         let lastAngle = 0;
+
+        // ============================================
+        // Haptic Engine
+        // ============================================
+        const HapticEngine = (() => {
+            if (!navigator.vibrate) return null; // Not supported (iOS, desktop)
+
+            // Accumulated rotation per drag session for tick tracking
+            let _accum = 0;
+            let _lastTickTime = 0;
+            let _lastDelta = 0;
+
+            // Tick every N degrees — lower = denser = feels stronger rotation
+            const TICK_DEGREES_SLOW   = 8;   // gentle/slow rotation
+            const TICK_DEGREES_MEDIUM = 5;   // medium rotation
+            const TICK_DEGREES_FAST   = 3;   // fast flick
+            const MIN_TICK_INTERVAL   = 30;  // ms — prevent buzzing too fast
+            const SNAP_ZONE_DEGREES   = 6;   // within this of 0° → approaching-snap feel
+
+            function _tickPulse(durationMs) {
+                const now = Date.now();
+                if (now - _lastTickTime < MIN_TICK_INTERVAL) return;
+                _lastTickTime = now;
+                navigator.vibrate(durationMs);
+            }
+
+            return {
+                reset() {
+                    _accum = 0;
+                    _lastDelta = 0;
+                },
+
+                // Call on every rotation delta (degrees). Also pass current layer rotation for snap detection.
+                onRotate(deltaAngle, currentRotationDeg) {
+                    const absDelta = Math.abs(deltaAngle);
+                    if (absDelta < 0.2) return; // ignore micro-jitter
+
+                    _accum += absDelta;
+                    _lastDelta = absDelta;
+
+                    // Determine tick interval based on speed (absDelta per frame ≈ speed proxy)
+                    let tickThreshold;
+                    if (absDelta > 4)      tickThreshold = TICK_DEGREES_FAST;
+                    else if (absDelta > 2) tickThreshold = TICK_DEGREES_MEDIUM;
+                    else                   tickThreshold = TICK_DEGREES_SLOW;
+
+                    if (_accum >= tickThreshold) {
+                        _accum = _accum % tickThreshold;
+
+                        // Check if we're near a snap point (0° = solved orientation)
+                        // currentRotationDeg should be normalised to [-180, 180]
+                        if (currentRotationDeg !== undefined) {
+                            const distToSnap = Math.abs(((currentRotationDeg % 360) + 540) % 360 - 180);
+                            // distToSnap is distance from 180° offset → 0 means aligned
+                            const distFromAlign = Math.min(distToSnap, 360 - distToSnap);
+                            if (distFromAlign < SNAP_ZONE_DEGREES) {
+                                // Approaching snap: two tiny pulses — distinct "click-click"
+                                navigator.vibrate([8, 20, 8]);
+                                _lastTickTime = Date.now();
+                                return;
+                            }
+                        }
+
+                        // Normal rotation tick: single very short pulse
+                        // Faster rotation = slightly longer pulse (more "physical" feel)
+                        const pulseDuration = absDelta > 4 ? 12 : 8;
+                        _tickPulse(pulseDuration);
+                    }
+                },
+
+                // Layer switched — brief confirmation
+                onLayerSwitch() {
+                    navigator.vibrate(20);
+                },
+
+                // Puzzle solved — rich celebration
+                onSolve() {
+                    navigator.vibrate(CONFIG.VIBRATION_PATTERN);
+                }
+            };
+        })();
         let performanceText = '';
 
-        // Parse URL parameters
+        // Album state
+        let currentAlbum = null;
+        let currentPuzzleIndex = 0;
+        let currentUserId = null;
+        let currentSubdomain = null;
+        let isAlbumMode = false;
+
+        // Parse URL parameters (for legacy/testing)
         const urlParams = new URLSearchParams(window.location.search);
         const username = urlParams.get('username');
         const puzzle = urlParams.get('puzzle');
-        const hasUrlParams = urlParams.toString() !== '';
+        const hasUrlParams = username && puzzle;
 
-        // Construct share URL with parameters
+        // Simulation mode: ?sim=1 disables countdown, solve detection, solve animation, shuffle
+        const isSimMode = urlParams.get('sim') === '1';
+
+        // Date for tracking
+        const today = new Date();
+        const dateStr = today.toISOString().split('T')[0];
+
+        // Managers - Use external GameDataManager from gameManager.js
+        const gameManager = new GameDataManager();
+        const albumResolver = new AlbumResolver(CONFIG.GCS_BUCKET_URL);
+
+        // Share URL construction
         let shareParams = '';
         if (urlParams.toString()) {
             shareParams = '?' + urlParams.toString();
         }
 
-        // Generate today's date string (YYYY-MM-DD)
-        const today = new Date();
-        const dateStr = today.toISOString().split('T')[0];
-
-        // Load game data - Now GameDataManager is defined above
-        const gameManager = new GameDataManager();
-
-        // Update branding based on puzzle type
-        if (username && puzzle) {
-            branding.updateSubtitle('User Puzzle');
-        } else {
-            branding.updateSubtitle('Daily Puzzle');
+        // ============================================
+        // UI Helpers
+        // ============================================
+        function showLoading(message = 'Loading puzzle...') {
+            const textElement = loadingContainer.querySelector('.loader-ring-text');
+            if (textElement) {
+                textElement.textContent = message;
+            }
+            loadingContainer.classList.remove('hidden');
+            puzzleContainer.classList.add('loading');
         }
 
+        function hideLoading() {
+            loadingContainer.classList.add('hidden');
+            puzzleContainer.classList.remove('loading');
+            // Remove from DOM after fade out
+            setTimeout(() => {
+                if (loadingContainer.classList.contains('hidden')) {
+                    loadingContainer.style.display = 'none';
+                }
+            }, 500);
+        }
+
+        function fadeInPuzzleBackground() {
+            // Access the background-layer inside the web component's shadow DOM
+            const shadowRoot = puzzleContainer.shadowRoot;
+            if (shadowRoot) {
+                const backgroundLayer = shadowRoot.querySelector('.background-layer');
+                if (backgroundLayer) {
+                    // Set up the transition and fade to white
+                    backgroundLayer.style.transition = 'background-color 6s ease-in-out';
+                    backgroundLayer.style.backgroundColor = 'white';
+                    backgroundLayer.style.borderRadius = '50%';
+                    console.log('Background fade-in triggered');
+                }
+            }
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorContainer.classList.add('show');
+            loadingContainer.classList.add('hidden');
+            window.stakcoAnalytics.trackError('display_error', message);
+        }
+
+        // Store puzzle info for showing on solve
+        let currentPuzzleTitle = '';
+        let currentPuzzleDesc = '';
+        let nextPuzzleCountdownInterval = null;
+        let isPuzzleInfoVisible = false;
+
+        function storePuzzleInfo(title, description) {
+            currentPuzzleTitle = title || '';
+            currentPuzzleDesc = description || '';
+        }
+
+        function showPuzzleInfoOnSolve() {
+            if (currentPuzzleTitle || currentPuzzleDesc) {
+                puzzleTitle.textContent = currentPuzzleTitle;
+                puzzleDescription.textContent = currentPuzzleDesc;
+                
+                // Wait for puzzle rotation animation to complete (4 seconds) + extra viewing time
+                // CONFIG.SOLVE_ANIMATION_DURATION is 4000ms
+                setTimeout(() => {
+                    showPuzzleInfo();
+                }, CONFIG.SOLVE_ANIMATION_DURATION + 1000);
+            }
+        }
+
+        function showPuzzleInfo() {
+            if (currentPuzzleTitle || currentPuzzleDesc) {
+                puzzleTitle.textContent = currentPuzzleTitle;
+                puzzleDescription.textContent = currentPuzzleDesc;
+                puzzleInfo.classList.remove('hiding');
+                puzzleInfo.classList.add('show');
+                isPuzzleInfoVisible = true;
+                
+                // Update toggle button to show "Puzzle" (to go back to puzzle view)
+                storyToggleIcon.className = 'fas fa-puzzle-piece';
+                storyToggleText.textContent = 'Puzzle';
+                storyToggleBtn.classList.add('puzzle-mode');
+                
+                // Update share button to story mode (full opacity)
+                floatingShareBtn.classList.remove('puzzle-view');
+                floatingShareBtn.classList.add('story-view');
+            }
+        }
+
+        function hidePuzzleInfo() {
+            if (!isPuzzleInfoVisible) return;
+            
+            // Remove show, add hiding for fade out animation
+            puzzleInfo.classList.remove('show');
+            puzzleInfo.classList.add('hiding');
+            isPuzzleInfoVisible = false;
+            
+            // Update toggle button to show "Story" (to go back to story view)
+            storyToggleIcon.className = 'fas fa-book-open';
+            storyToggleText.textContent = 'Story';
+            storyToggleBtn.classList.remove('puzzle-mode');
+            
+            // Update share button to puzzle mode (semi-transparent)
+            floatingShareBtn.classList.remove('story-view');
+            floatingShareBtn.classList.add('puzzle-view');
+            
+            // After animation completes, remove hiding class
+            setTimeout(() => {
+                puzzleInfo.classList.remove('hiding');
+            }, 400); // Match fadeOut animation duration
+        }
+
+        function togglePuzzleInfo() {
+            if (isPuzzleInfoVisible) {
+                hidePuzzleInfo();
+                window.stakcoAnalytics.trackPuzzleInfoToggle(false);
+            } else {
+                showPuzzleInfo();
+                window.stakcoAnalytics.trackPuzzleInfoToggle(true);
+            }
+        }
+
+        // Toggle button handler
+        storyToggleBtn.addEventListener('click', togglePuzzleInfo);
+
+        // Floating share button handler
+        floatingShareBtn.addEventListener('click', handleShare);
+
+        // Show toggle button when puzzle has title/description
+        function showStoryToggleButton() {
+            if (currentPuzzleTitle || currentPuzzleDesc) {
+                storyToggleBtn.classList.add('show');
+            }
+        }
+
+        // Show floating share button after solve
+        function showFloatingShareButton() {
+            floatingShareBtn.classList.add('show');
+            // Start in story view mode (full opacity) since story shows first
+            floatingShareBtn.classList.add('story-view');
+        }
+
+        // Tutorial blocker - show blocker if tutorial hasn't been seen
+        function updateTutorialBlocker() {
+            const seen = localStorage.getItem('stakco-play-tutorial-seen');
+            if (!seen && tutorialBlocker) {
+                tutorialBlocker.classList.add('active');
+            } else if (tutorialBlocker) {
+                tutorialBlocker.classList.remove('active');
+            }
+        }
+
+        // Initialize blocker state
+        updateTutorialBlocker();
+
+        // Listen for how-to-play hide event to remove blocker
+        if (howToPlay) {
+            howToPlay.addEventListener('show', () => {
+                window.stakcoAnalytics.tutorialDisplayed(true);
+            });
+            howToPlay.addEventListener('hide', () => {
+                updateTutorialBlocker();
+                window.stakcoAnalytics.tutorialDismissed();
+            });
+        }
+
+        // Info panel expand event - show How to Play overlay (only works after tutorial completed)
+        infoPanel.addEventListener('expand', () => {
+            const seen = localStorage.getItem('stakco-play-tutorial-seen');
+            if (howToPlay && seen) {
+                howToPlay.show();
+                window.stakcoAnalytics.tutorialDisplayed(false);
+            }
+        });
+
+        // Calculate puzzle container edges and align buttons
+        function alignBottomButtons() {
+            // Calculate puzzle container size (same formula as CSS)
+            const vw = window.innerWidth;
+            const vh = window.innerHeight;
+            const vmin = Math.min(vw, vh);
+            
+            const puzzleSize = Math.min(
+                vmin * 0.9,                    // 90vmin
+                vw - 20,                       // 100vw - 20px
+                vh - 200                       // 100vh - 200px
+            );
+            
+            // Calculate left and right edges from viewport edge
+            const leftEdge = (vw - puzzleSize) / 2;
+            const rightEdge = (vw - puzzleSize) / 2;
+            
+            // Set CSS custom properties
+            document.documentElement.style.setProperty('--puzzle-left-edge', `${leftEdge}px`);
+            document.documentElement.style.setProperty('--puzzle-right-edge', `${rightEdge}px`);
+        }
+
+        // Align buttons on load and resize
+        alignBottomButtons();
+        window.addEventListener('resize', alignBottomButtons);
+
+        function getNextPuzzleTime(albumType) {
+            const now = new Date();
+            let nextTime = new Date(now);
+
+            switch (albumType) {
+                case 'HOUR_12':
+                case 'HOUR_OF_DAY':
+                    // Next hour
+                    nextTime.setHours(now.getHours() + 1, 0, 0, 0);
+                    break;
+
+                case 'DAY_OF_WEEK':
+                case 'DAY_OF_MONTH':
+                case 'DAY_OF_YEAR':
+                case 'GENAI':
+                    // Next day at midnight
+                    nextTime.setDate(now.getDate() + 1);
+                    nextTime.setHours(0, 0, 0, 0);
+                    break;
+
+                default:
+                    return null;
+            }
+
+            return nextTime;
+        }
+
+        function formatCountdownTime(ms) {
+            if (ms <= 0) return '00:00';
+            
+            const totalSeconds = Math.floor(ms / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            if (hours > 0) {
+                return `${hours}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            }
+            return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function startNextPuzzleCountdown(albumType) {
+            if (!isTimeDrivenAlbum(albumType)) return;
+
+            const nextTime = getNextPuzzleTime(albumType);
+            if (!nextTime) return;
+
+            // Show countdown element
+            nextPuzzleCountdown.classList.add('show');
+
+            // Analytics: next puzzle countdown
+            const remaining = nextTime - new Date();
+            window.stakcoAnalytics.trackNextPuzzleCountdown(albumType, remaining);
+
+            // Update immediately
+            updateCountdownDisplay(nextTime);
+
+            // Update every second
+            nextPuzzleCountdownInterval = setInterval(() => {
+                const remaining = nextTime - new Date();
+                
+                if (remaining <= 0) {
+                    clearInterval(nextPuzzleCountdownInterval);
+                    // Reload page for next puzzle
+                    location.reload();
+                    return;
+                }
+
+                updateCountdownDisplay(nextTime);
+            }, 1000);
+        }
+
+        function updateCountdownDisplay(nextTime) {
+            const remaining = nextTime - new Date();
+            nextPuzzleCountdownTime.textContent = formatCountdownTime(remaining);
+        }
+
+        function stopNextPuzzleCountdown() {
+            if (nextPuzzleCountdownInterval) {
+                clearInterval(nextPuzzleCountdownInterval);
+                nextPuzzleCountdownInterval = null;
+            }
+            nextPuzzleCountdown.classList.remove('show');
+        }
+
+        // Keep the completion circle exactly over the puzzle circle
+        function syncCompletionToPuzzle() {
+            if (!completionModal.classList.contains('show')) return;
+            const rect = puzzleContainer.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+            completionModal.style.setProperty('--completion-size', `${Math.min(rect.width, rect.height)}px`);
+            completionModal.style.left = `${rect.left + rect.width / 2}px`;
+            completionModal.style.top = `${rect.top + rect.height / 2}px`;
+        }
+
+        function showCompletionModal(message) {
+            completionMessage.textContent = message || 'You\'ve completed all puzzles in this album!';
+            completionModal.classList.add('show');
+            syncCompletionToPuzzle();
+        }
+
+        window.addEventListener('resize', syncCompletionToPuzzle);
+
+        // ============================================
+        // Puzzle Loading
+        // ============================================
         function parseCustomPuzzle() {
             if (!username || !puzzle) return null;
 
-            const puzzleParts = puzzle.split('_');
+            // Backward compatibility: strip trailing "_image" from old-format URLs
+            const cleanPuzzle = puzzle.replace(/_image$/, '');
+
+            const puzzleParts = cleanPuzzle.split('_');
             if (puzzleParts.length < 2) return null;
 
-            const puzzleId = puzzleParts[0];
-            const puzzleIdFull = `${puzzleParts[0]}_${puzzleParts[1]}`;
-            const noOfLayers = parseInt(puzzleParts[1], 10);
+            // Layer count is always the last segment
+            const noOfLayers = parseInt(puzzleParts[puzzleParts.length - 1], 10);
+            
+            // Full puzzle ID is the entire string (e.g. "2026-02-17_639062871440896545_3" or "A2A3_3")
+            const puzzleIdFull = cleanPuzzle;
+            
+            // Base puzzle ID is everything except the last segment (layer count)
+            const puzzleId = puzzleParts.slice(0, -1).join('_');
 
             return { username, puzzleId, puzzleIdFull, noOfLayers };
         }
 
+        /**
+         * Extract the filename base from a puzzle ID by stripping the layer suffix.
+         * Folder = {userId}/{puzzleId}/
+         * Filename = {imageBase}_{layerIndex}.png
+         * 
+         * Examples:
+         *   "639062871440896545_3"                -> "639062871440896545"
+         *   "2026-02-16_639062871440896545_3"     -> "2026-02-16_639062871440896545"
+         *   "abcd_639062871440896545_3"           -> "abcd_639062871440896545"
+         */
+        function extractImageBase(puzzleId) {
+            const lastUnderscore = puzzleId.lastIndexOf('_');
+            if (lastUnderscore > 0) {
+                return puzzleId.substring(0, lastUnderscore);
+            }
+            return puzzleId;
+        }
+
+        function loadPuzzle(userId, puzzleId, layers) {
+            console.log(`Loading puzzle: userId=${userId}, puzzleId=${puzzleId}, layers=${layers}`);
+            
+            totalLayers = layers;
+            puzzleContainer.setAttribute('layers', layers);
+            puzzleContainer.setAttribute('user-id', userId);
+            puzzleContainer.setAttribute('puzzle-id', puzzleId);
+            puzzleContainer.setAttribute('image-base', extractImageBase(puzzleId));
+            puzzleContainer.setAttribute('puzzle-type','user');
+        }
+
+        async function initFromSubdomain(subdomain) {
+            try {
+                showLoading(MESSAGES.LOADING_ALBUM);
+                
+                const data = await albumResolver.resolve(subdomain);
+                
+                currentAlbum = data.album;
+                currentUserId = data.userId;
+                currentSubdomain = subdomain;
+                isAlbumMode = true;
+
+                // Calculate puzzle index
+                const progress = gameManager.getProgress(subdomain);
+                currentPuzzleIndex = albumResolver.calculatePuzzleIndex(currentAlbum, progress);
+
+                const currentPuzzle = currentAlbum.Puzzles[currentPuzzleIndex];
+                if (!currentPuzzle) {
+                    throw new Error(MESSAGES.ERROR_LOAD_FAILED);
+                }
+
+                // Extract layer count from puzzle ID (format: name_layers)
+                const puzzleParts = currentPuzzle.PuzzleId.split('_');
+                const layers = parseInt(puzzleParts[puzzleParts.length - 1], 10) || 3;
+
+                // Load the puzzle
+                loadPuzzle(currentUserId, currentPuzzle.PuzzleId, layers);
+
+                // Update UI - show album name as title, puzzle progress as subtitle
+                const totalPuzzles = currentAlbum.Puzzles.length;
+                const puzzleNumber = currentPuzzleIndex + 1; // 1-based for display
+                
+                branding.setAttribute('title', currentAlbum.Name || 'Album');
+                branding.setAttribute('version', ''); // Hide version for albums
+                
+                if (currentAlbum.Type === 'GENAI') {
+                    branding.updateSubtitle("Today's AI Puzzle");
+                } else {
+                    branding.updateSubtitle(`Puzzle ${puzzleNumber} of ${totalPuzzles}`);
+                }
+                
+                // Store puzzle info for showing on solve (not immediately)
+                // Fall back to album description if puzzle has no description
+                const puzzleDesc = currentPuzzle.Description || currentAlbum.Description || '';
+                storePuzzleInfo(currentPuzzle.Title, puzzleDesc);
+
+                // Update share URL
+                const isPrimaryDomain = subdomain === '@';
+                const albumShareUrl = isPrimaryDomain 
+                    ? 'https://play.stakcos.com' 
+                    : `https://${subdomain}.play.stakcos.com`;
+                shareWindow.setAttribute('share-url', albumShareUrl);
+
+                // Show freeplay navigation if applicable
+                if (currentAlbum.Type === 'FREEPLAY') {
+                    showFreeplayNav();
+                }
+
+                // Analytics: init with album context
+                window.stakcoAnalytics.init({
+                    puzzleId: currentPuzzle.PuzzleId,
+                    userId: currentUserId,
+                    albumId: currentAlbum.Id || currentAlbum.Name,
+                    albumName: currentAlbum.Name,
+                    albumType: currentAlbum.Type,
+                    subdomain: subdomain,
+                    puzzleIndex: currentPuzzleIndex,
+                    totalPuzzles: currentAlbum.Puzzles.length,
+                    layerCount: layers,
+                    puzzleTitle: currentPuzzle.Title || '',
+                    isDaily: subdomain === '@',
+                    isAlbumMode: true,
+                    isGenAI: currentAlbum.Type === 'GENAI',
+                    isUrlParams: false
+                });
+
+                // hideLoading will be called by puzzle-ready event
+                
+                console.log(`Loaded album puzzle: ${currentPuzzle.PuzzleId} (index ${currentPuzzleIndex})`);
+
+            } catch (error) {
+                console.error('Failed to load album:', error);
+                showError(error.message || MESSAGES.ERROR_LOAD_FAILED);
+                window.stakcoAnalytics.trackError('album_load_failed', error.message || 'unknown', subdomain);
+            }
+        }
+
+        async function initFromUrlParams() {
+            const customPuzzle = parseCustomPuzzle();
+            if (customPuzzle) {
+                showLoading(MESSAGES.LOADING_USER);
+                loadPuzzle(customPuzzle.username, customPuzzle.puzzleIdFull, customPuzzle.noOfLayers);
+                branding.updateSubtitle('User Puzzle');
+
+                // Analytics: init with URL params context
+                window.stakcoAnalytics.init({
+                    puzzleId: customPuzzle.puzzleIdFull,
+                    userId: customPuzzle.username,
+                    layerCount: customPuzzle.noOfLayers,
+                    isUrlParams: true,
+                    isDaily: false,
+                    isAlbumMode: false
+                });
+
+                // hideLoading will be called by puzzle-ready event
+            }
+        }
+
+        function initDefaultPuzzle() {
+            // Load default daily puzzle
+            showLoading(MESSAGES.LOADING_DAILY);
+            
+            // Set default puzzle attributes
+            const defaultUserId = CONFIG.DEFAULT_USER_ID;
+            const defaultPuzzleId = CONFIG.DEFAULT_PUZZLE_ID;
+            const defaultLayers = CONFIG.DEFAULT_LAYERS;
+            
+            puzzleContainer.setAttribute('layers', defaultLayers);
+            puzzleContainer.setAttribute('user-id', defaultUserId);
+            puzzleContainer.setAttribute('puzzle-id', defaultPuzzleId);
+            puzzleContainer.setAttribute('puzzle-type', 'play');
+            
+            branding.updateSubtitle('Daily Puzzle');
+
+            // Analytics: init with default daily context
+            window.stakcoAnalytics.init({
+                puzzleId: defaultPuzzleId,
+                userId: defaultUserId,
+                layerCount: defaultLayers,
+                isDaily: true,
+                isAlbumMode: false
+            });
+
+            // hideLoading will be called by puzzle-ready event
+        }
+
+        // ============================================
+        // Main Init
+        // ============================================
         async function init() {
             // Prevent zoom on mobile
             StakcoUtils.preventZoom();
 
-            // Parse custom puzzle if provided
-            const customPuzzle = parseCustomPuzzle();
-            if (customPuzzle) {
-                totalLayers = customPuzzle.noOfLayers;
-                puzzleContainer.setAttribute('layers', totalLayers);
-                puzzleContainer.setAttribute('user-id', customPuzzle.username);
-                puzzleContainer.setAttribute('puzzle-id', customPuzzle.puzzleIdFull);
-                puzzleContainer.setAttribute('puzzle-type', 'user');
-                layerControls.setAttribute('layers', totalLayers);
+            // Setup event listeners FIRST (before loading puzzles)
+            setupEventListeners();
+
+            // Check for subdomain first
+            const subdomain = albumResolver.getSubdomain();
+            
+            if (subdomain) {
+                // Album mode via subdomain
+                await initFromSubdomain(subdomain);
+            } else if (hasUrlParams) {
+                // Legacy URL parameter mode
+                await initFromUrlParams();
+            } else {
+                // Primary domain (play.stakcos.com) â€” try loading album via "@" key
+                try {
+                    await initFromSubdomain('@');
+                } catch (error) {
+                    console.warn('No primary album configured, falling back to default puzzle:', error.message);
+                    initDefaultPuzzle();
+                }
             }
 
-            setupEventListeners();
             gameManager.loadAttempts(dateStr);
         }
 
+        // Simulation mode: disable solve detection, hide solve button & countdown
+        if (isSimMode) {
+            puzzleContainer.checkAlignment = () => false;
+            solveButton.style.display = 'none';
+            countdown.style.display = 'none';
+            console.log('Simulation mode active — solve detection disabled');
+        }
+
+        // ============================================
+        // Event Handlers
+        // ============================================
+        let loadingHidden = false;
+        
         function setupEventListeners() {
-            // Puzzle container events (like azimuth)
+            // Puzzle container events
             puzzleContainer.addEventListener('puzzle-ready', () => {
-                console.log('Puzzle ready');
+                console.log('Puzzle ready event fired');
+                if (!loadingHidden) {
+                    loadingHidden = true;
+                    hideLoading();
+                }
+                // Sim mode: reset all layers to 0° (no shuffle)
+                if (isSimMode) {
+                    for (let i = 1; i <= totalLayers; i++) {
+                        puzzleContainer.setLayerRotation(i, 0);
+                    }
+                }
+                // Trigger white background fade-in inside shadow DOM
+                fadeInPuzzleBackground();
+                window.stakcoAnalytics.puzzleReady();
             });
+
+            // Fallback: Hide loading after timeout if puzzle-ready doesn't fire
+            // This handles cases where the web component doesn't emit the event
+            setTimeout(() => {
+                if (!loadingHidden) {
+                    console.log('Fallback: hiding loading after timeout');
+                    loadingHidden = true;
+                    hideLoading();
+                    // Trigger white background fade-in inside shadow DOM
+                    fadeInPuzzleBackground();
+                }
+            }, 3000);
 
             puzzleContainer.addEventListener('layer-switched', (e) => {
                 console.log('Layer switched:', e.detail.layer);
+                updateActiveLabelVisual(e.detail.layer);
             });
 
             puzzleContainer.addEventListener('layer-rotated', (e) => {
-                puzzleContainer.checkAlignment();
+                // Don't check alignment mid-drag — checked on drag release instead
             });
 
             puzzleContainer.addEventListener('puzzle-solved', (e) => {
+                // In sim mode, ignore solve events entirely
+                if (isSimMode) return;
+
+                // Normalize each layer's rotation to shortest path to 0° BEFORE
+                // the CDN component applies its snap-to-zero CSS transition.
+                // Without this, a layer at e.g. 316° (= -44°) would animate
+                // the long way: 316° → 360°/0°, instead of 316° → 272° ... no.
+                // CSS transitions go from current numeric value to target (0).
+                // 316 → 0 = -316° (long). Fix: set transform to -44deg first (no transition),
+                // then CDN's transition from -44 → 0 is only 44°.
+                const shadowRoot = puzzleContainer.shadowRoot;
+                if (shadowRoot) {
+                    const puzzleLayers = shadowRoot.querySelectorAll('.puzzle-layer');
+                    puzzleLayers.forEach(layer => {
+                        const style = layer.style.transform || '';
+                        const match = style.match(/rotate\(([-\d.]+)deg\)/);
+                        if (match) {
+                            let deg = parseFloat(match[1]);
+                            // Normalize to [-180, 180] for shortest path to 0
+                            deg = ((deg % 360) + 360) % 360; // bring to [0, 360)
+                            if (deg > 180) deg -= 360;       // bring to (-180, 180]
+                            // Replace transform without transition so CDN animates from here
+                            layer.style.transition = 'none';
+                            layer.style.transform = layer.style.transform.replace(
+                                /rotate\(([-\d.]+)deg\)/,
+                                `rotate(${deg}deg)`
+                            );
+                            // Force reflow so the browser registers the new value
+                            layer.getBoundingClientRect();
+                        }
+                    });
+                }
+
+                // Hide edge indicators on solve
+                hideEdgeIndicators();
+
                 solvePuzzle(e.detail.layers);
             });
 
-            // Drag events - attach to puzzle container's internal container
+            // Drag events + layer label setup
             setTimeout(() => {
                 const shadowRoot = puzzleContainer.shadowRoot;
                 if (shadowRoot) {
@@ -432,56 +1377,295 @@
                         container.addEventListener('wheel', handleScroll, { passive: false });
                         container.addEventListener('contextmenu', handleRightClick);
                     }
+
+                    // Inject CSS to enhance layer labels (2x size, always on top)
+                    const labelStyle = document.createElement('style');
+                    labelStyle.textContent = `
+                        .layer-label {
+                            /* Hide original labels — we'll clone them into top-layer */
+                            display: none !important;
+                        }
+                        /* Overlay labels live in top-layer */
+                        .stakco-edge-indicator {
+                            position: absolute;
+                            width: 44px;
+                            height: 44px;
+                            border-radius: 50%;
+                            background: rgba(0, 0, 0, 0.55);
+                            backdrop-filter: blur(6px);
+                            -webkit-backdrop-filter: blur(6px);
+                            border: 2.5px solid rgba(255,255,255,0.5);
+                            box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+                            color: white;
+                            font-family: 'Inter', sans-serif;
+                            font-size: 18px;
+                            font-weight: 700;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            cursor: pointer;
+                            user-select: none;
+                            -webkit-user-select: none;
+                            touch-action: none;
+                            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+                            /* top-layer is at 50%/50%, so offset by -22px to center the bubble */
+                            transform: translate(-50%, -50%);
+                            pointer-events: all;
+                        }
+                        .stakco-edge-indicator:hover {
+                            background: rgba(249, 167, 68, 0.35);
+                            border-color: rgba(249, 167, 68, 0.8);
+                            box-shadow: 0 4px 18px rgba(249,167,68,0.4);
+                        }
+                        .stakco-edge-indicator.label-active {
+                            background: rgba(249, 167, 68, 0.5);
+                            border-color: rgba(249, 167, 68, 1);
+                            box-shadow: 0 4px 20px rgba(249,167,68,0.5);
+                        }
+                        .stakco-edge-indicator.label-dragging {
+                            background: rgba(249, 167, 68, 0.6);
+                            border-color: #f9a743;
+                            box-shadow: 0 6px 24px rgba(249,167,68,0.6);
+                        }
+                        /* top-layer needs pointer-events and overflow visible */
+                        #top-layer {
+                            pointer-events: none;
+                            overflow: visible !important;
+                        }
+                    `;
+                    shadowRoot.appendChild(labelStyle);
+
+                    // Bind layer label interactions
+                    setupLayerLabelInteractions(shadowRoot);
                 }
             }, 100);
 
             // Keyboard controls
             document.addEventListener('keydown', handleKeyboard);
 
-            // Layer controls (like azimuth)
-            layerControls.addEventListener('layerchange', (e) => {
-                puzzleContainer.switchLayer(e.detail.layer);
-            });
-
             // Orientation overlay events
             orientationOverlay.addEventListener('blocked', () => {
                 if (countdown && countdown.active) {
                     countdown.pause();
                 }
+                window.stakcoAnalytics.trackOrientationBlocked();
             });
 
             orientationOverlay.addEventListener('unblocked', () => {
                 if (countdown && countdown.paused) {
                     countdown.resume();
                 }
+                window.stakcoAnalytics.trackOrientationUnblocked();
             });
 
-            // Solve button
+            // Buttons
             solveButton.addEventListener('click', () => solvePuzzle(null, true));
-
-            // Replay button
             replayButton.addEventListener('click', remixPuzzle);
+            nextPuzzleButton.addEventListener('click', loadNextPuzzle);
 
-            // Share button
-            shareButton.addEventListener('share-clicked', handleShare);
+            // Freeplay navigation buttons
+            prevPuzzleBtn.addEventListener('click', () => navigateToPuzzle(currentPuzzleIndex - 1));
+            nextPuzzleBtn.addEventListener('click', () => navigateToPuzzle(currentPuzzleIndex + 1));
         }
 
-        function handleFirstInteraction() {
-            if (!firstInteractionOccurred && !hasUrlParams && !puzzleContainer.isSolved && !orientationOverlay.isBlocked()) {
+        // ============================================
+        // Layer Label (Edge Indicator) Interactions
+        // ============================================
+
+        let labelShadowRoot = null;
+
+        let edgeIndicatorRafId = null;
+
+        function setupLayerLabelInteractions(shadowRoot) {
+            labelShadowRoot = shadowRoot;
+            
+            // Cancel any previous animation loop
+            if (edgeIndicatorRafId) {
+                cancelAnimationFrame(edgeIndicatorRafId);
+                edgeIndicatorRafId = null;
+            }
+
+            const topLayer = shadowRoot.querySelector('#top-layer');
+            if (!topLayer) return;
+
+            // Make top-layer a valid positioning context with overflow visible
+            topLayer.style.cssText += 'pointer-events: none; overflow: visible; position: absolute;';
+
+            const puzzleLayers = shadowRoot.querySelectorAll('.puzzle-layer');
+            const overlayIndicators = [];
+
+            puzzleLayers.forEach((puzzleLayer, index) => {
+                const layerNum = index + 1;
+
+                // Create overlay bubble in top-layer
+                const indicator = document.createElement('div');
+                indicator.className = 'stakco-edge-indicator';
+                indicator.textContent = String(layerNum);
+                indicator.dataset.layer = layerNum;
+                topLayer.appendChild(indicator);
+
+                // Random fixed offset so bubbles never all converge at the same spot,
+                // making the solution unpredictable from bubble positions alone.
+                // Spread evenly around the circle with some random jitter.
+                const baseSpread = (360 / puzzleLayers.length) * index;
+                const jitter = isSimMode ? 0 : (Math.random() - 0.5) * 80; // ±40° jitter (disabled in sim mode)
+                const angleOffset = baseSpread + jitter;
+
+                overlayIndicators.push({ indicator, puzzleLayer, layerNum, angleOffset });
+
+                // Pointer interactions
+                let dragStarted = false;
+                let dragAngle = 0;
+                let pointerStartX = 0;
+                let pointerStartY = 0;
+                const DRAG_THRESHOLD = 5;
+
+                indicator.addEventListener('pointerdown', (e) => {
+                    if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
+                    e.stopPropagation();
+                    e.preventDefault();
+                    indicator.setPointerCapture(e.pointerId);
+                    isDraggingIndicator = true; // Block container touch handlers on mobile
+                    dragStarted = false;
+                    pointerStartX = e.clientX;
+                    pointerStartY = e.clientY;
+                    dragAngle = getAngleFromEvent(e, e.clientX, e.clientY);
+                    if (HapticEngine) HapticEngine.reset();
+                    indicator.classList.add('label-dragging');
+                    window.stakcoAnalytics.dragStart();
+                }, { passive: false });
+
+                indicator.addEventListener('pointermove', (e) => {
+                    if (!indicator.hasPointerCapture(e.pointerId)) return;
+                    if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
+                    const dx = e.clientX - pointerStartX;
+                    const dy = e.clientY - pointerStartY;
+                    if (!dragStarted && Math.sqrt(dx * dx + dy * dy) > DRAG_THRESHOLD) {
+                        dragStarted = true;
+                        handleFirstInteraction('indicator');
+                        puzzleContainer.switchLayer(layerNum);
+                        updateActiveLabelVisual(layerNum);
+                    }
+                    if (dragStarted) {
+                        const currentAngle = getAngleFromEvent(e, e.clientX, e.clientY);
+                        let deltaAngle = currentAngle - dragAngle;
+                        if (deltaAngle > 180) deltaAngle -= 360;
+                        if (deltaAngle < -180) deltaAngle += 360;
+                        puzzleContainer.rotateCurrentLayer(deltaAngle);
+                        dragAngle = currentAngle;
+                        if (HapticEngine) HapticEngine.onRotate(deltaAngle, puzzleContainer.getLayerRotation ? puzzleContainer.getLayerRotation() : undefined);
+                        window.stakcoAnalytics.trackRotation(layerNum, 'indicator', deltaAngle);
+                    }
+                }, { passive: false });
+
+                indicator.addEventListener('pointerup', () => {
+                    isDraggingIndicator = false;
+                    indicator.classList.remove('label-dragging');
+                    if (!dragStarted) {
+                        handleFirstInteraction('indicator');
+                        const fromLayer = puzzleContainer.currentLayer;
+                        puzzleContainer.switchLayer(layerNum);
+                        updateActiveLabelVisual(layerNum);
+                        window.stakcoAnalytics.trackLayerSwitch(fromLayer, layerNum, 'indicator');
+                    } else {
+                        puzzleContainer.checkAlignment();
+                    }
+                    window.stakcoAnalytics.dragEnd();
+                });
+
+                indicator.addEventListener('pointercancel', () => {
+                    isDraggingIndicator = false;
+                    indicator.classList.remove('label-dragging');
+                });
+            });
+
+            // Store overlay refs globally for updateActiveLabelVisual
+            labelShadowRoot._overlayIndicators = overlayIndicators;
+
+            // Animation loop: sync indicator positions to layer rotation
+            function getLayerRotationDeg(puzzleLayer) {
+                const style = puzzleLayer.style.transform || '';
+                // Format: translate(-50%, -50%) rotate(Xdeg)
+                const match = style.match(/rotate\(([-\d.]+)deg\)/);
+                return match ? parseFloat(match[1]) : 0;
+            }
+
+            function syncIndicators() {
+                // Get container size to find radius
+                const container = shadowRoot.querySelector('.container');
+                if (!container) {
+                    edgeIndicatorRafId = requestAnimationFrame(syncIndicators);
+                    return;
+                }
+                const containerRect = container.getBoundingClientRect();
+                const radius = containerRect.width / 2;
+                // top-layer is 100%x100% inside container, centered at 50%/50%
+                const cx = containerRect.width / 2;
+                const cy = containerRect.height / 2;
+
+                overlayIndicators.forEach(({ indicator, puzzleLayer, angleOffset }) => {
+                    const deg = getLayerRotationDeg(puzzleLayer);
+                    const rad = (deg + angleOffset - 90) * (Math.PI / 180); // -90 so 0deg = top
+                    const x = cx + radius * Math.cos(rad);
+                    const y = cy + radius * Math.sin(rad);
+                    indicator.style.left = `${x}px`;
+                    indicator.style.top = `${y}px`;
+                });
+
+                edgeIndicatorRafId = requestAnimationFrame(syncIndicators);
+            }
+
+            edgeIndicatorRafId = requestAnimationFrame(syncIndicators);
+
+            // Set initial active visual
+            updateActiveLabelVisual(puzzleContainer.currentLayer || 1);
+        }
+
+        function updateActiveLabelVisual(activeLayerNum) {
+            if (!labelShadowRoot) return;
+            const overlays = labelShadowRoot._overlayIndicators;
+            if (!overlays) return;
+            overlays.forEach(({ indicator, layerNum }) => {
+                indicator.classList.toggle('label-active', layerNum === activeLayerNum);
+            });
+        }
+
+        function hideEdgeIndicators() {
+            if (!labelShadowRoot) return;
+            const overlays = labelShadowRoot._overlayIndicators;
+            if (!overlays) return;
+            // Stop the RAF sync loop
+            if (edgeIndicatorRafId) {
+                cancelAnimationFrame(edgeIndicatorRafId);
+                edgeIndicatorRafId = null;
+            }
+            overlays.forEach(({ indicator }) => {
+                indicator.style.transition = 'opacity 0.4s ease';
+                indicator.style.opacity = '0';
+                indicator.style.pointerEvents = 'none';
+            });
+        }
+
+        function handleFirstInteraction(method = 'unknown') {
+            if (!firstInteractionOccurred && !puzzleContainer.isSolved && !orientationOverlay.isBlocked()) {
                 firstInteractionOccurred = true;
-                countdown.start();
+                if (!isSimMode) countdown.start();
                 branding.hide();
+                puzzleInfo.classList.remove('show'); // Hide puzzle info when playing
                 infoPanel.setContent('<p>Drag active - Align all layers to solve!</p>');
+                window.stakcoAnalytics.firstInteraction(method);
             }
         }
 
         function startDrag(e) {
             if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
             e.preventDefault();
-            handleFirstInteraction();
+            handleFirstInteraction('drag');
             isDragging = true;
             e.target.closest('.container').style.cursor = 'grabbing';
             lastAngle = getAngleFromEvent(e, e.clientX, e.clientY);
+            if (HapticEngine) HapticEngine.reset();
+            window.stakcoAnalytics.dragStart();
         }
 
         function handleDrag(e) {
@@ -491,16 +1675,17 @@
             const currentAngle = getAngleFromEvent(e, e.clientX, e.clientY);
             let deltaAngle = currentAngle - lastAngle;
             
-            // Normalize angle delta
             if (deltaAngle > 180) deltaAngle -= 360;
             if (deltaAngle < -180) deltaAngle += 360;
 
-            // Use the same method as azimuth
             puzzleContainer.rotateCurrentLayer(deltaAngle);
             lastAngle = currentAngle;
+            if (HapticEngine) HapticEngine.onRotate(deltaAngle, puzzleContainer.getLayerRotation ? puzzleContainer.getLayerRotation() : undefined);
+            window.stakcoAnalytics.trackRotation(puzzleContainer.currentLayer, 'drag', deltaAngle);
         }
 
         function endDrag() {
+            if (!isDragging) return;
             isDragging = false;
             const shadowRoot = puzzleContainer.shadowRoot;
             if (shadowRoot) {
@@ -509,18 +1694,24 @@
                     container.style.cursor = 'grab';
                 }
             }
+            puzzleContainer.checkAlignment();
+            window.stakcoAnalytics.dragEnd();
         }
 
         function startTouch(e) {
             if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
+            if (isDraggingIndicator) return; // Indicator handles its own drag
             e.preventDefault();
-            handleFirstInteraction();
+            handleFirstInteraction('touch');
             isDragging = true;
             const touch = e.touches[0];
             lastAngle = getAngleFromEvent(e, touch.clientX, touch.clientY);
+            if (HapticEngine) HapticEngine.reset();
+            window.stakcoAnalytics.dragStart();
         }
 
         function handleTouch(e) {
+            if (isDraggingIndicator) return; // Indicator handles its own rotation — skip to prevent double-rotation on mobile
             if (!isDragging || puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
             e.preventDefault();
 
@@ -528,16 +1719,20 @@
             const currentAngle = getAngleFromEvent(e, touch.clientX, touch.clientY);
             let deltaAngle = currentAngle - lastAngle;
             
-            // Normalize angle delta
             if (deltaAngle > 180) deltaAngle -= 360;
             if (deltaAngle < -180) deltaAngle += 360;
 
             puzzleContainer.rotateCurrentLayer(deltaAngle);
             lastAngle = currentAngle;
+            if (HapticEngine) HapticEngine.onRotate(deltaAngle, puzzleContainer.getLayerRotation ? puzzleContainer.getLayerRotation() : undefined);
+            window.stakcoAnalytics.trackRotation(puzzleContainer.currentLayer, 'touch', deltaAngle);
         }
 
         function endTouch() {
+            if (!isDragging) return;
             isDragging = false;
+            puzzleContainer.checkAlignment();
+            window.stakcoAnalytics.dragEnd();
         }
 
         function getAngleFromEvent(e, clientX, clientY) {
@@ -556,8 +1751,22 @@
         function handleKeyboard(e) {
             if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
 
-            if (!firstInteractionOccurred && (e.key === 'ArrowLeft' || e.key === 'ArrowRight' || e.key === 'ArrowUp' || e.key === 'ArrowDown')) {
-                handleFirstInteraction();
+            if (!firstInteractionOccurred && ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) {
+                handleFirstInteraction('keyboard');
+            }
+
+            // Freeplay navigation with Shift + Arrow keys
+            if (isAlbumMode && currentAlbum && currentAlbum.Type === 'FREEPLAY') {
+                if (e.shiftKey && e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    navigateToPuzzle(currentPuzzleIndex - 1);
+                    return;
+                }
+                if (e.shiftKey && e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    navigateToPuzzle(currentPuzzleIndex + 1);
+                    return;
+                }
             }
 
             const keyActions = {
@@ -565,32 +1774,95 @@
                     const currentLayer = puzzleContainer.currentLayer;
                     const nextLayer = (currentLayer % totalLayers) + 1;
                     puzzleContainer.switchLayer(nextLayer);
-                    layerControls.setActiveLayer(nextLayer); // Sync UI
+                    window.stakcoAnalytics.trackLayerSwitch(currentLayer, nextLayer, 'keyboard');
                 },
-                'ArrowLeft': () => puzzleContainer.rotateCurrentLayer(-CONFIG.ROTATION_STEP_LARGE),
-                'ArrowRight': () => puzzleContainer.rotateCurrentLayer(CONFIG.ROTATION_STEP_LARGE),
-                'ArrowUp': () => puzzleContainer.rotateCurrentLayer(CONFIG.ROTATION_STEP_SMALL),
-                'ArrowDown': () => puzzleContainer.rotateCurrentLayer(-CONFIG.ROTATION_STEP_SMALL)
+                'ArrowLeft': () => {
+                    puzzleContainer.rotateCurrentLayer(-CONFIG.ROTATION_STEP_LARGE);
+                    window.stakcoAnalytics.trackRotation(puzzleContainer.currentLayer, 'keyboard');
+                },
+                'ArrowRight': () => {
+                    puzzleContainer.rotateCurrentLayer(CONFIG.ROTATION_STEP_LARGE);
+                    window.stakcoAnalytics.trackRotation(puzzleContainer.currentLayer, 'keyboard');
+                },
+                'ArrowUp': () => {
+                    puzzleContainer.rotateCurrentLayer(CONFIG.ROTATION_STEP_SMALL);
+                    window.stakcoAnalytics.trackRotation(puzzleContainer.currentLayer, 'keyboard');
+                },
+                'ArrowDown': () => {
+                    puzzleContainer.rotateCurrentLayer(-CONFIG.ROTATION_STEP_SMALL);
+                    window.stakcoAnalytics.trackRotation(puzzleContainer.currentLayer, 'keyboard');
+                }
             };
 
             if (keyActions[e.key]) {
                 e.preventDefault();
                 keyActions[e.key]();
+                puzzleContainer.checkAlignment();
             } else if (!isNaN(e.key)) {
                 const num = parseInt(e.key);
                 if (num >= 1 && num <= totalLayers) {
+                    const fromLayer = puzzleContainer.currentLayer;
                     puzzleContainer.switchLayer(num);
-                    layerControls.setActiveLayer(num); // Sync UI
+                    window.stakcoAnalytics.trackLayerSwitch(fromLayer, num, 'keyboard');
                 }
             }
+        }
+
+        // ============================================
+        // Freeplay Navigation
+        // ============================================
+        function showFreeplayNav() {
+            prevPuzzleBtn.classList.add('show');
+            nextPuzzleBtn.classList.add('show');
+            updateFreeplayNavState();
+        }
+
+        function hideFreeplayNav() {
+            prevPuzzleBtn.classList.remove('show');
+            nextPuzzleBtn.classList.remove('show');
+        }
+
+        function updateFreeplayNavState() {
+            if (!currentAlbum) return;
+            
+            const totalPuzzles = currentAlbum.Puzzles.length;
+            
+            // Disable prev if at first puzzle
+            prevPuzzleBtn.disabled = currentPuzzleIndex <= 0;
+            
+            // Disable next if at last puzzle
+            nextPuzzleBtn.disabled = currentPuzzleIndex >= totalPuzzles - 1;
+        }
+
+        function navigateToPuzzle(newIndex) {
+            if (!currentAlbum || !isAlbumMode) return;
+            
+            const totalPuzzles = currentAlbum.Puzzles.length;
+            
+            // Bounds check
+            if (newIndex < 0 || newIndex >= totalPuzzles) return;
+
+            // Analytics: track freeplay navigation
+            window.stakcoAnalytics.trackFreeplayNavigation(
+                newIndex > currentPuzzleIndex ? 'next' : 'prev',
+                currentPuzzleIndex,
+                newIndex
+            );
+            
+            // Update URL with new puzzle index and reload
+            const url = new URL(window.location.href);
+            url.searchParams.set('p', newIndex);
+            window.location.href = url.toString();
         }
 
         function handleScroll(e) {
             if (puzzleContainer.isSolved || orientationOverlay.isBlocked()) return;
             e.preventDefault();
-            handleFirstInteraction();
+            handleFirstInteraction('scroll');
             const delta = e.deltaY > 0 ? CONFIG.ROTATION_STEP_SMALL : -CONFIG.ROTATION_STEP_SMALL;
             puzzleContainer.rotateCurrentLayer(delta);
+            puzzleContainer.checkAlignment();
+            window.stakcoAnalytics.trackRotation(puzzleContainer.currentLayer, 'scroll', delta);
         }
 
         function handleRightClick(e) {
@@ -599,61 +1871,123 @@
             const currentLayer = puzzleContainer.currentLayer;
             const nextLayer = (currentLayer % totalLayers) + 1;
             puzzleContainer.switchLayer(nextLayer);
-            layerControls.setActiveLayer(nextLayer); // Sync UI
+            window.stakcoAnalytics.trackLayerSwitch(currentLayer, nextLayer, 'rightclick');
         }
 
+        // ============================================
+        // Puzzle Completion
+        // ============================================
         function solvePuzzle(layerImages, simulate = false) {
             console.log('Puzzle solved!');
             const finalTime = countdown.getTime();
 
             countdown.stop();
 
-            if (navigator.vibrate) {
+            if (HapticEngine) {
+                HapticEngine.onSolve();
+            } else if (navigator.vibrate) {
                 navigator.vibrate(CONFIG.VIBRATION_PATTERN);
             }
 
-            layerControls.hide();
             infoPanel.collapse();
             solveButton.style.display = 'none';
 
             if (!simulate) {
-                shareButton.show();
                 gameManager.saveAttempt(dateStr, true, finalTime);
                 performanceText = gameManager.generatePerformanceText(dateStr, finalTime);
-                
-                // Update share window text
-                const shareText = `Solved in ${finalTime} • ${performanceText}`;
-                shareWindow.querySelector('[slot="text"]').textContent = shareText;
+
+                // Analytics: puzzle solved
+                window.stakcoAnalytics.puzzleSolved(finalTime, false);
+
+                // Analytics: attempt stats
+                const dayData = gameManager.loadAttempts(dateStr);
+                const attemptNum = dayData.attemptCount || 1;
+                const prevBest = gameManager.getBestAttemptForDate(dateStr);
+                window.stakcoAnalytics.trackAttemptStats(
+                    dateStr,
+                    attemptNum,
+                    attemptNum === 1,
+                    prevBest ? prevBest.timeInSeconds : null
+                );
+
+                // Show floating share button
+                showFloatingShareButton();
+
+                // Show puzzle info overlay after delay (for albums with title/description)
+                if (isAlbumMode && currentAlbum) {
+                    showPuzzleInfoOnSolve();
+                    showStoryToggleButton();
+                    
+                    // Start countdown for time-driven albums
+                    const albumType = currentAlbum.Type || currentAlbum.type;
+                    console.log(`[solve] albumType="${albumType}", isTimeDriven=${isTimeDrivenAlbum(albumType)}`);
+                    if (isTimeDrivenAlbum(albumType)) {
+                        startNextPuzzleCountdown(albumType);
+                    }
+                } else {
+                    // Default daily puzzle (play.stakcos.com) Ã¢â‚¬â€ show countdown to next day
+                    startNextPuzzleCountdown('DAY_OF_YEAR');
+                }
+
+                // Handle album types
+                if (isAlbumMode && currentAlbum) {
+                    if (currentAlbum.Type === 'SEQUENTIAL') {
+                        handleSequentialComplete();
+                    } else if (currentAlbum.Type === 'FREEPLAY') {
+                        showFreeplayNav();
+                    }
+                }
             } else {
+                // Analytics: simulated solve
+                window.stakcoAnalytics.puzzleSolved(finalTime, true);
                 replayButton.classList.add('show');
             }
         }
 
+        function handleSequentialComplete() {
+            const nextIndex = currentPuzzleIndex + 1;
+            
+            if (nextIndex >= currentAlbum.Puzzles.length) {
+                // Album complete!
+                showCompletionModal(currentAlbum.CompletionMessage);
+                gameManager.resetProgress(currentSubdomain);
+                window.stakcoAnalytics.trackSequentialProgress(nextIndex, currentAlbum.Puzzles.length, true);
+                window.stakcoAnalytics.trackAlbumCompletion(currentAlbum.Name, currentAlbum.Type, currentAlbum.Puzzles.length);
+            } else {
+                // Save progress and show next button
+                gameManager.saveProgress(currentSubdomain, nextIndex);
+                nextPuzzleButton.classList.add('show');
+                window.stakcoAnalytics.trackSequentialProgress(nextIndex, currentAlbum.Puzzles.length, false);
+            }
+        }
+
+        function loadNextPuzzle() {
+            // Reload page to load next puzzle in sequence
+            location.reload();
+        }
+
         function remixPuzzle() {
+            window.stakcoAnalytics.trackReplay();
             location.reload();
         }
 
         function handleShare() {
-            const finalTime = countdown.getTime();
-            const shareText = performanceText || `Solved in ${finalTime}`;
+            const shareData = generateShareData();
             
-            // Get layer images from puzzle container
-            const layerImages = [];
-            if (puzzleContainer.puzzleLayers) {
-                Object.keys(puzzleContainer.puzzleLayers).forEach(key => {
-                    if (puzzleContainer.puzzleLayers[key].url) {
-                        layerImages.push(puzzleContainer.puzzleLayers[key].url);
-                    }
-                });
-            }
+            // Set attributes for fallback
+            shareWindow.setAttribute('share-url', shareData.shareUrl);
+            shareWindow.setAttribute('filename', `stakco-puzzle-${Date.now()}.png`);
             
-            const shareUrlWithParams = CONFIG.SHARE_URL + shareParams;
-            shareWindow.setAttribute('share-url', shareUrlWithParams);
-            shareWindow.setAttribute('filename', `stakco-play-${finalTime.replace(':', '')}.png`);
-            shareWindow.open(layerImages, shareText, true);
+            // Open with new data structure
+            shareWindow.open(shareData, true);
+
+            // Analytics: share triggered
+            window.stakcoAnalytics.trackShare('share_window', shareData);
         }
 
-        // Initialize the app
+        // ============================================
+        // Start App
+        // ============================================
         init();
     </script>
 </body>

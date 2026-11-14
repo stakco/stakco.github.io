@@ -1,8 +1,20 @@
+// stakco-play-html5 
+// src/gameManager.js
+
+/**
+ * GameDataManager - Handles game state persistence
+ * Supports both daily puzzle attempts and sequential album progress
+ */
 class GameDataManager {
     constructor() {
         this.storageKey = 'stakco_game_data';
+        this.progressKey = 'stakco_album_progress';
         this.maxRecords = 30; // Maximum number of date records to keep
     }
+
+    // ============================================
+    // Attempt Tracking (Daily Puzzles)
+    // ============================================
 
     // Load all game data or initialize empty structure
     loadAllGameData() {
@@ -283,6 +295,89 @@ class GameDataManager {
             storageUsed: JSON.stringify(allData).length
         };
     }
+
+    // ============================================
+    // Album Progress Tracking (Sequential Mode)
+    // ============================================
+
+    /**
+     * Get the current progress index for a subdomain (sequential albums)
+     * @param {string} subdomain - The subdomain identifier
+     * @returns {number} The current puzzle index (0-based)
+     */
+    getProgress(subdomain) {
+        try {
+            const data = localStorage.getItem(this.progressKey);
+            if (!data) return 0;
+            const allProgress = JSON.parse(data);
+            return allProgress[subdomain] || 0;
+        } catch (e) {
+            console.error('Error loading album progress:', e);
+            return 0;
+        }
+    }
+
+    /**
+     * Save progress for a subdomain (sequential albums)
+     * @param {string} subdomain - The subdomain identifier
+     * @param {number} index - The puzzle index to save
+     */
+    saveProgress(subdomain, index) {
+        try {
+            const data = localStorage.getItem(this.progressKey);
+            const allProgress = data ? JSON.parse(data) : {};
+            allProgress[subdomain] = index;
+            localStorage.setItem(this.progressKey, JSON.stringify(allProgress));
+            console.log(`Album progress saved: ${subdomain} = ${index}`);
+        } catch (e) {
+            console.error('Error saving album progress:', e);
+        }
+    }
+
+    /**
+     * Reset progress for a subdomain (when album is completed or reset)
+     * @param {string} subdomain - The subdomain identifier
+     */
+    resetProgress(subdomain) {
+        try {
+            const data = localStorage.getItem(this.progressKey);
+            const allProgress = data ? JSON.parse(data) : {};
+            delete allProgress[subdomain];
+            localStorage.setItem(this.progressKey, JSON.stringify(allProgress));
+            console.log(`Album progress reset for: ${subdomain}`);
+        } catch (e) {
+            console.error('Error resetting album progress:', e);
+        }
+    }
+
+    /**
+     * Get all album progress data
+     * @returns {Object} All subdomain progress data
+     */
+    getAllProgress() {
+        try {
+            const data = localStorage.getItem(this.progressKey);
+            return data ? JSON.parse(data) : {};
+        } catch (e) {
+            console.error('Error loading all album progress:', e);
+            return {};
+        }
+    }
+
+    /**
+     * Clear all album progress data
+     */
+    clearAllProgress() {
+        try {
+            localStorage.removeItem(this.progressKey);
+            console.log('All album progress cleared');
+        } catch (e) {
+            console.error('Error clearing album progress:', e);
+        }
+    }
+
+    
+
 }
 
 // Export for ES6 modules and CommonJS

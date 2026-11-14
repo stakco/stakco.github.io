@@ -1,0 +1,892 @@
+/* stakco-play-html5 */
+/* src/play.css */
+
+/* ============================================
+   Base Styles
+   ============================================ */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--text-primary);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+html, body {
+    margin: 0; 
+    height: 100%; 
+    overflow: hidden;
+}
+
+/* Override info panel text color to white */
+stakco-info-panel::part(content) {
+    color: white !important;
+}
+
+button {
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* ============================================
+   Solve Button
+   ============================================ */
+#solve-button {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    height: 50px;
+    width: 100px;
+    transform: translateX(-50%);
+    background: var(--primary-gradient);
+    border: 2px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 8px 20px;
+    font-family: 'Inter', sans-serif;
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-soft);
+    z-index: 800;
+    display: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#solve-button.show {
+    display: block;
+    animation: slideDown 0.5s ease-out 0.2s both;
+}
+
+#solve-button:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    background: rgba(249, 167, 68, 0.1);
+    box-shadow: var(--shadow-glow);
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%);
+    }
+}
+
+/* ============================================
+   Replay Button
+   ============================================ */
+#replay-button {
+    position: absolute;
+    bottom: 20px;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 15px 20px;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    display: none;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+#replay-button.show {
+    display: block;
+}
+
+#replay-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
+}
+
+/* ============================================
+   Next Puzzle Button
+   ============================================ */
+#next-puzzle-button {
+    position: absolute;
+    bottom: 20px;
+    background: var(--primary-gradient);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: none;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+#next-puzzle-button.show {
+    display: block;
+    animation: slideUp 0.5s ease-out;
+}
+
+#next-puzzle-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(249, 167, 68, 0.4);
+}
+
+/* ============================================
+   Freeplay Navigation
+   ============================================ */
+.freeplay-nav {
+    position: absolute;
+    bottom: 100px;  /* Position above layer controls */
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 20px;
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    z-index: 800;
+    backdrop-filter: blur(10px);
+}
+
+.freeplay-nav.show {
+    display: flex;
+}
+
+.freeplay-nav:hover {
+    background: var(--primary-gradient);
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-glow);
+}
+
+.freeplay-nav:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.freeplay-nav:disabled:hover {
+    background: var(--glass-bg);
+    border-color: var(--glass-border);
+    box-shadow: none;
+}
+
+#prev-puzzle-btn {
+    left: 15px;
+}
+
+#next-puzzle-btn {
+    right: 15px;
+}
+
+/* Mobile adjustments for nav buttons */
+@media (max-width: 600px) {
+    .freeplay-nav {
+        bottom: 90px;  /* Adjust for mobile */
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+    }
+
+    #prev-puzzle-btn {
+        left: 10px;
+    }
+
+    #next-puzzle-btn {
+        right: 10px;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ============================================
+   Countdown Timer Colors
+   ============================================ */
+.countdown-green { color: white; }
+.countdown-yellow { color: #ffc947; }
+.countdown-orange { color: #ff9900; }
+.countdown-red { color: #ff4444; }
+
+/* ============================================
+   Error Container
+   ============================================ */
+#error-container {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Match loader-ring / puzzle container size */
+    --error-size: min(90vmin, calc(100vw - 20px), calc(100vh - 200px));
+    width: var(--error-size);
+    height: var(--error-size);
+    border-radius: 50%;
+    background: var(--text-primary);
+    text-align: center;
+    color: white;
+    z-index: 2000;
+}
+
+#error-container.show {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#error-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 5px;
+    background: conic-gradient(
+        from 0deg,
+        #ff6b6b 0deg,
+        #ff6b6b 360deg
+    );
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0.6;
+}
+
+.error-inner {
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    background: rgba(255, 107, 107, 0.03);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    gap: 15px;
+}
+
+.error-icon {
+    color: #ff6b6b;
+    font-size: 60px;
+    opacity: 0.8;
+}
+
+#error-container h2 {
+    color: #ff6b6b;
+    margin: 0;
+    font-size: 24px;
+}
+
+#error-container p {
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+    font-size: 16px;
+    max-width: 80%;
+}
+
+#error-container a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 0 28px;
+    height: 50px;
+    background: var(--primary-gradient);
+    border-radius: 50px;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: var(--shadow-glow);
+    transition: box-shadow 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#error-container a:hover {
+    text-decoration: none;
+    box-shadow: 0 6px 25px rgba(249, 167, 68, 0.5);
+}
+
+/* Mobile adjustments for error */
+@media (max-width: 600px) {
+    .error-icon {
+        font-size: 40px;
+    }
+
+    #error-container h2 {
+        font-size: 20px;
+    }
+
+    #error-container p {
+        font-size: 14px;
+    }
+}
+
+/* ============================================
+   Loading Container
+   ============================================ */
+#loading-container {
+    display: flex;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--text-primary);
+    z-index: 5000;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.5s ease-out;
+}
+
+#loading-container.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Rotating Gradient Ring Loader - matches puzzle container size */
+.loader-ring {
+    /* Use the smallest of the constraints to ensure perfect circle */
+    --loader-size: min(90vmin, calc(100vw - 20px), calc(100vh - 200px));
+    width: var(--loader-size);
+    height: var(--loader-size);
+    border-radius: 50%;
+    position: relative;
+    background: var(--text-primary);
+}
+
+.loader-ring::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    padding: 5px;
+    background: conic-gradient(
+        from 0deg,
+        transparent 0deg,
+        var(--primary-color) 60deg,
+        #ff6b6b 120deg,
+        transparent 180deg
+    );
+    -webkit-mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    mask: 
+        linear-gradient(#fff 0 0) content-box, 
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: ring-spin 1.5s linear infinite;
+}
+
+.loader-ring-inner {
+    position: absolute;
+    inset: 5px; /* Same as the ring's padding (5px) so it touches the animated line */
+    border-radius: 50%;
+    background: rgba(249, 167, 68, 0.03);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+.loader-ring-icon {
+    color: var(--primary-color);
+    font-size: 60px;
+    opacity: 0.8;
+}
+
+.loader-ring-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    text-align: center;
+}
+
+@keyframes ring-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Mobile adjustments for loader */
+@media (max-width: 600px) {
+    .loader-ring-icon {
+        font-size: 40px;
+    }
+
+    .loader-ring-text {
+        font-size: 14px;
+    }
+}
+
+/* Hide puzzle container until loaded */
+stakco-puzzle-container.loading {
+    visibility: hidden;
+}
+
+/* ============================================
+   Puzzle Info Overlay
+   ============================================ */
+#puzzle-info {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Match puzzle container size */
+    --info-size: min(90vmin, calc(100vw - 20px), calc(100vh - 200px));
+    width: var(--info-size);
+    height: var(--info-size);
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    color: white;
+    z-index: 600;
+    box-shadow: var(--shadow-soft);
+    opacity: 0;
+    pointer-events: none;
+}
+
+#puzzle-info.show {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: auto;
+    animation: puzzleInfoFadeIn 1.5s ease-out forwards;
+}
+
+#puzzle-info.hiding {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    animation: puzzleInfoFadeOut 0.4s ease-out forwards;
+}
+
+#puzzle-info-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 40px;
+    max-width: 70%;
+}
+
+#puzzle-info h3 {
+    margin: 0 0 8px 0;
+    color: var(--primary-color);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.8),
+        0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+#puzzle-info p {
+    margin: 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 1);
+    line-height: 1.5;
+    text-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.8),
+        0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================
+   Story Toggle Button
+   ============================================ */
+#story-toggle-btn {
+    position: absolute;
+    top: calc(50% - var(--info-size, min(90vmin, calc(100vw - 20px), calc(100vh - 200px))) / 2 + 5%);
+    height: 50px;
+    min-width: 130px;
+    width: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    border-radius: 50px;
+    padding: 0;
+    box-sizing: border-box;
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 800;
+    box-shadow: var(--shadow-soft);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+    text-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.6),
+        0 0 6px rgba(0, 0, 0, 0.3);
+}
+
+#story-toggle-btn.show {
+    display: flex;
+}
+
+/* Story mode (default): Glassmorphic with yellow icon */
+#story-toggle-btn:hover {
+    background: var(--primary-gradient);
+    border-color: var(--primary-color);
+    color: white;
+    box-shadow: var(--shadow-glow);
+}
+
+#story-toggle-btn:hover i {
+    color: white;
+}
+
+#story-toggle-btn i {
+    color: var(--primary-color);
+    font-size: 14px;
+    transition: color 0.3s ease;
+    filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.3));
+}
+
+/* Puzzle mode: Yellow/orange gradient background, white text/icon */
+#story-toggle-btn.puzzle-mode {
+    background: var(--primary-gradient);
+    border: none;
+    color: white;
+    box-shadow: var(--shadow-glow);
+    text-shadow: none;
+}
+
+#story-toggle-btn.puzzle-mode i {
+    color: white;
+    filter: none;
+}
+
+#story-toggle-btn.puzzle-mode:hover {
+    box-shadow: 0 6px 25px rgba(249, 167, 68, 0.5);
+}
+
+/* Lock the text span width to prevent button resizing when toggling Story/Puzzle */
+#story-toggle-btn span {
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+}
+
+/* ============================================
+   Floating Share Button
+   ============================================ */
+#floating-share-btn {
+    position: absolute;
+    bottom: calc(50% - var(--info-size, min(90vmin, calc(100vw - 20px), calc(100vh - 200px))) / 2 + 5%);
+    height: 50px;
+    min-width: 130px;
+    width: 130px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: 50px;
+    padding: 0;
+    box-sizing: border-box;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-glow);
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#floating-share-btn.show {
+    display: flex;
+}
+
+/* Semi-transparent in puzzle view */
+#floating-share-btn.puzzle-view {
+    opacity: 0.6;
+}
+
+#floating-share-btn.puzzle-view:hover {
+    opacity: 1;
+}
+
+/* Fully visible in story view */
+#floating-share-btn.story-view {
+    opacity: 1;
+}
+
+#floating-share-btn:hover {
+    transform: translateX(-50%);
+    box-shadow: 0 6px 25px rgba(249, 167, 68, 0.5);
+}
+
+#floating-share-btn:active {
+    transform: translateX(-50%);
+}
+
+#floating-share-btn i {
+    font-size: 16px;
+}
+
+/* Fade-only animations (no zoom) */
+@keyframes puzzleInfoFadeIn {
+    from { 
+        opacity: 0;
+    }
+    to { 
+        opacity: 1;
+    }
+}
+
+@keyframes puzzleInfoFadeOut {
+    from { 
+        opacity: 1;
+    }
+    to { 
+        opacity: 0;
+    }
+}
+
+/* Mobile adjustments for puzzle info */
+@media (max-width: 600px) {
+    #puzzle-info-inner {
+        padding: 20px;
+        max-width: 75%;
+    }
+
+    #puzzle-info h3 {
+        font-size: 14px;
+        margin-bottom: 6px;
+        text-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.8),
+        0 0 8px rgba(0, 0, 0, 0.4);
+    }
+
+    #puzzle-info p {
+        font-size: 11px;
+        line-height: 1.4;
+        text-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.6),
+        0 0 6px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Move toggle button closer to top edge on mobile */
+    #story-toggle-btn {
+        top: calc(50% - var(--info-size, min(90vmin, calc(100vw - 20px), calc(100vh - 200px))) / 2 + 5%);
+    }
+
+    /* Move share button closer to bottom edge on mobile */
+    #floating-share-btn {
+        bottom: calc(50% - var(--info-size, min(90vmin, calc(100vw - 20px), calc(100vh - 200px))) / 2 + 5%);
+    }
+}
+
+/* ============================================
+   Next Puzzle Countdown
+   ============================================ */
+#next-puzzle-countdown {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 50px;
+    height: 50px;
+    padding: 0 24px;
+    box-sizing: border-box;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 800;
+    box-shadow: var(--shadow-soft);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+#next-puzzle-countdown.show {
+    display: flex;
+    animation: slideUp 0.5s ease-out;
+}
+
+#next-puzzle-countdown i {
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+#next-puzzle-countdown .countdown-time {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Mobile adjustments */
+@media (max-width: 600px) {
+    #next-puzzle-countdown {
+        height: 44px;
+        padding: 0 16px;
+        font-size: 12px;
+    }
+
+    #next-puzzle-countdown i {
+        font-size: 14px;
+    }
+
+    #story-toggle-btn {
+        padding: 0;
+        font-size: 12px;
+        height: 44px;
+        min-width: 110px;
+        width: 110px;
+    }
+
+    #floating-share-btn {
+        padding: 0;
+        font-size: 12px;
+        height: 44px;
+        min-width: 110px;
+        width: 110px;
+    }
+}
+
+/* ============================================
+   Completion Modal
+   ============================================ */
+#completion-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Match puzzle container size (same circle as #puzzle-info) */
+    --completion-size: min(90vmin, calc(100vw - 20px), calc(100vh - 200px));
+    width: var(--completion-size);
+    height: var(--completion-size);
+    box-sizing: border-box;
+    border-radius: 50%;
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-soft);
+    color: white;
+    z-index: 3000;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    container-type: size;
+}
+
+#completion-modal.show {
+    display: flex;
+    animation: puzzleInfoFadeIn 0.6s ease-out forwards;
+}
+
+#completion-modal .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(8px, 3cqmin, 16px);
+    max-width: 70%;
+}
+
+.completion-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: clamp(44px, 16cqmin, 64px);
+    height: clamp(44px, 16cqmin, 64px);
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    box-shadow: var(--shadow-glow);
+}
+
+.completion-icon i {
+    color: var(--text-primary);
+    font-size: clamp(20px, 7cqmin, 28px);
+}
+
+#completion-modal h2 {
+    margin: 0;
+    color: var(--primary-color);
+    font-size: clamp(18px, 6.5cqmin, 26px);
+    font-weight: 700;
+    line-height: 1.2;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.8),
+        0 0 8px rgba(0, 0, 0, 0.4);
+}
+
+#completion-modal p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(13px, 3.8cqmin, 16px);
+    line-height: 1.5;
+    text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.8),
+        0 0 6px rgba(0, 0, 0, 0.4);
+}
+
+#tutorial-blocker {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 120px;
+    z-index: 1700;
+    /* Invisible but blocks clicks */
+    /* Below how-to-play (1800) but above info panel and branding */
+}
+
+#tutorial-blocker.active {
+    display: block;
+}
