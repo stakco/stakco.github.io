@@ -3,7 +3,11 @@ class StakcoProductsPanel extends HTMLElement {
     super();
     this.attachShadow({ mode: 'open' });
     this.expanded = false;
-    this.MANIFEST_URL = 'https://stakcos.com/assets/1.0.0/apps/manifest.json';
+    // Resolve relative to wherever this file is served from:
+    //   https://cdn.stakcos.com/components/…            → https://cdn.stakcos.com/apps/manifest.json
+    //   https://stakcos.com/assets/1.0.0/components/…   → https://stakcos.com/assets/1.0.0/apps/manifest.json
+    this.MANIFEST_URL = new URL('../apps/manifest.json', StakcoProductsPanel.BASE_URL).href;
+    this.LOGO_URL = new URL('../images/stakco_logo_squricle.png', StakcoProductsPanel.BASE_URL).href;
     this.products = null;
   }
 
@@ -15,6 +19,7 @@ class StakcoProductsPanel extends HTMLElement {
 
   disconnectedCallback() {
     document.removeEventListener('click', this.outsideClickHandler);
+    document.removeEventListener('keydown', this.keyHandler);
   }
 
   getParentUrlParams() {
@@ -60,7 +65,7 @@ class StakcoProductsPanel extends HTMLElement {
           width: 50px;
           height: 50px;
           border-radius: 50%;
-          background: url('https://stakcos.com/assets/1.0.0/images/stakco_logo_squricle.png') no-repeat center;
+          background: url('${this.LOGO_URL}') no-repeat center;
           background-size: contain;
           transition: all 0.3s ease;
           box-shadow: var(--shadow-soft);
@@ -102,117 +107,186 @@ class StakcoProductsPanel extends HTMLElement {
           height: calc(100vh - 40px);
         }
         .content {
-          width: calc(100% - 30px);
-          margin: 15px;
+          width: calc(100% - 40px);
+          margin: 20px;
           opacity: 0;
           transition: opacity 0.3s ease 0.8s;
           color: var(--text-primary);
           text-shadow: none;
           overflow-y: auto;
-          height: calc(100% - 30px);
+          height: calc(100% - 40px);
+          box-sizing: border-box;
+          padding: 0 4px 4px;
+          display: flex;
+          flex-direction: column;
+        }
+        /* Centre the cards in the panel; margin:auto (not justify-content) so tall content still scrolls from the top */
+        .inner {
+          margin: auto 0;
+          width: 100%;
         }
         .panel.expanded .content {
           opacity: 1;
         }
-        h3, p {
-          text-align: center;
-          margin: 10px 0;
+        .header {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 4px;
+          margin: 6px 0 18px;
         }
         h3 {
-          font-size: 24px;
+          font-size: 22px;
           font-weight: 600;
+          margin: 0;
         }
+        .subtitle {
+          margin: 0;
+          font-size: 14px;
+          opacity: 0.75;
+        }
+        /* Compact cards: icon tile + name + short line, many per screen */
         .products-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 20px;
-          margin-top: 20px;
+          grid-template-columns: repeat(auto-fill, minmax(min(250px, 100%), 1fr));
+          gap: 12px;
+          max-width: 1180px;
+          margin: 0 auto;
         }
         .product-card {
-          background: var(--glass-bg);
-          border: 2px solid var(--glass-border);
-          border-radius: 12px;
-          padding: 20px;
-          transition: all 0.3s ease;
-          cursor: pointer;
-          text-decoration: none;
-          color: inherit;
-          display: block;
-          backdrop-filter: blur(10px);
-        }
-        .product-card:hover {
-          border-color: var(--primary-color);
-          background: rgba(249, 167, 68, 0.05);
-          box-shadow: var(--shadow-glow);
-        }
-        .product-thumbnail {
-          width: 100%;
-          height: 200px;
-          background: var(--glass-bg);
-          border-radius: 8px;
-          margin-bottom: 15px;
+          position: relative;
           display: flex;
           align-items: center;
-          justify-content: center;
-          font-size: 48px;
-          border: 1px solid var(--glass-border);
+          gap: 14px;
+          padding: 14px 16px;
+          border-radius: 16px;
+          background: rgba(255, 255, 255, 0.16);
+          color: inherit;
+          text-decoration: none;
+          transition: background 0.2s ease, box-shadow 0.2s ease;
+          -webkit-tap-highlight-color: transparent;
+        }
+        .product-card:hover,
+        .product-card:focus-visible {
+          background: rgba(255, 255, 255, 0.3);
+          box-shadow: var(--shadow-soft);
+          outline: none;
+        }
+        .product-card.current {
+          background: rgba(249, 167, 68, 0.2);
+        }
+        .product-icon {
+          flex: none;
+          width: 48px;
+          height: 48px;
+          border-radius: 14px;
+          display: grid;
+          place-items: center;
+          background: var(--primary-gradient);
+          color: white;
+          font-size: 21px;
+          box-shadow: var(--shadow-soft);
+        }
+        .product-text {
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
         }
         .product-title {
-          font-size: 20px;
+          font-size: 16px;
           font-weight: 600;
-          margin-bottom: 8px;
           color: var(--text-primary);
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        .here {
+          font-size: 10px;
+          font-weight: 600;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          padding: 2px 7px;
+          border-radius: 999px;
+          background: var(--primary-color);
+          color: white;
         }
         .product-description {
-          font-size: 14px;
-          line-height: 1.4;
-          margin-bottom: 10px;
-          opacity: 0.9;
+          font-size: 13px;
+          line-height: 1.35;
+          opacity: 0.8;
           color: var(--text-primary);
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
         }
-        .product-url {
-          font-size: 12px;
-          font-family: 'Inter', sans-serif;
-          opacity: 0.7;
-          word-break: break-all;
-          color: var(--text-primary);
-        }
-        @media (max-width: 768px) {
+        /* Phones: two columns of icon + name tiles so every app fits on screen */
+        @media (max-width: 600px) {
+          .header { margin: 4px 0 12px; }
+          h3 { font-size: 19px; }
+          .subtitle { font-size: 13px; }
           .products-grid {
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
           }
           .product-card {
-            padding: 15px;
+            flex-direction: column;
+            text-align: center;
+            gap: 8px;
+            padding: 14px 10px;
           }
-          .product-thumbnail {
-            height: 150px;
-            font-size: 36px;
-          }
+          .product-text { align-items: center; }
+          .product-title { font-size: 14px; justify-content: center; flex-wrap: wrap; gap: 4px; }
+          .product-description { display: none; }
+          .product-icon { width: 44px; height: 44px; font-size: 19px; border-radius: 13px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .panel, .content, .product-card { transition: none !important; }
         }
       </style>
       <button class="button" part="button"></button>
       <div class="panel" part="panel">
         <div class="content" part="content">
-          <h3>Explore Stakco Apps</h3>
-          <p>Same puzzle, endless experiences</p>
+          <div class="inner">
+          <div class="header">
+            <h3>Explore Stakco Apps</h3>
+            <p class="subtitle">Same puzzle, endless experiences</p>
+          </div>
           <div class="products-grid">
             ${products.map(product => {
               const productUrl = product.url + urlParams;
+              const current = this.isCurrent(product.url);
+              const name = (product.title || '').replace(/^Stakco\s+/i, '');
               return `
-              <a href="${productUrl}" class="product-card" target="_blank">
-                <div class="product-thumbnail">
-                  <i class="${product.icon}"></i>
-                </div>
-                <div class="product-title">${product.title}</div>
-                <div class="product-description">${product.description}</div>
-                <div class="product-url">${product.urlDisplay}</div>
+              <a href="${productUrl}" class="product-card${current ? ' current' : ''}" target="_blank" rel="noopener"
+                 title="${product.title}" aria-label="${product.title}${current ? ' (this app)' : ''}">
+                <span class="product-icon"><i class="${product.icon}"></i></span>
+                <span class="product-text">
+                  <span class="product-title">${name}${current ? '<span class="here">Here</span>' : ''}</span>
+                  <span class="product-description">${product.description}</span>
+                </span>
               </a>
             `;
             }).join('')}
           </div>
+          </div>
         </div>
       </div>
     `;
+  }
+
+  // True when the card points at the app this page is
+  isCurrent(url) {
+    try {
+      const target = new URL(url);
+      const here = window.location;
+      const clean = p => p.replace(/\/+$/, '') || '/';
+      if (here.hostname === 'play.stakcos.com') return clean(target.pathname) === '/play';
+      return target.hostname === here.hostname && clean(target.pathname) === clean(here.pathname);
+    } catch (e) {
+      return false;
+    }
   }
 
   getDefaultProducts() {
@@ -240,6 +314,11 @@ class StakcoProductsPanel extends HTMLElement {
       }
     };
     document.addEventListener('click', this.outsideClickHandler);
+
+    this.keyHandler = (e) => {
+      if (e.key === 'Escape' && this.expanded) this.collapse();
+    };
+    document.addEventListener('keydown', this.keyHandler);
   }
 
   toggle() {
@@ -276,5 +355,8 @@ class StakcoProductsPanel extends HTMLElement {
     this.dispatchEvent(new CustomEvent('collapse'));
   }
 }
+
+// Base URL of this script (module), used to find ../apps and ../images on either host
+StakcoProductsPanel.BASE_URL = (typeof import.meta !== 'undefined' && import.meta.url) || 'https://cdn.stakcos.com/components/stakco-products-panel.js';
 
 customElements.define('stakco-products-panel', StakcoProductsPanel);

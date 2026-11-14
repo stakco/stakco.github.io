@@ -2,84 +2,183 @@
   "apps": [
     {
       "title": "Stakco Play",
-      "description": "Classic Stakco - Touch and drag to rotate puzzle layers and align all pieces",
+      "description": "Touch and drag the layers to line up the picture.",
       "url": "https://stakcos.com/play",
       "urlDisplay": "stakcos.com/play",
       "icon": "fa-solid fa-gamepad",
-      "tags": ["classic", "original", "main", "puzzle", "game", "daily"]
+      "tags": [
+        "classic",
+        "original",
+        "main",
+        "puzzle",
+        "game",
+        "daily"
+      ]
     },
-   
     {
       "title": "Stakco MIDI",
-      "description": "MIDI driven Stakco - Create musical compositions while solving puzzles through sound and rhythm",
+      "description": "Play notes on a MIDI keyboard to turn the layers.",
       "url": "https://stakcos.com/midi",
       "urlDisplay": "stakcos.com/midi",
       "icon": "fa-solid fa-music",
-      "tags": ["music", "sound", "audio", "notes", "musical", "melody"]
+      "tags": [
+        "music",
+        "sound",
+        "audio",
+        "notes",
+        "musical",
+        "melody"
+      ]
     },
     {
       "title": "Stakco Clock",
-      "description": "Time-driven Stakco - Solve puzzles synchronized with real-time clock movements and temporal challenges",
+      "description": "The layers turn with the hands of a real clock.",
       "url": "https://stakcos.com/clock",
       "urlDisplay": "stakcos.com/clock",
       "icon": "fa-solid fa-clock",
-      "tags": ["time", "hours", "minutes", "watch", "timer", "temporal"]
+      "tags": [
+        "time",
+        "hours",
+        "minutes",
+        "watch",
+        "timer",
+        "temporal"
+      ]
     },
     {
       "title": "Stakco Dial",
-      "description": "Surface Dial driven Stakco - Experience tactile puzzle solving with Microsoft Surface Dial's precise rotational control",
+      "description": "Turn a Surface Dial to rotate each layer.",
       "url": "https://stakcos.com/dial",
       "urlDisplay": "stakcos.com/dial",
       "icon": "fa-solid fa-circle-dot",
-      "tags": ["phone", "number", "keypad", "telephone", "digits", "numeric"]
+      "tags": [
+        "phone",
+        "number",
+        "keypad",
+        "telephone",
+        "digits",
+        "numeric"
+      ]
     },
     {
-      "title": "Stakco Azimut",
-      "description": "Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation",
+      "title": "Stakco Azimuth",
+      "description": "Turn your device to steer the layers by compass.",
       "url": "https://stakcos.com/azimuth",
-      "urlDisplay": "stakcos.com/azimut",
+      "urlDisplay": "stakcos.com/azimuth",
       "icon": "fa-solid fa-compass",
-      "tags": ["direction", "compass", "angle", "degrees", "rotation", "orientation"]
+      "tags": [
+        "direction",
+        "compass",
+        "angle",
+        "degrees",
+        "rotation",
+        "orientation"
+      ]
     },
     {
       "title": "Stakco Gyro",
-      "description": "Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation",
+      "description": "Tilt your phone to rotate each layer.",
       "url": "https://stakcos.com/gyro",
       "urlDisplay": "stakcos.com/gyro",
       "icon": "fa-solid fa-globe",
-      "tags": ["spin", "rotate", "twist", "turn", "rotation", "circular"]
+      "tags": [
+        "spin",
+        "rotate",
+        "twist",
+        "turn",
+        "rotation",
+        "circular"
+      ]
     },
     {
       "title": "Stakco VOC",
-      "description": "Compass driven Stakco - Navigate through puzzles using real compass directions and magnetic orientation",
+      "description": "A Kiwrious air-quality sensor turns the layers.",
       "url": "https://stakcos.com/kiwrious/voc",
       "urlDisplay": "stakcos.com/kiwrious/voc",
       "icon": "fa-solid fa-wind",
-      "tags": ["voc", "sensor", "air", "quality", "environment", "kiwrious"]
+      "tags": [
+        "voc",
+        "sensor",
+        "air",
+        "quality",
+        "environment",
+        "kiwrious"
+      ]
     },
     {
       "title": "Stakco Video",
-      "description": "Touch-controlled Stakco video puzzles with interactive layers",
+      "description": "Touch to turn layers of a moving video.",
       "url": "https://stakcos.com/video",
       "urlDisplay": "stakcos.com/video",
       "icon": "fa-solid fa-hand-pointer",
-      "tags": ["video", "touch", "interactive", "visual", "motion", "media"]
+      "tags": [
+        "video",
+        "touch",
+        "interactive",
+        "visual",
+        "motion",
+        "media"
+      ]
     },
     {
       "title": "Stakco Camera",
-      "description": "Touch-controlled Stakco webcam puzzles with interactive layers",
+      "description": "Your live camera feed becomes the puzzle.",
       "url": "https://stakcos.com/camera",
       "urlDisplay": "stakcos.com/camera",
       "icon": "fa-solid fa-camera",
-      "tags": ["camera", "touch", "interactive", "visual", "motion", "media"]
+      "tags": [
+        "camera",
+        "touch",
+        "interactive",
+        "visual",
+        "motion",
+        "media"
+      ]
     },
     {
       "title": "Stakco Walk",
-      "description": "Pedometer-driven Stakco puzzles with step counter controls",
+      "description": "Every step you take turns the layers.",
       "url": "https://stakcos.com/walk",
       "urlDisplay": "stakcos.com/walk",
       "icon": "fa-solid fa-shoe-prints",
-      "tags": ["video", "touch", "interactive", "visual", "motion", "media"]
+      "tags": [
+        "walk",
+        "steps",
+        "pedometer",
+        "motion",
+        "fitness",
+        "sensor"
+      ]
+    },
+    {
+      "title": "Stakco MRT",
+      "description": "Ride the Singapore MRT; each line turns its own layer.",
+      "url": "https://stakcos.com/mrt",
+      "urlDisplay": "stakcos.com/mrt",
+      "icon": "fa-solid fa-train-subway",
+      "tags": [
+        "mrt",
+        "train",
+        "transit",
+        "singapore",
+        "gps",
+        "location"
+      ]
+    },
+    {
+      "title": "Stakco Vista",
+      "description": "Turn the bands of a 360° panorama to line it up.",
+      "url": "https://stakcos.com/vista",
+      "urlDisplay": "stakcos.com/vista",
+      "icon": "fa-solid fa-mountain-sun",
+      "tags": [
+        "panorama",
+        "360",
+        "view",
+        "landscape",
+        "vista",
+        "drag"
+      ]
     }
   ]
 }
