@@ -105,24 +105,39 @@ class StakcoProductsPanel extends HTMLElement {
         .panel.expanded {
           width: calc(100vw - 40px);
           height: calc(100vh - 40px);
+          background: rgba(36, 27, 34, 0.88);
+          -webkit-backdrop-filter: blur(24px) saturate(1.2);
+          backdrop-filter: blur(24px) saturate(1.2);
         }
         .content {
           width: calc(100% - 40px);
-          margin: 20px;
+          margin: 0 20px 20px;
           opacity: 0;
           transition: opacity 0.3s ease 0.8s;
-          color: var(--text-primary);
+          color: #fff;
           text-shadow: none;
           overflow-y: auto;
-          height: calc(100% - 40px);
+          height: calc(100% - 20px);
           box-sizing: border-box;
           padding: 0 4px 4px;
           display: flex;
           flex-direction: column;
         }
-        /* Centre the cards in the panel; margin:auto (not justify-content) so tall content still scrolls from the top */
+        /* Header sits at the top; the cards are centred in the space below.
+           margin:auto (not justify-content) so tall content still scrolls from the top. */
         .inner {
-          margin: auto 0;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+        }
+        .grid-area {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+        .grid-area .products-grid {
+          margin: auto;
           width: 100%;
         }
         .panel.expanded .content {
@@ -132,18 +147,22 @@ class StakcoProductsPanel extends HTMLElement {
           display: flex;
           flex-direction: column;
           align-items: center;
-          gap: 4px;
-          margin: 6px 0 18px;
+          gap: 2px;
+          min-height: 50px;
+          justify-content: center;
+          margin: 0 56px 20px;
+          text-align: center;
         }
         h3 {
-          font-size: 22px;
+          font-size: 20px;
           font-weight: 600;
           margin: 0;
+          color: #fff;
         }
         .subtitle {
           margin: 0;
-          font-size: 14px;
-          opacity: 0.75;
+          font-size: 13px;
+          color: rgba(255, 255, 255, 0.72);
         }
         /* Compact cards: icon tile + name + short line, many per screen */
         .products-grid {
@@ -160,7 +179,7 @@ class StakcoProductsPanel extends HTMLElement {
           gap: 14px;
           padding: 14px 16px;
           border-radius: 16px;
-          background: rgba(255, 255, 255, 0.16);
+          background: rgba(255, 255, 255, 0.07);
           color: inherit;
           text-decoration: none;
           transition: background 0.2s ease, box-shadow 0.2s ease;
@@ -168,12 +187,12 @@ class StakcoProductsPanel extends HTMLElement {
         }
         .product-card:hover,
         .product-card:focus-visible {
-          background: rgba(255, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.14);
           box-shadow: var(--shadow-soft);
           outline: none;
         }
         .product-card.current {
-          background: rgba(249, 167, 68, 0.2);
+          background: rgba(249, 167, 68, 0.18);
         }
         .product-icon {
           flex: none;
@@ -196,7 +215,7 @@ class StakcoProductsPanel extends HTMLElement {
         .product-title {
           font-size: 16px;
           font-weight: 600;
-          color: var(--text-primary);
+          color: #fff;
           display: flex;
           align-items: center;
           gap: 8px;
@@ -209,13 +228,12 @@ class StakcoProductsPanel extends HTMLElement {
           padding: 2px 7px;
           border-radius: 999px;
           background: var(--primary-color);
-          color: white;
+          color: #2a1f27;
         }
         .product-description {
           font-size: 13px;
           line-height: 1.35;
-          opacity: 0.8;
-          color: var(--text-primary);
+          color: rgba(255, 255, 255, 0.78);
           display: -webkit-box;
           -webkit-line-clamp: 2;
           -webkit-box-orient: vertical;
@@ -223,8 +241,8 @@ class StakcoProductsPanel extends HTMLElement {
         }
         /* Phones: two columns of icon + name tiles so every app fits on screen */
         @media (max-width: 600px) {
-          .header { margin: 4px 0 12px; }
-          h3 { font-size: 19px; }
+          .header { margin: 0 52px 14px; }
+          h3 { font-size: 17px; }
           .subtitle { font-size: 13px; }
           .products-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -253,6 +271,7 @@ class StakcoProductsPanel extends HTMLElement {
             <h3>Explore Stakco Apps</h3>
             <p class="subtitle">Same puzzle, endless experiences</p>
           </div>
+          <div class="grid-area">
           <div class="products-grid">
             ${products.map(product => {
               const productUrl = product.url + urlParams;
@@ -269,6 +288,7 @@ class StakcoProductsPanel extends HTMLElement {
               </a>
             `;
             }).join('')}
+          </div>
           </div>
           </div>
         </div>
