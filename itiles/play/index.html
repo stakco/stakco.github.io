@@ -107,7 +107,6 @@
     <!-- Import Stakco Components -->
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
-    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
     <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
@@ -153,7 +152,7 @@
         /* Mobile adjustment */
         @media (max-width: 600px) {
             #itiles-info {
-                top: 80px;
+                top: 130px;
                 max-width: 90%;
                 flex-direction: column;
                 gap: 10px;
@@ -241,15 +240,12 @@
 
         @media (max-width: 600px) {
             .connection-buttons {
-                top: auto;
-                bottom: 120px;
+                top: 80px;
                 right: 10px;
-                left: 10px;
-                justify-content: center;
+                gap: 6px;
             }
             
             .connection-buttons button {
-                flex: 1;
                 font-size: 11px;
                 padding: 8px 12px;
             }
@@ -297,11 +293,9 @@
         subtitle="Touch Puzzle">
     </stakco-branding>
 
-    <stakco-products-panel></stakco-products-panel>
-
     <div class="connection-buttons">
         <button id="connectBtn">Connect iTiles</button>
-        <button id="pairBtn" disabled class="success">ðŸ”— Pair Tiles</button>
+        <button id="pairBtn" disabled class="success">🔗 Pair Tiles</button>
     </div>
 
     <div id="itiles-info" class="hidden">
@@ -365,6 +359,8 @@
         const bleManager = new ITilesBLEManager();
         let touchCount = 0;
         let puzzleSolved = false;
+        let centerTileId = 7; // Default, updated after pairing
+        let isAnimating = false; // Lock to prevent overlapping rotations
 
         // Tile rotation mappings
         const tileRotations = {
@@ -466,8 +462,25 @@
                 console.log(`Paired tiles (${response.pairedTileTotal}): ${tiles}`);
                 
                 if (response.pairedTileTotal > 0) {
+                    // Detect center tile: the highest-numbered tile is likely center
+                    if (response.pairedTileTotal >= 7) {
+                        centerTileId = Math.max(...response.pairedTileIds);
+                        console.log(`Center tile detected as ID: ${centerTileId}`);
+                    }
                     initializeITiles();
                 }
+            });
+
+            // Online tile status - log for debugging tile IDs
+            bleManager.onOnlineTileStatusReceived((response) => {
+                const macStr = response.macAddress.map(b => b.toString(16).padStart(2, '0').toUpperCase()).join(':');
+                console.log(`Online: Tile ${response.tileId}, MAC: ${macStr}, Battery: ${response.batteryPercentage}%, Assigned: ${response.assignedTileId}`);
+            });
+
+            // Step event as backup center tile detection
+            bleManager.onStepChanged((response) => {
+                if (puzzleSolved) return;
+                console.log(`Step event: tileId=${response.tileId}, status=${response.stepStatus}`);
             });
 
             // Touch event handler
@@ -481,31 +494,38 @@
                 updateTileVisual(tileId);
                 lastTileSpan.textContent = `#${tileId}`;
                 
+                console.log(`Touch event: tileId=${tileId}, raw response:`, response);
+                
                 // Tile 1-6: Rotate current layer to angle
-                if (tileId >= 1 && tileId <= 6) {
+                if (tileId >= 1 && tileId <= 6 && tileRotations[tileId] !== undefined) {
                     const angle = tileRotations[tileId];
-                    rotateToAngle(angle);
+                    smoothRotateToAngle(angle);
                     
                     // Visual feedback on tile
                     triggerTileFeedback(tileId);
                     
                     console.log(`Tile ${tileId} touched: rotating to ${angle}°`);
                 }
-                
-                // Tile 7 (center): Switch to next layer
-                if (tileId === 7) {
+                // Center tile: switch layer (tile 7 or any ID not in 1-6)
+                else if (tileId >= 7 || tileId === centerTileId) {
                     const currentLayer = parseInt(activeLayerSpan.textContent);
-                    const nextLayer = (currentLayer % 3) + 1;
+                    const totalLayers = parseInt(puzzleContainer.getAttribute('layers') || '3');
+                    const nextLayer = (currentLayer % totalLayers) + 1;
                     
                     puzzleContainer.switchLayer(nextLayer);
                     activeLayerSpan.textContent = nextLayer;
                     layerControls.setActiveLayer(nextLayer);
                     updateRotationDisplay();
                     
-                    // Visual feedback on center tile
-                    triggerTileFeedback(tileId);
+                    // Visual feedback - white flash for layer switch
+                    bleManager.triggerLight(
+                        TileColor.WHITE,
+                        TIMEOUT_DELAY.SEC_1,
+                        0, 0,
+                        tileId
+                    );
                     
-                    console.log(`Tile 7 (center) touched: switched to layer ${nextLayer}`);
+                    console.log(`Center tile ${tileId} touched: switched to layer ${nextLayer}`);
                 }
                 
                 // Check if puzzle solved
@@ -560,17 +580,21 @@
                 await bleManager.confirmAssignment(SELECT_ITILE.ALL);
                 await new Promise(r => setTimeout(r, 500));
                 
-                // FIXED: Activate tiles 1-7 to pair all tiles including center tile
+                // Activate tiles 1-7 to pair all tiles including center tile
                 for (let i = 1; i <= 7; i++) {
                     await bleManager.gameInProgress(GAME_STATUS.IN_GAME, i);
                     await new Promise(r => setTimeout(r, 500));
                 }
                 
-                // Enable touch sensors
+                // Enable touch sensors on ALL tiles (including center)
                 await bleManager.toggleTouchSensor(TOGGLE_SENSOR.ON, SELECT_ITILE.ALL);
-                console.log('Touch sensors enabled');
+                console.log('Touch sensors enabled on all tiles');
                 
                 await bleManager.queryPairedTiles();
+                
+                // Assign rainbow colors to outer tiles (1-6) after a short delay
+                await new Promise(r => setTimeout(r, 1000));
+                await assignTileColors();
                 
                 pairBtn.textContent = 'Paired';
                 
@@ -581,8 +605,43 @@
             }
         }
 
+        // Rainbow colors for tiles at 0°, 60°, 120°, 180°, 240°, 300°
+        const tileRainbowColors = {
+            1: new TileColor(153, 0, 0),      // Red       (0°)
+            2: new TileColor(153, 77, 0),      // Orange    (60°)
+            3: new TileColor(153, 153, 0),     // Yellow    (120°)
+            4: new TileColor(0, 153, 0),       // Green     (180°)
+            5: new TileColor(0, 0, 153),       // Blue      (240°)
+            6: new TileColor(75, 0, 130),      // Indigo    (300°)
+        };
+
+        async function assignTileColors() {
+            try {
+                for (let tileId = 1; tileId <= 6; tileId++) {
+                    const color = tileRainbowColors[tileId];
+                    await bleManager.triggerLight(
+                        color,
+                        TIMEOUT_DELAY.SEC_30,
+                        0, 0,
+                        tileId
+                    );
+                    await new Promise(r => setTimeout(r, 100));
+                }
+                // Center tile gets white
+                await bleManager.triggerLight(
+                    TileColor.WHITE,
+                    TIMEOUT_DELAY.SEC_30,
+                    0, 0,
+                    7
+                );
+                console.log('Rainbow colors assigned to tiles');
+            } catch (error) {
+                console.error('Error assigning tile colors:', error);
+            }
+        }
+
         function initializeITiles() {
-            infoPanel.setContent('<p>iTiles active - Touch tiles 1-6 to rotate, tile 7 (center) to switch layers</p>');
+            infoPanel.setContent('<p>iTiles active - Touch outer tiles to rotate, center tile to switch layers</p>');
             iTilesInfo.classList.remove('hidden');
             branding.hide();
         }
@@ -619,20 +678,80 @@
             updateRotationDisplay();
         }
 
-        async function triggerTileFeedback(tileId) {
-            // Light up the pressed tile
-            const colors = [
-                TileColor.RED, TileColor.YELLOW, TileColor.GREEN,
-                TileColor.CYAN, TileColor.BLUE, TileColor.MAGENTA
-            ];
-            const color = colors[(tileId - 1) % colors.length];
+        function smoothRotateToAngle(targetAngle) {
+            if (isAnimating) return;
             
+            const currentRotation = puzzleContainer.getCurrentRotation();
+            let normalizedCurrent = ((currentRotation % 360) + 360) % 360;
+            let diff = targetAngle - normalizedCurrent;
+            
+            // Shortest path
+            if (diff > 180) diff -= 360;
+            if (diff < -180) diff += 360;
+            
+            if (Math.abs(diff) < 0.5) return; // Already at target
+            
+            isAnimating = true;
+            const startRotation = currentRotation;
+            const endRotation = currentRotation + diff;
+            const duration = 250; // ms — fast but smooth
+            const startTime = performance.now();
+            
+            function easeOutCubic(t) {
+                return 1 - Math.pow(1 - t, 3);
+            }
+            
+            function animate(now) {
+                const elapsed = now - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = easeOutCubic(progress);
+                
+                const currentTarget = startRotation + diff * eased;
+                const stepDiff = currentTarget - puzzleContainer.getCurrentRotation();
+                
+                if (Math.abs(stepDiff) > 0.01) {
+                    puzzleContainer.rotateCurrentLayer(stepDiff);
+                }
+                
+                updateRotationDisplay();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    // Snap to exact target
+                    const finalDiff = endRotation - puzzleContainer.getCurrentRotation();
+                    if (Math.abs(finalDiff) > 0.01) {
+                        puzzleContainer.rotateCurrentLayer(finalDiff);
+                    }
+                    updateRotationDisplay();
+                    isAnimating = false;
+                }
+            }
+            
+            requestAnimationFrame(animate);
+        }
+
+        async function triggerTileFeedback(tileId) {
+            // Flash the tile brighter, then restore its assigned color
             await bleManager.triggerLight(
-                color,
+                TileColor.WHITE,
                 TIMEOUT_DELAY.SEC_1,
                 0, 0,
                 tileId
             );
+            
+            // Restore assigned color after flash
+            setTimeout(async () => {
+                const color = tileRainbowColors[tileId];
+                if (color) {
+                    await bleManager.triggerLight(
+                        color,
+                        TIMEOUT_DELAY.SEC_30,
+                        0, 0,
+                        tileId
+                    );
+                }
+            }, 800);
         }
 
         function updateRotationDisplay() {
