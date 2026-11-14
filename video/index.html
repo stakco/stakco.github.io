@@ -10,7 +10,7 @@
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#3c2f38">
 
-    <title>Stakco Touch Video</title>
+    <title>Stakco Video</title>
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -20,9 +20,9 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Stakco Touch Video">
+    <meta property="og:title" content="Stakco Video">
     <meta property="og:description" content="Touch-controlled Stakco video puzzles with interactive layers.">
-    <meta property="og:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
     <meta property="og:url" content="https://stakcos.com/touch-video/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Stakco">
@@ -30,9 +30,9 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Stakco Touch Video">
+    <meta name="twitter:title" content="Stakco Video">
     <meta name="twitter:description" content="Touch-controlled Stakco video puzzles with interactive layers.">
-    <meta name="twitter:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
     <meta name="twitter:url" content="https://stakcos.com/touch-video/">
     <meta name="twitter:site" content="@StakcoPuzzle">
     <meta name="twitter:creator" content="@StakcoPuzzle">
@@ -46,25 +46,26 @@
     <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
 
     <!-- PWA -->
-    <link rel="manifest" href="/video/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Stakco Touch Video">
+    <meta name="application-name" content="Stakco Video">
 
     <!-- Mobile App Meta Tags (iOS) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Stakco Touch Video">
+    <meta name="apple-mobile-web-app-title" content="Stakco Video">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Stakco Touch Video",
+      "name": "Stakco Video",
       "url": "https://stakcos.com/touch-video/",
       "description": "Touch-controlled Stakco video puzzles with interactive layers.",
       "applicationCategory": "Game",
       "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png",
       "publisher": {
         "@type": "Organization",
         "name": "Stakco"
@@ -234,7 +235,7 @@
 </head>
 
 <body>
-    <stakco-info-panel icon="fa-hand-pointer">
+    <stakco-info-panel icon="fa-hand-pointer" icon-size="26px">
         <p>Touch and drag to rotate layers - Align all videos to solve!</p>
     </stakco-info-panel>
 
@@ -278,7 +279,7 @@
     <stakco-share-button label="Share Success!"></stakco-share-button>
 
     <stakco-share-window 
-        title="Stakco Touch Video"
+        title="Stakco Video"
         share-url="https://stakcos.com/touch-video/">
         <div slot="text">Solved the video puzzle!</div>
     </stakco-share-window>
@@ -319,7 +320,7 @@
         };
 
         async function init() {
-            console.log('Initializing Stakco Touch Video...');
+            console.log('Initializing Stakco Video...');
             
             StakcoUtils.preventZoom();
             setupEventListeners();
