@@ -10,7 +10,7 @@
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#3c2f38">
 
-    <title>Stakco Touch Webcam</title>
+    <title>Stakco Camera</title>
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -20,9 +20,9 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Stakco Touch Webcam">
+    <meta property="og:title" content="Stakco Camera">
     <meta property="og:description" content="Touch-controlled Stakco webcam puzzles with interactive layers.">
-    <meta property="og:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
     <meta property="og:url" content="https://stakcos.com/touch-webcam/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Stakco">
@@ -30,9 +30,9 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Stakco Touch Webcam">
+    <meta name="twitter:title" content="Stakco Camera">
     <meta name="twitter:description" content="Touch-controlled Stakco webcam puzzles with interactive layers.">
-    <meta name="twitter:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
     <meta name="twitter:url" content="https://stakcos.com/touch-webcam/">
     <meta name="twitter:site" content="@StakcoPuzzle">
     <meta name="twitter:creator" content="@StakcoPuzzle">
@@ -46,25 +46,26 @@
     <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
 
     <!-- PWA -->
-    <link rel="manifest" href="/camera/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Stakco Touch Webcam">
+    <meta name="application-name" content="Stakco Camera">
 
     <!-- Mobile App Meta Tags (iOS) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Stakco Touch Webcam">
+    <meta name="apple-mobile-web-app-title" content="Stakco Camera">
 
     <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Stakco Touch Webcam",
+      "name": "Stakco Camera",
       "url": "https://stakcos.com/touch-webcam/",
       "description": "Touch-controlled Stakco webcam puzzles with interactive layers.",
       "applicationCategory": "Game",
       "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png",
       "publisher": {
         "@type": "Organization",
         "name": "Stakco"
@@ -227,65 +228,119 @@
             box-shadow: 0 0 30px rgba(255, 107, 107, 0.6);
         }
 
-        /* Camera permission overlay */
+        /* Camera permission overlay: frosted circle over the puzzle */
         #camera-permission {
+            --perm-size: min(90vmin, calc(100vw - 20px), calc(100vh - 200px));
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: var(--perm-size);
+            height: var(--perm-size);
+            box-sizing: border-box;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-soft);
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
             z-index: 1000;
-            gap: 20px;
+            container-type: size;
         }
 
         #camera-permission.hidden {
             display: none;
         }
 
-        #camera-permission button {
-            padding: 15px 40px;
-            font-size: 18px;
-            background: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            cursor: pointer;
-            font-weight: 600;
-            transition: transform 0.2s;
+        .camera-permission-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(8px, 3cqmin, 16px);
+            max-width: 70%;
         }
 
-        #camera-permission button:hover {
-            transform: scale(1.05);
+        .camera-permission-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: clamp(44px, 16cqmin, 64px);
+            height: clamp(44px, 16cqmin, 64px);
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            box-shadow: var(--shadow-glow);
+        }
+
+        #camera-permission .camera-permission-icon i {
+            color: var(--text-primary);
+            font-size: clamp(20px, 7cqmin, 28px);
+        }
+
+        #camera-permission h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: clamp(18px, 6.5cqmin, 26px);
+            font-weight: 700;
+            line-height: 1.2;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
         }
 
         #camera-permission p {
-            color: white;
-            font-size: 16px;
-            max-width: 400px;
-            text-align: center;
-            padding: 0 20px;
+            margin: 0;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: clamp(13px, 3.8cqmin, 16px);
+            line-height: 1.5;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
         }
 
-        #camera-permission i {
-            color: var(--primary-color);
-            font-size: 64px;
+        #camera-permission button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: clamp(4px, 2cqmin, 10px);
+            height: clamp(42px, 12cqmin, 50px);
+            padding: 0 28px;
+            border: none;
+            border-radius: 50px;
+            background: var(--primary-gradient);
+            box-shadow: var(--shadow-glow);
+            color: white;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #camera-permission button:hover {
+            box-shadow: 0 6px 25px rgba(249, 167, 68, 0.5);
+        }
+
+        #camera-permission button:disabled {
+            opacity: 0.7;
+            cursor: default;
         }
     </style>
 </head>
 
 <body>
-    <div id="camera-permission">
-        <i class="fas fa-camera"></i>
-        <p>This puzzle needs access to your camera to create the interactive experience</p>
-        <button id="enable-camera">Enable Camera</button>
+    <div id="camera-permission" role="dialog" aria-labelledby="camera-permission-title">
+        <div class="camera-permission-inner">
+            <div class="camera-permission-icon"><i class="fas fa-camera"></i></div>
+            <h2 id="camera-permission-title">Enable Camera</h2>
+            <p id="camera-permission-text">Your camera feed becomes the puzzle.</p>
+            <button id="enable-camera">Enable Camera</button>
+        </div>
     </div>
 
-    <stakco-info-panel icon="fa-hand-pointer">
+    <stakco-info-panel icon="fa-hand-pointer" icon-size="26px">
         <p>Touch and drag to rotate layers - Align all camera feeds to solve!</p>
     </stakco-info-panel>
 
@@ -329,7 +384,7 @@
     <stakco-share-button label="Share Success!"></stakco-share-button>
 
     <stakco-share-window 
-        title="Stakco Touch Webcam"
+        title="Stakco Camera"
         share-url="https://stakcos.com/touch-webcam/">
         <div slot="text">Solved the webcam puzzle!</div>
     </stakco-share-window>
@@ -371,7 +426,7 @@
         };
 
         async function init() {
-            console.log('Initializing Stakco Touch Webcam...');
+            console.log('Initializing Stakco Camera...');
             
             StakcoUtils.preventZoom();
             setupEventListeners();
@@ -379,7 +434,19 @@
             console.log('App initialized, waiting for camera permission');
         }
 
+        // Keep the permission circle exactly over the puzzle circle
+        function syncPermissionToPuzzle() {
+            if (cameraPermission.classList.contains('hidden')) return;
+            const rect = document.getElementById('video-container').getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+            const size = Math.min(rect.width, rect.height);
+            cameraPermission.style.setProperty('--perm-size', `${size}px`);
+            cameraPermission.style.left = `${rect.left + rect.width / 2}px`;
+            cameraPermission.style.top = `${rect.top + rect.height / 2}px`;
+        }
+
         async function initializeCamera() {
+            enableCameraBtn.disabled = true;
             try {
                 // Request camera access with ideal constraints
                 stream = await navigator.mediaDevices.getUserMedia({
@@ -416,7 +483,10 @@
                 console.log('Camera initialized successfully');
             } catch (error) {
                 console.error('Camera access error:', error);
-                alert('Unable to access camera. Please ensure you have granted camera permissions.');
+                document.getElementById('camera-permission-title').textContent = 'Camera Blocked';
+                document.getElementById('camera-permission-text').textContent = 'Allow camera access, then try again.';
+                enableCameraBtn.textContent = 'Try Again';
+                enableCameraBtn.disabled = false;
             }
         }
 
@@ -430,6 +500,8 @@
         function setupEventListeners() {
             // Camera enable button
             enableCameraBtn.addEventListener('click', initializeCamera);
+            syncPermissionToPuzzle();
+            window.addEventListener('resize', syncPermissionToPuzzle);
 
             // Setup container-level interaction (rotates currently selected layer)
             setupContainerInteraction();
