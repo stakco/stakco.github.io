@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Basic Meta -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Stakco Audio: rotate three circular waveforms until their beats line up. A listening puzzle that plays in the browser on phone or desktop.">
+    <meta name="keywords" content="Stakco, puzzles, interactive puzzle, audio puzzle, rhythm, waveform, music games, educational games, therapy puzzles">
+    <meta name="author" content="Stakco Team">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#3c2f38">
+
+    <title>Stakco Audio</title>
+    <link rel="canonical" href="https://stakcos.com/audio/">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+
+    <!-- External Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Stakco Audio">
+    <meta property="og:description" content="Rotate three circular waveforms until their beats line up.">
+    <meta property="og:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Stakco circular layered puzzle">
+    <meta property="og:url" content="https://stakcos.com/audio/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco Audio">
+    <meta name="twitter:description" content="Rotate three circular waveforms until their beats line up.">
+    <meta name="twitter:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
+    <meta name="twitter:image:alt" content="Stakco circular layered puzzle">
+    <meta name="twitter:creator" content="@stakco">
+
+    <!-- Favicons / Android -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+    <!-- Apple Touch Icons (Squircles) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco Audio">
+
+    <!-- Mobile App Meta Tags (iOS) -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco Audio">
+
+    <!-- Structured Data (Schema.org) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Stakco Audio",
+      "url": "https://stakcos.com/audio/",
+      "description": "Rotate three circular waveforms until their beats line up.",
+      "applicationCategory": "Game",
+      "operatingSystem": "Web",
+      "image": "https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Stakco"
+      }
+    }
+    </script>
+
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-countdown.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-orientation-overlay.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-permission-prompt.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+
+    <style>
+        :root {
+            /* Waveform layers: theme orange + a warm rose + a cool aqua,
+               all bright enough to read on the plum background. */
+            --audio-color-1: #f9a743;
+            --audio-color-2: #ff7aa2;
+            --audio-color-3: #6fd3e6;
+            --puzzle-size: min(90vmin, calc(100vw - 20px), calc(100vh - 200px));
+        }
+
+        html, body {
+            margin: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            overscroll-behavior: none;
+        }
+
+        /* Puzzle circle: same size and centring as <stakco-puzzle-container> */
+        #audio-puzzle {
+            position: relative;
+            width: var(--puzzle-size);
+            height: var(--puzzle-size);
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            cursor: grab;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #audio-puzzle.dragging {
+            cursor: grabbing;
+        }
+
+        .audio-layer {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            pointer-events: none;
+            will-change: transform;
+        }
+
+        .audio-layer.active {
+            z-index: 10;
+        }
+
+        .waveform-canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+            opacity: 0.45;
+            transition: opacity 0.3s ease, filter 0.3s ease;
+        }
+
+        .audio-layer.active .waveform-canvas {
+            opacity: 1;
+            filter: drop-shadow(0 0 10px currentColor);
+        }
+
+        #audio-puzzle.solved .waveform-canvas {
+            opacity: 1;
+        }
+
+        /* Playhead: sweeps once per loop; a layer sounds its beats as the
+           playhead passes the bumps drawn on it. */
+        .position-marker {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 44%;
+            border-radius: 2px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.85) 100%);
+            transform-origin: bottom center;
+            transform: translate(-50%, -100%) rotate(0deg);
+            z-index: 20;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .position-marker.show {
+            opacity: 1;
+        }
+
+        /* Centre hub: play/pause + sync level */
+        #hub {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 30;
+            pointer-events: none;
+        }
+
+        #play-button {
+            pointer-events: auto;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 2px solid var(--glass-border);
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            color: var(--primary-color);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: box-shadow 0.3s ease, border-color 0.3s ease, background 0.3s ease, color 0.3s ease;
+        }
+
+        #play-button i.fa-play {
+            margin-left: 3px; /* optical centre */
+        }
+
+        #play-button:hover,
+        #play-button:focus-visible {
+            border-color: var(--primary-color);
+            box-shadow: var(--shadow-glow);
+        }
+
+        #play-button.playing {
+            background: var(--primary-gradient);
+            border-color: var(--primary-color);
+            color: #fff;
+            box-shadow: var(--shadow-glow);
+        }
+
+        #sync-chip {
+            position: absolute;
+            top: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 12px;
+            border-radius: 50px;
+            background: rgba(20, 14, 20, 0.45);
+            border: 1px solid rgba(249, 167, 67, 0.45);
+            color: var(--primary-color);
+            font-size: 13px;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+            line-height: 1.4;
+            white-space: nowrap;
+        }
+
+        #audio-puzzle.solved #hub {
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        /* ============================================
+           Circular solved overlay (same frosted circle
+           as gyro's solved state / play's completion)
+           ============================================ */
+        .circle-overlay {
+            position: fixed;
+            left: calc(50vw - var(--puzzle-size) / 2);
+            top: calc(50vh - var(--puzzle-size) / 2);
+            width: var(--puzzle-size);
+            height: var(--puzzle-size);
+            box-sizing: border-box;
+            border-radius: 50%;
+            container-type: size;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.4s ease, visibility 0s linear 0.4s;
+            background: var(--glass-bg, rgba(255, 255, 255, 0.25));
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.18));
+            box-shadow: var(--shadow-soft, 0 8px 32px rgba(31, 38, 135, 0.37));
+            color: #fff;
+        }
+
+        .circle-overlay.show {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transition: opacity 0.4s ease, visibility 0s linear 0s;
+        }
+
+        .co-panel {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(8px, 3cqw, 14px);
+            width: 70%;
+            max-height: 70%;
+        }
+
+        .co-icon {
+            flex: none;
+            width: clamp(40px, 13cqw, 64px);
+            height: clamp(40px, 13cqw, 64px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary-gradient);
+            box-shadow: var(--shadow-glow);
+            color: #fff;
+            font-size: clamp(18px, 6cqw, 28px);
+            line-height: 1;
+        }
+
+        .co-title {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: clamp(16px, 5.4cqw, 24px);
+            font-weight: 700;
+            line-height: 1.2;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .co-message {
+            margin: 0;
+            color: rgba(255, 255, 255, 0.92);
+            font-size: clamp(12px, 3.6cqw, 16px);
+            line-height: 1.45;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8), 0 0 6px rgba(0, 0, 0, 0.4);
+        }
+
+        .co-time-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(20, 14, 20, 0.45);
+            border: 1px solid rgba(249, 167, 67, 0.45);
+            border-radius: 50px;
+            padding: clamp(4px, 1.2cqw, 6px) clamp(12px, 3.6cqw, 16px);
+            font-family: 'Courier New', monospace;
+            font-size: clamp(14px, 4.2cqw, 20px);
+            font-weight: 700;
+            color: var(--primary-color);
+            line-height: 1.2;
+        }
+
+        .co-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(6px, 2cqw, 10px);
+            margin-top: clamp(2px, 1.5cqw, 8px);
+        }
+
+        .co-btn {
+            flex: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            height: clamp(38px, 11cqw, 50px);
+            padding: 0 clamp(16px, 5.6cqw, 28px);
+            border: none;
+            border-radius: 50px;
+            background: var(--primary-gradient);
+            box-shadow: var(--shadow-glow);
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            font-size: clamp(12px, 3.3cqw, 14px);
+            font-weight: 600;
+            line-height: 1;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease, background 0.3s ease;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .co-btn:hover { box-shadow: 0 6px 25px rgba(249, 167, 68, 0.5); }
+
+        .co-btn.secondary {
+            background: rgba(60, 47, 56, 0.35);
+            border: 1px solid var(--glass-border);
+            box-shadow: none;
+            color: var(--primary-color);
+        }
+        .co-btn.secondary:hover {
+            background: rgba(249, 167, 68, 0.15);
+            box-shadow: none;
+        }
+
+        @container (max-height: 260px) {
+            .co-icon, .co-message { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Components -->
+    <stakco-orientation-overlay></stakco-orientation-overlay>
+
+    <stakco-countdown></stakco-countdown>
+
+    <stakco-info-panel icon="fa-wave-square" icon-size="26px">
+        <p>Drag to turn a ring. Line up all three beats.</p>
+    </stakco-info-panel>
+
+    <stakco-branding
+        title="Stakco Audio"
+        version="v1.0.0"
+        subtitle="Sync the Beat">
+    </stakco-branding>
+
+    <stakco-products-panel></stakco-products-panel>
+
+    <div id="audio-puzzle">
+        <div class="position-marker" id="position-marker"></div>
+        <div id="hub">
+            <button id="play-button" type="button" title="Play" aria-label="Play">
+                <i class="fa-solid fa-play"></i>
+            </button>
+            <div id="sync-chip" aria-live="polite">
+                <i class="fa-solid fa-wave-square"></i><span id="sync-text">0%</span>
+            </div>
+        </div>
+        <!-- Audio layers are created by script -->
+    </div>
+
+    <stakco-layer-controls layers="3"></stakco-layer-controls>
+
+    <stakco-permission-prompt
+        icon="fa-solid fa-headphones"
+        title="Turn on sound"
+        message="Listen as you turn the rings."
+        primary-label="Start"
+        secondary-label="Skip"
+        target="#audio-puzzle">
+    </stakco-permission-prompt>
+
+    <!-- Solved state -->
+    <div id="solved-overlay" class="circle-overlay" role="dialog" aria-labelledby="solved-title">
+        <div class="co-panel">
+            <div class="co-icon"><i class="fa-solid fa-music"></i></div>
+            <div class="co-title" id="solved-title">In Sync!</div>
+            <div class="co-time-chip">
+                <i class="fa-solid fa-stopwatch"></i>
+                <span id="solved-time-display">00:00</span>
+            </div>
+            <div class="co-message">All three beats line up.</div>
+            <div class="co-actions">
+                <button class="co-btn" id="solved-share-btn" type="button">
+                    <i class="fa-solid fa-share-nodes"></i><span>Share</span>
+                </button>
+                <button class="co-btn secondary" id="solved-again-btn" type="button">
+                    <i class="fa-solid fa-rotate-right"></i><span>Again</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <stakco-share-window
+        title="Stakco Audio"
+        share-url="https://stakcos.com/audio/">
+        <div slot="text">Synced the beat!</div>
+    </stakco-share-window>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            TOTAL_LAYERS: 3,
+            SYNC_THRESHOLD: 95,          // alignment % that counts as solved
+            WAVEFORM_SAMPLES: 240,
+            LOOP_SECONDS: 2,             // one bar of four beats
+            BEATS_PER_LOOP: 4,
+            FREQUENCIES: [220, 330, 440], // A3, E4, A4
+            COLORS: ['#f9a743', '#ff7aa2', '#6fd3e6'],
+            CANVAS_SIZE: 600,
+            RESTART_THROTTLE: 80,        // ms between source restarts while dragging
+            SOLVE_ANIMATION_DURATION: 600
+        };
+
+        // App state
+        let audioContext = null;
+        let audioBuffers = [];
+        let audioSources = [];
+        let analyzers = [];
+        let gainNodes = [];
+        let isPlaying = false;
+        let playStartTime = 0;            // audioContext time the shared loop clock started
+        let restartTimer = null;
+        let currentLayer = 1;
+        let layerRotations = [0, 0, 0];
+        let isDragging = false;
+        let lastAngle = 0;
+        let firstInteraction = false;
+        let isSolved = false;
+        let started = false;              // start prompt dismissed
+        let solveTime = '';
+
+        // DOM / components
+        let puzzle, playButton, syncText, positionMarker, solvedOverlay, solvedTimeDisplay;
+        let layerControls, countdown, infoPanel, branding, orientationOverlay, permissionPrompt, shareWindow;
+
+        function initApp() {
+            puzzle = document.getElementById('audio-puzzle');
+            playButton = document.getElementById('play-button');
+            syncText = document.getElementById('sync-text');
+            positionMarker = document.getElementById('position-marker');
+            solvedOverlay = document.getElementById('solved-overlay');
+            solvedTimeDisplay = document.getElementById('solved-time-display');
+
+            layerControls = document.querySelector('stakco-layer-controls');
+            countdown = document.querySelector('stakco-countdown');
+            infoPanel = document.querySelector('stakco-info-panel');
+            branding = document.querySelector('stakco-branding');
+            orientationOverlay = document.querySelector('stakco-orientation-overlay');
+            permissionPrompt = document.querySelector('stakco-permission-prompt');
+            shareWindow = document.querySelector('stakco-share-window');
+
+            createAudioLayers();
+            scrambleLayers();
+            setupEventHandlers();
+            startVisualization();
+
+            // Browsers need a gesture before audio can play.
+            customElements.whenDefined('stakco-permission-prompt').then(() => permissionPrompt.show());
+        }
+
+        // ---------- Layers ----------
+
+        function createAudioLayers() {
+            for (let i = 1; i <= CONFIG.TOTAL_LAYERS; i++) {
+                const layerDiv = document.createElement('div');
+                layerDiv.id = `layer${i}`;
+                layerDiv.className = `audio-layer${i === 1 ? ' active' : ''}`;
+
+                const canvas = document.createElement('canvas');
+                canvas.className = 'waveform-canvas';
+                canvas.id = `canvas${i}`;
+                canvas.width = CONFIG.CANVAS_SIZE;
+                canvas.height = CONFIG.CANVAS_SIZE;
+                canvas.style.color = CONFIG.COLORS[i - 1];
+
+                layerDiv.appendChild(canvas);
+                puzzle.appendChild(layerDiv);
+            }
+        }
+
+        // Random, clearly different start angles so the puzzle never starts solved.
+        function scrambleLayers() {
+            let tries = 0;
+            do {
+                layerRotations = layerRotations.map(() => Math.round(30 + Math.random() * 300));
+                tries++;
+            } while (tries < 50 && computeAlignment() > 40);
+            for (let i = 1; i <= CONFIG.TOTAL_LAYERS; i++) renderLayer(i);
+            updateSyncDisplay(computeAlignment());
+        }
+
+        function renderLayer(n) {
+            const el = document.getElementById(`layer${n}`);
+            const deg = ((layerRotations[n - 1] % 360) + 360) % 360;
+            if (el) el.style.transform = `rotate(${deg}deg)`;
+        }
+
+        function switchLayer(layerNumber) {
+            if (layerNumber === currentLayer) return;
+            document.querySelectorAll('.audio-layer').forEach(el => el.classList.remove('active'));
+            document.getElementById(`layer${layerNumber}`).classList.add('active');
+            currentLayer = layerNumber;
+        }
+
+        // ---------- Audio ----------
+
+        // Build one bar per layer: four decaying tone bursts, the first one
+        // accented, so the downbeats only coincide when the rings line up.
+        function buildLoopBuffer(index) {
+            const rate = audioContext.sampleRate;
+            const length = Math.floor(rate * CONFIG.LOOP_SECONDS);
+            const buffer = audioContext.createBuffer(1, length, rate);
+            const data = buffer.getChannelData(0);
+            const beatLen = length / CONFIG.BEATS_PER_LOOP;
+            const freq = CONFIG.FREQUENCIES[index];
+            for (let s = 0; s < length; s++) {
+                const beat = Math.floor(s / beatLen);
+                const t = (s - beat * beatLen) / rate;
+                const accent = beat === 0 ? 1 : 0.45;
+                const env = Math.exp(-t * (beat === 0 ? 6 : 10)) * Math.min(1, t * 400);
+                data[s] = Math.sin(2 * Math.PI * freq * t) * env * accent * 0.6;
+            }
+            return buffer;
+        }
+
+        function ensureAudio() {
+            if (audioContext) {
+                if (audioContext.state === 'suspended') audioContext.resume();
+                return true;
+            }
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                for (let i = 0; i < CONFIG.TOTAL_LAYERS; i++) {
+                    audioBuffers[i] = buildLoopBuffer(i);
+                    analyzers[i] = audioContext.createAnalyser();
+                    analyzers[i].fftSize = 512;
+                    gainNodes[i] = audioContext.createGain();
+                    gainNodes[i].gain.value = 0.3;
+                    // source -> gain -> analyser -> destination
+                    gainNodes[i].connect(analyzers[i]);
+                    analyzers[i].connect(audioContext.destination);
+                }
+                return true;
+            } catch (error) {
+                console.error('Audio initialization failed:', error);
+                infoPanel.setContent('<p>Sound is not available. Line up the rings by eye.</p>');
+                return false;
+            }
+        }
+
+        // Offset each layer so it sounds a beat as the playhead passes that
+        // beat's bump on screen: buffer time = loop clock - rotation.
+        function startSources() {
+            const dur = CONFIG.LOOP_SECONDS;
+            const elapsed = audioContext.currentTime - playStartTime;
+            audioSources = [];
+            for (let i = 0; i < CONFIG.TOTAL_LAYERS; i++) {
+                const source = audioContext.createBufferSource();
+                source.buffer = audioBuffers[i];
+                source.loop = true;
+                source.connect(gainNodes[i]);
+                const offset = (((elapsed - (layerRotations[i] / 360) * dur) % dur) + dur) % dur;
+                source.start(0, offset);
+                audioSources[i] = source;
+            }
+        }
+
+        function stopSources() {
+            audioSources.forEach(source => {
+                try { source.stop(); } catch (e) { /* already stopped */ }
+                try { source.disconnect(); } catch (e) { /* ignore */ }
+            });
+            audioSources = [];
+        }
+
+        function playAudio() {
+            if (!ensureAudio()) return;
+            playStartTime = audioContext.currentTime;
+            stopSources();
+            startSources();
+            isPlaying = true;
+            setPlayButton(true);
+            positionMarker.classList.add('show');
+        }
+
+        function stopAudio() {
+            clearTimeout(restartTimer);
+            restartTimer = null;
+            stopSources();
+            isPlaying = false;
+            setPlayButton(false);
+            positionMarker.classList.remove('show');
+        }
+
+        function togglePlayback() {
+            if (isPlaying) stopAudio();
+            else playAudio();
+        }
+
+        function setPlayButton(playing) {
+            playButton.classList.toggle('playing', playing);
+            playButton.innerHTML = `<i class="fa-solid ${playing ? 'fa-pause' : 'fa-play'}"></i>`;
+            playButton.title = playing ? 'Pause' : 'Play';
+            playButton.setAttribute('aria-label', playButton.title);
+        }
+
+        // Re-time the sources after a rotation (throttled while dragging).
+        function scheduleAudioRestart() {
+            if (!isPlaying || restartTimer) return;
+            restartTimer = setTimeout(() => {
+                restartTimer = null;
+                if (!isPlaying) return;
+                stopSources();
+                startSources();
+            }, CONFIG.RESTART_THROTTLE);
+        }
+
+        // ---------- Input ----------
+
+        function setupEventHandlers() {
+            playButton.addEventListener('click', togglePlayback);
+            // Pressing the play button must not start a drag.
+            playButton.addEventListener('mousedown', e => e.stopPropagation());
+            playButton.addEventListener('touchstart', e => e.stopPropagation(), { passive: true });
+
+            puzzle.addEventListener('mousedown', startDrag);
+            document.addEventListener('mousemove', handleDrag);
+            document.addEventListener('mouseup', endDrag);
+
+            puzzle.addEventListener('touchstart', startTouch, { passive: false });
+            document.addEventListener('touchmove', handleTouch, { passive: false });
+            document.addEventListener('touchend', endDrag);
+            document.addEventListener('touchcancel', endDrag);
+
+            document.addEventListener('keydown', handleKeyboard);
+            puzzle.addEventListener('contextmenu', e => e.preventDefault());
+
+            // Layer buttons (and keys 1-3) come from <stakco-layer-controls>
+            layerControls.addEventListener('layerchange', e => switchLayer(e.detail.layer));
+
+            // Start prompt
+            permissionPrompt.addEventListener('primary-action', () => {
+                started = true;
+                playAudio();
+            });
+            permissionPrompt.addEventListener('secondary-action', () => {
+                started = true;
+            });
+
+            // Orientation overlay pauses the timer
+            orientationOverlay.addEventListener('blocked', () => {
+                if (countdown.active) countdown.pause();
+            });
+            orientationOverlay.addEventListener('unblocked', () => {
+                if (countdown.paused) countdown.resume();
+            });
+
+            document.getElementById('solved-share-btn').addEventListener('click', handleShare);
+            document.getElementById('solved-again-btn').addEventListener('click', resetPuzzle);
+        }
+
+        function canRotate() {
+            return started && !isSolved && !(orientationOverlay.isBlocked && orientationOverlay.isBlocked());
+        }
+
+        function startDrag(e) {
+            if (!canRotate()) return;
+            e.preventDefault();
+            isDragging = true;
+            puzzle.classList.add('dragging');
+            lastAngle = getAngleFromEvent(e.clientX, e.clientY);
+        }
+
+        function startTouch(e) {
+            if (!canRotate() || !e.touches) return;
+            e.preventDefault();
+            isDragging = true;
+            puzzle.classList.add('dragging');
+            const touch = e.touches[0];
+            lastAngle = getAngleFromEvent(touch.clientX, touch.clientY);
+        }
+
+        function handleDrag(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            const currentAngle = getAngleFromEvent(e.clientX, e.clientY);
+            applyRotation(normalizeAngleDelta(currentAngle - lastAngle));
+            lastAngle = currentAngle;
+        }
+
+        function handleTouch(e) {
+            if (!isDragging) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            const currentAngle = getAngleFromEvent(touch.clientX, touch.clientY);
+            applyRotation(normalizeAngleDelta(currentAngle - lastAngle));
+            lastAngle = currentAngle;
+        }
+
+        function endDrag() {
+            isDragging = false;
+            puzzle.classList.remove('dragging');
+        }
+
+        function getAngleFromEvent(clientX, clientY) {
+            const rect = puzzle.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            return Math.atan2(clientY - centerY, clientX - centerX) * 180 / Math.PI;
+        }
+
+        function normalizeAngleDelta(delta) {
+            if (delta > 180) delta -= 360;
+            if (delta < -180) delta += 360;
+            return delta;
+        }
+
+        function handleKeyboard(e) {
+            if (shareWindow && shareWindow.isOpen) return;
+            if (e.key === 'Enter') {
+                if (!started) return;
+                e.preventDefault();
+                togglePlayback();
+                return;
+            }
+            if (!canRotate()) return;
+            const keyActions = {
+                ' ': () => layerControls.setActiveLayer((currentLayer % CONFIG.TOTAL_LAYERS) + 1),
+                'ArrowLeft': () => applyRotation(-5),
+                'ArrowRight': () => applyRotation(5)
+            };
+            if (keyActions[e.key]) {
+                e.preventDefault();
+                keyActions[e.key]();
+            }
+            // Keys 1-3 are handled by <stakco-layer-controls>.
+        }
+
+        // ---------- Puzzle ----------
+
+        function applyRotation(deltaAngle) {
+            if (!canRotate() || !deltaAngle) return;
+
+            if (!firstInteraction) {
+                firstInteraction = true;
+                countdown.start();
+                branding.hide();
+            }
+
+            layerRotations[currentLayer - 1] += deltaAngle;
+            renderLayer(currentLayer);
+            scheduleAudioRestart();
+            checkSync();
+        }
+
+        // 100% when all rings share an angle; drops 1% per degree of average spread.
+        function computeAlignment() {
+            let totalDifference = 0;
+            let comparisons = 0;
+            for (let i = 0; i < CONFIG.TOTAL_LAYERS - 1; i++) {
+                for (let j = i + 1; j < CONFIG.TOTAL_LAYERS; j++) {
+                    totalDifference += Math.abs(normalizeAngleDelta(((layerRotations[i] - layerRotations[j]) % 360 + 360) % 360));
+                    comparisons++;
+                }
+            }
+            return Math.max(0, 100 - totalDifference / comparisons);
+        }
+
+        function updateSyncDisplay(alignment) {
+            syncText.textContent = `${Math.round(alignment)}%`;
+        }
+
+        function checkSync() {
+            const alignment = computeAlignment();
+            updateSyncDisplay(alignment);
+            if (alignment >= CONFIG.SYNC_THRESHOLD) solvePuzzle();
+        }
+
+        function solvePuzzle() {
+            if (isSolved) return;
+            isSolved = true;
+            endDrag();
+
+            countdown.stop();
+            solveTime = countdown.getTime ? countdown.getTime() : '';
+            if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+
+            layerControls.hide();
+            infoPanel.collapse();
+            puzzle.classList.add('solved');
+            updateSyncDisplay(100);
+
+            // Snap every ring to the same angle (their average) and re-time the beats.
+            animateToSolution(CONFIG.SOLVE_ANIMATION_DURATION, () => {
+                if (isPlaying) { stopSources(); startSources(); }
+            });
+
+            setTimeout(() => {
+                solvedTimeDisplay.textContent = solveTime || '00:00';
+                solvedOverlay.classList.add('show');
+            }, CONFIG.SOLVE_ANIMATION_DURATION + 400);
+        }
+
+        function animateToSolution(duration, done) {
+            const base = layerRotations[0];
+            const target = base;
+            const from = layerRotations.slice();
+            const to = from.map(r => r + normalizeAngleDelta(((target - r) % 360 + 360) % 360));
+            const t0 = performance.now();
+            function step(now) {
+                const p = Math.min(1, (now - t0) / duration);
+                const ease = 1 - Math.pow(1 - p, 3);
+                layerRotations = from.map((f, i) => f + (to[i] - f) * ease);
+                for (let i = 1; i <= CONFIG.TOTAL_LAYERS; i++) renderLayer(i);
+                if (p < 1) requestAnimationFrame(step);
+                else if (done) done();
+            }
+            requestAnimationFrame(step);
+        }
+
+        function resetPuzzle() {
+            solvedOverlay.classList.remove('show');
+            puzzle.classList.remove('solved');
+            isSolved = false;
+            firstInteraction = false;
+            layerControls.show();
+            layerControls.setActiveLayer(1);
+            switchLayer(1);
+            scrambleLayers();
+            if (isPlaying) { stopSources(); startSources(); }
+        }
+
+        async function handleShare() {
+            const layerImages = [];
+            for (let i = 1; i <= CONFIG.TOTAL_LAYERS; i++) {
+                layerImages.push(document.getElementById(`canvas${i}`).toDataURL('image/png'));
+            }
+            const time = solveTime || '';
+            shareWindow.setAttribute('filename', `stakco-audio-${time.replace(/:/g, '') || 'synced'}.png`);
+            await shareWindow.open(layerImages, time ? `Synced the beat in ${time}!` : 'Synced the beat!', true);
+        }
+
+        // ---------- Drawing ----------
+
+        function startVisualization() {
+            function animate() {
+                drawWaveforms();
+                updatePositionMarker();
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // Live loudness of a layer (0..1) from its analyser.
+        function layerLevel(i) {
+            if (!analyzers[i] || !isPlaying) return 0;
+            const data = new Uint8Array(analyzers[i].fftSize);
+            analyzers[i].getByteTimeDomainData(data);
+            let peak = 0;
+            for (let k = 0; k < data.length; k++) peak = Math.max(peak, Math.abs(data[k] - 128));
+            return Math.min(1, peak / 40);
+        }
+
+        // Each ring draws its loop's beat envelope around the circle, starting
+        // at the top: the tall bump is the accented downbeat.
+        function drawWaveforms() {
+            const now = Date.now() / 1000;
+            for (let i = 0; i < CONFIG.TOTAL_LAYERS; i++) {
+                const canvas = document.getElementById(`canvas${i + 1}`);
+                const ctx = canvas.getContext('2d');
+                const size = canvas.width;
+                const c = size / 2;
+                const ringRadius = size * (0.2 + i * 0.09);
+                const amp = size * 0.015;
+                const level = layerLevel(i);
+                const breathe = 1 + Math.sin(now * 2 + i) * 0.06 + level * 0.5;
+                const ripple = 3 + i * 2;
+
+                ctx.clearRect(0, 0, size, size);
+                ctx.strokeStyle = CONFIG.COLORS[i];
+                ctx.lineJoin = 'round';
+
+                // Waveform ring
+                ctx.lineWidth = size * 0.007;
+                ctx.beginPath();
+                for (let j = 0; j <= CONFIG.WAVEFORM_SAMPLES; j++) {
+                    const u = j / CONFIG.WAVEFORM_SAMPLES;            // 0..1 around the loop
+                    const beatPos = u * CONFIG.BEATS_PER_LOOP;
+                    const beat = Math.floor(beatPos) % CONFIG.BEATS_PER_LOOP;
+                    const t = beatPos - Math.floor(beatPos);
+                    const accent = beat === 0 ? 1.6 : 0.8;
+                    const env = Math.exp(-t * 6) * accent;
+                    const wave = Math.sin(u * Math.PI * 2 * CONFIG.BEATS_PER_LOOP * ripple);
+                    const r = ringRadius + amp * breathe * (env * 1.4 + wave * env * 0.6);
+                    const a = -Math.PI / 2 + u * Math.PI * 2;
+                    const x = c + Math.cos(a) * r;
+                    const y = c + Math.sin(a) * r;
+                    if (j === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+                ctx.stroke();
+
+                // Downbeat dot at the top of each ring
+                ctx.fillStyle = CONFIG.COLORS[i];
+                ctx.beginPath();
+                ctx.arc(c, c - ringRadius - amp * 5.6, size * 0.012, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function updatePositionMarker() {
+            if (isPlaying && audioContext) {
+                const elapsed = audioContext.currentTime - playStartTime;
+                const angle = ((elapsed / CONFIG.LOOP_SECONDS) % 1) * 360;
+                positionMarker.style.transform = `translate(-50%, -100%) rotate(${angle}deg)`;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
