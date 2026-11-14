@@ -179,6 +179,21 @@
         "vista",
         "drag"
       ]
+    },
+    {
+      "title": "Stakco Audio",
+      "description": "Turn the waveform rings until the beat syncs.",
+      "url": "https://stakcos.com/audio",
+      "urlDisplay": "stakcos.com/audio",
+      "icon": "fa-solid fa-wave-square",
+      "tags": [
+        "audio",
+        "sound",
+        "music",
+        "beat",
+        "waveform",
+        "sync"
+      ]
     }
   ]
 }
