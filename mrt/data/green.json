@@ -1,36 +1,167 @@
 [
-    { "name": "Tuas Link", "lat": 1.334722, "lng": 103.636111 },
-    { "name": "Tuas West Road", "lat": 1.332500, "lng": 103.644167 },
-    { "name": "Tuas Crescent", "lat": 1.331389, "lng": 103.653611 },
-    { "name": "Gul Circle", "lat": 1.331111, "lng": 103.662500 },
-    { "name": "Joo Koon", "lat": 1.326111, "lng": 103.667500 },
-    { "name": "Pioneer", "lat": 1.315278, "lng": 103.670833 },
-    { "name": "Boon Lay", "lat": 1.337500, "lng": 103.706389 },
-    { "name": "Lakeside", "lat": 1.340278, "lng": 103.705278 },
-    { "name": "Chinese Garden", "lat": 1.347222, "lng": 103.737500 },
-    { "name": "Jurong East", "lat": 1.333611, "lng": 103.742500 },
-    { "name": "Clementi", "lat": 1.315000, "lng": 103.765278 },
-    { "name": "Dover", "lat": 1.306111, "lng": 103.772222 },
-    { "name": "Buona Vista", "lat": 1.304444, "lng": 103.790833 },
-    { "name": "Commonwealth", "lat": 1.296389, "lng": 103.800278 },
-    { "name": "Queenstown", "lat": 1.294167, "lng": 103.816667 },
-    { "name": "Redhill", "lat": 1.288611, "lng": 103.819722 },
-    { "name": "Tiong Bahru", "lat": 1.284167, "lng": 103.828611 },
-    { "name": "Outram Park", "lat": 1.280278, "lng": 103.831667 },
-    { "name": "Tanjong Pagar", "lat": 1.276389, "lng": 103.844722 },
-    { "name": "Raffles Place", "lat": 1.283333, "lng": 103.851944 },
-    { "name": "City Hall", "lat": 1.293611, "lng": 103.852500 },
-    { "name": "Bugis", "lat": 1.300278, "lng": 103.857500 },
-    { "name": "Lavender", "lat": 1.308611, "lng": 103.873611 },
-    { "name": "Kallang", "lat": 1.315278, "lng": 103.877500 },
-    { "name": "Aljunied", "lat": 1.319167, "lng": 103.884722 },
-    { "name": "Paya Lebar", "lat": 1.317500, "lng": 103.894722 },
-    { "name": "Eunos", "lat": 1.319167, "lng": 103.904722 },
-    { "name": "Kembangan", "lat": 1.318611, "lng": 103.915278 },
-    { "name": "Bedok", "lat": 1.324167, "lng": 103.927500 },
-    { "name": "Tanah Merah", "lat": 1.327500, "lng": 103.945000 },
-    { "name": "Simei", "lat": 1.343611, "lng": 103.956389 },
-    { "name": "Tampines", "lat": 1.353611, "lng": 103.945833 },
-    { "name": "Pasir Ris", "lat": 1.372222, "lng": 103.949722 }
-  
+    {
+        "name": "Tuas Link",
+        "lat": 1.34043,
+        "lng": 103.63696
+    },
+    {
+        "name": "Tuas West Road",
+        "lat": 1.3295,
+        "lng": 103.64015
+    },
+    {
+        "name": "Tuas Crescent",
+        "lat": 1.32081,
+        "lng": 103.64957
+    },
+    {
+        "name": "Gul Circle",
+        "lat": 1.31942,
+        "lng": 103.66042
+    },
+    {
+        "name": "Joo Koon",
+        "lat": 1.32772,
+        "lng": 103.67829
+    },
+    {
+        "name": "Pioneer",
+        "lat": 1.33757,
+        "lng": 103.69735
+    },
+    {
+        "name": "Boon Lay",
+        "lat": 1.33847,
+        "lng": 103.70578
+    },
+    {
+        "name": "Lakeside",
+        "lat": 1.3443,
+        "lng": 103.7208
+    },
+    {
+        "name": "Chinese Garden",
+        "lat": 1.34247,
+        "lng": 103.73259
+    },
+    {
+        "name": "Jurong East",
+        "lat": 1.33312,
+        "lng": 103.7423
+    },
+    {
+        "name": "Clementi",
+        "lat": 1.3151,
+        "lng": 103.76523
+    },
+    {
+        "name": "Dover",
+        "lat": 1.31142,
+        "lng": 103.77863
+    },
+    {
+        "name": "Buona Vista",
+        "lat": 1.30726,
+        "lng": 103.79071
+    },
+    {
+        "name": "Commonwealth",
+        "lat": 1.30244,
+        "lng": 103.79831
+    },
+    {
+        "name": "Queenstown",
+        "lat": 1.29455,
+        "lng": 103.80605
+    },
+    {
+        "name": "Redhill",
+        "lat": 1.28965,
+        "lng": 103.81676
+    },
+    {
+        "name": "Tiong Bahru",
+        "lat": 1.28609,
+        "lng": 103.82764
+    },
+    {
+        "name": "Outram Park",
+        "lat": 1.28069,
+        "lng": 103.84024
+    },
+    {
+        "name": "Tanjong Pagar",
+        "lat": 1.27657,
+        "lng": 103.84588
+    },
+    {
+        "name": "Raffles Place",
+        "lat": 1.28441,
+        "lng": 103.85147
+    },
+    {
+        "name": "City Hall",
+        "lat": 1.29321,
+        "lng": 103.85183
+    },
+    {
+        "name": "Bugis",
+        "lat": 1.30053,
+        "lng": 103.85609
+    },
+    {
+        "name": "Lavender",
+        "lat": 1.30744,
+        "lng": 103.86303
+    },
+    {
+        "name": "Kallang",
+        "lat": 1.31145,
+        "lng": 103.87134
+    },
+    {
+        "name": "Aljunied",
+        "lat": 1.31626,
+        "lng": 103.88267
+    },
+    {
+        "name": "Paya Lebar",
+        "lat": 1.31805,
+        "lng": 103.89232
+    },
+    {
+        "name": "Eunos",
+        "lat": 1.31981,
+        "lng": 103.90306
+    },
+    {
+        "name": "Kembangan",
+        "lat": 1.32106,
+        "lng": 103.91276
+    },
+    {
+        "name": "Bedok",
+        "lat": 1.32394,
+        "lng": 103.93
+    },
+    {
+        "name": "Tanah Merah",
+        "lat": 1.32726,
+        "lng": 103.94651
+    },
+    {
+        "name": "Simei",
+        "lat": 1.34318,
+        "lng": 103.95338
+    },
+    {
+        "name": "Tampines",
+        "lat": 1.35337,
+        "lng": 103.94508
+    },
+    {
+        "name": "Pasir Ris",
+        "lat": 1.37303,
+        "lng": 103.94925
+    }
 ]

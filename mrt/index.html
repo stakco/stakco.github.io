@@ -1,474 +1,864 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Singapore MRT Line Tracker</title>
+    <meta name="description" content="Singapore MRT line-tracker — interactive transit puzzles with rotating layers.">
+    <meta name="author" content="Stakco Team">
+    <meta name="theme-color" content="#3c2f38">
+
+    <title>Stakco MRT</title>
+
+    <!-- Favicons / Android -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+    <!-- Apple Touch Icons (Squircles) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Stakco MRT">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Stakco MRT">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Stakco MRT">
+    <meta property="og:description" content="Singapore MRT line-tracker — interactive transit puzzles with rotating layers.">
+    <meta property="og:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
+    <meta property="og:url" content="https://stakcos.com/mrt/">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Stakco">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Stakco MRT">
+    <meta name="twitter:description" content="Singapore MRT line-tracker — interactive transit puzzles with rotating layers.">
+    <meta name="twitter:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
+    <meta name="twitter:site" content="@StakcoPuzzle">
+    <meta name="twitter:creator" content="@StakcoPuzzle">
+
+    <!-- Stakco theme + share capture -->
+    <link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <!-- Import Stakco Components -->
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-countdown.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-window.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-orientation-overlay.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-puzzle-container.js"></script>
+    <script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-share-button.js"></script>
+
     <style>
         body {
-            margin: 0;
             padding: 0;
-            font-family: Arial, sans-serif;
-            background: #000;
-            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: var(--text-primary);
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
         }
 
-        #container {
-            position: relative;
-            width: 90vmin;
-            height: 90vmin;
-            max-width: calc(100vw - 20px);
-            max-height: calc(100vh - 240px); /* Account for info bar (80px) + station tracker (160px) */
-        }
-
-        .mrt-layer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
+        html, body {
+            margin: 0;
             height: 100%;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            transition: transform 1s ease-in-out;
+            overflow: hidden;
+            overscroll-behavior: none;
         }
 
-        #green-line {
-            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_0.png');
-            z-index: 3;
+        /* ============================================
+           Bottom HUD: debug controls + LED info bar
+           ============================================ */
+        #hud {
+            position: fixed;
+            left: 16px;
+            right: 16px;
+            bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            z-index: 900;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
-        #yellow-line {
-            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1.png');
-            z-index: 2;
+        #hud > * {
+            pointer-events: auto;
         }
 
-        #blue-line {
-            background-image: url('https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_2.png');
-            z-index: 1;
+        #hud.hidden {
+            opacity: 0;
+        }
+
+        #hud.hidden > * {
+            pointer-events: none;
         }
 
         #info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 6px;
+            padding: 6px;
+            max-width: 100%;
+            box-sizing: border-box;
+            border-radius: 25px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        /* LED chip */
+        .led-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+            max-width: 100%;
+            box-sizing: border-box;
+            height: 38px;
+            padding: 0 14px;
+            border-radius: 19px;
+            background: rgba(60, 47, 56, 0.55);
+            color: #fff;
+        }
+
+        .led-label {
+            flex: 0 0 auto;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .led-value {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--primary-color);
+            text-shadow: 0 0 8px rgba(249, 167, 67, 0.55);
+            animation: flicker 2.5s infinite;
+        }
+
+        .led-coords {
+            color: #fff;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.35);
+        }
+
+        /* Active line: coloured dot in the line's own colour */
+        .led-active::before {
+            content: '';
+            display: none;
+            width: 9px;
+            height: 9px;
+            margin-right: 7px;
+            border-radius: 50%;
+            vertical-align: 1px;
+            background: var(--line-color);
+            box-shadow: 0 0 8px var(--line-color);
+        }
+
+        .led-active.on::before {
+            display: inline-block;
+        }
+
+        /* Status chip (GPS state) */
+        #status i {
+            color: var(--primary-color);
+            font-size: 13px;
+        }
+
+        #gps-status {
+            margin: 0;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Phones: compact chips, station on its own row */
+        @media (max-width: 600px) {
+            .led-text {
+                height: 34px;
+                padding: 0 12px;
+                gap: 6px;
+            }
+
+            .led-value {
+                font-size: 13px;
+            }
+
+            #info .led-text:has(#nearest-station) {
+                order: -1;
+            }
+        }
+
+        /* Subtle LED flicker */
+        @keyframes flicker {
+            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+            20%, 24%, 55% { opacity: 0.85; }
+            22% { opacity: 0.7; }
+        }
+
+        /* ============================================
+           Debug controls (prev / next station)
+           ============================================ */
+        #debug-controls {
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #debug-controls.active {
+            display: flex;
+        }
+
+        .debug-button {
+            width: 44px;
+            height: 44px;
+            flex: 0 0 auto;
+            border: none;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            transition: box-shadow 0.3s ease, background 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .debug-button:hover {
+            background: var(--primary-gradient);
+            box-shadow: var(--shadow-glow);
+        }
+
+        #debug-info {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 150px;
+            max-width: 220px;
+            height: 44px;
+            padding: 0 16px;
+            box-sizing: border-box;
+            border-radius: 22px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            color: #fff;
+            line-height: 1.25;
+        }
+
+        #debug-info.active {
+            display: flex;
+        }
+
+        #debug-station-info {
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        #debug-line-info {
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 11px;
+            letter-spacing: 1px;
+            color: var(--primary-color);
+        }
+
+        /* Wide screens: debug controls float at the right edge, clear of the puzzle */
+        @media (min-width: 900px) {
+            #debug-controls {
+                position: fixed;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+        }
+
+        /* ============================================
+           Map button (below the Stakco products button)
+           ============================================ */
+        #map-button {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 900;
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            color: #fff;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            transition: box-shadow 0.3s ease, background 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #map-button:hover {
+            background: var(--primary-gradient);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* ============================================
+           Full-screen MRT Map
+           ============================================ */
+        #map-overlay {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 45%, #4a3a45 0%, var(--text-primary) 70%);
+            display: none;
+            z-index: 5000;
+            font-family: 'Inter', sans-serif;
+        }
+
+        #map-overlay.show {
+            display: block;
+        }
+
+        #map-overlay header {
             position: absolute;
             top: 20px;
             left: 20px;
             right: 20px;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-        }
-
-        #status {
-            position: absolute;
-            bottom: 180px;
-            left: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 12px;
-        }
-
-        .active {
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-        }
-
-        #station-tracker {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 160px;
-            background: rgba(0, 0, 0, 0.95);
-            color: white;
-            overflow-x: auto;
-            overflow-y: hidden;
-            border-top: 2px solid #333;
-        }
-
-        .line-display {
-            display: none;
-            padding: 10px;
-            height: 140px;
-        }
-
-        .line-display.active-display {
-            display: block;
-        }
-
-        .line-header {
-            text-align: center;
-            margin-bottom: 10px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-
-        .stations-container {
-            position: relative;
-            height: 100px;
-            width: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-        }
-
-        .stations-line {
-            position: relative;
-            height: 4px;
-            background: #333;
-            margin: 50px 20px;
-            border-radius: 2px;
-            min-width: calc(100vw - 40px);
-        }
-
-        .station-point {
-            position: absolute;
-            top: -8px;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
-            border: 3px solid #666;
-            background: #222;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            pointer-events: none;
             z-index: 2;
         }
 
-        .station-point.current {
-            background: #FFD700;
-            border-color: #FFA500;
-            box-shadow: 0 0 15px #FFD700;
-            animation: pulse 2s infinite;
+        #map-overlay header > * {
+            pointer-events: auto;
         }
 
-        .station-point.proximity {
-            background: #FF6B6B;
-            border-color: #FF4757;
-            box-shadow: 0 0 10px #FF6B6B;
+        #map-overlay header .title {
+            height: 50px;
+            line-height: 50px;
+            padding: 0 22px;
+            border-radius: 25px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
         }
 
-        .station-point.passed {
-            background: #4ECDC4;
-            border-color: #26de81;
+        #map-close {
+            width: 50px;
+            height: 50px;
+            border: none;
+            border-radius: 50%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: box-shadow 0.3s ease, background 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        .station-name {
+        #map-close:hover {
+            background: var(--primary-gradient);
+            box-shadow: var(--shadow-glow);
+        }
+
+        #map-svg-wrap {
             position: absolute;
-            top: 25px;
-            left: 50%;
-            transform: translateX(-50%) rotate(-45deg);
-            transform-origin: center;
-            font-size: 10px;
-            white-space: nowrap;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 2px 4px;
-            border-radius: 3px;
-            border: 1px solid #444;
-            min-width: 60px;
-            text-align: center;
+            inset: 80px 0 0 0;
+            overflow: hidden;
         }
 
-        .station-distance {
-            position: absolute;
-            top: -35px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 8px;
-            background: rgba(0, 0, 0, 0.9);
-            padding: 1px 3px;
-            border-radius: 2px;
-            border: 1px solid #666;
-            display: none;
-        }
-
-        .station-point.current .station-distance,
-        .station-point.proximity .station-distance {
+        #map-svg {
+            width: 100%;
+            height: 100%;
             display: block;
         }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 15px #FFD700; }
-            50% { box-shadow: 0 0 25px #FFD700, 0 0 35px #FFD700; }
-            100% { box-shadow: 0 0 15px #FFD700; }
+        .map-line {
+            fill: none;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .line-selector {
+        #map-legend {
             position: absolute;
-            top: 5px;
-            right: 5px;
+            bottom: 20px;
+            left: 20px;
+            padding: 10px 16px;
+            border-radius: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            font-size: 12px;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        #map-legend .legend-row {
             display: flex;
-            gap: 5px;
+            align-items: center;
+            gap: 8px;
+            margin: 3px 0;
         }
 
-        .line-button {
-            width: 30px;
-            height: 20px;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 10px;
-            font-weight: bold;
-            color: white;
-            transition: all 0.3s ease;
+        #map-legend .legend-swatch {
+            width: 18px;
+            height: 4px;
+            border-radius: 2px;
         }
 
-        .line-button.green { background: #008000; }
-        .line-button.yellow { background: #FFD700; color: black; }
-        .line-button.blue { background: #006AD0; }
-
-        .line-button.active-button {
-            box-shadow: 0 0 10px currentColor;
-            transform: scale(1.1);
-        }
-
-        .progress-indicator {
+        #map-station-tooltip {
             position: absolute;
-            top: -2px;
-            height: 8px;
-            background: linear-gradient(90deg, transparent 0%, currentColor 50%, transparent 100%);
-            border-radius: 4px;
-            transition: all 0.5s ease;
-            opacity: 0.6;
+            top: 12px;
+            right: 20px;
+            max-width: 220px;
+            padding: 10px 16px;
+            border-radius: 16px;
+            background: rgba(60, 47, 56, 0.85);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            color: #fff;
+            font-size: 13px;
+            line-height: 1.4;
+            display: none;
         }
 
-        /* LED Text Styling */
-.led-text {
-    display: block;
-    margin: 5px 0;
-    font-family: 'Courier New', monospace; /* dashboard look */
-    font-size: 16px;
-    color: #0f0; /* default green LED glow */
-    text-shadow: 
-        0 0 5px #0f0,
-        0 0 10px #0f0,
-        0 0 20px #0f0,
-        0 0 40px #0f0;
-    letter-spacing: 2px;
-}
+        #map-station-tooltip.show {
+            display: block;
+        }
 
-/* Labels in dimmer LED */
-.led-label {
-    color: #0a0;
-    font-weight: bold;
-    margin-right: 6px;
-    text-shadow: 
-        0 0 3px #060,
-        0 0 6px #090;
-}
+        #map-station-tooltip .tt-name {
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 2px;
+        }
 
-/* Values in stronger LED */
-.led-value {
-    color: #0f0;
-    font-weight: bold;
-    text-transform: uppercase;
-}
-
-/* Different LED colors depending on type */
-.led-coords { color: #0ff; text-shadow: 0 0 5px #0ff, 0 0 15px #0ff; }  /* cyan GPS */
-.led-station { color: #ff0; text-shadow: 0 0 5px #ff0, 0 0 15px #ff0; }  /* yellow station */
-.led-active { color: #f00; text-shadow: 0 0 5px #f00, 0 0 15px #f00; }   /* red active line */
-
-/* Optional subtle flicker for realism */
-@keyframes flicker {
-    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
-    20%, 24%, 55% { opacity: 0.8; }
-    22% { opacity: 0.6; }
-}
-.led-text, .led-value {
-    animation: flicker 2.5s infinite;
-}
-
+        #map-station-tooltip .tt-lines {
+            font-size: 11px;
+            opacity: 0.8;
+        }
     </style>
 </head>
+
 <body>
-    <div id="info">
-        <span class="led-text">
-            <span class="led-label">GPS:</span>
-            <span class="led-value led-coords" id="coordinates">Getting...</span>
-        </span>
-        <span class="led-text">
-            <span class="led-label">STN:</span>
-            <span class="led-value led-station" id="nearest-station">Detecting</span>
-        </span>
-        <span class="led-text">
-            <span class="led-label">LNE:</span>
-            <span class="led-value led-active" id="active-line">None</span>
-        </span>
-    </div>
+    <!-- Components -->
+    <stakco-orientation-overlay></stakco-orientation-overlay>
 
-    <div id="container">
-        <div id="green-line" class="mrt-layer"></div>
-        <div id="yellow-line" class="mrt-layer"></div>
-        <div id="blue-line" class="mrt-layer"></div>
-    </div>
+    <stakco-countdown></stakco-countdown>
 
-    <div id="status">
-        <p id="gps-status">Initializing GPS...</p>
-    </div>
+    <stakco-info-panel icon="fa-train-subway" icon-size="26px">
+        <p>Ride the MRT to turn the layers</p>
+    </stakco-info-panel>
 
-    <div id="station-tracker">
-        <div class="line-selector">
-            <button class="line-button green active-button" data-line="green">G</button>
-            <button class="line-button yellow" data-line="yellow">Y</button>
-            <button class="line-button blue" data-line="blue">B</button>
+    <stakco-branding
+        title="Stakco MRT"
+        version="v2.0.0"
+        subtitle="Transit Puzzle">
+    </stakco-branding>
+
+    <stakco-products-panel></stakco-products-panel>
+
+    <!-- Layer 1 = East-West (green), 2 = Circle (yellow), 3 = Downtown (blue) -->
+    <stakco-puzzle-container
+        layers="3"
+        user-id="109949450257686494443"
+        puzzle-id="A2A3_3"
+        puzzle-type="play"
+        tolerance="2">
+    </stakco-puzzle-container>
+
+    <stakco-share-button label="Share Success!"></stakco-share-button>
+
+    <stakco-share-window
+        title="Stakco MRT"
+        share-url="https://stakcos.com/mrt/">
+        <div slot="text">Solved on the MRT!</div>
+    </stakco-share-window>
+
+    <button id="map-button" title="MRT map" aria-label="Open MRT map">
+        <i class="fa-solid fa-map-location-dot"></i>
+    </button>
+
+    <div id="hud">
+        <div id="debug-controls">
+            <button class="debug-button" id="prev-station" title="Previous station" aria-label="Previous station"><i class="fa-solid fa-chevron-left"></i></button>
+            <div id="debug-info">
+                <div id="debug-station-info">Pick a station</div>
+                <div id="debug-line-info">EWL</div>
+            </div>
+            <button class="debug-button" id="next-station" title="Next station" aria-label="Next station"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
-        
-        <div id="green-display" class="line-display active-display">
-            <div class="line-header" style="color: #008000;">Green Line (North-South)</div>
-            <div class="stations-container">
-                <div class="stations-line" style="background: #008000;" id="green-stations-line"></div>
+
+        <div id="info">
+            <span class="led-text">
+                <span class="led-label">Line</span>
+                <span class="led-value led-active" id="active-line">None</span>
+            </span>
+            <span class="led-text">
+                <span class="led-label">Stn</span>
+                <span class="led-value led-station" id="nearest-station">Detecting</span>
+            </span>
+            <span class="led-text">
+                <span class="led-label">GPS</span>
+                <span class="led-value led-coords" id="coordinates">Getting...</span>
+            </span>
+            <span class="led-text" id="status">
+                <i class="fa-solid fa-location-crosshairs"></i>
+                <p id="gps-status">Starting GPS...</p>
+            </span>
+        </div>
+    </div>
+
+    <div id="map-overlay">
+        <header>
+            <span class="title">Singapore MRT</span>
+            <button id="map-close" aria-label="Close map">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </header>
+        <div id="map-svg-wrap">
+            <svg id="map-svg" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg"></svg>
+            <div id="map-legend">
+                <div class="legend-row"><span class="legend-swatch" style="background:#009639"></span>East-West Line</div>
+                <div class="legend-row"><span class="legend-swatch" style="background:#FA9E0D"></span>Circle Line</div>
+                <div class="legend-row"><span class="legend-swatch" style="background:#0052B4"></span>Downtown Line</div>
+                <div class="legend-row"><span class="legend-swatch" style="background:#e53935;border-radius:50%;width:10px;height:10px"></span>You</div>
+            </div>
+            <div id="map-station-tooltip">
+                <div class="tt-name"></div>
+                <div class="tt-lines"></div>
             </div>
         </div>
-        
-        <div id="yellow-display" class="line-display">
-            <div class="line-header" style="color: #FFD700;">Yellow Line (Circle)</div>
-            <div class="stations-container">
-                <div class="stations-line" style="background: #FFD700;" id="yellow-stations-line"></div>
-            </div>
-        </div>
-        
-        <div id="blue-display" class="line-display">
-            <div class="line-header" style="color: #006AD0;">Blue Line (Downtown)</div>
-            <div class="stations-container">
-                <div class="stations-line" style="background: #006AD0;" id="blue-stations-line"></div>
-            </div>
-        </div>
     </div>
 
-    <script>
-        // Singapore MRT Station Coordinates (sample stations for each line)
+    <script type="module">
+        import { StakcoUtils } from 'https://stakcos.com/assets/1.0.0/components/stakco-utils.js';
+        import { StakcoConfig } from 'https://stakcos.com/assets/1.0.0/components/stakco-config.js';
+
+        // Singapore MRT station lists for the three game lines
         const mrtStations = {
-            green: [
-                { name: "Tuas Link", lat: 1.334722, lng: 103.636111 },
-                { name: "Tuas West Road", lat: 1.332500, lng: 103.644167 },
-                { name: "Tuas Crescent", lat: 1.331389, lng: 103.653611 },
-                { name: "Gul Circle", lat: 1.331111, lng: 103.662500 },
-                { name: "Joo Koon", lat: 1.326111, lng: 103.667500 },
-                { name: "Pioneer", lat: 1.315278, lng: 103.670833 },
-                { name: "Boon Lay", lat: 1.337500, lng: 103.706389 },
-                { name: "Lakeside", lat: 1.340278, lng: 103.705278 },
-                { name: "Chinese Garden", lat: 1.347222, lng: 103.737500 },
-                { name: "Jurong East", lat: 1.333611, lng: 103.742500 },
-                { name: "Clementi", lat: 1.315000, lng: 103.765278 },
-                { name: "Dover", lat: 1.306111, lng: 103.772222 },
-                { name: "Buona Vista", lat: 1.304444, lng: 103.790833 },
-                { name: "Commonwealth", lat: 1.296389, lng: 103.800278 },
-                { name: "Queenstown", lat: 1.294167, lng: 103.816667 },
-                { name: "Redhill", lat: 1.288611, lng: 103.819722 },
-                { name: "Tiong Bahru", lat: 1.284167, lng: 103.828611 },
-                { name: "Outram Park", lat: 1.280278, lng: 103.831667 },
-                { name: "Tanjong Pagar", lat: 1.276389, lng: 103.844722 },
-                { name: "Raffles Place", lat: 1.283333, lng: 103.851944 },
-                { name: "City Hall", lat: 1.293611, lng: 103.852500 },
-                { name: "Bugis", lat: 1.300278, lng: 103.857500 },
-                { name: "Lavender", lat: 1.308611, lng: 103.873611 },
-                { name: "Kallang", lat: 1.315278, lng: 103.877500 },
-                { name: "Aljunied", lat: 1.319167, lng: 103.884722 },
-                { name: "Paya Lebar", lat: 1.317500, lng: 103.894722 },
-                { name: "Eunos", lat: 1.319167, lng: 103.904722 },
-                { name: "Kembangan", lat: 1.318611, lng: 103.915278 },
-                { name: "Bedok", lat: 1.324167, lng: 103.927500 },
-                { name: "Tanah Merah", lat: 1.327500, lng: 103.945000 },
-                { name: "Simei", lat: 1.343611, lng: 103.956389 },
-                { name: "Tampines", lat: 1.353611, lng: 103.945833 },
-                { name: "Pasir Ris", lat: 1.372222, lng: 103.949722 }
-            ],
-            yellow: [
-                { name: "HarbourFront", lat: 1.265297, lng: 103.822203 },
-                { name: "Telok Blangah", lat: 1.274517, lng: 103.815972 },
-                { name: "Labrador Park", lat: 1.280167, lng: 103.808556 },
-                { name: "Pasir Panjang", lat: 1.286389, lng: 103.787222 },
-                { name: "Haw Par Villa", lat: 1.290556, lng: 103.782500 },
-                { name: "Kent Ridge", lat: 1.293611, lng: 103.784722 },
-                { name: "One-North", lat: 1.300278, lng: 103.787500 },
-                { name: "Buona Vista", lat: 1.304444, lng: 103.790833 },
-                { name: "Holland Village", lat: 1.309167, lng: 103.798056 },
-                { name: "Farrer Road", lat: 1.319444, lng: 103.807500 },
-                { name: "Botanic Gardens", lat: 1.323611, lng: 103.814167 },
-                { name: "Caldecott", lat: 1.332500, lng: 103.816667 },
-                { name: "Marymount", lat: 1.340833, lng: 103.835000 },
-                { name: "Bishan", lat: 1.351236, lng: 103.848456 },
-                { name: "Lorong Chuan", lat: 1.360278, lng: 103.849722 },
-                { name: "Serangoon", lat: 1.358611, lng: 103.870833 },
-                { name: "Bartley", lat: 1.340278, lng: 103.879167 },
-                { name: "Tai Seng", lat: 1.333611, lng: 103.886667 },
-                { name: "MacPherson", lat: 1.326111, lng: 103.893056 },
-                { name: "Paya Lebar", lat: 1.317500, lng: 103.894722 },
-                { name: "Dakota", lat: 1.308611, lng: 103.895556 },
-                { name: "Mountbatten", lat: 1.303611, lng: 103.895000 },
-                { name: "Stadium", lat: 1.301389, lng: 103.874444 },
-                { name: "Nicoll Highway", lat: 1.302500, lng: 103.863611 },
-                { name: "promenade", lat: 1.292861, lng: 103.861178 },
-                { name: "Esplanade", lat: 1.293489, lng: 103.855436 },
-                { name: "Bras Basah", lat: 1.297031, lng: 103.850964 },
-                { name: "Bencoolen", lat: 1.301019, lng: 103.850356 },
-                { name: "Dhoby Ghaut", lat: 1.299156, lng: 103.845736 }
-            ],
-            blue: [
-                { name: "Bukit Panjang", lat: 1.377667, lng: 103.763500 },
-                { name: "Cashew", lat: 1.370833, lng: 103.770278 },
-                { name: "Hillview", lat: 1.362500, lng: 103.772500 },
-                { name: "Hume", lat: 1.352500, lng: 103.772222 },
-                { name: "Beauty World", lat: 1.340278, lng: 103.772222 },
-                { name: "King Albert Park", lat: 1.329167, lng: 103.776389 },
-                { name: "Sixth Avenue", lat: 1.323611, lng: 103.779722 },
-                { name: "Tan Kah Kee", lat: 1.315278, lng: 103.781111 },
-                { name: "Botanic Gardens", lat: 1.323611, lng: 103.814167 },
-                { name: "Stevens", lat: 1.320278, lng: 103.835000 },
-                { name: "Newton", lat: 1.313083, lng: 103.838358 },
-                { name: "Little India", lat: 1.307167, lng: 103.849722 },
-                { name: "Rochor", lat: 1.303611, lng: 103.855000 },
-                { name: "Bugis", lat: 1.300278, lng: 103.857500 },
-                { name: "Promenade", lat: 1.292861, lng: 103.861178 },
-                { name: "Bayfront", lat: 1.283556, lng: 103.860833 },
-                { name: "Downtown", lat: 1.283333, lng: 103.851944 },
-                { name: "Telok Ayer", lat: 1.282222, lng: 103.848611 },
-                { name: "Chinatown", lat: 1.283333, lng: 103.843611 },
-                { name: "Fort Canning", lat: 1.290278, lng: 103.844722 },
-                { name: "Bencoolen", lat: 1.301019, lng: 103.850356 },
-                { name: "Jalan Besar", lat: 1.308056, lng: 103.856111 },
-                { name: "Bendemeer", lat: 1.315278, lng: 103.861389 },
-                { name: "Geylang Bahru", lat: 1.320278, lng: 103.866667 },
-                { name: "Mattar", lat: 1.326111, lng: 103.886667 },
-                { name: "MacPherson", lat: 1.326111, lng: 103.893056 },
-                { name: "Ubi", lat: 1.324167, lng: 103.903611 },
-                { name: "Kaki Bukit", lat: 1.321389, lng: 103.912500 },
-                { name: "Bedok North", lat: 1.320278, lng: 103.928611 },
-                { name: "Bedok Reservoir", lat: 1.319167, lng: 103.940000 },
-                { name: "Tampines West", lat: 1.350000, lng: 103.945000 },
-                { name: "Tampines", lat: 1.353611, lng: 103.945833 },
-                { name: "Tampines East", lat: 1.354722, lng: 103.957500 },
-                { name: "Upper Changi", lat: 1.357500, lng: 103.973611 },
-                { name: "Expo", lat: 1.334722, lng: 103.961111 },
-                { name: "Xilin", lat: 1.325000, lng: 103.962500 },
-                { name: "Sungei Bedok", lat: 1.318611, lng: 103.961389 }
-            ]
+            green: [],
+            yellow: [],
+            blue: []
         };
+
+        // Each MRT line drives one puzzle layer (same image order as before:
+        // green = A2A3_0, yellow = A2A3_1, blue = A2A3_2)
+        const LINE_LAYER = { green: 1, yellow: 2, blue: 3 };
+        const LINE_SHORT = { green: 'EWL', yellow: 'CCL', blue: 'DTL' };
+
+        // Load the game-line station lists (relative paths — works locally + in production)
+        ['green', 'yellow', 'blue'].forEach(line => {
+            fetch(`data/${line}.json`)
+                .then(r => r.json())
+                .then(data => {
+                    mrtStations[line] = data;
+                    console.log(`[Game] ${line} line: ${data.length} stations`);
+                })
+                .catch(err => console.error(`[Game] Failed to load ${line}.json:`, err));
+        });
+
+        // ============================================
+        // Full-screen MRT Map — network geometry + render
+        // ============================================
+        let mrtNetwork = null;  // FeatureCollection from data/network.geojson (lines + stations)
+
+        fetch('data/network.geojson')
+            .then(r => r.json())
+            .then(d => {
+                mrtNetwork = d;
+                const lc = d.features.filter(f => f.properties.kind === 'line').length;
+                const sc = d.features.filter(f => f.properties.kind === 'station').length;
+                console.log(`[Map] network loaded: ${lc} lines, ${sc} stations`);
+            })
+            .catch(err => console.error('[Map] Failed to load network.geojson:', err));
+
+        // Color keys used by the game-side proximity logic (green/yellow/blue)
+        // (Used to color the ±1 neighbor halos and the active-line LED.)
+        const MAP_LINE_COLORS = {
+            green:  '#009645',   // East-West Line (EWL)
+            yellow: '#FA9E0D',   // Circle Line (CCL)
+            blue:   '#005EC4',   // Downtown Line (DTL)
+        };
+
+        // Singapore bounding box (with a touch of padding)
+        const SG_BBOX = { minLng: 103.60, maxLng: 104.05, minLat: 1.21, maxLat: 1.48 };
+
+        function projectLngLat(lng, lat, viewW, viewH) {
+            const { minLng, maxLng, minLat, maxLat } = SG_BBOX;
+            const dataAspect = (maxLng - minLng) / (maxLat - minLat);
+            const viewAspect = viewW / viewH;
+            let scale, offX = 0, offY = 0;
+            if (viewAspect > dataAspect) {
+                // Letterbox horizontally
+                scale = viewH / (maxLat - minLat);
+                offX  = (viewW - (maxLng - minLng) * scale) / 2;
+            } else {
+                scale = viewW / (maxLng - minLng);
+                offY  = (viewH - (maxLat - minLat) * scale) / 2;
+            }
+            const x = offX + (lng - minLng) * scale;
+            const y = offY + (maxLat - lat) * scale;   // y inverted
+            return [x, y];
+        }
+
+        // Friendly line name from station-code prefix
+        const CODE_PREFIX_NAME = {
+            NS: 'North-South', EW: 'East-West', CG: 'Changi Branch',
+            CC: 'Circle', CE: 'Circle Ext', DT: 'Downtown', NE: 'North-East',
+            TE: 'Thomson-East Coast',
+            BP: 'Bukit Panjang LRT', SE: 'Sengkang LRT', SW: 'Sengkang LRT',
+            PE: 'Punggol LRT',       PW: 'Punggol LRT', STC:'Sengkang LRT', PTC:'Punggol LRT',
+        };
+        function prefixesOf(codes) {
+            return [...new Set(codes.map(c => c.match(/^[A-Z]+/)?.[0]).filter(Boolean))];
+        }
+
+        function renderMrtMap() {
+            const svg = document.getElementById('map-svg');
+            const wrap = document.getElementById('map-svg-wrap');
+            if (!svg || !mrtNetwork) return;
+            const rect = wrap.getBoundingClientRect();
+            const W = rect.width || 320;
+            const H = rect.height || 480;
+            svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+            svg.innerHTML = '';
+            const NS = 'http://www.w3.org/2000/svg';
+
+            const lineFeatures    = mrtNetwork.features.filter(f => f.properties.kind === 'line');
+            const stationFeatures = mrtNetwork.features.filter(f => f.properties.kind === 'station');
+
+            // ---- 1. Draw all line geometries ----
+            lineFeatures.forEach(f => {
+                const color = f.properties.color;
+                const geom = f.geometry;
+                const segments = (geom.type === 'LineString') ? [geom.coordinates] : geom.coordinates;
+                segments.forEach(coords => {
+                    if (!coords || coords.length < 2) return;
+                    const d = coords.map(([lng, lat], i) => {
+                        const [x, y] = projectLngLat(lng, lat, W, H);
+                        return `${i === 0 ? 'M' : 'L'}${x.toFixed(1)},${y.toFixed(1)}`;
+                    }).join(' ');
+                    const path = document.createElementNS(NS, 'path');
+                    path.setAttribute('d', d);
+                    path.setAttribute('class', 'map-line');
+                    path.setAttribute('stroke', color);
+                    svg.appendChild(path);
+                });
+            });
+
+            // ---- 2. Determine highlights (current + ±1 per active game line) ----
+            const currentNames   = new Set();    // lowercase station names
+            const neighborByLine = {};           // name → 'green'|'yellow'|'blue'
+            if (currentLocation) {
+                const nearest = findNearestStations(currentLocation.lat, currentLocation.lng);
+                Object.keys(nearest).forEach(line => {
+                    const s = nearest[line];
+                    if (!s || s.distance > PROXIMITY_THRESHOLD) return;
+                    const stations = mrtStations[line];
+                    const idx = stations.findIndex(x => x.name === s.name);
+                    if (idx === -1) return;
+                    currentNames.add(s.name.toLowerCase());
+                    if (idx > 0)                   neighborByLine[stations[idx - 1].name.toLowerCase()] = line;
+                    if (idx < stations.length - 1) neighborByLine[stations[idx + 1].name.toLowerCase()] = line;
+                });
+            }
+
+            // ---- 3. Draw station dots ----
+            const tooltip = document.getElementById('map-station-tooltip');
+            stationFeatures.forEach(f => {
+                const [lng, lat] = f.geometry.coordinates;
+                const [x, y]     = projectLngLat(lng, lat, W, H);
+                const key        = f.properties.name.toLowerCase();
+                const colors     = f.properties.colors || [];
+                const isInterchange = colors.length > 1 || (new Set(colors)).size > 1;
+                const isCurrent     = currentNames.has(key);
+                const isNeighbor    = !isCurrent && (key in neighborByLine);
+                const primary       = colors[0] || '#999';
+
+                const c = document.createElementNS(NS, 'circle');
+                c.setAttribute('cx', x.toFixed(1));
+                c.setAttribute('cy', y.toFixed(1));
+
+                if (isCurrent) {
+                    c.setAttribute('r', '7');
+                    c.setAttribute('fill', '#fff');
+                    c.setAttribute('stroke', '#e53935');
+                    c.setAttribute('stroke-width', '3');
+                } else if (isNeighbor) {
+                    c.setAttribute('r', '5.5');
+                    c.setAttribute('fill', '#fff');
+                    c.setAttribute('stroke', MAP_LINE_COLORS[neighborByLine[key]]);
+                    c.setAttribute('stroke-width', '2.5');
+                } else if (isInterchange) {
+                    c.setAttribute('r', '3.8');
+                    c.setAttribute('fill', '#fff');
+                    c.setAttribute('stroke', '#3c2f38');
+                    c.setAttribute('stroke-width', '1.6');
+                } else {
+                    c.setAttribute('r', '2.8');
+                    c.setAttribute('fill', '#fff');
+                    c.setAttribute('stroke', primary);
+                    c.setAttribute('stroke-width', '1.4');
+                }
+                c.style.cursor = 'pointer';
+                c.addEventListener('click', (ev) => {
+                    ev.stopPropagation();
+                    const codes = f.properties.codes || [];
+                    const lineNames = prefixesOf(codes).map(p => CODE_PREFIX_NAME[p] || p);
+                    tooltip.querySelector('.tt-name').textContent  = f.properties.name;
+                    tooltip.querySelector('.tt-lines').textContent = lineNames.join(' · ');
+                    tooltip.classList.add('show');
+                });
+                svg.appendChild(c);
+            });
+
+            // Hide tooltip on background click
+            svg.addEventListener('click', (ev) => {
+                if (ev.target === svg || ev.target.tagName === 'path') {
+                    tooltip.classList.remove('show');
+                }
+            }, { once: true });
+
+            // ---- 5. Current location pulse ----
+            if (currentLocation) {
+                const [x, y] = projectLngLat(currentLocation.lng, currentLocation.lat, W, H);
+
+                const pulse = document.createElementNS(NS, 'circle');
+                pulse.setAttribute('cx', x.toFixed(1));
+                pulse.setAttribute('cy', y.toFixed(1));
+                pulse.setAttribute('fill', '#e53935');
+                pulse.setAttribute('opacity', '0.45');
+                pulse.setAttribute('r', '6');
+                const aR = document.createElementNS(NS, 'animate');
+                aR.setAttribute('attributeName', 'r');
+                aR.setAttribute('from', '6'); aR.setAttribute('to', '28');
+                aR.setAttribute('dur', '1.6s'); aR.setAttribute('repeatCount', 'indefinite');
+                const aO = document.createElementNS(NS, 'animate');
+                aO.setAttribute('attributeName', 'opacity');
+                aO.setAttribute('from', '0.45'); aO.setAttribute('to', '0');
+                aO.setAttribute('dur', '1.6s'); aO.setAttribute('repeatCount', 'indefinite');
+                pulse.appendChild(aR); pulse.appendChild(aO);
+                svg.appendChild(pulse);
+
+                const dot = document.createElementNS(NS, 'circle');
+                dot.setAttribute('cx', x.toFixed(1));
+                dot.setAttribute('cy', y.toFixed(1));
+                dot.setAttribute('r', '6');
+                dot.setAttribute('fill', '#e53935');
+                dot.setAttribute('stroke', '#fff');
+                dot.setAttribute('stroke-width', '2.5');
+                svg.appendChild(dot);
+            }
+        }
+
+        function isMapOpen() {
+            return document.getElementById('map-overlay').classList.contains('show');
+        }
+        function openMrtMap() {
+            document.getElementById('map-overlay').classList.add('show');
+            requestAnimationFrame(renderMrtMap);
+        }
+        function closeMrtMap() {
+            document.getElementById('map-overlay').classList.remove('show');
+            document.getElementById('map-station-tooltip').classList.remove('show');
+        }
 
         // App state
         let currentLocation = null;
         let activeLines = { green: false, yellow: false, blue: false };
-        let rotationAngles = { green: 0, yellow: 0, blue: 0 };
-        let currentDisplayLine = 'green';
-        let stationElements = { green: [], yellow: [], blue: [] };
-        let currentStations = { green: null, yellow: null, blue: null };
-        
+        // Last target angle applied per line (null = not applied yet)
+        let rotationAngles = { green: null, yellow: null, blue: null };
+        let sessionStarted = false;
+        let puzzleReady = false;
+
+        // Debug mode state
+        let debugMode = false;
+        let debugStationIndex = 0;
+        let debugLine = 'green';
+
         // Proximity threshold in meters
         const PROXIMITY_THRESHOLD = 500;
+        // Duration of the station-to-station layer turn
+        const ROTATE_DURATION = 1000;
+
+        // Stakco components
+        const puzzleContainer = document.querySelector('stakco-puzzle-container');
+        const countdown = document.querySelector('stakco-countdown');
+        const infoPanel = document.querySelector('stakco-info-panel');
+        const branding = document.querySelector('stakco-branding');
+        const shareWindow = document.querySelector('stakco-share-window');
+        const shareButton = document.querySelector('stakco-share-button');
+        const orientationOverlay = document.querySelector('stakco-orientation-overlay');
 
         // DOM elements
+        const hud = document.getElementById('hud');
         const coordinatesSpan = document.getElementById('coordinates');
         const nearestStationSpan = document.getElementById('nearest-station');
         const activeLineSpan = document.getElementById('active-line');
         const gpsStatus = document.getElementById('gps-status');
-        const greenLine = document.getElementById('green-line');
-        const yellowLine = document.getElementById('yellow-line');
-        const blueLine = document.getElementById('blue-line');
 
         // Calculate distance between two coordinates using Haversine formula
         function calculateDistance(lat1, lng1, lat2, lng2) {
@@ -476,8 +866,8 @@
             const dLat = toRadians(lat2 - lat1);
             const dLng = toRadians(lng2 - lng1);
             const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                     Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
-                     Math.sin(dLng / 2) * Math.sin(dLng / 2);
+                Math.cos(toRadians(lat1)) * Math.cos(toRadians(lat2)) *
+                Math.sin(dLng / 2) * Math.sin(dLng / 2);
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return R * c;
         }
@@ -489,11 +879,11 @@
         // Find nearest stations for each line
         function findNearestStations(lat, lng) {
             const nearestStations = {};
-            
+
             Object.keys(mrtStations).forEach(line => {
                 let minDistance = Infinity;
                 let nearestStation = null;
-                
+
                 mrtStations[line].forEach(station => {
                     const distance = calculateDistance(lat, lng, station.lat, station.lng);
                     if (distance < minDistance) {
@@ -501,258 +891,323 @@
                         nearestStation = { ...station, distance };
                     }
                 });
-                
+
                 nearestStations[line] = nearestStation;
             });
-            
+
             return nearestStations;
         }
 
-        // Update layer rotations based on proximity
+        // ============================================
+        // Layer rotation through <stakco-puzzle-container>
+        // ============================================
+        const layerAnimations = {};   // line → timer id
+        // Timer-driven frames: keeps turning (and finishes) even where rAF is paused
+        const nextFrame = (cb) => setTimeout(() => cb(performance.now()), 16);
+
+        function easeInOut(t) {
+            return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+        }
+
+        // Turn a line's layer to an absolute angle along the shortest path
+        function animateLineTo(line, targetAngle) {
+            const layer = LINE_LAYER[line];
+            const from = puzzleContainer.getAllRotations()[`layer${layer}`] || 0;
+            const delta = ((targetAngle - from) % 360 + 540) % 360 - 180;
+            const to = from + delta;
+
+            if (layerAnimations[line]) clearTimeout(layerAnimations[line]);
+
+            const start = performance.now();
+            const step = (now) => {
+                if (puzzleContainer.isSolved) { delete layerAnimations[line]; return; }
+                const t = Math.min(1, (now - start) / ROTATE_DURATION);
+                puzzleContainer.setLayerRotation(layer, from + delta * easeInOut(t));
+                if (t < 1) {
+                    layerAnimations[line] = nextFrame(step);
+                } else {
+                    delete layerAnimations[line];
+                    puzzleContainer.setLayerRotation(layer, to);
+                    if (Object.keys(layerAnimations).length === 0) {
+                        puzzleContainer.checkAlignment();
+                    }
+                }
+            };
+            layerAnimations[line] = nextFrame(step);
+        }
+
+        // Update layer rotations based on current station position
         function updateLayerRotations(nearestStations) {
             const activeLinesArray = [];
-            
+
             Object.keys(nearestStations).forEach(line => {
                 const station = nearestStations[line];
+                if (!station) return; // Skip if no station data
+
                 const isInProximity = station.distance <= PROXIMITY_THRESHOLD;
-                
-                if (isInProximity !== activeLines[line]) {
-                    activeLines[line] = isInProximity;
-                    
-                    if (isInProximity) {
-                        // Rotate by 45 degrees when entering proximity
-                        rotationAngles[line] += 45;
-                        activeLinesArray.push(line);
-                        
-                        // Add visual feedback
-                        const layerElement = document.getElementById(`${line}-line`);
-                        layerElement.classList.add('active');
-                    } else {
-                        // Remove visual feedback
-                        const layerElement = document.getElementById(`${line}-line`);
-                        layerElement.classList.remove('active');
+
+                // Calculate rotation based on station position in the line
+                const stations = mrtStations[line];
+                if (stations && stations.length > 0) {
+                    // Find the index of the current nearest station
+                    const stationIndex = stations.findIndex(s => s.name === station.name);
+
+                    if (stationIndex !== -1) {
+                        // Calculate rotation angle
+                        const anglePerStation = 360 / stations.length;
+                        const targetAngle = Math.round(stationIndex * anglePerStation); // round to nearest int
+
+                        // Rotate this line's layer (once the puzzle has loaded)
+                        if (puzzleReady && !puzzleContainer.isSolved && rotationAngles[line] !== targetAngle) {
+                            console.log(`Rotating ${line} line (layer ${LINE_LAYER[line]}) to ${targetAngle}° for station ${station.name}`);
+                            rotationAngles[line] = targetAngle;
+                            animateLineTo(line, targetAngle);
+                        }
                     }
-                    
-                    // Apply rotation
-                    const layerElement = document.getElementById(`${line}-line`);
-                    layerElement.style.transform = `translate(-50%, -50%) rotate(${rotationAngles[line]}deg)`;
                 }
-                
+
+                activeLines[line] = isInProximity;
                 if (isInProximity) {
                     activeLinesArray.push(line);
                 }
             });
-            
-            return activeLinesArray;
-        }
 
-        // Initialize station displays
-        function initializeStationDisplays() {
-            Object.keys(mrtStations).forEach(lineColor => {
-                const stationsLine = document.getElementById(`${lineColor}-stations-line`);
-                const stations = mrtStations[lineColor];
-                const lineWidth = Math.max(800, stations.length * 80); // Minimum width for proper spacing
-                
-                stationsLine.style.width = `${lineWidth}px`;
-                stationElements[lineColor] = [];
-                
-                stations.forEach((station, index) => {
-                    // Create station point
-                    const stationPoint = document.createElement('div');
-                    stationPoint.className = 'station-point';
-                    stationPoint.style.left = `${(index / (stations.length - 1)) * (lineWidth - 40) + 20}px`;
-                    
-                    // Create station name label
-                    const stationName = document.createElement('div');
-                    stationName.className = 'station-name';
-                    stationName.textContent = station.name;
-                    stationPoint.appendChild(stationName);
-                    
-                    // Create distance indicator
-                    const stationDistance = document.createElement('div');
-                    stationDistance.className = 'station-distance';
-                    stationPoint.appendChild(stationDistance);
-                    
-                    stationsLine.appendChild(stationPoint);
-                    stationElements[lineColor].push({
-                        element: stationPoint,
-                        station: station,
-                        distanceElement: stationDistance
-                    });
-                });
-            });
-        }
-
-        // Update station display based on current location
-        function updateStationDisplay(nearestStations) {
-            Object.keys(nearestStations).forEach(lineColor => {
-                const stations = mrtStations[lineColor];
-                const elements = stationElements[lineColor];
-                const nearestStation = nearestStations[lineColor];
-                
-                elements.forEach((stationData, index) => {
-                    const element = stationData.element;
-                    const station = stationData.station;
-                    const distanceElement = stationData.distanceElement;
-                    
-                    // Calculate distance to this station
-                    if (currentLocation) {
-                        const distance = calculateDistance(
-                            currentLocation.lat, currentLocation.lng,
-                            station.lat, station.lng
-                        );
-                        
-                        // Update distance display
-                        distanceElement.textContent = `${Math.round(distance)}m`;
-                        
-                        // Reset classes
-                        element.className = 'station-point';
-                        
-                        // Determine station status
-                        if (station.name === nearestStation.name && distance <= PROXIMITY_THRESHOLD) {
-                            element.classList.add('current');
-                            currentStations[lineColor] = index;
-                        } else if (distance <= PROXIMITY_THRESHOLD * 1.5) {
-                            element.classList.add('proximity');
-                        } else if (currentStations[lineColor] !== null && index < currentStations[lineColor]) {
-                            element.classList.add('passed');
-                        }
-                    }
-                });
-                
-                // Auto-scroll to current station if on active display
-                if (lineColor === currentDisplayLine && currentStations[lineColor] !== null) {
-                    const currentElement = elements[currentStations[lineColor]].element;
-                    const container = currentElement.parentElement.parentElement;
-                    const elementLeft = parseInt(currentElement.style.left);
-                    const containerWidth = container.clientWidth;
-                    
-                    container.scrollLeft = elementLeft - containerWidth / 2;
+            // Highlight the layer of the line you are on
+            if (puzzleReady && activeLinesArray.length > 0) {
+                const layer = LINE_LAYER[activeLinesArray[0]];
+                if (puzzleContainer.getCurrentLayer() !== layer) {
+                    puzzleContainer.switchLayer(layer);
                 }
-            });
-        }
+            }
 
-        // Switch between line displays
-        function switchLineDisplay(lineColor) {
-            // Hide all displays
-            document.querySelectorAll('.line-display').forEach(display => {
-                display.classList.remove('active-display');
-            });
-            
-            // Remove active button styling
-            document.querySelectorAll('.line-button').forEach(button => {
-                button.classList.remove('active-button');
-            });
-            
-            // Show selected display
-            document.getElementById(`${lineColor}-display`).classList.add('active-display');
-            document.querySelector(`[data-line="${lineColor}"]`).classList.add('active-button');
-            
-            currentDisplayLine = lineColor;
+            return activeLinesArray;
         }
 
         // Update UI with current information
         function updateUI(lat, lng, nearestStations, activeLines) {
             coordinatesSpan.textContent = `${lat.toFixed(4)}, ${lng.toFixed(4)}`;
-            
+
             // Find overall nearest station
             let overallNearest = null;
             let minDistance = Infinity;
-            
+
             Object.values(nearestStations).forEach(station => {
-                if (station.distance < minDistance) {
+                if (station && station.distance < minDistance) {
                     minDistance = station.distance;
                     overallNearest = station;
                 }
             });
-            
+
             if (overallNearest) {
                 nearestStationSpan.textContent = `${overallNearest.name} (${Math.round(overallNearest.distance)}m)`;
             }
-            
-            activeLineSpan.textContent = activeLines.length > 0 ? activeLines.join(', ') : 'None';
-            
-            // Update LED indicator for active lines
-            const lineLed = document.getElementById('line-led');
-            if (activeLines.length > 0) {
-                lineLed.className = 'led-dot active';
-            } else {
-                lineLed.className = 'led-dot inactive';
-            }
-            
-            // Update station display
-            updateStationDisplay(nearestStations);
+
+            activeLineSpan.textContent = activeLines.length > 0 ? activeLines.map(l => LINE_SHORT[l]).join(' ') : 'None';
+            activeLineSpan.classList.toggle('on', activeLines.length > 0);
+            if (activeLines.length > 0) activeLineSpan.style.setProperty('--line-color', MAP_LINE_COLORS[activeLines[0]]);
+        }
+
+        // First location (real or debug) starts the timer, like the other apps
+        function startSession() {
+            if (sessionStarted) return;
+            sessionStarted = true;
+            countdown.start();
+            branding.hide();
+        }
+
+        function runLocationUpdate(lat, lng) {
+            currentLocation = { lat, lng };
+            const nearestStations = findNearestStations(lat, lng);
+            const activeLinesArray = updateLayerRotations(nearestStations);
+            updateUI(lat, lng, nearestStations, activeLinesArray);
+            if (puzzleReady) startSession();
+            if (isMapOpen()) renderMrtMap();
         }
 
         // Handle geolocation success
         function onLocationSuccess(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            
-            currentLocation = { lat, lng };
-            
-            const nearestStations = findNearestStations(lat, lng);
-            const activeLinesArray = updateLayerRotations(nearestStations);
-            updateUI(lat, lng, nearestStations, activeLinesArray);
-            
-            gpsStatus.textContent = `GPS Active - Accuracy: ${Math.round(position.coords.accuracy)}m`;
+            runLocationUpdate(position.coords.latitude, position.coords.longitude);
+            gpsStatus.textContent = `GPS ±${Math.round(position.coords.accuracy)}m`;
+        }
+
+        // Enable debug mode
+        function enableDebugMode() {
+            debugMode = true;
+            document.getElementById('debug-controls').classList.add('active');
+            document.getElementById('debug-info').classList.add('active');
+
+            // Set initial debug position to first station of default line
+            debugStationIndex = 0;
+            debugLine = 'green';
+            console.log('Debug mode enabled on line:', debugLine);
+
+            gpsStatus.textContent = 'Debug mode';
+            infoPanel.setContent('<p>Debug mode: step through stations</p>');
+        }
+
+        // Update debug mode simulation
+        function updateDebugMode() {
+            if (!debugMode || !mrtStations[debugLine] || mrtStations[debugLine].length === 0) return;
+
+            const station = mrtStations[debugLine][debugStationIndex];
+            if (!station) return;
+
+            // Update debug info display
+            document.getElementById('debug-station-info').textContent = station.name;
+            document.getElementById('debug-line-info').textContent = `${LINE_SHORT[debugLine]} ${debugStationIndex + 1}/${mrtStations[debugLine].length}`;
+
+            // Simulate being at this station and run normal location update logic
+            runLocationUpdate(station.lat, station.lng);
+        }
+
+        // Navigate to previous station
+        function goToPrevStation() {
+            if (!debugMode || !mrtStations[debugLine]) return;
+
+            debugStationIndex = Math.max(0, debugStationIndex - 1);
+            updateDebugMode();
+        }
+
+        // Navigate to next station
+        function goToNextStation() {
+            if (!debugMode || !mrtStations[debugLine]) return;
+
+            debugStationIndex = Math.min(mrtStations[debugLine].length - 1, debugStationIndex + 1);
+            updateDebugMode();
         }
 
         // Handle geolocation error
         function onLocationError(error) {
-            let errorMessage = 'GPS Error: ';
+            let errorMessage;
             switch (error.code) {
                 case error.PERMISSION_DENIED:
-                    errorMessage += 'Location access denied by user.';
+                    errorMessage = 'Location denied';
+                    enableDebugMode(); // Enable debug mode when GPS is denied
                     break;
                 case error.POSITION_UNAVAILABLE:
-                    errorMessage += 'Location information unavailable.';
+                    errorMessage = 'Location unavailable';
+                    enableDebugMode(); // Enable debug mode when GPS unavailable
                     break;
                 case error.TIMEOUT:
-                    errorMessage += 'Location request timed out.';
+                    errorMessage = 'GPS timed out';
                     break;
                 default:
-                    errorMessage += 'Unknown error occurred.';
+                    errorMessage = 'GPS error';
                     break;
             }
+            if (debugMode) errorMessage = 'Debug mode';
             gpsStatus.textContent = errorMessage;
-            coordinatesSpan.textContent = 'GPS unavailable';
+            coordinatesSpan.textContent = 'Unavailable';
+        }
+
+        // ============================================
+        // Solve + share (same flow as the other Stakco apps)
+        // ============================================
+        function solvePuzzle() {
+            console.log('Puzzle solved!');
+            Object.values(layerAnimations).forEach(id => clearTimeout(id));
+
+            countdown.stop();
+            StakcoUtils.vibrate(StakcoConfig.VIBRATION_PATTERN);
+
+            infoPanel.collapse();
+            hud.classList.add('hidden');
+            shareButton.show();
+        }
+
+        async function handleShare() {
+            const timeToSolve = countdown.getTime();
+            const layerImages = puzzleContainer.getLayerImages();
+            const station = nearestStationSpan.textContent.replace(/\s*\(\d+m\)$/, '');
+
+            const message = `Solved in ${timeToSolve} at ${station}!`;
+            shareWindow.setAttribute('filename', 'stakco-mrt.png');
+
+            await shareWindow.open(layerImages, message, true);
         }
 
         // Initialize the app
         function initApp() {
-            // Initialize station displays
-            initializeStationDisplays();
-            
-            // Add line selector event listeners
-            document.querySelectorAll('.line-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    switchLineDisplay(button.dataset.line);
-                });
+            StakcoUtils.preventZoom();
+
+            // The container may have finished loading before this listener exists
+            if (Object.values(puzzleContainer.puzzleLayers || {}).some(l => l.url)) {
+                puzzleReady = true;
+            }
+
+            // Puzzle container
+            puzzleContainer.addEventListener('puzzle-ready', () => {
+                console.log('Puzzle ready');
+                puzzleReady = true;
+                // Re-apply the latest station angles if GPS arrived before the puzzle
+                rotationAngles = { green: null, yellow: null, blue: null };
+                if (currentLocation) runLocationUpdate(currentLocation.lat, currentLocation.lng);
             });
-            
+            puzzleContainer.addEventListener('puzzle-solved', solvePuzzle);
+
+            // Orientation overlay
+            orientationOverlay.addEventListener('blocked', () => {
+                if (countdown && countdown.active) countdown.pause();
+            });
+            orientationOverlay.addEventListener('unblocked', () => {
+                if (countdown && countdown.paused) countdown.resume();
+            });
+
+            // Share button
+            shareButton.addEventListener('share-clicked', handleShare);
+
+            // Debug control event listeners
+            document.getElementById('prev-station').addEventListener('click', goToPrevStation);
+            document.getElementById('next-station').addEventListener('click', goToNextStation);
+
+            // Map overlay
+            document.getElementById('map-button').addEventListener('click', openMrtMap);
+            document.getElementById('map-close').addEventListener('click', closeMrtMap);
+            window.addEventListener('resize', () => { if (isMapOpen()) renderMrtMap(); });
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', (event) => {
+                // ESC closes the map regardless of debug state
+                if (event.key === 'Escape' && isMapOpen()) {
+                    event.preventDefault();
+                    closeMrtMap();
+                    return;
+                }
+                if (debugMode) {
+                    switch (event.key) {
+                        case 'ArrowLeft':
+                            event.preventDefault();
+                            goToPrevStation();
+                            break;
+                        case 'ArrowRight':
+                            event.preventDefault();
+                            goToNextStation();
+                            break;
+                        case 'Escape':
+                            // Exit debug mode (if GPS becomes available)
+                            if (confirm('Exit debug mode?')) {
+                                debugMode = false;
+                                document.getElementById('debug-controls').classList.remove('active');
+                                document.getElementById('debug-info').classList.remove('active');
+                                gpsStatus.textContent = 'Debug off';
+                            }
+                            break;
+                    }
+                }
+            });
+
             if ('geolocation' in navigator) {
-                gpsStatus.textContent = 'Requesting location permission...';
-                
-                // Options for geolocation
-                const options = {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
-                };
-                
+                gpsStatus.textContent = 'Locating...';
+
                 // Start watching position
-                const watchId = navigator.geolocation.watchPosition(
+                window.geoWatchId = navigator.geolocation.watchPosition(
                     onLocationSuccess,
                     onLocationError,
-                    options
+                    { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
                 );
-                
-                // Store watch ID for cleanup if needed
-                window.geoWatchId = watchId;
-                
             } else {
-                gpsStatus.textContent = 'Geolocation not supported by this browser.';
+                gpsStatus.textContent = 'No GPS';
+                enableDebugMode(); // Enable debug mode if geolocation not supported
             }
         }
 
@@ -765,21 +1220,7 @@
                 navigator.geolocation.clearWatch(window.geoWatchId);
             }
         });
-
-        // Add touch events for mobile interaction
-        document.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-        }, { passive: false });
-
-        // Prevent zoom on double tap
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
-            }
-            lastTouchEnd = now;
-        }, false);
     </script>
 </body>
+
 </html>

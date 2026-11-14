@@ -1,0 +1,61 @@
+{
+  "name": "Stakco MRT",
+  "short_name": "MRT",
+  "description": "Singapore MRT line-tracker \u2014 interactive transit puzzles with rotating layers.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#3c2f38",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "games",
+    "education",
+    "navigation"
+  ],
+  "icons": [
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/stakco-logo-512x512-square.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1280x720.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Stakco MRT on desktop"
+    },
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/mobile-screenshot-750x1334.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "Stakco MRT on mobile"
+    }
+  ]
+}
