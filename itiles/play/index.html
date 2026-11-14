@@ -213,11 +213,15 @@
             border: 1px solid var(--glass-border);
             border-radius: 15px;
             padding: 10px 20px;
-            color: var(--text-primary);
+            color: #fff;
             font-family: 'Inter', sans-serif;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
@@ -228,14 +232,19 @@
             box-shadow: var(--shadow-glow);
         }
 
+        .connection-buttons button.primary:not(:disabled) {
+            background: var(--primary-gradient);
+            border-color: var(--primary-color);
+            color: var(--text-primary);
+        }
+
         .connection-buttons button:disabled {
-            opacity: 0.5;
+            opacity: 0.45;
             cursor: not-allowed;
         }
 
-        .connection-buttons button.success {
-            background: var(--success-gradient);
-            border-color: var(--success-color);
+        .connection-buttons button.done:disabled {
+            opacity: 0.8;
         }
 
         @media (max-width: 600px) {
@@ -294,8 +303,8 @@
     </stakco-branding>
 
     <div class="connection-buttons">
-        <button id="connectBtn">Connect iTiles</button>
-        <button id="pairBtn" disabled class="success">🔗 Pair Tiles</button>
+        <button id="connectBtn" class="primary"><i class="fa-brands fa-bluetooth-b"></i><span>Connect iTiles</span></button>
+        <button id="pairBtn" class="primary" disabled><i class="fa-solid fa-link"></i><span>Pair Tiles</span></button>
     </div>
 
     <div id="itiles-info" class="hidden">
@@ -390,6 +399,10 @@
         const connectBtn = document.getElementById('connectBtn');
         const pairBtn = document.getElementById('pairBtn');
 
+        function setButton(btn, icon, label) {
+            btn.innerHTML = `<i class="${icon}"></i><span>${label}</span>`;
+        }
+
         async function init() {
             console.log('Initializing Stakco iTiles...');
 
@@ -448,12 +461,16 @@
                 if (connected) {
                     connectBtn.disabled = true;
                     pairBtn.disabled = false;
-                    connectBtn.textContent = 'Connected';
+                    setButton(connectBtn, 'fa-solid fa-check', 'Connected');
+                    connectBtn.classList.add('done');
                     console.log('iTiles master connected');
                 } else {
                     connectBtn.disabled = false;
                     pairBtn.disabled = true;
-                    connectBtn.textContent = 'Connect iTiles';
+                    setButton(connectBtn, 'fa-brands fa-bluetooth-b', 'Connect iTiles');
+                    connectBtn.classList.remove('done');
+                    setButton(pairBtn, 'fa-solid fa-link', 'Pair Tiles');
+                    pairBtn.classList.remove('done');
                 }
             });
 
@@ -564,13 +581,13 @@
                 infoPanel.setContent('<p>Pairing tiles... Please wait 20 seconds</p>');
                 
                 pairBtn.disabled = true;
-                pairBtn.textContent = 'Pairing...';
+                setButton(pairBtn, 'fa-solid fa-spinner fa-spin', 'Pairing...');
                 
                 await bleManager.queryOnlineTiles(SELECT_ITILE.ALL);
                 
                 let countdown = 20;
                 const interval = setInterval(() => {
-                    pairBtn.textContent = `Pairing... ${countdown}s`;
+                    setButton(pairBtn, 'fa-solid fa-spinner fa-spin', `Pairing... ${countdown}s`);
                     countdown--;
                 }, 1000);
                 
@@ -596,12 +613,14 @@
                 await new Promise(r => setTimeout(r, 1000));
                 await assignTileColors();
                 
-                pairBtn.textContent = 'Paired';
+                setButton(pairBtn, 'fa-solid fa-check', 'Paired');
+                pairBtn.classList.add('done');
                 
             } catch (error) {
                 console.error('Pairing error:', error);
                 pairBtn.disabled = false;
-                pairBtn.textContent = 'Pair Tiles';
+                setButton(pairBtn, 'fa-solid fa-link', 'Pair Tiles');
+                pairBtn.classList.remove('done');
             }
         }
 
