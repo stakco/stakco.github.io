@@ -4,7 +4,11 @@ export const StakcoUtils = {
     const date = new Date();
     const dateStr = date.toISOString().split('T')[0];
     const baseUrl = 'https://storage.googleapis.com/stakco-images';
-    const puzzlePrefix = puzzleId.split('_')[0];
+
+    // Strip layer count suffix to get image prefix
+    // e.g. "A2A3_3" -> "A2A3", "2026-02-07_639060708450246170_3" -> "2026-02-07_639060708450246170"
+    const lastUnderscore = puzzleId.lastIndexOf('_');
+    const puzzlePrefix = lastUnderscore > 0 ? puzzleId.substring(0, lastUnderscore) : puzzleId;
 
     // Base path conditionally includes date for non-user puzzles
     const basePath =
