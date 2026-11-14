@@ -24,7 +24,7 @@
     <meta property="og:title" content="Stakco Walk">
     <meta property="og:description" content="Pedometer-driven Stakco puzzles with step counter controls.">
     <meta property="og:image"
-        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+        content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
     <meta property="og:url" content="https://stakcos.com/walk/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Stakco">
@@ -35,25 +35,36 @@
     <meta name="twitter:title" content="Stakco Walk">
     <meta name="twitter:description" content="Pedometer-driven Stakco puzzles with step counter controls.">
     <meta name="twitter:image"
-        content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+        content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
     <meta name="twitter:creator" content="@stakco">
 
-    <!-- Favicons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-touch-icon.png">
-    <link rel="icon" type="image/svg+xml" href="https://stakcos.com/assets/1.0.0/images/favicon.svg">
-    <link rel="shortcut icon" href="https://stakcos.com/assets/1.0.0/images/favicon.ico">
+    <!-- Favicons / Android -->
+    <link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+    <!-- Apple Touch Icons (Squircles) -->
+    <link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+    <link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
 
     <!-- PWA -->
-    <link rel="manifest" href="/walk/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Stakco Walk">
 
     <!-- Mobile App Meta Tags (iOS) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Stakco Steps">
+    <meta name="apple-mobile-web-app-title" content="Stakco Walk">
 
     <!-- Structured Data (Schema.org) -->
     <script type="application/ld+json">
@@ -65,7 +76,7 @@
       "description": "Pedometer-driven Stakco puzzles with step counter controls.",
       "applicationCategory": "Game",
       "operatingSystem": "Web",
-      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "image": "https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png",
       "publisher": {
         "@type": "Organization",
         "name": "Stakco"
@@ -179,46 +190,6 @@
             }
         }
 
-        /* Debug Panel */
-        #debug-panel {
-            position: fixed;
-            bottom: 100px;
-            left: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            color: #0f0;
-            font-family: 'Courier New', monospace;
-            font-size: 11px;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #0f0;
-            z-index: 1000;
-            display: none;
-            max-width: 250px;
-        }
-
-        #debug-panel.show {
-            display: block;
-        }
-
-        #debug-panel div {
-            margin: 2px 0;
-        }
-
-        #debug-toggle {
-            position: fixed;
-            bottom: 50px;
-            left: 10px;
-            background: var(--glass-bg);
-            border: 2px solid var(--primary-color);
-            color: var(--primary-color);
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 600;
-            cursor: pointer;
-            z-index: 1001;
-            backdrop-filter: blur(10px);
-        }
     </style>
 </head>
 
@@ -227,20 +198,6 @@
     <stakco-orientation-overlay></stakco-orientation-overlay>
     
     <stakco-countdown></stakco-countdown>
-    
-    <!-- Debug Toggle -->
-    <button id="debug-toggle">Show Debug</button>
-    
-    <!-- Debug Panel -->
-    <div id="debug-panel">
-        <div><strong>SENSOR DEBUG</strong></div>
-        <div>Baseline: <span id="debug-baseline">--</span></div>
-        <div>Current: <span id="debug-current">--</span></div>
-        <div>Deviation: <span id="debug-deviation">--</span></div>
-        <div>Peak: <span id="debug-peak">--</span></div>
-        <div>State: <span id="debug-state">INIT</span></div>
-        <div>Steps: <span id="debug-steps">0</span></div>
-    </div>
     
     <!-- Steps Info Display -->
     <div id="steps-info">
@@ -258,7 +215,7 @@
         </div>
     </div>
     
-    <stakco-info-panel icon="fa-shoe-prints">
+    <stakco-info-panel icon="fa-shoe-prints" icon-size="26px">
         <p>Initializing pedometer... Walk to rotate selected layer</p>
     </stakco-info-panel>
 
@@ -282,8 +239,9 @@
     <stakco-share-button label="Share Success!"></stakco-share-button>
 
     <stakco-permission-prompt 
-        title="Enable Motion Sensors"
-        message="This app needs access to your device's motion sensors to count your steps and rotate puzzle layers as you walk."
+        icon="fa-solid fa-person-walking"
+        title="Enable Motion"
+        message="Walk to rotate the puzzle layers, one step at a time."
         primary-label="Enable Motion"
         secondary-label="Skip">
     </stakco-permission-prompt>
@@ -336,22 +294,6 @@
         const totalStepsSpan = document.getElementById('total-steps');
         const rotationValueSpan = document.getElementById('rotation-value');
         const walkingIndicator = document.getElementById('walking-indicator');
-
-        // Debug elements
-        const debugPanel = document.getElementById('debug-panel');
-        const debugToggle = document.getElementById('debug-toggle');
-        const debugBaseline = document.getElementById('debug-baseline');
-        const debugCurrent = document.getElementById('debug-current');
-        const debugDeviation = document.getElementById('debug-deviation');
-        const debugPeak = document.getElementById('debug-peak');
-        const debugState = document.getElementById('debug-state');
-        const debugSteps = document.getElementById('debug-steps');
-
-        // Debug toggle
-        debugToggle.addEventListener('click', () => {
-            debugPanel.classList.toggle('show');
-            debugToggle.textContent = debugPanel.classList.contains('show') ? 'Hide Debug' : 'Show Debug';
-        });
 
         async function init() {
             StakcoUtils.preventZoom();
@@ -481,12 +423,6 @@
             // Calculate deviation from baseline
             const deviation = Math.abs(smoothedMagnitude - baselineMagnitude);
 
-            // Update debug display
-            debugCurrent.textContent = smoothedMagnitude.toFixed(2);
-            debugDeviation.textContent = deviation.toFixed(2);
-            debugBaseline.textContent = baselineMagnitude.toFixed(2);
-            debugState.textContent = lookingForPeak ? 'LOOKING_PEAK' : 'LOOKING_VALLEY';
-
             // Detect step using improved algorithm
             detectStep(smoothedMagnitude, deviation);
 
@@ -512,7 +448,6 @@
                     deviation < STEP_CONFIG.THRESHOLD_HIGH &&
                     currentMagnitude > lastPeakMagnitude) {
                     lastPeakMagnitude = currentMagnitude;
-                    debugPeak.textContent = lastPeakMagnitude.toFixed(2);
                 } else if (lastPeakMagnitude > baselineMagnitude + STEP_CONFIG.THRESHOLD_LOW) {
                     // We found a peak, now look for valley
                     lookingForPeak = false;
@@ -529,11 +464,9 @@
                     // Reset for next step
                     lookingForPeak = true;
                     lastPeakMagnitude = 0;
-                    debugPeak.textContent = '--';
-                    
+
                     // Update UI
                     totalStepsSpan.textContent = totalSteps;
-                    debugSteps.textContent = totalSteps;
                     setWalkingState(true);
                     
                     // Rotate puzzle layer
