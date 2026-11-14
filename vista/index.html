@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Cylindrical panorama Stakco puzzles with parallax-layered visual depth.">
+<meta name="keywords" content="Stakco, puzzles, interactive puzzle, panorama, cylindrical puzzle, parallax, educational games, therapy puzzles">
+<meta name="author" content="Stakco Team">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#3c2f38">
+
+<title>Stakco Vista</title>
+
+<!-- Stylesheets -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://stakcos.com/assets/1.0.0/theme.css">
+
+<!-- Favicons / Android -->
+<link rel="icon" type="image/png" sizes="16x16" href="https://stakcos.com/assets/1.0.0/images/favicon-16x16-squircle.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://stakcos.com/assets/1.0.0/images/favicon-32x32-squircle.png">
+<link rel="icon" type="image/png" sizes="48x48" href="https://stakcos.com/assets/1.0.0/images/favicon-48x48-squircle.png">
+<link rel="icon" type="image/png" sizes="192x192" href="https://stakcos.com/assets/1.0.0/images/favicon-192x192-squircle.png">
+<link rel="icon" type="image/png" sizes="512x512" href="https://stakcos.com/assets/1.0.0/images/favicon-512x512-squircle.png">
+
+<!-- Apple Touch Icons (Squircles) -->
+<link rel="apple-touch-icon" sizes="57x57" href="https://stakcos.com/assets/1.0.0/images/apple-icon-57x57-squircle.png">
+<link rel="apple-touch-icon" sizes="60x60" href="https://stakcos.com/assets/1.0.0/images/apple-icon-60x60-squircle.png">
+<link rel="apple-touch-icon" sizes="72x72" href="https://stakcos.com/assets/1.0.0/images/apple-icon-72x72-squircle.png">
+<link rel="apple-touch-icon" sizes="76x76" href="https://stakcos.com/assets/1.0.0/images/apple-icon-76x76-squircle.png">
+<link rel="apple-touch-icon" sizes="114x114" href="https://stakcos.com/assets/1.0.0/images/apple-icon-114x114-squircle.png">
+<link rel="apple-touch-icon" sizes="120x120" href="https://stakcos.com/assets/1.0.0/images/apple-icon-120x120-squircle.png">
+<link rel="apple-touch-icon" sizes="152x152" href="https://stakcos.com/assets/1.0.0/images/apple-icon-152x152-squircle.png">
+<link rel="apple-touch-icon" sizes="167x167" href="https://stakcos.com/assets/1.0.0/images/apple-icon-167x167-squircle.png">
+<link rel="apple-touch-icon" sizes="180x180" href="https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png">
+
+<!-- PWA -->
+<link rel="manifest" href="manifest.json">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="application-name" content="Stakco Vista">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Stakco Vista">
+
+<!-- Open Graph -->
+<meta property="og:title" content="Stakco Vista">
+<meta property="og:description" content="Cylindrical panorama Stakco puzzles with parallax-layered visual depth.">
+<meta property="og:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
+<meta property="og:url" content="https://stakcos.com/vista/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Stakco">
+<meta property="og:locale" content="en_US">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Stakco Vista">
+<meta name="twitter:description" content="Cylindrical panorama Stakco puzzles with parallax-layered visual depth.">
+<meta name="twitter:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
+<meta name="twitter:site" content="@StakcoPuzzle">
+<meta name="twitter:creator" content="@StakcoPuzzle">
+
+<!-- Structured Data (Schema.org) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Stakco Vista",
+  "url": "https://stakcos.com/vista/",
+  "description": "Cylindrical panorama Stakco puzzles with parallax-layered visual depth.",
+  "applicationCategory": "Game",
+  "operatingSystem": "Web",
+  "image": "https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Stakco"
+  }
+}
+</script>
+
+<!-- Import Stakco Components -->
+<script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-layer-controls.js"></script>
+<script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-info-panel.js"></script>
+<script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-orientation-overlay.js"></script>
+<script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-products-panel.js"></script>
+<script type="module" src="https://stakcos.com/assets/1.0.0/components/stakco-branding.js"></script>
+
+<style>
+html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    padding: 0;
+    font-family: 'Inter', sans-serif;
+    background: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+#cylinder-viewport {
+    position: relative;
+    border: 2px solid var(--glass-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-soft);
+    overflow: hidden;
+    cursor: grab;
+    background: linear-gradient(180deg, #111 0%, #222 50%, #111 100%);
+    perspective: 1000px;
+    /* Same size as the circular puzzle in the other play apps (stakco-puzzle-container) */
+    width: min(90vmin, calc(100vw - 20px), calc(100vh - 200px));
+    height: min(90vmin, calc(100vw - 20px), calc(100vh - 200px));
+    box-sizing: border-box;
+}
+
+#cylinder-viewport.dragging {
+    cursor: grabbing;
+}
+
+/* Each layer is one horizontal band of the same seamless 360° panorama.
+   The image tiles horizontally (repeat-x) so the right edge joins the left,
+   giving endless rotation; the square shows a window onto the full 360°. */
+.puzzle-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image: url('vista-panorama.jpg');
+    background-size: auto 100%;
+    background-repeat: repeat-x;
+    transition: filter 0.3s ease;
+}
+#layer1 { clip-path: inset(0 0 66.666% 0); }
+#layer2 { clip-path: inset(33.333% 0 33.333% 0); }
+#layer3 { clip-path: inset(66.666% 0 0 0); }
+
+
+
+/* At rest every band shows at normal colour. While dragging, the other bands
+   dim slightly so the band being turned stands out. */
+#cylinder-viewport.dragging .puzzle-layer:not(.active) { filter: brightness(0.7) saturate(0.85); }
+
+</style>
+</head>
+<body>
+
+<stakco-orientation-overlay></stakco-orientation-overlay>
+
+<stakco-info-panel icon="fa-mountain-sun" icon-size="26px">
+    <p>Drag each band to turn it. Line up all three to rebuild the view.</p>
+</stakco-info-panel>
+
+<stakco-branding
+    title="Stakco Vista"
+    version="v1.0.0"
+    subtitle="Panorama Puzzle">
+</stakco-branding>
+
+<stakco-products-panel></stakco-products-panel>
+
+<div id="cylinder-viewport">
+    <div id="layer1" class="puzzle-layer active"></div>
+    <div id="layer2" class="puzzle-layer"></div>
+    <div id="layer3" class="puzzle-layer"></div>
+</div>
+
+<stakco-layer-controls layers="3"></stakco-layer-controls>
+
+<script>
+const CONFIG = {
+    PANORAMA_SRC: 'vista-panorama.jpg',
+    PANORAMA_ASPECT: 5788 / 1100, // replaced by the image's real aspect once it loads
+    TILE_WIDTH: null              // px width of one full 360° turn at the current size
+};
+
+// Rotation of each band in degrees (0–360). Random start so the view begins scrambled.
+const randomAngle = () => 40 + Math.random() * 280;
+let puzzleLayers = {
+    layer1: { angle: randomAngle() },
+    layer2: { angle: randomAngle() },
+    layer3: { angle: randomAngle() }
+};
+let totalLayers = 3;
+let currentLayer = 1;
+let isDragging = false;
+let lastX = 0;
+
+// Layer buttons come from <stakco-layer-controls> (also keys 1-3)
+function setupControls() {
+    document.querySelector('stakco-layer-controls')
+        .addEventListener('layerchange', (e) => switchLayer(e.detail.layer));
+}
+
+function switchLayer(layerNumber) {
+    if(layerNumber===currentLayer) return;
+    document.querySelectorAll('.puzzle-layer').forEach(el=>el.classList.remove('active'));
+    document.getElementById(`layer${layerNumber}`).classList.add('active');
+    currentLayer = layerNumber;
+}
+
+// Dragging a band turns that band: pick the layer under the pointer
+// (top third = layer 1, middle = layer 2, bottom = layer 3) and keep the 1/2/3 buttons in sync.
+function selectBandAt(clientY) {
+    const rect = document.getElementById('cylinder-viewport').getBoundingClientRect();
+    const band = Math.min(totalLayers, Math.max(1, Math.floor(((clientY - rect.top) / rect.height) * totalLayers) + 1));
+    if (band === currentLayer) return;
+    const controls = document.querySelector('stakco-layer-controls');
+    if (controls && typeof controls.setActiveLayer === 'function') controls.setActiveLayer(band); // fires layerchange → switchLayer
+    else switchLayer(band);
+}
+
+// Drag & Touch handlers
+function startDrag(e) {
+    selectBandAt(e.clientY);
+    isDragging=true;
+    lastX=e.clientX;
+    document.getElementById('cylinder-viewport').classList.add('dragging'); 
+}
+
+function handleDrag(e){ 
+    if(!isDragging) return; 
+    const deltaX=e.clientX-lastX; 
+    applyHorizontalMovement(deltaX); 
+    lastX=e.clientX;
+}
+
+function endDrag(){
+    isDragging=false; 
+    document.getElementById('cylinder-viewport').classList.remove('dragging');
+}
+
+function startTouch(e){ 
+    if(!e.touches) return;
+    selectBandAt(e.touches[0].clientY);
+    isDragging=true;
+    lastX=e.touches[0].clientX;
+    document.getElementById('cylinder-viewport').classList.add('dragging');
+    e.preventDefault();
+}
+
+function handleTouch(e){ 
+    if(!isDragging) return; 
+    const deltaX=e.touches[0].clientX-lastX; 
+    applyHorizontalMovement(deltaX); 
+    lastX=e.touches[0].clientX;
+    e.preventDefault();
+}
+
+function endTouch(){
+    isDragging=false;
+    document.getElementById('cylinder-viewport').classList.remove('dragging');
+}
+
+// Dragging right turns the band so the scene moves right with the finger.
+function applyHorizontalMovement(deltaX){
+    const layer = puzzleLayers[`layer${currentLayer}`];
+    if(!layer || !CONFIG.TILE_WIDTH) return;
+    layer.angle = ((layer.angle - (deltaX / CONFIG.TILE_WIDTH) * 360) % 360 + 360) % 360;
+    renderLayer(currentLayer);
+}
+
+// One full turn (360°) = one panorama width; repeat-x wraps the edges seamlessly.
+function renderLayer(n){
+    const el = document.getElementById(`layer${n}`);
+    if(!el || !CONFIG.TILE_WIDTH) return;
+    const px = -(puzzleLayers[`layer${n}`].angle / 360) * CONFIG.TILE_WIDTH;
+    el.style.backgroundPositionX = `${px}px`;
+}
+
+function renderAllLayers(){
+    for(let n = 1; n <= totalLayers; n++) renderLayer(n);
+}
+
+// The square is sized in CSS to match the circular puzzle in the other apps.
+// The panorama fills its height, so a full turn is height × image aspect wide.
+function resizeCylinderViewport() {
+    const viewport = document.getElementById('cylinder-viewport');
+    CONFIG.TILE_WIDTH = viewport.clientHeight * CONFIG.PANORAMA_ASPECT;
+    renderAllLayers();
+}
+
+// Initialization
+function initApp(){
+    setupControls();
+    resizeCylinderViewport();
+
+    const viewport = document.getElementById('cylinder-viewport');
+    viewport.addEventListener('mousedown', startDrag);
+    document.addEventListener('mousemove', handleDrag);
+    document.addEventListener('mouseup', endDrag);
+    viewport.addEventListener('touchstart', startTouch, {passive:false});
+    document.addEventListener('touchmove', handleTouch, {passive:false});
+    document.addEventListener('touchend', endTouch);
+
+    window.addEventListener('resize', resizeCylinderViewport);
+    window.addEventListener('orientationchange', resizeCylinderViewport);
+
+    // Use the panorama's real aspect ratio once it has loaded
+    const img = new Image();
+    img.onload = () => {
+        CONFIG.PANORAMA_ASPECT = img.naturalWidth / img.naturalHeight;
+        resizeCylinderViewport();
+    };
+    img.src = CONFIG.PANORAMA_SRC;
+}
+
+document.addEventListener('DOMContentLoaded', initApp);
+</script>
+
+</body>
+</html>
