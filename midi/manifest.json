@@ -1,12 +1,20 @@
 {
   "name": "Stakco MIDI",
-  "short_name": "Stakco MIDI",
-  "description": "Time-driven Stakco puzzles synchronized with clock movements",
-  "start_url": "/midi/",
+  "short_name": "MIDI",
+  "description": "MIDI-driven Stakco puzzles synchronized with musical input.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#ffffff",
   "theme_color": "#3c2f38",
-  "orientation": "portrait",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "games",
+    "music"
+  ],
   "icons": [
     {
       "src": "https://stakcos.com/assets/1.0.0/images/apple-icon-180x180-squircle.png",
@@ -25,6 +33,12 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "https://stakcos.com/assets/1.0.0/images/stakco-logo-512x512-square.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "screenshots": [
@@ -33,14 +47,14 @@
       "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": "Stakco Apps Dashboard"
+      "label": "Stakco MIDI on desktop"
     },
     {
       "src": "https://stakcos.com/assets/1.0.0/images/mobile-screenshot-750x1334.png",
       "sizes": "750x1334",
       "type": "image/png",
       "form_factor": "narrow",
-      "label": "Stakco Apps Mobile View"
+      "label": "Stakco MIDI on mobile"
     }
   ]
 }
