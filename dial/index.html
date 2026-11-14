@@ -22,7 +22,7 @@
     <!-- Open Graph -->
     <meta property="og:title" content="Stakco Dial">
     <meta property="og:description" content="Surface Dial-driven Stakco puzzles with hardware control.">
-    <meta property="og:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
     <meta property="og:url" content="https://stakcos.com/dial/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Stakco">
@@ -32,7 +32,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Stakco Dial">
     <meta name="twitter:description" content="Surface Dial-driven Stakco puzzles with hardware control.">
-    <meta name="twitter:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
     <meta name="twitter:url" content="https://stakcos.com/dial/">
     <meta name="twitter:site" content="@StakcoPuzzle">
     <meta name="twitter:creator" content="@StakcoPuzzle">
@@ -74,7 +74,7 @@
     <meta name="msapplication-wide310x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x150.png">
 
     <!-- PWA -->
-    <link rel="manifest" href="/dial/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Stakco Dial">
 
@@ -93,7 +93,7 @@
       "description": "Surface Dial-driven Stakco puzzles with hardware control.",
       "applicationCategory": "Game",
       "operatingSystem": "Web",
-      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "image": "https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png",
       "publisher": {
         "@type": "Organization",
         "name": "Stakco"
@@ -196,7 +196,7 @@
 </head>
 
 <body>
-    <stakco-info-panel icon="fa-gamepad">
+    <stakco-info-panel icon="fa-gamepad" icon-size="26px">
         <p>Initializing Surface Dial... Connect device to play</p>
     </stakco-info-panel>
 
@@ -236,9 +236,10 @@
     <stakco-share-button label="Share Success!"></stakco-share-button>
 
     <stakco-permission-prompt 
-        title="Enable Surface Dial Access"
-        message="This app needs access to your Surface Dial device to control puzzle layers with rotation and button press. Connect your Surface Dial via Bluetooth, then enable access."
-        primary-label="Connect Surface Dial"
+        icon="fa-solid fa-compact-disc"
+        title="Connect Surface Dial"
+        message="Pair your Surface Dial over Bluetooth, then turn it to rotate the layers."
+        primary-label="Connect Dial"
         secondary-label="Skip">
     </stakco-permission-prompt>
 
