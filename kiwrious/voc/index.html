@@ -10,7 +10,7 @@
     <meta name="robots" content="index, follow">
     <meta name="theme-color" content="#3c2f38">
 
-    <title>Stakco VOC Sensor</title>
+    <title>Stakco VOC</title>
     
     <!-- Stylesheets -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -20,9 +20,9 @@
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
     <!-- Open Graph -->
-    <meta property="og:title" content="Stakco VOC Sensor">
+    <meta property="og:title" content="Stakco VOC">
     <meta property="og:description" content="Kiwrious VOC sensor-driven Stakco puzzles with air quality control.">
-    <meta property="og:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta property="og:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
     <meta property="og:url" content="https://stakcos.com/voc/">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Stakco">
@@ -30,9 +30,9 @@
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Stakco VOC Sensor">
+    <meta name="twitter:title" content="Stakco VOC">
     <meta name="twitter:description" content="Kiwrious VOC sensor-driven Stakco puzzles with air quality control.">
-    <meta name="twitter:image" content="https://storage.googleapis.com/stakco-images/109949450257686494443/latest/A2A3_3/A2A3_1_thumb.png">
+    <meta name="twitter:image" content="https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png">
     <meta name="twitter:url" content="https://stakcos.com/voc/">
     <meta name="twitter:site" content="@StakcoPuzzle">
     <meta name="twitter:creator" content="@StakcoPuzzle">
@@ -74,7 +74,7 @@
     <meta name="msapplication-wide310x150logo" content="https://stakcos.com/assets/1.0.0/images/mstile-310x150.png">
 
     <!-- PWA -->
-    <link rel="manifest" href="/kiwrious/voc/manifest.json">
+    <link rel="manifest" href="manifest.json">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Stakco VOC">
 
@@ -88,12 +88,12 @@
     {
       "@context": "https://schema.org",
       "@type": "WebApplication",
-      "name": "Stakco VOC Sensor",
+      "name": "Stakco VOC",
       "url": "https://stakcos.com/voc/",
       "description": "Kiwrious VOC sensor-driven Stakco puzzles with air quality control.",
       "applicationCategory": "Game",
       "operatingSystem": "Web",
-      "image": "https://stakcos.com/assets/1.0.0/images/og-image-1200x630.png",
+      "image": "https://stakcos.com/assets/1.0.0/images/desktop-screenshot-1200x630.png",
       "publisher": {
         "@type": "Organization",
         "name": "Stakco"
@@ -217,7 +217,7 @@
 </head>
 
 <body>
-    <stakco-info-panel icon="fa-wind">
+    <stakco-info-panel icon="fa-wind" icon-size="26px">
         <p>Initializing VOC Sensor... Connect device to play</p>
     </stakco-info-panel>
 
@@ -263,14 +263,15 @@
     <stakco-share-button label="Share Success!"></stakco-share-button>
 
     <stakco-permission-prompt 
-        title="Enable VOC Sensor Access"
-        message="This app needs access to your Kiwrious VOC sensor to control puzzle layers with air quality readings. Connect your sensor via USB, then enable access."
-        primary-label="Connect VOC Sensor"
+        icon="fa-solid fa-wind"
+        title="Connect VOC Sensor"
+        message="Plug in your Kiwrious VOC sensor by USB to steer the layers with air quality."
+        primary-label="Connect Sensor"
         secondary-label="Skip">
     </stakco-permission-prompt>
 
     <stakco-share-window 
-        title="Stakco VOC Sensor"
+        title="Stakco VOC"
         share-url="https://stakcos.com/voc/">
         <div slot="text">Solved with air quality control!</div>
     </stakco-share-window>
@@ -452,7 +453,7 @@
         let serialService;
 
         async function init() {
-            console.log('Initializing Stakco VOC Sensor...');
+            console.log('Initializing Stakco VOC...');
 
             StakcoUtils.preventZoom();
             setupEventListeners();
